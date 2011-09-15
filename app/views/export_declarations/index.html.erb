@@ -1,0 +1,55 @@
+<% title "Spedi Liste" %>
+
+<%= link_to("Spedi importieren", new_export_declaration_path(:import => true)) %>
+<table>
+  <thead>
+    <tr>
+      <th>Eori NR</th>
+      <th>vk_auftrag</th>
+      <th>vk</th>
+      <th>vk_position</th>
+      <th>lieferadresse</th>
+      <th>liefertermin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @export_declarations.each do |export_declaration| %>
+      <tr>
+        <td><%= export_declaration[:eori] %></td>
+        <td><%= export_declaration[:vk_auftrag] %></td>
+        <td><%= export_declaration[:vk] %></td>
+        <td><%= export_declaration[:vk_position] %></td>
+        <td><%= export_declaration[:lieferadresse] %></td>
+        <td><%= export_declaration[:liefertermin] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Eori NR</th>
+      <th>lieferadresse</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @uniq_eori.uniq.compact.each do |eori| %>
+      <% address = String.new %>
+      <% @export_declarations.each do |f| %>
+        <% if f[:eori] == eori %>
+          <% address << f[:lieferadresse] %>
+          <% break %>
+        <% end %>
+      <% end %>
+      <tr>
+        <td><%= link_to(eori, export_declaration_path(eori.delete(' '))) %></td>
+        <td><%= address %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>

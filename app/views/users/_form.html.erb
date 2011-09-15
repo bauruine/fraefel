@@ -1,0 +1,40 @@
+<%= form_for(@user) do |f| %>
+
+  <p class="formLabel">
+    <%= f.label :username %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :username, :class => "fullWidth" %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :email %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :email, :class => "fullWidth" %>
+  </p>
+  <p class="formLabel">
+    <%= label_tag :password %>
+  </p>
+  <p class="formInput">
+    <%= f.password_field :password, :class => "fullWidth" %>
+  </p>
+  <p class="formLabel">
+    <%= label_tag :password_confirmation %>
+  </p>
+  <p class="formInput">
+    <%= f.password_field :password_confirmation, :class => "fullWidth" %>
+  </p>
+  <p class="formInput">
+    <%= f.submit("Benutzer erstellen") %>
+  </p>
+
+  <% if @user.errors.any? %>
+    <script>
+      $("#user_username").attr("placeholder", "<%= @user.errors['username'].inspect %>");
+      $("#user_email").attr("placeholder", "<%= @user.errors['email'].inspect %>");
+      $("#user_password").attr("placeholder", "<%= @user.errors['password'].inspect %>");
+      $("#user_password_confirmation").attr("placeholder", "<%= @user.errors['password_confirmation'].inspect %>");
+    </script>
+  <% end %>
+
+<% end %>

@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  company: MyString
+  street: MyString
+  city: MyString
+  zip: 1
+  country: MyString
+  referee: MyString
+  active: false
+
+two:
+  company: MyString
+  street: MyString
+  city: MyString
+  zip: 1
+  country: MyString
+  referee: MyString
+  active: false

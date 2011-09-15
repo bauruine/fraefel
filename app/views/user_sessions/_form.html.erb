@@ -1,0 +1,19 @@
+<section id="loginRight">
+<%= form_for(@user_session) do |f| %>
+  <p class="formLabel">
+    <%= f.label :username %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :username %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :password %>
+  </p>
+  <p class="formInput">
+    <%= f.password_field :password %>
+  </p>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+</section>

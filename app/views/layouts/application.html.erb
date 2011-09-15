@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
+    <%= stylesheet_link_tag "reset" %>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "jquery" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tag %>
+    <%= yield(:head) %>
+  </head>
+  <body>
+    <section id="pageContainer">
+      <header id="containerHeader" class="clearfix">
+        <nav id="applicationNavigation" class="floatLeft">
+          <ul class="clearfix">
+            <% if current_user %>
+              <li><%= link_to("Logout: #{current_user.username}", logout_path) %></li>
+              <% if permitted_to? :index, :microsoft_databases %>
+                <li><%= link_to("Datenbanken", microsoft_databases_path) %></li>
+              <% end %>
+              <li><%= link_to("Benutzer", users_path) %></li>
+              <li><%= link_to("Roles", roles_path) %></li>
+              <li><%= link_to("Kunden", customers_path) %></li>
+            <% else %>
+              <li><%= link_to("Login", login_path) %></li>
+            <% end %>
+          </ul>
+        </nav>
+        <%= image_tag("logo.gif", :class => "floatRight", :id => "logo") %>
+      </header>
+      <section id="yieldContent">
+        <% flash.each do |name, msg| %>
+          <%= content_tag :div, msg, :id => "flash_#{name}" %>
+        <% end %>
+        <%= content_tag :h1, yield(:title) if show_title? %>
+        <%= yield %>
+      </section>
+    </section>
+  </body>
+</html>

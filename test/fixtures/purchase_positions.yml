@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  purchase_order: 1
+  commodity_code_id: 1
+  weight_single: 1.5
+  weight_total: 1.5
+  quantity: 1
+  amount: 9.99
+
+two:
+  purchase_order: 1
+  commodity_code_id: 1
+  weight_single: 1.5
+  weight_total: 1.5
+  quantity: 1
+  amount: 9.99

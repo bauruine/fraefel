@@ -1,0 +1,54 @@
+<% title "Firma: #{@customer.company}" %>
+<% if @versions.present? %>
+  <h3>Versionen</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Company</th>
+        <th>Baan ID</th>
+        <th>Editor</th>
+        <th>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @versions.each do |version| %>
+      <% customer = version.reify %>
+        <tr>
+          <td><%= customer.id %></td>
+          <td><%= customer.company %></td>
+          <td><%= customer.baan_id %></td>
+          <td><%= version.whodunnit %></td>
+          <td class="clearfix"><%= button_to("Revert", customer_path(customer, :version => version.id), {:method => :put}) %> <%= button_to("Delete", version_path(version), :method => :delete) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>
+<% end %>
+
+<h3>Open Orders</h3>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>VK-Auftrag</th>
+      <th>Positions</th>
+      <th>Fällig in</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @purchase_orders.each do |purchase_order| %>
+      <% foobar = purchase_order.purchase_positions.order('delivery_date asc').first() %>
+      <tr>
+        <td><%= purchase_order.id %></td>
+        <td><%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %></td>
+        <td><%= purchase_order.purchase_positions.count %></td>
+        <td><%= distance_of_time_in_words(Date.today - 30, foobar.delivery_date.to_date) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>

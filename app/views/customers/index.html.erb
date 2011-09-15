@@ -1,0 +1,48 @@
+<% title "Customer List" %>
+
+<div id="flash_notice">Version <%= @import_version %></div>
+
+<%= link_to("Kunden importieren", new_customer_path(:import => true)) %>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Company</th>
+      <th>Street</th>
+      <th>ZIP</th>
+      <th>City</th>
+      <th>Country</th>
+      <th>Fällig in</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @customers.each do |customer| %>
+    <% foobar = customer.purchase_orders.includes(:purchase_positions).order("purchase_positions.delivery_date asc").first.purchase_positions.order("delivery_date asc").first %>
+      <tr>
+        <td><%= customer.id %></td>
+        <td><%= link_to(customer.company, customer_path(customer)) %></td>
+        <td><%= customer.shipping_addresses.present? ? customer.shipping_addresses.first.street : nil %></td>
+        <td><%= customer.shipping_addresses.present? ? customer.shipping_addresses.first.zip : nil %></td>
+        <td><%= customer.shipping_addresses.present? ? customer.shipping_addresses.first.city : nil %></td>
+        <td><%= customer.shipping_addresses.present? ? customer.shipping_addresses.first.country : nil %></td>
+        <td><%= distance_of_time_in_words(Date.today - 30, foobar.delivery_date.to_date) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td class="clearfix" colspan="6">
+        <div class="bulk-actions floatLeft">
+        <%= form_tag customers_path, :method => :get do %>
+          <p>
+            <%= text_field_tag :search, params[:search] %>
+            <%= submit_tag "Search", :name => nil %>
+          </p>
+        <% end %>
+        </div>
+        
+      </td>
+    </tr>
+  </tfoot>
+</table>

@@ -1,0 +1,31 @@
+<h3>Auftrag: <%= @purchase_order.baan_id %>, Warenempfänger: <%= link_to(@purchase_order.customer.company, customer_path(@purchase_order.customer)) %></h3>
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Position</th>
+      <th>Gewicht Einzel</th>
+      <th>Gewicht Total</th>
+      <th>Menge Total</th>
+      <th>Betrag</th>
+      <th>Delivery</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @purchase_order.purchase_positions.each do |purchase_position| %>
+      <tr>
+        <td class="align-center"><%= purchase_position.commodity_code.code %></td>
+        <td class="align-center"><%= purchase_position.commodity_code.content %></td>
+        <td class="align-center"><%= purchase_position.position %></td>
+        <td class="align-center"><%= purchase_position.weight_single %></td>
+        <td class="align-center"><%= purchase_position.weight_total %></td>
+        <td class="align-center"><%= purchase_position.quantity %></td>
+        <td class="align-center"><%= number_to_currency purchase_position.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
+        <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:long) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>

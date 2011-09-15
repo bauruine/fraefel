@@ -1,0 +1,18 @@
+<%= form_for(@role) do |f| %>
+
+  <p class="formLabel">
+    <%= f.label :name %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :name, :class => "fullWidth" %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :active %>
+  </p>
+  <p class="formInput">
+    <%= f.select("active", {"Ja" => true, "Nein" => false}, { :include_blank => true }, {:class => "fullWidth"}) %>
+  </p>
+  <p class="formInput">
+    <%= f.submit("Rolle erstellen", :class => "fullWidth") %>
+  </p>
+<% end %>

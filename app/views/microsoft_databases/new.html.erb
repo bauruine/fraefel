@@ -1,0 +1,26 @@
+<% title "New Microsoft Database" %>
+
+<%= form_for @microsoft_database do |f| %>
+  <%= f.error_messages %>
+  <p class="formLabel">
+    <%= f.label :name %>
+  </p>
+  <p class="formInput fullWidth">
+    <%= f.text_field :name, :class => "fullWidth" %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :database_type_id %>
+  </p>
+  <p class="formInput">
+    <%= collection_select(:microsoft_database, :database_type_id, MicrosoftDatabaseType.all, :id, :name, {:prompt => true}, {:class => "fullWidth"}) %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :file %>
+  </p>
+  <p class="formInput">
+    <%= f.text_area :file, :class => "fullWidth smallTextArea", :placeholder => "Datei in diese Box ziehen..." %>
+  </p>
+  <p class="formImput">
+    <%= f.submit("Absenden", :class => "fullWidth") %>
+  </p>
+<% end %>

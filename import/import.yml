@@ -1,0 +1,23 @@
+---
+csv:
+  users:
+    checksum: cf23b220f337af7ba072ba23a07102e1458a9354
+    import_count: 1
+  microsoft_databases:
+    checksum: ''
+    import_count: 0
+  customers:
+    checksum: d446ecfb644155eb3f4f0084a7b271a6d5a45875
+    import_count: 1
+  shipping_addresses:
+    checksum: 933c5d391ed095965d1dcb11f66932310fb15393
+    import_count: 1
+  purchase_orders:
+    checksum: 9a73e37f4607f92422a6294db9628045a4c11a61
+    import_count: 1
+  commodity_codes:
+    checksum: 9a73e37f4607f92422a6294db9628045a4c11a61
+    import_count: 1
+  purchase_positions:
+    checksum: 9a73e37f4607f92422a6294db9628045a4c11a61
+    import_count: 1

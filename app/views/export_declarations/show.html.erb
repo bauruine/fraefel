@@ -1,0 +1,34 @@
+<% title "Spedi Liste: #{@eori}" %>
+
+<% @uniq_vk_auftrag.uniq.compact.each do |vk_auftrag| %>
+  <h3><%= vk_auftrag%></h3>
+  <table>
+    <thead>
+      <tr>
+        <th>VK Position</th>
+        <th>Zoll Position NR</th>
+        <th>Zoll Bezeichnung</th>
+        <th>Liefertermin</th>
+        <th>WE Datum</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @uniq_vk_auftrag.uniq.compact.each do |vk_auftrag| %>
+        <% @export_declarations.each do |f| %>
+          <% if f[:vk_auftrag] == vk_auftrag %>
+            <tr>
+              <td><%= f[:vk_position] %></td>
+              <td><%= f[:zoll_position_nr] %></td>
+              <td><%= f[:zoll_position_beschreibung] %></td>
+              <td><%= f[:liefertermin] %></td>
+              <td><%= f[:we_datum] %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>
+<% end %>
+

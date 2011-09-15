@@ -1,0 +1,40 @@
+<% title "Microsoft Databases" %>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Database</th>
+      <th>Database Type</th>
+      <th>Database Type Description</th>
+      <th>Found in</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @microsoft_databases.each do |microsoft_database| %>
+      <tr>
+        <td><%= microsoft_database.id %></td>
+        <td><%= link_to(microsoft_database.name, "file:///#{microsoft_database.file}", :class => "openDatabase", "data-link" => "#{microsoft_database.file}") %></td>
+        <td><%= microsoft_database.database_type.name %></td>
+        <td><%= microsoft_database.database_type.description %></td>
+        <td><%= microsoft_database.file_directory %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td class="clearfix" colspan="5">
+        <div class="bulk-actions floatLeft">
+        <%= form_tag microsoft_databases_path, :method => :get do %>
+          <p>
+            <%= text_field_tag :search, params[:search] %>
+            <%= submit_tag "Search", :name => nil %>
+          </p>
+        <% end %>
+        </div>
+
+        <%= paginate @microsoft_databases %>
+      </td>
+    </tr>
+  </tfoot>
+</table>
