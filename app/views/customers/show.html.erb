@@ -35,17 +35,23 @@
       <th>ID</th>
       <th>VK-Auftrag</th>
       <th>Positions</th>
+      <th>Gebuchte Paletten</th>
+      <th>Lieferadresse</th>
       <th>Fällig in</th>
     </tr>
   </thead>
   <tbody>
     <% @purchase_orders.each do |purchase_order| %>
+      <% address = @customer.shipping_addresses.first %>
+      <% address_array = [address.street, address.country + "-" + address.zip.to_s] %>
       <% foobar = purchase_order.purchase_positions.order('delivery_date asc').first() %>
       <tr>
         <td><%= purchase_order.id %></td>
-        <td><%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %></td>
-        <td><%= purchase_order.purchase_positions.count %></td>
-        <td><%= distance_of_time_in_words(Date.today - 30, foobar.delivery_date.to_date) %></td>
+        <td class="align-center"><%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %></td>
+        <td class="align-center"><%= purchase_order.purchase_positions.count %></td>
+        <td class="align-center"><%= purchase_order.pallets.present? ? purchase_order.pallets.count : "Keine Paletten gefunden" %></td>
+        <td class="align-center"><%= address_array.join(", ") %></td>
+        <td class="align-center"><%= distance_of_time_in_words(Date.today - 30, foobar.delivery_date.to_date) %></td>
       </tr>
     <% end %>
   </tbody>

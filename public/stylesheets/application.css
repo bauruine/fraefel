@@ -34,7 +34,9 @@ img#logo {
   height: 0;
   overflow: hidden;
 }
-
+.bold {
+	font-weight: bold;
+}
 
 section#login {
   overflow: auto;

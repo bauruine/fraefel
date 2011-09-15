@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  purchase_order_id: 1
+  amount: 9.99
+  weight_total: 9.99
+  delivery_date: 2011-09-15 15:35:43
+
+two:
+  purchase_order_id: 1
+  amount: 9.99
+  weight_total: 9.99
+  delivery_date: 2011-09-15 15:35:43
