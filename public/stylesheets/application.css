@@ -88,7 +88,12 @@ nav ul li a {
 nav ul li a:hover {
   color: #005D91;
 }
-
+ul li.summary {
+	padding-bottom: 5px;
+}
+ul li p.title {
+	width: 150px;
+}
 
 /************ Table ************/
 

@@ -18,7 +18,14 @@ Fraefel::Application.routes.draw do
   
   resources :purchase_orders
   
-  resources :pallets
+  resources :pallets do
+    member do
+      delete 'remove_positions'
+    end
+    collection do
+      delete 'delete_empty'
+    end
+  end
 
   match 'login' => 'user_sessions#new', :as => :login
   match 'logout' => 'user_sessions#destroy', :as => :logout

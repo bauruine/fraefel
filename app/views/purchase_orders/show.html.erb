@@ -1,48 +1,55 @@
-<h3>Auftrag: <%= @purchase_order.baan_id %>, Warenempfänger: <%= link_to(@purchase_order.customer.company, customer_path(@purchase_order.customer)) %></h3>
-<table>
-  <thead>
-    <tr>
-      <th>Description</th>
-      <th>Position</th>
-      <th>Gewicht Einzel</th>
-      <th>Gewicht Total</th>
-      <th>Menge Total</th>
-      <th>Betrag</th>
-      <th>Delivery</th>
-      <th>Palettieren</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @purchase_order.purchase_positions.each do |purchase_position| %>
+<%= button_to("Lehre Paletten entfernen", delete_empty_pallets_path(:purchase_order_id => @purchase_order.id), :method => :delete) %>
+
+<h1>Auftrag: <%= @purchase_order.baan_id %>, Warenempfänger: <%= link_to(@purchase_order.customer.company, customer_path(@purchase_order.customer)) %></h3>
+<% if @purchase_positions.present? %>
+  <table>
+    <thead>
       <tr>
-        <td class="align-center"><%= purchase_position.commodity_code.content %></td>
-        <td class="align-center"><%= purchase_position.position %></td>
-        <td class="align-center"><%= purchase_position.weight_single %></td>
-        <td class="align-center"><%= purchase_position.weight_total %></td>
-        <td class="align-center"><%= purchase_position.quantity %></td>
-        <td class="align-center"><%= number_to_currency purchase_position.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
-        <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:long) %></td>
-        <td class="align-center"><%= check_box_tag 'accept' %></td>
+        <th>Description</th>
+        <th>Position</th>
+        <th>Gewicht Einzel</th>
+        <th>Gewicht Total</th>
+        <th>Menge Total</th>
+        <th>Betrag</th>
+        <th>Delivery</th>
+        <th>Palettieren</th>
       </tr>
-    <% end %>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td class="align-center bold"><%= @purchase_order.weight_total %></td>
-      <td></td>
-      <td class="align-center bold"><%= number_to_currency @purchase_order.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
-      <td></td>
-      <td class="align-center"><%= button_to("Hinzufügen", root_path) %></td>
-    </tr>
-  </tfoot>
-</table>
-<%= button_to("Neue Palette erstellen", pallets_path(:purchase_order => @purchase_order), :method => :post) %>
+    </thead>
+    <tbody>
+      <% @purchase_order.purchase_positions.each do |purchase_position| %>
+        <tr>
+          <td class="align-center"><%= purchase_position.commodity_code.content %></td>
+          <td class="align-center"><%= purchase_position.position %></td>
+          <td class="align-center"><%= purchase_position.weight_single %></td>
+          <td class="align-center"><%= purchase_position.weight_total %></td>
+          <td class="align-center"><%= purchase_position.quantity %></td>
+          <td class="align-center"><%= number_to_currency purchase_position.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
+          <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:long) %></td>
+          <td class="align-center"><%= check_box_tag 'accept' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="align-center bold"><%= @purchase_order.weight_total %></td>
+        <td></td>
+        <td class="align-center bold"><%= number_to_currency @purchase_order.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
+        <td></td>
+        <td class="align-center"><%= button_to("Hinzufügen", root_path) %></td>
+      </tr>
+    </tfoot>
+  </table>
+  <%= button_to("Neue Palette erstellen", pallets_path(:purchase_order => @purchase_order), :method => :post) %>
+<% else %>
+  <div id="flash_notice">Für diesen Auftrag wurden bereits alle Positionen bearbeitet!</div>
+  
+<% end %>
 
 <% @purchase_order.pallets.each do |pallet| %>
-  <h3>Palette #<%= pallet.id %></h3>
+  <h3>Palette #<%= link_to(pallet.id, edit_pallet_path(pallet)) %></h3>
   <table>
     <thead>
       <tr>
