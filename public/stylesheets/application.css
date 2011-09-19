@@ -37,6 +37,10 @@ img#logo {
 .bold {
 	font-weight: bold;
 }
+.red_background {
+	background-color: #990000;
+	color: #ffffff;
+}
 
 section#login {
   overflow: auto;
@@ -95,6 +99,11 @@ ul li p.title {
 	width: 150px;
 }
 
+/******** Form Navigation *********/
+
+nav.form_navigation {
+	padding-bottom: 15px;
+}
 /************ Table ************/
 
 table {

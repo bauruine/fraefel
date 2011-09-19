@@ -28,7 +28,7 @@ class PalletsController < ApplicationController
   end
   
   def remove_positions
-    @pallet = Pallet.find(params[:pallet_id])
+    @pallet = Pallet.find(params[:id])
     @purchase_positions = PurchasePosition.find(params[:purchase_position_ids])
     @pallet.purchase_positions.delete(@purchase_positions)
     redirect_to(:back)
@@ -40,6 +40,19 @@ class PalletsController < ApplicationController
       if !pallet.purchase_positions.present?
         pallet.destroy
       end
+    end
+    redirect_to(:back)
+  end
+  
+  def assign_positions
+    if params[:pallet_id].present?
+      @pallet = Pallet.find(params[:pallet_id])
+      @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+    else
+      @purchase_order = PurchaseOrder.find(params[:purchase_order_id])
+      @pallet = @purchase_order.pallets.build
+      @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+      @pallet.save
     end
     redirect_to(:back)
   end

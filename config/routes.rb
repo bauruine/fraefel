@@ -23,6 +23,7 @@ Fraefel::Application.routes.draw do
       delete 'remove_positions'
     end
     collection do
+      post 'assign_positions'
       delete 'delete_empty'
     end
   end

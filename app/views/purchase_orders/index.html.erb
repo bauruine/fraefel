@@ -1,2 +1,27 @@
-<h1>PurchaseOrders#index</h1>
-<p>Find me in app/views/purchase_orders/index.html.erb</p>
+<h3>Open Orders</h3>
+<table>
+  <thead>
+    <tr>
+      <th>VK-Auftrag</th>
+      <th>Positions</th>
+      <th>Gebuchte Paletten</th>
+      <th>Handelspartner</th>
+      <th>Route</th>
+      <th>Versandsdatum</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @purchase_orders.each do |purchase_order| %>
+      <tr>
+        <td class="align-center"><%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %></td>
+        <td class="align-center"><%= purchase_order.purchase_positions.count %></td>
+        <td class="align-center"><%= purchase_order.pallets.present? ? purchase_order.pallets.count : "Keine Paletten gefunden" %></td>
+        <td class="align-center"><%= purchase_order.customer.company %></td>
+        <td class="align-center"><%= purchase_order.delivery_route %></td>
+        <td class="align-center"><%= purchase_order.purchase_positions.first.delivery_date.to_date.to_formatted_s(:long) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>

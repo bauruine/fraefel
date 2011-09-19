@@ -218,9 +218,9 @@ namespace :baan do
           customer = Customer.find_by_baan_id(row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip)
           baan_id = row[2].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           csv_customer = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          
+          delivery_route = row[21].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
         
-          purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open")
+          purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :delivery_route => delivery_route)
           if purchase_order.present? && purchase_order.new_record?
             purchase_order.save
             puts "New Purchase Order has been created: #{purchase_order.attributes}"
@@ -277,17 +277,22 @@ namespace :baan do
           amount = row[17].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_f
           position = row[4].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_i
           delivery_date = row[13].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          article = row[27].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          article_number = row[26].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          product_line = row[29].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          storage_location = row[23].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          
           
           if purchase_order.purchase_positions.where(:position => position).present?
             purchase_position = purchase_order.purchase_positions.where(:position => position).first
             csv_array = [weight_single.to_s, weight_total.to_s, quantity.to_s, amount.to_s, position]
             purchase_position_array = [purchase_position.weight_single.to_s, purchase_position.weight_total.to_s, purchase_position.quantity.to_s, purchase_position.amount.to_s, purchase_position.position]
             if (csv_array != purchase_position_array && purchase_position.status == "open")
-              purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open")
+              purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
               puts "Found differences. Update Position..."
             end
           else
-            purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date)
+            purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
             purchase_position.save
             puts "New Purchase Position has been created: #{purchase_position.attributes}"
           end

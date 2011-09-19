@@ -7,17 +7,17 @@ csv:
     checksum: ''
     import_count: 0
   customers:
-    checksum: d446ecfb644155eb3f4f0084a7b271a6d5a45875
+    checksum: 14c04007fd208be264132f41610cfba6835bc6bf
     import_count: 1
   shipping_addresses:
-    checksum: 933c5d391ed095965d1dcb11f66932310fb15393
+    checksum: 6f63ac634d95be9c03d74587d57c07d0d953c0f4
     import_count: 1
   purchase_orders:
-    checksum: 9a73e37f4607f92422a6294db9628045a4c11a61
+    checksum: 34dc1bdbc88c17c238bd6bc198c51c2cc82f6310
     import_count: 1
   commodity_codes:
-    checksum: 9a73e37f4607f92422a6294db9628045a4c11a61
+    checksum: 34dc1bdbc88c17c238bd6bc198c51c2cc82f6310
     import_count: 1
   purchase_positions:
-    checksum: 9a73e37f4607f92422a6294db9628045a4c11a61
+    checksum: 34dc1bdbc88c17c238bd6bc198c51c2cc82f6310
     import_count: 1

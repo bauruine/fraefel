@@ -30,7 +30,7 @@
         <td class="align-center"><%= purchase_position.quantity %></td>
         <td class="align-center"><%= number_to_currency purchase_position.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
         <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:long) %></td>
-        <td class="align-center"><%= button_to("Entfernen", pallet_remove_positions_path(@pallet, :purchase_position_ids => purchase_position.id), :method => :delete) %></td>
+        <td class="align-center"><%= button_to("Entfernen", remove_positions_pallet_path(@pallet, :purchase_position_ids => purchase_position.id), :method => :delete) %></td>
       </tr>
     <% end %>
   </tbody>
