@@ -1,4 +1,13 @@
-<h3>Open Orders</h3>
+<h1>Verkaufs Aufträge</h1>
+
+<nav>
+  <ul>
+    <li><%= link_to "Offen", purchase_orders_path(:scope => "open") %></li>
+    <li><%= link_to "In bearbeitung", purchase_orders_path(:scope => "in_pogress") %></li>
+    <li><%= link_to "Abgeschlossen", purchase_orders_path(:scope => "closed") %></li>
+  </ul>
+</nav>
+
 <table>
   <thead>
     <tr>

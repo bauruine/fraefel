@@ -1,0 +1,41 @@
+<nav class="form_navigation">
+  <ul class="clearfix">
+    <li><%= button_to("Papiere erfassen", new_cargo_list_path, :method => :get) %></li>
+  </ul>
+</nav>
+
+<h1>Rüstungs Papiere</h1>
+<% if @cargo_lists.present? %>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ladeliste NR</th>
+        <th>Anz. Paletten</th>
+        <th>Abholtermin von</th>
+        <th>Abholtermin bis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cargo_lists.each do |cargo_list| %>
+        <tr>
+          <td class="align-center"><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
+          <td class="align-center"><%= cargo_list.pallets.count %></td>
+          <td class="align-center"><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
+          <td class="align-center"><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+  
+<% else %>
+  <div id="flash_notice">Keine Rüstungs Papiere gefunden...</div>
+<% end %>

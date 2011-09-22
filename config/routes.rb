@@ -27,6 +27,15 @@ Fraefel::Application.routes.draw do
       delete 'delete_empty'
     end
   end
+  
+  resources :cargo_lists do
+    collection do
+      post 'assign_pallets'
+    end
+    member do
+      get 'print_pallets'
+    end
+  end
 
   match 'login' => 'user_sessions#new', :as => :login
   match 'logout' => 'user_sessions#destroy', :as => :logout

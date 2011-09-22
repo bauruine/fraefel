@@ -19,9 +19,8 @@
               <% if permitted_to? :index, :microsoft_databases %>
                 <li><%= link_to("Datenbanken", microsoft_databases_path) %></li>
               <% end %>
-              <li><%= link_to("Benutzer", users_path) %></li>
-              <li><%= link_to("Roles", roles_path) %></li>
-              <li><%= link_to("Kunden", customers_path) %></li>
+              <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
+              <li><%= link_to("Ladelisten", cargo_lists_path) %></li>
             <% else %>
               <li><%= link_to("Login", login_path) %></li>
             <% end %>

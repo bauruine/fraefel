@@ -1,0 +1,1 @@
+Date::DATE_FORMATS[:swiss_date] = "%d.%m.%y"

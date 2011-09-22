@@ -1,0 +1,42 @@
+<h1>Ladeliste NR#<%= @cargo_list.id %></h1>
+<p>Gedruckt von <%= current_user.username %></p>
+<% @pallets.each do |pallet| %>
+<h3>Pallette NR#<%= pallet.id %></h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Artikel NR</th>
+        <th>Artikel</th>
+        <th>Produktlinie</th>
+        <th>Menge Total</th>
+        <th>Lager Ort</th>
+        <th>Delivery</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pallet.purchase_positions.each do |purchase_position| %>
+        <tr>
+          <td class="align-center"><%= purchase_position.position %></td>
+          <td class="align-center"><%= purchase_position.article_number %></td>
+          <td class="align-center"><%= purchase_position.article %></td>
+          <td class="align-center"><%= purchase_position.product_line %></td>
+          <td class="align-center"><%= purchase_position.quantity %></td>
+          <td class="align-center"><%= purchase_position.storage_location %></td>
+          <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>

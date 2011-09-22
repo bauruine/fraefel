@@ -1,0 +1,20 @@
+<h1>Neue Rüstpapiere erstellen</h1>
+<%= form_for(@cargo_list) do |f| %>
+
+  <p class="formLabel">
+    <%= f.label :pick_up_time_earliest %>
+  </p>
+  <p class="formInput">
+    <%= f.datetime_select :pick_up_time_earliest %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :pick_up_time_latest %>
+  </p>
+  <p class="formInput">
+    <%= f.datetime_select :pick_up_time_latest %>
+  </p>
+  <p class="formInput">
+    <%= f.submit("Papiere erfassen") %>
+  </p>
+
+<% end %>

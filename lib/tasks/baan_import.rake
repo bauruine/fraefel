@@ -277,9 +277,9 @@ namespace :baan do
           amount = row[17].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_f
           position = row[4].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_i
           delivery_date = row[13].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          article = row[27].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          article_number = row[26].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          product_line = row[29].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          article = row[28].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          article_number = row[27].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          product_line = row[30].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           storage_location = row[23].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           
           
@@ -343,6 +343,10 @@ namespace :baan do
       
       puts "Update CONFIG_FILE..."
       File.open("#{RAILS_ROOT}/import/import.yml", 'w') { |f| YAML.dump(import_yaml, f) }
+    end
+    
+    desc "Run all Imports --> this will reset your data!"
+    task :complete => [:reset, :default_data, :customers, :shipping_addresses, :users, :commodity_codes, :purchase_orders, :purchase_positions] do
     end
     
   end

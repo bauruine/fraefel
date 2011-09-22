@@ -1,0 +1,231 @@
+body {
+  font-family: Verdana,Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  color: #211F1E;
+  height: 100%;
+}
+
+a img {
+  border: none;
+}
+
+a {
+}
+
+h1 {
+  padding-bottom: 20px;
+  font-size: 20px;
+}
+
+img#logo {
+  padding-right: 30px;
+  padding-top: 30px;
+}
+
+.floatLeft {
+  float: left;
+}
+.floatRight{
+  float: right;
+}
+.clear {
+  clear: both;
+  height: 0;
+  overflow: hidden;
+}
+.bold {
+	font-weight: bold;
+}
+.red_background {
+	background-color: #990000;
+	color: #ffffff;
+}
+
+section#login {
+  overflow: auto;
+}
+section#loginLeft {
+
+}
+section#loginRight {
+  overflow: hidden;
+  margin-bottom: auto;
+  margin-top: 105px;
+}
+form#new_user_session {
+  margin: auto;
+  overflow: auto;
+  width: 305px;
+}
+p.formLabel {
+  margin-bottom: 8px;
+}
+
+p.formInput {
+  margin-bottom: 8px;
+}
+
+section#pageContainer {
+  width: 75%;
+	min-height: 500px;
+  margin: 0 auto;
+  background-color: #FFF;
+  border: solid 1px black;
+  margin-top: 20px;
+}
+header#containerHeader {
+  border-top: 8px solid #005D91;
+}
+nav#applicationNavigation {
+  padding-top: 30px;
+  padding-left: 30px;
+}
+nav ul li {
+  float: left;
+  padding: 0 15px 0 0;
+}
+
+nav ul li a {
+  color: #211F1E;
+}
+nav ul li a:hover {
+  color: #005D91;
+}
+ul li.summary {
+	padding-bottom: 5px;
+}
+ul li p.title {
+	width: 150px;
+}
+
+/******** Form Navigation *********/
+
+nav.form_navigation {
+	padding-bottom: 15px;
+}
+/************ Table ************/
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+                
+table thead th {
+  font-weight: bold;
+  font-size: 15px;
+  border-bottom: 1px solid #ddd;
+}
+                
+table tbody {
+  border-bottom: 1px solid #ddd;
+}
+                
+table tbody tr {
+  background: #fff;
+}
+
+table tbody tr:nth-child(2n+1) {
+  background: #f3f3f3;
+}
+table tbody tr input[type="submit"] {
+	float:left;
+	margin-right: 5px;
+}
+
+table td,
+table th {
+  padding: 10px;
+  line-height: 1.3em;
+}
+table td.align-center {
+	text-align: center;
+}
+
+table tfoot td .bulk-actions {
+  padding: 15px 0 5px 0;
+}
+
+table tfoot td .bulk-actions select {
+  padding: 4px;
+  border: 1px solid #ccc;
+} 
+
+
+
+table a {
+  font-weight: bold;
+  color: #211F1E;
+  text-decoration: none;
+}
+section#yieldContent {
+  padding: 20px 40px;
+}
+nav.pagination {
+  float: right;
+  padding: 15px 0 5px;
+}
+input {
+  padding: 6px;
+  border-radius: 5px;
+  border: 1px solid #D5D5D5;
+}
+select {
+  padding: 6px;
+  border-radius: 5px;
+  border: 1px solid #D5D5D5;
+}
+
+#flash_notice, #flash_error, #flash_alert {
+  padding: 5px 8px;
+  margin: 10px 0;
+}
+
+#flash_notice {
+  background-color: #CFC;
+  border: solid 1px #6C6;
+}
+
+#flash_error, #flash_alert {
+  background-color: #FCC;
+  border: solid 1px #C66;
+}
+
+.fieldWithErrors {
+  display: inline;
+}
+
+.error_messages {
+  width: 400px;
+  border: 2px solid #CF0000;
+  padding: 0px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  font-size: 12px;
+}
+
+.error_messages h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 12px;
+  margin: 0;
+  background-color: #c00;
+  color: #fff;
+}
+
+.error_messages p {
+  margin: 8px 10px;
+}
+
+.error_messages ul {
+  margin: 0;
+}
+.fullWidth {
+  width: 100%;
+}
+
+.smallTextArea {
+  height: 90px;
+  resize: none;
+}
