@@ -7,4 +7,12 @@ class PurchasePositionsController < ApplicationController
   def index
     
   end
+  
+  def edit
+    @purchase_position = PurchasePosition.find(params[:id])
+  end
+  
+  def update
+    
+  end
 end

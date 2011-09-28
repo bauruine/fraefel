@@ -1,5 +1,6 @@
 class PurchaseOrder < ActiveRecord::Base
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
+  belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
   has_many :purchase_positions, :class_name => "PurchasePosition", :foreign_key => "purchase_order_id"
   has_many :pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
   
@@ -18,4 +19,5 @@ class PurchaseOrder < ActiveRecord::Base
     end
     return weight_total
   end
+  
 end

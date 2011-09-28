@@ -1,22 +1,43 @@
 <h1>Verkaufs Aufträge</h1>
 
-<nav>
-  <ul>
-    <li><%= link_to "Offen", purchase_orders_path(:scope => "open") %></li>
-    <li><%= link_to "In bearbeitung", purchase_orders_path(:scope => "in_pogress") %></li>
-    <li><%= link_to "Abgeschlossen", purchase_orders_path(:scope => "closed") %></li>
-  </ul>
-</nav>
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Filter anwenden</h4></header>
+  <section class="filter_box_content clearfix">
+  <% form_for :search, @search, :html => {:method => :get} do |f| %>
+    <ul class="ul_summary">
+      
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Tour</p>
+        <p class="floatLeft"><%= f.collection_select(:shipping_route_id_equals, ShippingRoute.all, :id, :name, {:include_blank => true, :placeholder => "Tour"}) %></p>
+      </li>
+      
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Von</p>
+        <p class="floatLeft"><%= f.date_select :delivery_date_greater_than_or_equal_to, :include_blank => true %></p>
+      </li>
+      
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Bis</p>
+        <p class="floatLeft"><%= f.date_select :delivery_date_less_than_or_equal_to, :include_blank => true %></p>
+      </li>
+      <li class="summary clearfix">
+        <p class="floatLeft title">Aktionen</p>
+        <p class="floatLeft"><%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil %></p>
+      </li>
+    </ul>
+  <% end %>
+  </section>
+</section>
 
 <table>
   <thead>
     <tr>
       <th>VK-Auftrag</th>
-      <th>Positions</th>
+      <th>Positionen</th>
       <th>Gebuchte Paletten</th>
       <th>Handelspartner</th>
-      <th>Route</th>
-      <th>Versandsdatum</th>
+      <th>Tour</th>
+      <th>Versand</th>
     </tr>
   </thead>
   <tbody>
@@ -26,8 +47,8 @@
         <td class="align-center"><%= purchase_order.purchase_positions.count %></td>
         <td class="align-center"><%= purchase_order.pallets.present? ? purchase_order.pallets.count : "Keine Paletten gefunden" %></td>
         <td class="align-center"><%= purchase_order.customer.company %></td>
-        <td class="align-center"><%= purchase_order.delivery_route %></td>
-        <td class="align-center"><%= purchase_order.purchase_positions.first.delivery_date.to_date.to_formatted_s(:long) %></td>
+        <td class="align-center"><%= purchase_order.shipping_route.present? ? purchase_order.shipping_route.name : nil %></td>
+        <td class="align-center"><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>
       </tr>
     <% end %>
   </tbody>

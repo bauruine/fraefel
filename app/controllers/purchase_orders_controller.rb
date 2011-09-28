@@ -2,10 +2,52 @@ class PurchaseOrdersController < ApplicationController
   def show
     @purchase_order = PurchaseOrder.find(params[:id])
     @purchase_positions = @purchase_order.purchase_positions.where('pallet_id IS NULL')
+    @pallets = @purchase_order.pallets
+    @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL AND")
   end
 
   def index
-    @purchase_orders = PurchaseOrder.where(:status => "open").where("customer_id IS NOT NULL").order("purchase_positions.delivery_date asc, delivery_route asc, customer_id asc").includes(:purchase_positions)
+    @search = PurchaseOrder.where(:status => "open").where("customer_id IS NOT NULL").search(params[:search])
+    @purchase_orders = @search.order("delivery_date asc, shipping_route_id asc, customer_id asc")
   end
 
+  def print_pallets
+    @purchase_order = PurchaseOrder.find(params[:id])
+    @pallets = @purchase_order.pallets
+    @purchase_positions = @purchase_order.purchase_positions.where('pallet_id IS NOT NULL')
+    
+    @foreign_purchase_positions = []
+    @pallets.each do |pallet|
+      pallet.purchase_positions.each do |purchase_position|
+        if purchase_position.purchase_order_id != @purchase_order.id
+          @foreign_purchase_positions << purchase_position
+        end
+      end
+    end
+    
+    respond_to do |format|
+      format.pdf do
+        render( 
+          :pdf => "paletten_liste_VK##{@purchase_order.baan_id}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :header => {
+            :left => "Fraefel AG",
+            :right => "VK-Auftrag NR #{@purchase_order.baan_id}",
+            :line => true,
+            :spacing => 2
+          },
+          :footer => {
+            :left => "#{purchase_order_url(@purchase_order)}",
+            :right => "Seite [page]",
+            :line => true
+          }
+        )
+      end
+    end
+  end
+  
 end

@@ -16,7 +16,11 @@ Fraefel::Application.routes.draw do
   
   resources :purchase_positions
   
-  resources :purchase_orders
+  resources :purchase_orders do
+    member do
+      get 'print_pallets'
+    end
+  end
   
   resources :pallets do
     member do

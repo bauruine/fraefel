@@ -1,0 +1,50 @@
+<h1>Palettenliste für Auftrag NR#<%= @purchase_order.baan_id %></h1>
+
+<% if @foreign_purchase_positions.present? %>
+  <div id="flash_error">Achtung! Dieser VK-Auftrag enthält eine oder mehrere Mischpaletten.</div>
+<% end %>
+
+<% @pallets.each do |pallet| %>
+<h3>Pallette NR#<%= pallet.id %></h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Artikel NR</th>
+        <th>Artikel</th>
+        <th>Produktlinie</th>
+        <th>Menge</th>
+        <th>Lager</th>
+        <th>Delivery</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pallet.purchase_positions.each do |purchase_position| %>
+        <tr>
+          <% if purchase_position.purchase_order != @purchase_order %>
+            <td class="align-center red bold"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+          <% else %>
+            <td class="align-center"><%= purchase_position.position %></td>
+          <% end %>
+          <td class="align-center"><%= purchase_position.article_number %></td>
+          <td class="align-center"><%= purchase_position.article %></td>
+          <td class="align-center"><%= purchase_position.product_line %></td>
+          <td class="align-center"><%= purchase_position.quantity %></td>
+          <td class="align-center"><%= purchase_position.storage_location %></td>
+          <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>

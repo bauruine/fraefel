@@ -58,19 +58,18 @@ namespace :baan do
           company = row[1].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           baan_id = row[3].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           
-          if Customer.find_by_baan_id(baan_id)
-            customer = Customer.find_by_baan_id(baan_id)
+          customer = Customer.find_or_initialize_by_baan_id(:baan_id => baan_id, :company => company)
           
-            csv_array = [company, baan_id]
-            customer_array = [customer.company, customer.baan_id]
-          
-            if csv_array != customer_array
-              customer.update_attributes(:company => company)
-            end
-          
+          if customer.present? && customer.new_record?
+            customer.save
+            puts "New Customer has been created: #{customer.attributes}"
           else
-            Customer.find_or_create_by_company(:company => company, :baan_id => baan_id)
+            if (customer.baan_id == baan_id && customer.company != company)
+              customer.update_attributes(:company => company)
+              puts "Customer #{customer.id} was updated with a different Copmany Name... You should check it manualy!"
+            end
           end
+          
         end
         
         puts "Recalculate IMPORT_COUNTER..."
@@ -218,9 +217,9 @@ namespace :baan do
           customer = Customer.find_by_baan_id(row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip)
           baan_id = row[2].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           csv_customer = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          delivery_route = row[21].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          delivery_route = ShippingRoute.find_by_name(row[21].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip)
         
-          purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :delivery_route => delivery_route)
+          purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :shipping_route => delivery_route)
           if purchase_order.present? && purchase_order.new_record?
             purchase_order.save
             puts "New Purchase Order has been created: #{purchase_order.attributes}"
@@ -311,6 +310,26 @@ namespace :baan do
       end
     end
     
+    desc "Load Delivery Routes from CSV into Database"
+    task :shipping_routes => :environment do
+      PaperTrail.whodunnit = 'System'
+      
+      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
+      
+      CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
+        delivery_route = row[21].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+      
+        shipping_route = ShippingRoute.find_or_initialize_by_name(:name => delivery_route, :active => true)
+        if shipping_route.present? && shipping_route.new_record? && shipping_route.name.present?
+          shipping_route.save
+          puts "New ShippingRoute has been created: #{shipping_route.attributes}"
+        end
+      end
+        
+    end
+    
+    
     desc "Create user tzhbami7 and assign Admin Role"
     task :default_data => :environment do
       User.find_or_create_by_username(:username => "tzhbami7", :forename => "Michael", :surname => "Balsiger", :email => "michael.balsiger@swisscom.com", :password => "masT!44!", :password_confirmation => "masT!44!")
@@ -346,7 +365,7 @@ namespace :baan do
     end
     
     desc "Run all Imports --> this will reset your data!"
-    task :complete => [:reset, :default_data, :customers, :shipping_addresses, :users, :commodity_codes, :purchase_orders, :purchase_positions] do
+    task :complete => [:reset, :default_data, :customers, :shipping_addresses, :users, :commodity_codes, :shipping_routes, :purchase_orders, :purchase_positions] do
     end
     
   end

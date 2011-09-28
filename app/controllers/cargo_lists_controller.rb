@@ -13,6 +13,7 @@ class CargoListsController < ApplicationController
   
   def new
     @cargo_list = CargoList.new
+    @customers = Customer.where("pallets.id IS NOT NULL").includes(:purchase_orders => [:pallets])
   end
   
   def create

@@ -10,11 +10,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110921102717) do
+ActiveRecord::Schema.define(:version => 20110927210553) do
 
   create_table "cargo_lists", :force => true do |t|
     t.datetime "pick_up_time_earliest"
     t.datetime "pick_up_time_latest"
+    t.integer  "shipper_id"
+    t.integer  "shipper_location_id"
+    t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -68,8 +71,8 @@ ActiveRecord::Schema.define(:version => 20110921102717) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "status"
-    t.string   "delivery_route"
-    t.integer  "delivery_route_id"
+    t.integer  "shipping_route_id"
+    t.date     "delivery_date"
   end
 
   create_table "purchase_positions", :force => true do |t|
@@ -106,6 +109,18 @@ ActiveRecord::Schema.define(:version => 20110921102717) do
     t.datetime "updated_at"
   end
 
+  create_table "shipper_locations", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "shippers", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "shipping_addresses", :force => true do |t|
     t.string   "street"
     t.integer  "zip"
@@ -114,6 +129,13 @@ ActiveRecord::Schema.define(:version => 20110921102717) do
     t.string   "fax"
     t.string   "phone_number"
     t.integer  "customer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "shipping_routes", :force => true do |t|
+    t.string   "name"
+    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

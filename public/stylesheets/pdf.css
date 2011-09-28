@@ -36,6 +36,10 @@ img#logo {
 .bold {
 	font-weight: bold;
 }
+.red {
+	background-color: #FCC;
+}
+
 .red_background {
 	background-color: #990000;
 	color: #ffffff;

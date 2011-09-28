@@ -1,0 +1,25 @@
+<h1>VK-Position NR#<%= @purchase_position.position %></h3>
+
+<% form_for @purchase_position do |f| %>
+  <p class="formLabel">
+    <%= f.label :weight_single %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :weight_single %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :quantity %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :quantity %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :amount %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :amount %>
+  </p>
+  <p class="formInput">
+    <%= f.submit("Artikel ändern") %>
+  </p>
+<% end %>
