@@ -1,4 +1,35 @@
 class PalletsController < ApplicationController
+  
+  def index
+    @pallets = Pallet.all
+    @purchase_orders = PurchaseOrder.joins(:pallets)
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render( 
+          :pdf => "Paletten-Liste-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :header => {
+            :left => "Fraefel AG",
+            :right => "#{Date.today}",
+            :line => true,
+            :spacing => 2
+          },
+          :footer => {
+            :left => "#{pallets_url()}",
+            :right => "Seite [page]",
+            :line => true
+          }
+        )
+      end
+    end
+  end
+  
   def edit
     @pallet = Pallet.find(params[:id])
     @purchase_order = @pallet.purchase_order

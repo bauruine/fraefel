@@ -1,6 +1,6 @@
 body {
   font-family: Verdana,Helvetica,Arial,sans-serif;
-  font-size: 14px;
+  font-size: 10px;
   color: #211F1E;
   height: 100%;
 }
@@ -14,7 +14,7 @@ a {
 
 h1 {
   padding-bottom: 20px;
-  font-size: 20px;
+  font-size: 14px;
 }
 
 img#logo {
@@ -116,7 +116,7 @@ table {
                 
 table thead th {
   font-weight: bold;
-  font-size: 15px;
+  font-size: 12px;
   border-bottom: 1px solid #ddd;
 }
                 
@@ -232,4 +232,25 @@ select {
 .smallTextArea {
   height: 90px;
   resize: none;
+}
+
+/*** Filter Box***/
+section.filter_box:nth-of-type(3) {
+	page-break-after: always;
+}
+section.filter_box {
+	margin-bottom: 20px;
+}
+section.filter_box header.filter_box_header {
+	background-color: #005D91;
+	padding: 5px;
+}
+
+section.filter_box header.filter_box_header h4 {
+	color: #fff;
+}
+
+section.filter_box section.filter_box_content {
+	background-color: #f3f3f3;
+	padding: 5px;
 }

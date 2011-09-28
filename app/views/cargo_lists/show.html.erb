@@ -5,80 +5,97 @@
   </ul>
 </nav>
 
-<h1>Rüstpapier NR#<%= @cargo_list.id %></h1>
+<h1>Versand NR#<%= @cargo_list.id %></h1>
 <% if @assigned_pallets.present? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Paletten NR</th>
-        <th>Positionen</th>
-        <th>Tour</th>
-        <th>Handelspartner</th>
-        <th>Auswahl</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @assigned_pallets.each do |pallet| %>
-        <tr>
-          <td class="align-center"><%= link_to(pallet.id, pallet_path(pallet)) %></td>
-          <td class="align-center"><%= pallet.purchase_positions.count %></td>
-          <td class="align-center"><%= pallet.purchase_order.delivery_route %></td>
-          <td class="align-center"><%= pallet.purchase_order.customer.company %></td>
-          <td class="align-center"></td>
-        </tr>
+  <section class="filter_box">
+    <header class="filter_box_header"><h4>Angefügte Paletten</h4></header>
+    <section class="filter_box_content clearfix">
+      <% form_tag(remove_pallets_cargo_lists_path, {:class => "form", :method => :post}) do %>
+        <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
+        <table>
+          <thead>
+            <tr>
+              <th>Paletten NR</th>
+              <th>Positionen</th>
+              <th>Tour</th>
+              <th>Handelspartner</th>
+              <th>Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @assigned_pallets.each do |pallet| %>
+              <tr>
+                <td class="align-center"><%= link_to(pallet.id, pallet_path(pallet)) %></td>
+                <td class="align-center"><%= pallet.purchase_positions.count %></td>
+                <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
+                <td class="align-center"><%= pallet.purchase_order.customer.company %></td>
+                <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+            </tr>
+          </tfoot>
+        </table>
       <% end %>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tfoot>
-  </table>
+    </section>
+  </section>
+  
 <% else %>
   <div id="flash_notice">Es sind noch keine Paletten zugewiesen worden.</div>
 <% end %>
 
-<h3>Verfügbare Paletten</h3>
 
 <% if @pallets.present? %>
-  <% form_tag(assign_pallets_cargo_lists_path, {:class => "form", :method => :post}) do %>
-    <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-    <table>
-      <thead>
-        <tr>
-          <th>Paletten NR</th>
-          <th>Positionen</th>
-          <th>Tour</th>
-          <th>Handelspartner</th>
-          <th>Auswahl</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @pallets.each do |pallet| %>
-          <tr>
-            <td class="align-center"><%= link_to(pallet.id, pallet_path(pallet)) %></td>
-            <td class="align-center"><%= pallet.purchase_positions.count %></td>
-            <td class="align-center"><%= pallet.purchase_order.delivery_route %></td>
-            <td class="align-center"><%= pallet.purchase_order.customer.company %></td>
-            <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
-          </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
-        </tr>
-      </tfoot>
-    </table>
-  <% end %>
+  <section class="filter_box">
+    <header class="filter_box_header"><h4>Verfügbare Paletten</h4></header>
+    <section class="filter_box_content clearfix">
+      <% form_tag(assign_pallets_cargo_lists_path, {:class => "form", :method => :post}) do %>
+        <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
+        <table>
+          <thead>
+            <tr>
+              <th>Paletten NR</th>
+              <th>Positionen</th>
+              <th>Mehrplatz</th>
+              <th>Tour</th>
+              <th>Handelspartner</th>
+              <th>Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @pallets.each do |pallet| %>
+              <tr>
+                <td class="align-center"><%= link_to(pallet.id, pallet_path(pallet)) %></td>
+                <td class="align-center"><%= pallet.purchase_positions.count %></td>
+                <td class="align-center"></td>
+                <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
+                <td class="align-center"><%= pallet.purchase_order.customer.company %></td>
+                <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+            </tr>
+          </tfoot>
+        </table>
+      <% end %>
+    </section>
+  </section>
+  
 <% else %>
   <div id="flash_notice">Es wurden bereits alle Palleten bearbeitet!</div>
 <% end %>

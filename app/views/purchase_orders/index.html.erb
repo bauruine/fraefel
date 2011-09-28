@@ -13,12 +13,12 @@
       
       <li class="summary clearfix">
         <p class="floatLeft bold title">Von</p>
-        <p class="floatLeft"><%= f.date_select :delivery_date_greater_than_or_equal_to, :include_blank => true %></p>
+        <p class="floatLeft"><%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %></p>
       </li>
       
       <li class="summary clearfix">
         <p class="floatLeft bold title">Bis</p>
-        <p class="floatLeft"><%= f.date_select :delivery_date_less_than_or_equal_to, :include_blank => true %></p>
+        <p class="floatLeft"><%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %></p>
       </li>
       <li class="summary clearfix">
         <p class="floatLeft title">Aktionen</p>

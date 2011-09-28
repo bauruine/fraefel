@@ -15,4 +15,6 @@ $(document).ready(function(){
       window.open('file:///' + $(this).attr("data-link"));
       return true;
   });
+
+	$('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
 });

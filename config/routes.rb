@@ -35,6 +35,7 @@ Fraefel::Application.routes.draw do
   resources :cargo_lists do
     collection do
       post 'assign_pallets'
+      post 'remove_pallets'
     end
     member do
       get 'print_pallets'

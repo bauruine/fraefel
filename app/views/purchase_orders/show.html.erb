@@ -6,56 +6,59 @@
   </ul>
 </nav>
 <h1>VK-Auftrag NR#<%= @purchase_order.baan_id %></h3>
-<%= @pallets.present? %>  
 <ul class="ul_summary">
   <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @purchase_order.customer.company %></p></li>
 </ul>
 
 <% if @purchase_positions.present? %>
-  <h2>Offene Positionen</h2>
-  <% form_tag(assign_positions_pallets_path, {:class => "form", :method => :post}) do %>
-    <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
-    <table class="margin_bottom_big">
-      <thead>
-        <tr>
-          <th>Position</th>
-          <th>Artikel NR</th>
-          <th>Artikel</th>
-          <th>Produktlinie</th>
-          <th>Menge Total</th>
-          <th>Lager Ort</th>
-          <th>Versand</th>
-          <th>Auswahl</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @purchase_positions.each do |purchase_position| %>
-          <tr>
-            <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position)) %></td>
-            <td class="align-center"><%= purchase_position.article_number %></td>
-            <td class="align-center"><%= purchase_position.article %></td>
-            <td class="align-center"><%= purchase_position.product_line %></td>
-            <td class="align-center"><%= purchase_position.quantity %></td>
-            <td class="align-center"><%= purchase_position.storage_location %></td>
-            <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-            <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
-          </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td class="align-center"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palett NR...") %></td>
-          <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
-        </tr>
-      </tfoot>
-    </table>
-  <% end %>
+  <section class="filter_box">
+    <header class="filter_box_header"><h4>Offene Positionen</h4></header>
+    <section class="filter_box_content clearfix">
+      <% form_tag(assign_positions_pallets_path, {:class => "form", :method => :post}) do %>
+        <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
+        <table class="margin_bottom_big">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Artikel NR</th>
+              <th>Artikel</th>
+              <th>Produktlinie</th>
+              <th>Menge Total</th>
+              <th>Lager Ort</th>
+              <th>Versand</th>
+              <th>Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @purchase_positions.each do |purchase_position| %>
+              <tr>
+                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position)) %></td>
+                <td class="align-center"><%= purchase_position.article_number %></td>
+                <td class="align-center"><%= purchase_position.article %></td>
+                <td class="align-center"><%= purchase_position.product_line %></td>
+                <td class="align-center"><%= purchase_position.quantity %></td>
+                <td class="align-center"><%= purchase_position.storage_location %></td>
+                <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+                <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="align-center"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palett NR...") %></td>
+              <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+            </tr>
+          </tfoot>
+        </table>
+      <% end %>
+    </section>
+  </section>
   
 <% else %>
   <div id="flash_notice">Für diesen Auftrag wurden bereits alle Positionen bearbeitet!</div>
@@ -63,51 +66,57 @@
 <% end %>
 
 <% @pallets.each do |pallet| %>
-  <h3>Palette NR#<%= link_to(pallet.id, edit_pallet_path(pallet)) %></h3>
-  <% form_tag(remove_positions_pallet_path(pallet), {:class => "form", :method => :delete}) do %>
-    <table class="margin_bottom_big">
-      <thead>
-        <tr>
-          <th>Position</th>
-          <th>Artikel NR</th>
-          <th>Artikel</th>
-          <th>Produktlinie</th>
-          <th>Menge Total</th>
-          <th>Lager Ort</th>
-          <th>Versand</th>
-          <th>Auswahl</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% pallet.purchase_positions.each do |purchase_position| %>
-          <tr>
-            <% if purchase_position.purchase_order != @purchase_order %>
-              <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
-            <% else %>
-            <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position)) %></td>
+  
+  <section class="filter_box">
+    <header class="filter_box_header"><h4>Palette NR#<%= link_to(pallet.id, edit_pallet_path(pallet)) %></h4></header>
+    <section class="filter_box_content clearfix">
+      <% form_tag(remove_positions_pallet_path(pallet), {:class => "form", :method => :delete}) do %>
+        <table class="margin_bottom_big">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Artikel NR</th>
+              <th>Artikel</th>
+              <th>Produktlinie</th>
+              <th>Menge Total</th>
+              <th>Lager Ort</th>
+              <th>Versand</th>
+              <th>Auswahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% pallet.purchase_positions.each do |purchase_position| %>
+              <tr>
+                <% if purchase_position.purchase_order != @purchase_order %>
+                  <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
+                <% else %>
+                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position)) %></td>
+                <% end %>
+                <td class="align-center"><%= purchase_position.article_number %></td>
+                <td class="align-center"><%= purchase_position.article %></td>
+                <td class="align-center"><%= purchase_position.product_line %></td>
+                <td class="align-center"><%= purchase_position.quantity %></td>
+                <td class="align-center"><%= purchase_position.storage_location %></td>
+                <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+                <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+              </tr>
             <% end %>
-            <td class="align-center"><%= purchase_position.article_number %></td>
-            <td class="align-center"><%= purchase_position.article %></td>
-            <td class="align-center"><%= purchase_position.product_line %></td>
-            <td class="align-center"><%= purchase_position.quantity %></td>
-            <td class="align-center"><%= purchase_position.storage_location %></td>
-            <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-            <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
-          </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td class="align-center"></td>
-          <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
-        </tr>
-      </tfoot>
-    </table>
-  <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="align-center"></td>
+              <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+            </tr>
+          </tfoot>
+        </table>
+      <% end %>
+    </section>
+  </section>
+  
 <% end %>

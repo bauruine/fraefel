@@ -4,37 +4,45 @@
   </ul>
 </nav>
 
-<h1>Rüstungs Papiere</h1>
+<h1>Versand Listen</h1>
 <% if @cargo_lists.present? %>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Ladeliste NR</th>
-        <th>Anz. Paletten</th>
-        <th>Abholtermin von</th>
-        <th>Abholtermin bis</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @cargo_lists.each do |cargo_list| %>
-        <tr>
-          <td class="align-center"><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
-          <td class="align-center"><%= cargo_list.pallets.count %></td>
-          <td class="align-center"><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
-          <td class="align-center"><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tfoot>
-  </table>
+  <section class="filter_box">
+    <header class="filter_box_header"><h4>Versand</h4></header>
+    <section class="filter_box_content clearfix">
+      <table>
+        <thead>
+          <tr>
+            <th>Versand NR</th>
+            <th>Anz. Paletten</th>
+            <th>Spediteur</th>
+            <th>Ablade Ort</th>
+            <th>Abholtermin von</th>
+            <th>Abholtermin bis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @cargo_lists.each do |cargo_list| %>
+            <tr>
+              <td class="align-center"><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
+              <td class="align-center"><%= cargo_list.pallets.count %></td>
+              <td></td>
+              <td></td>
+              <td class="align-center"><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
+              <td class="align-center"><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </section>
   
 <% else %>
   <div id="flash_notice">Keine Rüstungs Papiere gefunden...</div>

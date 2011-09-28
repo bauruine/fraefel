@@ -4,7 +4,10 @@
     <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
     <%= stylesheet_link_tag "reset" %>
     <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag "jquery_ui" %>
     <%= javascript_include_tag "jquery" %>
+    <%= javascript_include_tag "jquery_ui" %>
+    <%= javascript_include_tag "jquery.ui.datepicker-de.js" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tag %>
     <%= yield(:head) %>
@@ -20,7 +23,8 @@
                 <li><%= link_to("Datenbanken", microsoft_databases_path) %></li>
               <% end %>
               <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
-              <li><%= link_to("Ladelisten", cargo_lists_path) %></li>
+              <li><%= link_to("Versandlisten", cargo_lists_path) %></li>
+              <li><%= link_to("Paletten Liste", pallets_path) %></li>
             <% else %>
               <li><%= link_to("Login", login_path) %></li>
             <% end %>

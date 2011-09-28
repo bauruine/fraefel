@@ -1,0 +1,57 @@
+<nav class="form_navigation">
+  <ul class="clearfix">
+    <li><%= button_to("Drucken", pallets_path(:format => :pdf), :method => :get) %></li>
+  </ul>
+</nav>
+
+<h1>Paletten Liste</h1>
+
+<% @pallets.each do |pallet| %>
+  
+  <section class="filter_box">
+    <header class="filter_box_header"><h4>Palette NR#<%= pallet.id %></h4></header>
+    <section class="filter_box_content clearfix">
+      <table class="margin_bottom_big">
+        <thead>
+          <tr>
+            <th>VK-Position</th>
+            <th>Artikel NR</th>
+            <th>Artikel</th>
+            <th>Produktlinie</th>
+            <th>Menge Total</th>
+            <th>Lager Ort</th>
+            <th>Versand</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% pallet.purchase_positions.each do |purchase_position| %>
+            <tr>
+              <% if purchase_position.purchase_order != pallet.purchase_order %>
+                <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
+              <% else %>
+              <td class="align-center"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
+              <% end %>
+              <td class="align-center"><%= purchase_position.article_number %></td>
+              <td class="align-center"><%= purchase_position.article %></td>
+              <td class="align-center"><%= purchase_position.product_line %></td>
+              <td class="align-center"><%= purchase_position.quantity %></td>
+              <td class="align-center"><%= purchase_position.storage_location %></td>
+              <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="align-center"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </section>
+<% end %>

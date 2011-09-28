@@ -1,38 +1,44 @@
-<h1>Neue Rüstpapiere erstellen</h1>
-<%= form_for(@cargo_list) do |f| %>
+<h1>Neuen Versand erstellen</h1>
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Versand</h4></header>
+  <section class="filter_box_content clearfix">
+    <%= form_for(@cargo_list) do |f| %>
 
-  <p class="formLabel">
-    <%= f.label :pick_up_time_earliest %>
-  </p>
-  <p class="formInput">
-    <%= f.datetime_select :pick_up_time_earliest %>
-  </p>
-  <p class="formLabel">
-    <%= f.label :pick_up_time_latest %>
-  </p>
-  <p class="formInput">
-    <%= f.datetime_select :pick_up_time_latest %>
-  </p>
-  <p class="formLabel">
-    <%= f.label :shipper %>
-  </p>
-  <p class="formInput">
-    <%= f.collection_select(:shipper_id, Shipper.all, :id, :name, {:include_blank => true}) %>
-  </p>
-  <p class="formLabel">
-    <%= f.label :shipper_location %>
-  </p>
-  <p class="formInput">
-    <%= f.collection_select(:shipper_location_id, ShipperLocation.all, :id, :name, {:include_blank => true}) %>
-  </p>
-  <p class="formLabel">
-    <%= f.label :customer %>
-  </p>
-  <p class="formInput">
-    <%= f.collection_select(:customer_id, @customers, :id, :company, {:include_blank => true}) %>
-  </p>
-  <p class="formInput">
-    <%= f.submit("Papiere erfassen") %>
-  </p>
+      <p class="formLabel">
+        <%= f.label :pick_up_time_earliest %>
+      </p>
+      <p class="formInput">
+        <%= f.datetime_select :pick_up_time_earliest %>
+      </p>
+      <p class="formLabel">
+        <%= f.label :pick_up_time_latest %>
+      </p>
+      <p class="formInput">
+        <%= f.datetime_select :pick_up_time_latest %>
+      </p>
+      <p class="formLabel">
+        <%= f.label :shipper %>
+      </p>
+      <p class="formInput">
+        <%= f.collection_select(:shipper_id, Shipper.all, :id, :name, {:include_blank => true}) %>
+      </p>
+      <p class="formLabel">
+        <%= f.label :shipper_location %>
+      </p>
+      <p class="formInput">
+        <%= f.collection_select(:shipper_location_id, ShipperLocation.all, :id, :name, {:include_blank => true}) %>
+      </p>
+      <p class="formLabel">
+        <%= f.label :customer %>
+      </p>
+      <p class="formInput">
+        <%= f.collection_select(:customer_id, @customers, :id, :company, {:include_blank => true}) %>
+      </p>
+      <p class="formInput">
+        <%= f.submit("Papiere erfassen") %>
+      </p>
 
-<% end %>
+    <% end %>
+  </section>
+</section>
+

@@ -46,7 +46,15 @@ class CargoListsController < ApplicationController
   def assign_pallets
     @pallets = Pallet.find(params[:pallet_ids])
     @cargo_list = CargoList.find(params[:cargo_id])
-    @cargo_list.pallets = @pallets
+    @cargo_list.pallets += @pallets
+    
+    redirect_to(:back)
+  end
+  
+  def remove_pallets
+    @pallets = Pallet.find(params[:pallet_ids])
+    @cargo_list = CargoList.find(params[:cargo_id])
+    @cargo_list.pallets -= @pallets
     
     redirect_to(:back)
   end
