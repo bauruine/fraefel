@@ -86,4 +86,24 @@ class CargoListsController < ApplicationController
       end
     end
   end
+  
+  def collective_invoice
+    @cargo_list = CargoList.find(params[:id])
+    @customer = @cargo_list.customer
+    @customer_address = @customer.shipping_addresses.first
+    
+    respond_to do |format|
+      format.pdf do
+        render( 
+          :pdf => "Sammelrechnung_Versand-NR##{@cargo_list.id}-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Portrait',
+          :encoding => 'UTF-8'
+        )
+      end
+    end
+  end
+  
 end

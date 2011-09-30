@@ -17,4 +17,13 @@ $(document).ready(function(){
   });
 
 	$('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
+
+	$('div[data-type=modal]').dialog({ autoOpen: false, modal: true, draggable: false, resizable: false });
+	
+	$('a[data-type=modal]').click(function() {
+		var remote_url = $(this).attr("href");
+		$('div[data-type=modal]').load(remote_url + ' form');
+		$('div[data-type=modal]').dialog('open');
+		return false;
+	});
 });

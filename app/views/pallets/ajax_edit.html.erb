@@ -1,0 +1,11 @@
+<% form_for @pallet do |f| %>
+  <p class="formLabel">
+    <%= f.label :additional_space, "Additional Space" %>
+  </p>
+  <p class="formInput">
+    <%= f.text_field :additional_space %>
+  </p>
+  <p class="formInput">
+    <%= f.submit "Edit", :disable_with => 'Editing...' %>
+  </p>
+<% end %>

@@ -1,0 +1,122 @@
+<header id="invoice_header" class="clearfix">
+  <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
+  <ul class="floatLeft">
+    <li class="bold">Verkaufsinnendienst</li>
+    <li>Telefon +41 71 982 80 84</li>
+    <li>Telefax +41 71 982 80 77</li>
+  </ul>
+
+  <ul class="floatLeft">
+    <li class="bold">Fraefel AG</li>
+    <li>Lerchenfeld</li>
+    <li>CH-9601 Lütisburg-Station</li>
+    <li>www.fraefel.ag</li>
+  </ul>
+</header>
+
+<h1 class="logo_title">Sammelrechnung</h1>
+<h1>Diverse Empfänger in Deutschland</h1>
+
+<p><%="#{@customer_address.country}-#{@customer_address.zip} #{@customer_address.city}"%></p>
+<hr>
+
+<section id="customer_attributes_1" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>DE-ST-Nr.</li>
+    <li>DE-Zollnummer Fraefel</li>
+  </ul>
+  <ul id="column_2" class="floatLeft">
+    <li class="bold">DE 09408/24772</li>
+    <li class="bold">6207308</li>
+  </ul>
+  <ul id="column_3" class="floatLeft">
+    <li>U/Z</li>
+    <li>MwSt.Nr.</li>
+  </ul>
+  <ul id="column_4" class="floatLeft">
+    <li class="white_color">.</li>
+    <li class="white_color">.</li>
+  </ul>
+  <ul id="column_5" class="floatLeft">
+    <li>BE</li>
+    <li class="white_color">.</li>
+  </ul>
+</section>
+
+<section id="customer_attributes_2" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>Kunde</li>
+    <li>Transport/Lieferung</li>
+  </ul>
+  <ul id="column_2" class="floatLeft">
+    <li class="bold"><%= @customer.company %></li>
+    <li class="bold light_blue_background"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></li>
+  </ul>
+  <ul id="column_3" class="floatLeft">
+    <li class="white_color">.</li>
+    <li class="white_color">.</li>
+  </ul>
+  <ul id="column_4" class="floatLeft">
+    <li class="white_color">.</li>
+    <li class="bold">Lebert Fax: +41 71 677 22 66</li>
+  </ul>
+</section>
+
+<section id="price_table">
+  <table>
+    <thead>
+      <tr>
+        <th>Menge Coli</th>
+        <th>Pos. Artikel</th>
+        <th>Stückzahl Total</th>
+        <th>Warenwert / Euro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>9403.6000 Holzmöbel</td>
+        <td>13</td>
+        <td>7003.00</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section id="conditions" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>Lieferbedingung</li>
+    <li>Versandbedingung</li>
+    <li>Zahlungsbedingung</li>
+  </ul>
+  <ul id="column_2" class="floatLeft">
+    <li>frei Haus, verzollt, versteuert</li>
+    <li>per LKW</li>
+    <li>30 Tage netto</li>
+  </ul>
+</section>
+
+<section id="declaration">
+  <p>
+    Der Ausführer ( Ermächtigter Ausführer; Bewilligungs-Nr.4218 ) der Waren, auf die sich dieses
+  </p>
+  <p>
+    Handelspapier bezieht, erklärt, dass diese Waren, soweit nicht anders angegeben, präferenzbegünstigte
+  </p>
+  <p>
+    schweizerische Ursprungswaren sind.
+  </p>
+</section>
+
+<footer id="invoice_footer" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>Lütisburg-Station,</li>
+    <li>Unterschrift des Ausführers</li>
+  </ul>
+  
+  <ul id="column_2" class="floatLeft">
+    <li>( Ort, Datum )</li>
+    <li>( in Druckschrift anführen )</li>
+  </ul>
+</footer>

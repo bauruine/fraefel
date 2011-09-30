@@ -13,8 +13,12 @@ a {
 }
 
 h1 {
-  padding-bottom: 20px;
-  font-size: 14px;
+  padding-bottom: 32px;
+  font-size: 13px;
+}
+
+h1.logo_title {
+	
 }
 
 img#logo {
@@ -43,6 +47,12 @@ img#logo {
 .red_background {
 	background-color: #990000;
 	color: #ffffff;
+}
+.white_color {
+	color: #FFFFFF;
+}
+.light_blue_background {
+	background-color: #75D8FF;
 }
 
 section#login {
@@ -253,4 +263,105 @@ section.filter_box header.filter_box_header h4 {
 section.filter_box section.filter_box_content {
 	background-color: #f3f3f3;
 	padding: 5px;
+}
+
+/*** Invoice Header ***/
+header#invoice_header {
+	padding-bottom: 7px;
+}
+
+header#invoice_header img {
+	margin-right: 150px;
+}
+header#invoice_header ul {
+	margin-right: 20px;
+}
+
+/*** Customer Attributes - 1 ***/
+section#customer_attributes_1 {
+	margin-bottom: 16px;
+}
+
+section#customer_attributes_1 ul#column_1 {
+	width: 160px;
+}
+
+section#customer_attributes_1 ul#column_2 {
+	width: 120px;
+}
+
+section#customer_attributes_1 ul#column_3 {
+	width: 110px;
+}
+
+section#customer_attributes_1 ul#column_4 {
+	width: 290px;
+}
+
+/*** Customer Attributes - 2 ***/
+section#customer_attributes_2 {
+	margin-bottom: 23px;
+}
+
+section#customer_attributes_2 ul#column_1 {
+	width: 160px;
+}
+
+section#customer_attributes_2 ul#column_2 {
+	width: 120px;
+}
+section#customer_attributes_2 ul#column_3 {
+	width: 110px;
+}
+section#customer_attributes_2 ul#column_4 {
+	width: 290px;
+}
+
+/*** Conditions ***/
+section#conditions {
+	margin-bottom: 35px;
+}
+section#conditions ul#column_1 {
+	width: 160px;
+}
+
+/*** Price Table ***/
+section#price_table {
+	height: 340px;
+}
+
+section#price_table table thead th {
+  font-weight: normal;
+  font-size: 10px;
+	border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+	text-align: left;
+}
+
+section#price_table table th {
+  padding: 3px;
+  line-height: 1.2em;
+}
+
+section#price_table table td {
+  padding: 3px;
+  line-height: 1.2em;
+}
+
+/*** Declaration ***/
+section#declaration {
+	margin-bottom: 20px;
+}
+
+/*** Invoice Footer ***/
+footer#invoice_footer {
+	
+}
+
+footer#invoice_footer ul li {
+	margin-bottom: 9px;
+}
+
+footer#invoice_footer ul#column_1 {
+	margin-right: 260px;
 }

@@ -39,6 +39,7 @@ Fraefel::Application.routes.draw do
     end
     member do
       get 'print_pallets'
+      get 'collective_invoice'
     end
   end
 

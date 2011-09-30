@@ -1,12 +1,17 @@
-<nav class="form_navigation">
-  <ul class="clearfix">
-    <li><%= button_to("Zollpapiere", new_cargo_list_path, :method => :get) %></li>
-    <li><%= button_to("Liste drucken", print_pallets_cargo_list_path(:format => :pdf), {:method => :get}) %></li>
-  </ul>
-</nav>
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Versand NR#<%= @cargo_list.id %></h1>
+  <%= link_to("Print", print_pallets_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Zollpapiere", collective_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
 
-<h1>Versand NR#<%= @cargo_list.id %></h1>
 <% if @assigned_pallets.present? %>
+  
+  <ul class="ul_summary">
+    <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @cargo_list.customer.company %></p></li>
+    <li class="summary clearfix"><p class="floatLeft bold title">Anz. Paletten:</p><p class="floatLeft"><%= @assigned_pallets.count %></p></li>
+    <li class="summary clearfix"><p class="floatLeft bold title">Mehrplatz:</p><p class="floatLeft"><%= @cargo_list.additional_space %></p></li>
+  </ul>
+  
   <section class="filter_box">
     <header class="filter_box_header"><h4>Angefügte Paletten</h4></header>
     <section class="filter_box_content clearfix">

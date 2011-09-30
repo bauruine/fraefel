@@ -1,10 +1,8 @@
-<nav class="form_navigation">
-  <ul class="clearfix">
-    <li><%= button_to("Papiere erfassen", new_cargo_list_path, :method => :get) %></li>
-  </ul>
-</nav>
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Versand Listen</h1>
+  <%= link_to("Papiere erfassen", new_cargo_list_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
 
-<h1>Versand Listen</h1>
 <% if @cargo_lists.present? %>
   <section class="filter_box">
     <header class="filter_box_header"><h4>Versand</h4></header>

@@ -17,7 +17,7 @@ gem "dummy_data"
 gem 'paper_trail', '~> 2'
 gem 'wicked_pdf'
 gem "meta_search"
-
+gem 'hirb'
 # Use unicorn as the web server
 # gem 'unicorn'
 

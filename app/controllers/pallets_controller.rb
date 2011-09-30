@@ -1,5 +1,32 @@
 class PalletsController < ApplicationController
   
+  def show
+    @pallet = Pallet.find(params[:id])
+    respond_to do |format|
+      format.pdf do
+        render( 
+          :pdf => "Palette-NR: #{@pallet.id}-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :header => {
+            :left => "Fraefel AG",
+            :right => "#{Time.now}",
+            :line => true,
+            :spacing => 2
+          },
+          :footer => {
+            :left => "#{pallet_url(@pallet, :format => :pdf)}",
+            :right => "Seite [page]",
+            :line => true
+          }
+        )
+      end
+    end
+  end
+  
   def index
     @pallets = Pallet.all
     @purchase_orders = PurchaseOrder.joins(:pallets)
@@ -8,7 +35,7 @@ class PalletsController < ApplicationController
       format.html
       format.pdf do
         render( 
-          :pdf => "Paletten-Liste-#{Date.today}",
+          :pdf => "Paletten-Liste-#{Time.now}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
           :show_as_html => params[:debug].present?,
@@ -34,6 +61,9 @@ class PalletsController < ApplicationController
     @pallet = Pallet.find(params[:id])
     @purchase_order = @pallet.purchase_order
     @purchase_positions = @purchase_order.purchase_positions.where("pallet_id IS NULL")
+    if request.xhr?
+      render :template => 'pallets/ajax_edit'
+    end
   end
   
   def update

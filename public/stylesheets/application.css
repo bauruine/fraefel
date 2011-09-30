@@ -46,8 +46,35 @@ img#logo {
 	color: #ffffff;
 }
 
+.white_font {
+	color: #fff;
+}
+a.no_text_decoration {
+	text-decoration: none;
+}
 .margin_bottom_big {
 	margin-bottom: 20px;
+}
+.m-r_5px {
+	margin-right: 5px;
+}
+
+a.link_button {
+	background-color: #F3F3F3;
+	padding: 3px;
+	color: #333333;
+	font-size: 11px;
+	border-radius: 2px;
+	border-color: #5F5F62;
+}
+
+a.blue_link_button {
+	background-color: #005D91;
+	padding: 3px 7px 3px 7px;
+	color: #fff;
+	font-size: 12px;
+	border-radius: 2px;
+	border-color: #5F5F62;
 }
 
 section#login {
@@ -171,7 +198,7 @@ table a {
   text-decoration: none;
 }
 section#yieldContent {
-  padding: 20px 40px;
+  padding: 40px 40px;
 }
 nav.pagination {
   float: right;
@@ -259,4 +286,13 @@ section.filter_box header.filter_box_header h4 {
 section.filter_box section.filter_box_content {
 	background-color: #f3f3f3;
 	padding: 5px;
+}
+
+/*** Resource Header ***/
+header.resource_header {
+}
+
+header.resource_header h1 {
+	font-size: 20px;
+	padding: 0px;
 }

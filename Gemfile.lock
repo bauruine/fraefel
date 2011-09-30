@@ -41,6 +41,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fastercsv (1.5.4)
+    hirb (0.5.0)
     i18n (0.5.0)
     kaminari (0.12.4)
       rails (>= 3.0.0)
@@ -101,6 +102,7 @@ DEPENDENCIES
   declarative_authorization
   dummy_data
   fastercsv
+  hirb
   kaminari
   meta_search
   meta_where
