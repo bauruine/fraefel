@@ -244,7 +244,7 @@ select {
   resize: none;
 }
 
-/*** Filter Box***/
+/*** Filter Box**/
 section.filter_box:nth-of-type(3) {
 	page-break-after: always;
 }
