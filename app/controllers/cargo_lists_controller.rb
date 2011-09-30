@@ -91,6 +91,7 @@ class CargoListsController < ApplicationController
     @cargo_list = CargoList.find(params[:id])
     @customer = @cargo_list.customer
     @customer_address = @customer.shipping_addresses.first
+    @ordered_commodity_codes = PurchasePosition.sum("amount", :include => [:commodity_code, :pallet => :cargo_list], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
     
     respond_to do |format|
       format.pdf do
@@ -104,6 +105,10 @@ class CargoListsController < ApplicationController
         )
       end
     end
+  end
+  
+  def heydo
+    PurchasePosition.sum("amount", :include => [:commodity_code, :pallet => :cargo_list], :group => "commodity_code", :conditions => {:cargo_lists => { :id => 2}})
   end
   
 end

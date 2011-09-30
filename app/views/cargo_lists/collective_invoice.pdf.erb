@@ -73,12 +73,14 @@
       </tr>
     </thead>
     <tbody>
+      <% @ordered_commodity_codes.each do |foo| %>
       <tr>
         <td></td>
-        <td>9403.6000 Holzmöbel</td>
-        <td>13</td>
-        <td>7003.00</td>
+        <td><%= "#{foo.first.code} #{foo.first.content}" %></td>
+        <td><%= @ordered_commodity_codes.keys %></td>
+        <td><%= foo[1] %></td>
       </tr>
+      <% end %>
     </tbody>
   </table>
 </section>
