@@ -13,4 +13,13 @@ class PurchasePosition < ActiveRecord::Base
     @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
     @purchase_order.update_attributes(:delivery_date => @date_for_update)
   end
+  
+  def self.calculate_for_invoice(type, attrs)
+    if attrs[1].present?
+      sum("#{type}", :include => [:commodity_code, :pallet => :cargo_list], :conditions => {:cargo_lists => { :id => attrs[0] }, :commodity_codes => { :id => attrs[1] }})
+    else
+      sum("#{type}", :include => [:pallet => :cargo_list], :conditions => {:cargo_lists => { :id => attrs[0] }})
+    end
+  end
+  
 end

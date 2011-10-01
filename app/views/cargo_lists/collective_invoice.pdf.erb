@@ -68,8 +68,8 @@
       <tr>
         <th>Menge Coli</th>
         <th>Pos. Artikel</th>
-        <th>Stückzahl Total</th>
-        <th>Warenwert / Euro</th>
+        <th class="align-center">Stückzahl Total</th>
+        <th class="align-right">Warenwert / Euro</th>
       </tr>
     </thead>
     <tbody>
@@ -77,10 +77,16 @@
       <tr>
         <td></td>
         <td><%= "#{foo.first.code} #{foo.first.content}" %></td>
-        <td><%= @ordered_commodity_codes.keys %></td>
-        <td><%= foo[1] %></td>
+        <td class="align-center"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id, foo.first.id]).to_i %></td>
+        <td class="align-right"><%= foo[1] %></td>
       </tr>
       <% end %>
+      <tr>
+        <td></td>
+        <td class="bold">Total Stücke</td>
+        <td class="align-center"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id]).to_i %></td>
+        <td class="align-right"><%= PurchasePosition.calculate_for_invoice("amount", [@cargo_list.id]).to_i %></td>
+      </tr>
     </tbody>
   </table>
 </section>

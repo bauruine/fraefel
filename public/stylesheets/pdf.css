@@ -151,8 +151,12 @@ table th {
   padding: 10px;
   line-height: 1.3em;
 }
-table td.align-center {
+table td.align-center, table th.align-center {
 	text-align: center;
+}
+
+table td.align-right, table th.align-right {
+	text-align: right;
 }
 
 table tfoot td .bulk-actions {
@@ -336,6 +340,14 @@ section#price_table table thead th {
 	border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 	text-align: left;
+}
+
+section#price_table table thead th.align-center {
+	text-align: center;
+}
+
+section#price_table table thead th.align-right {
+	text-align: right;
 }
 
 section#price_table table th {
