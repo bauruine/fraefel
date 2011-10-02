@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110927210553) do
+ActiveRecord::Schema.define(:version => 20111002143743) do
 
   create_table "cargo_lists", :force => true do |t|
     t.datetime "pick_up_time_earliest"
@@ -54,6 +54,13 @@ ActiveRecord::Schema.define(:version => 20110927210553) do
     t.datetime "updated_at"
   end
 
+  create_table "pallet_types", :force => true do |t|
+    t.string   "description"
+    t.float    "count_as"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pallets", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "cargo_list_id"
@@ -62,7 +69,8 @@ ActiveRecord::Schema.define(:version => 20110927210553) do
     t.datetime "delivery_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "additional_space"
+    t.decimal  "additional_space",  :default => 0.0
+    t.integer  "pallet_type_id"
   end
 
   create_table "purchase_orders", :force => true do |t|

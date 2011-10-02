@@ -1,6 +1,6 @@
 class AddAdditionalSpaceToPallets < ActiveRecord::Migration
   def self.up
-    add_column :pallets, :additional_space, :decimal
+    add_column :pallets, :additional_space, :decimal, :default => 0
   end
 
   def self.down

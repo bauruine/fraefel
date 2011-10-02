@@ -331,7 +331,7 @@ section#conditions ul#column_1 {
 
 /*** Price Table ***/
 section#price_table {
-	height: 340px;
+	margin-bottom: 30px;
 }
 
 section#price_table table thead th {
@@ -358,6 +358,10 @@ section#price_table table th {
 section#price_table table td {
   padding: 3px;
   line-height: 1.2em;
+}
+
+section#price_table table td.border-top {
+	border-top: 1px solid #000;
 }
 
 /*** Declaration ***/

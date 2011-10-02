@@ -1,0 +1,41 @@
+<h1>Versand ID: <%= @cargo_list.id %></h1>
+<h1><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></h1>
+
+<% @cargo_list.pallets.each do |pallet| %>
+  <% @customer_address = pallet.purchase_order.customer.shipping_addresses.first %>
+  <% @total_weight = pallet.purchase_positions.sum("weight_total") %>
+  
+  <section class="filter_box">
+    <header class="filter_box_header"><h4>Palette NR#<%= pallet.id %></h4></header>
+    <section class="filter_box_content clearfix">
+      <ul class="ul_summary">
+        <li class="summary clearfix"><p class="floatLeft bold title">Kunden Name:</p><p class="floatLeft"><%= pallet.purchase_order.customer.company %></p></li>
+        <li class="summary clearfix"><p class="floatLeft bold title">Strasse:</p><p class="floatLeft"><%= @customer_address.street %></p></li>
+        <li class="summary clearfix"><p class="floatLeft bold title">Ort:</p><p class="floatLeft"><%= "#{@customer_address.country} #{@customer_address.zip} #{@customer_address.city}" %></p></li>
+      </ul>
+      <table class="margin_bottom_big">
+        <thead>
+          <tr>
+            <th>VK-Auftrag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% pallet.purchase_positions.group("purchase_order_id").each do |purchase_position| %>
+            <tr>
+              <td class="align-center"><%= purchase_position.purchase_order.baan_id %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <ul class="ul_summary">
+        <li class="summary clearfix"><p class="floatLeft bold title">Paletten:</p><p class="floatLeft"><%= pallet.pallet_type.count_as.to_i %></p></li>
+        <li class="summary clearfix"><p class="floatLeft bold title">Paletten-Plätze:</p><p class="floatLeft"><%= pallet.pallet_type.count_as + (pallet.additional_space / 120) %></p></li>
+        <li class="summary clearfix"><p class="floatLeft bold title">Mehrplatz:</p><p class="floatLeft"><%= pallet.additional_space %></p></li>
+      </ul>
+      <ul class="ul_summary">
+        <li class="summary clearfix"><p class="floatLeft bold title">Netto kg:</p><p class="floatLeft"><%= @total_weight %></p></li>
+        <li class="summary clearfix"><p class="floatLeft bold title">Brutto kg:</p><p class="floatLeft"><%= @total_weight + (pallet.pallet_type.count_as * 20) %></p></li>
+      </ul>
+    </section>
+  </section>
+<% end %>

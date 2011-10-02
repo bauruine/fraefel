@@ -3,7 +3,7 @@ class CargoListsController < ApplicationController
   def show
     @cargo_list = CargoList.find(params[:id])
     @assigned_pallets = @cargo_list.pallets
-    
+    @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
     @pallets = Pallet.order("purchase_positions.delivery_date asc").includes(:purchase_order => [:purchase_positions]) - @assigned_pallets - Pallet.where("cargo_list_id IS NOT NULL")
   end
   
@@ -92,7 +92,10 @@ class CargoListsController < ApplicationController
     @customer = @cargo_list.customer
     @customer_address = @customer.shipping_addresses.first
     @ordered_commodity_codes = PurchasePosition.sum("amount", :include => [:commodity_code, :pallet => :cargo_list], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
-    
+    @purchase_positions_amount = PurchasePosition.calculate_for_invoice("amount", [@cargo_list.id])
+    @pallets_additional_space = @cargo_list.pallets.sum("additional_space") / 120
+    @pallets_weight = PurchasePosition.calculate_for_invoice("weight_total", [@cargo_list.id])
+    @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
     respond_to do |format|
       format.pdf do
         render( 
@@ -105,6 +108,26 @@ class CargoListsController < ApplicationController
         )
       end
     end
+  end
+  
+  def print_lebert
+    @cargo_list = CargoList.find(params[:id])
+    @customer = @cargo_list.customer
+    @customer_address = @customer.shipping_addresses.first
+    
+    respond_to do |format|
+      format.pdf do
+        render( 
+          :pdf => "Angaben-Lebert_Versand-NR##{@cargo_list.id}-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Portrait',
+          :encoding => 'UTF-8'
+        )
+      end
+    end
+    
   end
   
   def heydo
