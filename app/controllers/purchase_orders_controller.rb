@@ -68,4 +68,9 @@ class PurchaseOrdersController < ApplicationController
     end
   end
   
+  def import_orders
+    #system('rake routes')
+    system('rake baan:import:re')
+    redirect_to(:back)
+  end
 end

@@ -285,7 +285,7 @@ namespace :baan do
             csv_array = [weight_single.to_s, weight_total.to_s, quantity.to_s, amount.to_s, position]
             purchase_position_array = [purchase_position.weight_single.to_s, purchase_position.weight_total.to_s, purchase_position.quantity.to_s, purchase_position.amount.to_s, purchase_position.position]
             if (csv_array != purchase_position_array && purchase_position.status == "open")
-              purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
+              purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
               puts "Found differences. Update Position..."
             end
           else
@@ -364,6 +364,25 @@ namespace :baan do
     
     desc "Run all Imports --> this will reset your data!"
     task :complete => [:reset, :default_data, :customers, :shipping_addresses, :users, :commodity_codes, :shipping_routes, :purchase_orders, :purchase_positions] do
+    end
+    
+    desc "Re-Import"
+    task :re => [:customers, :shipping_addresses, :users, :commodity_codes, :shipping_routes, :purchase_orders, :purchase_positions] do
+    end
+    
+    desc "Update-MD5"
+    task :update_md5 => :environment do
+      import_yaml = YAML.load_file("import/import.yml")
+      
+      import_yaml["csv"]["users"]["checksum"] = Digest::SHA1.hexdigest(File.read("import/csv/users/BaanRead_Benutzer.csv"))
+      import_yaml["csv"]["customers"]["checksum"] = Digest::SHA1.hexdigest(File.read("import/csv/purchase_orders/BaanRead_Versand.csv"))
+      import_yaml["csv"]["shipping_addresses"]["checksum"] = Digest::SHA1.hexdigest(File.read("import/csv/purchase_orders/BaanRead_Versand.csv"))
+      import_yaml["csv"]["commodity_codes"]["checksum"] = Digest::SHA1.hexdigest(File.read("import/csv/purchase_orders/BaanRead_Versand.csv"))
+      import_yaml["csv"]["purchase_orders"]["checksum"] = Digest::SHA1.hexdigest(File.read("import/csv/purchase_orders/BaanRead_Versand.csv"))
+      import_yaml["csv"]["purchase_positions"]["checksum"] = Digest::SHA1.hexdigest(File.read("import/csv/purchase_orders/BaanRead_Versand.csv"))
+      
+      puts "Update CONFIG_FILE..."
+      File.open("#{RAILS_ROOT}/import/import.yml", 'w') { |f| YAML.dump(import_yaml, f) }
     end
     
   end

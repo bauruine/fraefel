@@ -2,19 +2,19 @@
 
 <% form_for @purchase_position do |f| %>
   <p class="formLabel">
-    <%= f.label :weight_single %>
+    <%= f.label :weight_single, "Gewicht einzeln" %>
   </p>
   <p class="formInput">
     <%= f.text_field :weight_single %>
   </p>
   <p class="formLabel">
-    <%= f.label :quantity %>
+    <%= f.label :quantity, "Anzahl" %>
   </p>
   <p class="formInput">
     <%= f.text_field :quantity %>
   </p>
   <p class="formLabel">
-    <%= f.label :amount %>
+    <%= f.label :amount, "Preis" %>
   </p>
   <p class="formInput">
     <%= f.text_field :amount %>

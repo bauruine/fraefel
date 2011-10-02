@@ -20,6 +20,9 @@ Fraefel::Application.routes.draw do
     member do
       get 'print_pallets'
     end
+    collection do
+      get 'import_orders'
+    end
   end
   
   resources :pallets do
