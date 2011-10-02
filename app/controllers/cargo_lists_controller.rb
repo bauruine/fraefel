@@ -8,7 +8,12 @@ class CargoListsController < ApplicationController
   end
   
   def index
-    @cargo_lists = CargoList.find(:all)
+    if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"
+      @search = CargoList.search(params[:search])
+    else
+      @search = CargoList.where(:delivered => false).search(params[:search])
+    end
+    @cargo_lists = @search
   end
   
   def new

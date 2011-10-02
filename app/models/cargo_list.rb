@@ -4,6 +4,8 @@ class CargoList < ActiveRecord::Base
   belongs_to :shipper_location, :class_name => "ShipperLocation", :foreign_key => "shipper_location_id"
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
   
+  after_update :change_pallets_status
+  
   def additional_space
     additional_space = 0
     pallets.each do |pallet|
@@ -26,6 +28,14 @@ class CargoList < ActiveRecord::Base
       weight_total = weight_total + purchase_position.weight_total
     end
     return weight_total
+  end
+  
+  private
+  
+  def change_pallets_status
+    if delivered == true
+      Pallet.where(:cargo_list => self).update_all(:delivered => true)
+    end
   end
   
 end

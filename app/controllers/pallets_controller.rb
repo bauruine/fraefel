@@ -28,7 +28,7 @@ class PalletsController < ApplicationController
   end
   
   def index
-    @pallets = Pallet.all
+    @pallets = Pallet.where(:delivered => false)
     @purchase_orders = PurchaseOrder.joins(:pallets)
     
     respond_to do |format|

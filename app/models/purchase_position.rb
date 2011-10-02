@@ -4,6 +4,7 @@ class PurchasePosition < ActiveRecord::Base
   belongs_to :pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
   
   after_save :update_purchase_order_date
+  after_update :update_weight_total
   
   
   protected
@@ -12,6 +13,13 @@ class PurchasePosition < ActiveRecord::Base
     @purchase_order = self.purchase_order
     @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
     @purchase_order.update_attributes(:delivery_date => @date_for_update)
+  end
+  
+  def update_weight_total
+    @calculated_weight = (weight_single * quantity)
+    if  @calculated_weight != weight_total
+      update_attributes(:weight_total => @calculated_weight)
+    end
   end
   
   def self.calculate_for_invoice(type, attrs)

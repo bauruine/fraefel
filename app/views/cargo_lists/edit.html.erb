@@ -1,0 +1,13 @@
+<h1>Versand NR#<%= @cargo_list.id %></h3>
+
+<% form_for @cargo_list do |f| %>
+  <p class="formLabel">
+    <%= f.label :delivered, "Versendet?" %>
+  </p>
+  <p class="formInput">
+    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+  </p>
+  <p class="formInput">
+    <%= f.submit("Speichern") %>
+  </p>
+<% end %>

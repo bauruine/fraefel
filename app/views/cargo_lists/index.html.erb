@@ -1,3 +1,24 @@
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Filter anwenden</h4></header>
+  <section class="filter_box_content clearfix">
+  <% form_for :search, @search, :html => {:method => :get} do |f| %>
+    <ul class="ul_summary">
+      
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Versendet?</p>
+        <p class="floatLeft"><%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %></p>
+      </li>
+      
+      <li class="summary clearfix">
+        <p class="floatLeft title">Aktionen</p>
+        <p class="floatLeft"><%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil %></p>
+      </li>
+      
+    </ul>
+  <% end %>
+  </section>
+</section>
+
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand Listen</h1>
   <%= link_to("Papiere erfassen", new_cargo_list_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>

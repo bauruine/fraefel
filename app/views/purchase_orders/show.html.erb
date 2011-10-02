@@ -1,6 +1,7 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
   <%= link_to("Print", print_pallets_purchase_order_path(@purchase_order, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Edit", edit_purchase_order_path(@purchase_order), {"data-type" => "modal", :class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
 </header>
 
 <ul class="ul_summary">
@@ -9,7 +10,9 @@
 
 <% if @purchase_positions.present? %>
   <section class="filter_box">
-    <header class="filter_box_header"><h4>Offene Positionen</h4></header>
+    <header class="filter_box_header clearfix">
+      <h4 class="floatLeft">Offene Positionen</h4>
+    </header>
     <section class="filter_box_content clearfix">
       <% form_tag(assign_positions_pallets_path, {:class => "form", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
@@ -29,7 +32,7 @@
           <tbody>
             <% @purchase_positions.each do |purchase_position| %>
               <tr>
-                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position)) %></td>
+                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
                 <td class="align-center"><%= purchase_position.article_number %></td>
                 <td class="align-center"><%= purchase_position.article %></td>
                 <td class="align-center"><%= purchase_position.product_line %></td>

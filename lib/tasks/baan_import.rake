@@ -43,8 +43,8 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/customers/")
-      csv_file = Dir[File.join(csv_folder, 'BaanRead_Handelspartner.csv')]
+      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["customers"]["checksum"]
       csv_checksum = Digest::SHA1.hexdigest(File.read(csv_file[0]))
@@ -55,8 +55,8 @@ namespace :baan do
         puts "Current HANDELSPARTNER VERSION --> #{import_yaml["csv"]["customers"]["import_count"]}"
 
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-          company = row[1].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          baan_id = row[3].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          company = row[5].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          baan_id = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           
           customer = Customer.find_or_initialize_by_baan_id(:baan_id => baan_id, :company => company)
           
@@ -91,8 +91,8 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/customers/")
-      csv_file = Dir[File.join(csv_folder, 'BaanRead_Lieferadresse.csv')]
+      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["shipping_addresses"]["checksum"]
       csv_checksum = Digest::SHA1.hexdigest(File.read(csv_file[0]))
@@ -103,27 +103,25 @@ namespace :baan do
         puts "Current HANDELSPARTNER ADRESSEN VERSION --> #{import_yaml["csv"]["shipping_addresses"]["import_count"]}"
 
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-          street = row[2].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip + " " + row[3].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          zip = row[5]
-          city = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          country = row[4].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          fax = row[8].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          phone_number = row[7].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          baan_id = row[0].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          street = row[7].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip + " " + row[8].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          zip = row[10]
+          city = row[11].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          country = row[9].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          baan_id = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
           if Customer.find_by_baan_id(baan_id) && Customer.find_by_baan_id(baan_id).shipping_addresses.first.present?
             customer = Customer.find_by_baan_id(baan_id)
             address = customer.shipping_addresses.first
             
-            csv_array = [street, zip, city, country, fax, phone_number]
-            customer_array = [address.street, address.zip, address.city, address.country, address.fax, address.phone_number]
+            csv_array = [street, zip, city, country]
+            customer_array = [address.street, address.zip, address.city, address.country]
           
             if csv_array != customer_array
-              address.update_attributes(:street => street, :zip => zip, :city => city, :country => country, :fax => fax, :phone_number => phone_number)
+              address.update_attributes(:street => street, :zip => zip, :city => city, :country => country)
             end
           
           else
             if Customer.find_by_baan_id(baan_id).present?
-              Customer.find_by_baan_id(baan_id).shipping_addresses.build(:street => street, :zip => zip, :city => city, :country => country, :fax => fax, :phone_number => phone_number).save
+              Customer.find_by_baan_id(baan_id).shipping_addresses.build(:street => street, :zip => zip, :city => city, :country => country).save
             else
               # Should write in LOG
             end

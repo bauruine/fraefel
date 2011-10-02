@@ -80,7 +80,7 @@
         <td></td>
         <td><%= "#{foo.first.code} #{foo.first.content}" %></td>
         <td class="align-center"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id, foo.first.id]).to_i %></td>
-        <td class="align-right"><%= foo[1] %></td>
+        <td class="align-right"><%= number_to_currency(foo[1]) %></td>
       </tr>
       <% end %>
       <tr>
@@ -88,7 +88,7 @@
         <td></td>
         <td class="bold">Total Stücke</td>
         <td class="align-center border-top bold"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id]).to_i %></td>
-        <td class="align-right border-top"><%= @purchase_positions_amount %></td>
+        <td class="align-right border-top"><%= number_to_currency(@purchase_positions_amount.to_f) %></td>
       </tr>
       <tr>
         <td class="white_color">.</td>
@@ -102,35 +102,35 @@
         <td></td>
         <td></td>
         <td>Zwischentotal</td>
-        <td class="align-right"><%= @purchase_positions_amount %></td>
+        <td class="align-right"><%= number_to_currency(@purchase_positions_amount.to_f) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>MwSt 19.00%</td>
-        <td class="align-right"><%= @purchase_positions_amount / 100 * 19 %></td>
+        <td class="align-right"><%= number_to_currency(((@purchase_positions_amount / 100) * 19).to_f) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>Total</td>
-        <td class="align-right"><%= (@purchase_positions_amount / 100 * 19) + @purchase_positions_amount %></td>
+        <td class="align-right"><%= number_to_currency((((@purchase_positions_amount / 100) * 19) + @purchase_positions_amount).to_f) %></td>
       </tr>
       <tr>
         <td></td>
         <td>Total netto kg</td>
         <td><%= @pallets_weight %></td>
         <td>Sonderrabat 100%</td>
-        <td class="align-right">0</td>
+        <td class="align-right"><%= number_to_currency(0) %></td>
       </tr>
       <tr>
         <td></td>
         <td class="bold">Total brutto kg</td>
         <td class="bold"><%= @pallets_weight + (@pallets_count * 20) %></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= (@purchase_positions_amount / 100 * 19) + @purchase_positions_amount %></td>
+        <td class="align-right bold"><%= number_to_currency((((@purchase_positions_amount / 100) * 19) + @purchase_positions_amount).to_f) %></td>
       </tr>
     </tbody>
   </table>
@@ -184,7 +184,7 @@
   var coli_count_value = $("tr")[3].children[1];
   
   $(pallet_count).html(<%= @pallets_count %>);
-  $(pallet_total).html(<%= @pallets_additional_space + @pallets_count %>);
+  $(pallet_total).html(<%= (@pallets_additional_space + @pallets_count).round(1) %>);
   $(coli_count).html(0);
   
   $(pallet_count_value).html("Paletten");

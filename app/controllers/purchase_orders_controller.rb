@@ -7,10 +7,28 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @search = PurchaseOrder.where(:status => "open").where("customer_id IS NOT NULL").search(params[:search])
+    if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"
+      @search = PurchaseOrder.where(:status => "open").where("customer_id IS NOT NULL").search(params[:search])
+    else
+      @search = PurchaseOrder.where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").search(params[:search])
+    end
+    
     @purchase_orders = @search.order("delivery_date asc, shipping_route_id asc, customer_id asc")
   end
-
+  
+  def edit
+    @purchase_order = PurchaseOrder.find(params[:id])
+  end
+  
+  def update
+    @purchase_order = PurchaseOrder.find(params[:id])
+    if @purchase_order.update_attributes(params[:purchase_order])
+      redirect_to(:back)
+    else
+      render 'edit'
+    end
+  end
+  
   def print_pallets
     @purchase_order = PurchaseOrder.find(params[:id])
     @pallets = @purchase_order.pallets

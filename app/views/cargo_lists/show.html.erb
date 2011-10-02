@@ -1,6 +1,6 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand NR#<%= @cargo_list.id %></h1>
-  <%= link_to("Print", print_pallets_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal") %>
   <%= link_to("Zollpapiere", collective_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
   <%= link_to("Lebert", print_lebert_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
@@ -106,3 +106,4 @@
 <% else %>
   <div id="flash_notice">Es wurden bereits alle Palleten bearbeitet!</div>
 <% end %>
+<div data-type="modal"></div>

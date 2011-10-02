@@ -21,6 +21,10 @@
         <p class="floatLeft"><%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %></p>
       </li>
       <li class="summary clearfix">
+        <p class="floatLeft bold title">Versendet?</p>
+        <p class="floatLeft"><%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %></p>
+      </li>
+      <li class="summary clearfix">
         <p class="floatLeft title">Aktionen</p>
         <p class="floatLeft"><%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil %></p>
       </li>
