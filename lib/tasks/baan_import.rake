@@ -7,7 +7,7 @@ namespace :baan do
     task :users => :environment do
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/users/")
+      csv_folder = "/home/sufu/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Benutzer.csv')]
       
       current_checksum = import_yaml["csv"]["users"]["checksum"]
@@ -43,7 +43,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_folder = "/home/sufu/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["customers"]["checksum"]
@@ -91,7 +91,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_folder = "/home/sufu/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["shipping_addresses"]["checksum"]
@@ -146,7 +146,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_folder = "/home/sufu/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["commodity_codes"]["checksum"]
@@ -194,7 +194,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_folder = "/home/sufu/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["purchase_orders"]["checksum"]
@@ -247,7 +247,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_folder = "/home/sufu/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["purchase_positions"]["checksum"]
@@ -312,7 +312,7 @@ namespace :baan do
     task :shipping_routes => :environment do
       PaperTrail.whodunnit = 'System'
       
-      csv_folder = File.join(Rails.root, "import/csv/purchase_orders/")
+      csv_folder = "/home/sufu/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
