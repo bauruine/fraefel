@@ -17,7 +17,7 @@
 <h1 class="logo_title">Sammelrechnung</h1>
 <h1>Diverse Empfänger in Deutschland</h1>
 
-<p><%="#{@customer_address.country}-#{@customer_address.zip} #{@customer_address.city}"%></p>
+<p><%="#{@cargo_list.country}-#{@cargo_list.zip} #{@cargo_list.city}"%></p>
 <hr>
 
 <section id="customer_attributes_1" class="clearfix">
@@ -49,7 +49,7 @@
     <li>Transport/Lieferung</li>
   </ul>
   <ul id="column_2" class="floatLeft">
-    <li class="bold"><%= @customer.company %></li>
+    <li class="bold"><%= @cargo_list.referee %></li>
     <li class="bold"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></li>
   </ul>
   <ul id="column_3" class="floatLeft">

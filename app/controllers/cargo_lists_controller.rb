@@ -18,7 +18,7 @@ class CargoListsController < ApplicationController
   
   def new
     @cargo_list = CargoList.new
-    @customers = Customer.where("pallets.id IS NOT NULL").includes(:purchase_orders => [:pallets])
+    #@customers = Customer.where("pallets.id IS NOT NULL").includes(:purchase_orders => [:pallets])
   end
   
   def create
@@ -94,8 +94,8 @@ class CargoListsController < ApplicationController
   
   def collective_invoice
     @cargo_list = CargoList.find(params[:id])
-    @customer = @cargo_list.customer
-    @customer_address = @customer.shipping_addresses.first
+    #@customer = @cargo_list.referee
+    #@customer_address = @customer.shipping_addresses.first
     @ordered_commodity_codes = PurchasePosition.sum("amount", :include => [:commodity_code, :pallet => :cargo_list], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
     @purchase_positions_amount = PurchasePosition.calculate_for_invoice("amount", [@cargo_list.id])
     @pallets_additional_space = @cargo_list.pallets.sum("additional_space") / 120
@@ -117,8 +117,8 @@ class CargoListsController < ApplicationController
   
   def print_lebert
     @cargo_list = CargoList.find(params[:id])
-    @customer = @cargo_list.customer
-    @customer_address = @customer.shipping_addresses.first
+    @customer = @cargo_list.referee
+    #@customer_address = @customer.shipping_addresses.first
     
     respond_to do |format|
       format.pdf do

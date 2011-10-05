@@ -33,11 +33,30 @@
         <%= f.collection_select(:shipper_location_id, ShipperLocation.all, :id, :name, {:include_blank => true}) %>
       </p>
       <p class="formLabel">
-        <%= f.label :customer %>
+        <%= f.label :referee, "Kunden Name" %>
       </p>
       <p class="formInput">
-        <%= f.collection_select(:customer_id, @customers, :id, :company, {:include_blank => true}) %>
+        <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
       </p>
+      <p class="formLabel">
+        <%= f.label :zip, "ZIP" %>
+      </p>
+      <p class="formInput">
+        <%= f.text_field :zip %>
+      </p>
+      <p class="formLabel">
+        <%= f.label :city, "Ortschaft" %>
+      </p>
+      <p class="formInput">
+        <%= f.text_field :city %>
+      </p>
+      <p class="formLabel">
+        <%= f.label :country, "Land" %>
+      </p>
+      <p class="formInput">
+        <%= f.select(:country, { 'DE'=>"DE", 'CH'=>"CH" }) %>
+      </p>
+      
       <p class="formInput">
         <%= f.submit("Papiere erfassen") %>
       </p>

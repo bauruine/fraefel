@@ -9,7 +9,7 @@
   
   <ul class="ul_summary">
     <li class="summary clearfix"><p class="floatLeft bold title">Versand:</p><p class="floatLeft"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></p></li>
-    <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @cargo_list.customer.company %></p></li>
+    <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @cargo_list.referee %></p></li>
     <li class="summary clearfix"><p class="floatLeft bold title">Anz. Paletten:</p><p class="floatLeft"><%= @pallets_count.to_i %></p></li>
     <li class="summary clearfix"><p class="floatLeft bold title">Mehrplatz:</p><p class="floatLeft"><%= @cargo_list.additional_space %></p></li>
   </ul>
