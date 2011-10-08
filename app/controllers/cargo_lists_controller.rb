@@ -96,7 +96,7 @@ class CargoListsController < ApplicationController
     @cargo_list = CargoList.find(params[:id])
     #@customer = @cargo_list.referee
     #@customer_address = @customer.shipping_addresses.first
-    @ordered_commodity_codes = PurchasePosition.sum("amount", :include => [:commodity_code, :pallet => :cargo_list], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
+    @ordered_commodity_codes = PurchasePosition.sum("amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
     @purchase_positions_amount = PurchasePosition.calculate_for_invoice("amount", [@cargo_list.id])
     @pallets_additional_space = @cargo_list.pallets.sum("additional_space") / 120
     @pallets_weight = PurchasePosition.calculate_for_invoice("weight_total", [@cargo_list.id])
@@ -136,7 +136,7 @@ class CargoListsController < ApplicationController
   end
   
   def heydo
-    PurchasePosition.sum("amount", :include => [:commodity_code, :pallet => :cargo_list], :group => "commodity_code", :conditions => {:cargo_lists => { :id => 2}})
+    PurchasePosition.sum("amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => 2}})
   end
   
 end
