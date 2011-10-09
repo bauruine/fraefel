@@ -3,10 +3,10 @@ class CreatePurchasePositions < ActiveRecord::Migration
     create_table :purchase_positions do |t|
       t.integer :purchase_order_id
       t.integer :commodity_code_id
-      t.decimal :weight_single, :scale => 2
-      t.decimal :weight_total, :scale => 2
-      t.decimal :quantity, :scale => 2
-      t.decimal :amount, :scale => 2
+      t.decimal :weight_single, :precision => 12, :scale => 2
+      t.decimal :weight_total, :precision => 12, :scale => 2
+      t.decimal :quantity, :precision => 12, :scale => 2
+      t.decimal :amount, :precision => 12, :scale => 2
       t.datetime :delivery_date
 
       t.timestamps
