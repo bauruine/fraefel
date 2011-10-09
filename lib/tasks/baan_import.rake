@@ -286,19 +286,19 @@ namespace :baan do
           article_number = Iconv.conv('UTF-8', 'iso-8859-1', row[27]).to_s.chomp.lstrip.rstrip
           product_line = Iconv.conv('UTF-8', 'iso-8859-1', row[30]).to_s.chomp.lstrip.rstrip
           storage_location = Iconv.conv('UTF-8', 'iso-8859-1', row[23]).to_s.chomp.lstrip.rstrip
-          
+          calculated_amount = amount * quantity
           if purchase_order.purchase_positions.where(:position => position).present?
             purchase_position = purchase_order.purchase_positions.where(:position => position).first
             csv_array = [weight_single.to_s, weight_total.to_s, quantity.to_s, amount.to_s, position]
             purchase_position_array = [purchase_position.weight_single.to_s, purchase_position.weight_total.to_s, purchase_position.quantity.to_s, purchase_position.amount.to_s, purchase_position.position]
             if (csv_array != purchase_position_array && purchase_position.status == "open")
-              purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
+              purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount)
               puts "Found differences. Update Position..."
             else
               puts "Already in database -- No differences"
             end
           else
-            purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
+            purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount)
             if purchase_position.save
               #puts "New Purchase Position has been created: #{purchase_position.attributes}"
             else

@@ -10,11 +10,9 @@ class PurchasePosition < ActiveRecord::Base
   protected
   
   def update_purchase_order_date
-    @cal_total = self.amount * self.quantity
     @purchase_order = self.purchase_order
     @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
     @purchase_order.update_attributes(:delivery_date => @date_for_update)
-    self.update_attributes(:total_amount => @cal_total)
   end
   
   def update_total_amount
