@@ -1,5 +1,4 @@
 require "csv"
-require 'iconv'
 
 namespace :baan do
   namespace :import do
