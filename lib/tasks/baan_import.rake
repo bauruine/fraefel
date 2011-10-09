@@ -7,7 +7,7 @@ namespace :baan do
     task :users => :environment do
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/sufu/csv/"
+      csv_folder = "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Benutzer.csv')]
       
       current_checksum = import_yaml["csv"]["users"]["checksum"]
@@ -20,9 +20,10 @@ namespace :baan do
 
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
           email = "#{row[3].downcase.delete(' ')}.#{row[4].downcase.delete(' ')}@fraefel.ag"
-          surname = row[4].downcase.delete(' ')
-          forename = row[3].downcase.delete(' ')
-          User.find_or_create_by_username(:username => row[6], :email => email, :password => "fraefelExport", :password_confirmation => "fraefelExport", :forename => forename, :surname => surname)
+          surname = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.downcase.delete(' ')
+          forename = Iconv.conv('UTF-8', 'iso-8859-1', row[3]).to_s.downcase.delete(' ')
+          username = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.downcase.delete(' ')
+          User.find_or_create_by_username(:username => username, :email => email, :password => "fraefelExport", :password_confirmation => "fraefelExport", :forename => forename, :surname => surname)
         end
         
         puts "Recalculate IMPORT_COUNTER..."
@@ -43,7 +44,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/sufu/csv/"
+      csv_folder = "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["customers"]["checksum"]
@@ -55,14 +56,18 @@ namespace :baan do
         puts "Current HANDELSPARTNER VERSION --> #{import_yaml["csv"]["customers"]["import_count"]}"
 
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-          company = row[5].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          baan_id = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          company = Iconv.conv('UTF-8', 'iso-8859-1', row[5]).to_s.chomp.lstrip.rstrip
+          #baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip
+          baan_id = row[6].to_s.chomp.lstrip.rstrip
           
           customer = Customer.find_or_initialize_by_baan_id(:baan_id => baan_id, :company => company)
           
           if customer.present? && customer.new_record?
-            customer.save
-            puts "New Customer has been created: #{customer.attributes}"
+            if customer.save
+              #puts "New Customer has been created: #{customer.attributes}"
+            else
+              puts "ERROR-- Customer not saved..."
+            end
           else
             if (customer.baan_id == baan_id && customer.company != company)
               customer.update_attributes(:company => company)
@@ -91,7 +96,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/sufu/csv/"
+      csv_folder = "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["shipping_addresses"]["checksum"]
@@ -103,11 +108,11 @@ namespace :baan do
         puts "Current HANDELSPARTNER ADRESSEN VERSION --> #{import_yaml["csv"]["shipping_addresses"]["import_count"]}"
 
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-          street = row[7].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip + " " + row[8].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          street = Iconv.conv('UTF-8', 'iso-8859-1', row[7]).to_s.chomp.lstrip.rstrip + " " + Iconv.conv('UTF-8', 'iso-8859-1', row[8]).to_s.chomp.lstrip.rstrip
           zip = row[10]
-          city = row[11].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          country = row[9].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          baan_id = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          city = Iconv.conv('UTF-8', 'iso-8859-1', row[11]).to_s.chomp.lstrip.rstrip
+          country = Iconv.conv('UTF-8', 'iso-8859-1', row[9]).to_s.chomp.lstrip.rstrip
+          baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip
           if Customer.find_by_baan_id(baan_id) && Customer.find_by_baan_id(baan_id).shipping_addresses.first.present?
             customer = Customer.find_by_baan_id(baan_id)
             address = customer.shipping_addresses.first
@@ -146,7 +151,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/sufu/csv/"
+      csv_folder = "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["commodity_codes"]["checksum"]
@@ -158,8 +163,8 @@ namespace :baan do
         puts "Current COMMODITY CODES VERSION --> #{import_yaml["csv"]["commodity_codes"]["import_count"]}"
 
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-          code = row[0].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          content = row[1].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+          code = Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip
+          content = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
           
           if CommodityCode.find_by_code(code)
             commodity_code = CommodityCode.find_by_code(code)
@@ -194,7 +199,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/sufu/csv/"
+      csv_folder = "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["purchase_orders"]["checksum"]
@@ -212,15 +217,18 @@ namespace :baan do
         end
         
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-          customer = Customer.find_by_baan_id(row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip)
-          baan_id = row[2].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          csv_customer = row[6].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          delivery_route = ShippingRoute.find_by_name(row[21].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip)
+          customer = Customer.find_by_baan_id(Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip)
+          baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
+          csv_customer = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip
+          delivery_route = ShippingRoute.find_by_name(Iconv.conv('UTF-8', 'iso-8859-1', row[21]).to_s.chomp.lstrip.rstrip)
         
           purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :shipping_route => delivery_route)
           if purchase_order.present? && purchase_order.new_record?
-            purchase_order.save
-            puts "New Purchase Order has been created: #{purchase_order.attributes}"
+            if purchase_order.save
+              #puts "New Purchase Order has been created: #{purchase_order.attributes}"
+            else
+              puts "ERROR-- PurchaseOrder not saved..."
+            end
           else
             if (purchase_order.baan_id == baan_id && purchase_order.status == "open" && purchase_order.customer.baan_id != csv_customer)
               purchase_order.update_attributes(:customer => customer)
@@ -247,7 +255,7 @@ namespace :baan do
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/sufu/csv/"
+      csv_folder = "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["purchase_positions"]["checksum"]
@@ -265,20 +273,19 @@ namespace :baan do
         end
 
         CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-          baan_id = row[2].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          commodity_code = CommodityCode.find_by_code(row[0].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip)
+          baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
+          commodity_code = CommodityCode.find_by_code(Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip)
           purchase_order = PurchaseOrder.find_by_baan_id(baan_id)
-          weight_single = row[15].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_f
-          weight_total = row[16].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_f
-          quantity = row[18].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_f
-          amount = row[17].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_f
-          position = row[4].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip.to_i
-          delivery_date = row[13].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          article = row[28].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          article_number = row[27].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          product_line = row[30].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          storage_location = row[23].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
-          
+          weight_single = Iconv.conv('UTF-8', 'iso-8859-1', row[15]).to_s.chomp.lstrip.rstrip.to_f
+          weight_total = Iconv.conv('UTF-8', 'iso-8859-1', row[16]).to_s.chomp.lstrip.rstrip.to_f
+          quantity = Iconv.conv('UTF-8', 'iso-8859-1', row[18]).to_s.chomp.lstrip.rstrip.to_f
+          amount = Iconv.conv('UTF-8', 'iso-8859-1', row[17]).to_s.chomp.lstrip.rstrip.to_f
+          position = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.chomp.lstrip.rstrip.to_i
+          delivery_date = Iconv.conv('UTF-8', 'iso-8859-1', row[13]).to_s.chomp.lstrip.rstrip
+          article = Iconv.conv('UTF-8', 'iso-8859-1', row[28]).to_s.chomp.lstrip.rstrip
+          article_number = Iconv.conv('UTF-8', 'iso-8859-1', row[27]).to_s.chomp.lstrip.rstrip
+          product_line = Iconv.conv('UTF-8', 'iso-8859-1', row[30]).to_s.chomp.lstrip.rstrip
+          storage_location = Iconv.conv('UTF-8', 'iso-8859-1', row[23]).to_s.chomp.lstrip.rstrip
           
           if purchase_order.purchase_positions.where(:position => position).present?
             purchase_position = purchase_order.purchase_positions.where(:position => position).first
@@ -287,11 +294,16 @@ namespace :baan do
             if (csv_array != purchase_position_array && purchase_position.status == "open")
               purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
               puts "Found differences. Update Position..."
+            else
+              puts "Already in database -- No differences"
             end
           else
             purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number)
-            purchase_position.save
-            puts "New Purchase Position has been created: #{purchase_position.attributes}"
+            if purchase_position.save
+              #puts "New Purchase Position has been created: #{purchase_position.attributes}"
+            else
+              puts "ERROR-- PurchasePosition not saved..."
+            end
           end
         end
         
@@ -312,11 +324,11 @@ namespace :baan do
     task :shipping_routes => :environment do
       PaperTrail.whodunnit = 'System'
       
-      csv_folder = "/home/sufu/csv/"
+      csv_folder = "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
-        delivery_route = row[21].to_s.force_encoding("UTF-8").chomp.lstrip.rstrip
+        delivery_route = Iconv.conv('UTF-8', 'iso-8859-1', row[21]).to_s.chomp.lstrip.rstrip
       
         shipping_route = ShippingRoute.find_or_initialize_by_name(:name => delivery_route, :active => true)
         if shipping_route.present? && shipping_route.new_record? && shipping_route.name.present?

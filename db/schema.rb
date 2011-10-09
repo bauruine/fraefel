@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111004191149) do
+ActiveRecord::Schema.define(:version => 20111009215721) do
 
   create_table "cargo_lists", :force => true do |t|
     t.datetime "pick_up_time_earliest"
@@ -20,12 +20,13 @@ ActiveRecord::Schema.define(:version => 20111004191149) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "delivered",             :default => false
+    t.boolean  "delivered",                                            :default => false
     t.string   "referee"
     t.integer  "zip"
     t.string   "country"
     t.string   "street"
     t.string   "city"
+    t.decimal  "vat",                   :precision => 12, :scale => 2
   end
 
   create_table "commodity_codes", :force => true do |t|
@@ -70,14 +71,14 @@ ActiveRecord::Schema.define(:version => 20111004191149) do
   create_table "pallets", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "cargo_list_id"
-    t.decimal  "amount"
-    t.decimal  "weight_total"
+    t.decimal  "amount",            :precision => 10, :scale => 0
+    t.decimal  "weight_total",      :precision => 10, :scale => 0
     t.datetime "delivery_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "additional_space",  :default => 0.0
+    t.decimal  "additional_space",  :precision => 10, :scale => 0, :default => 0
     t.integer  "pallet_type_id"
-    t.boolean  "delivered",         :default => false
+    t.boolean  "delivered",                                        :default => false
   end
 
   create_table "purchase_orders", :force => true do |t|
@@ -94,10 +95,10 @@ ActiveRecord::Schema.define(:version => 20111004191149) do
   create_table "purchase_positions", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "commodity_code_id"
-    t.decimal  "weight_single"
-    t.decimal  "weight_total"
-    t.decimal  "quantity"
-    t.decimal  "amount"
+    t.decimal  "weight_single",     :precision => 10, :scale => 0
+    t.decimal  "weight_total",      :precision => 10, :scale => 0
+    t.decimal  "quantity",          :precision => 10, :scale => 0
+    t.decimal  "amount",            :precision => 10, :scale => 0
     t.datetime "delivery_date"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -108,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20111004191149) do
     t.string   "article"
     t.string   "storage_location"
     t.string   "article_number"
+    t.decimal  "total_amount",      :precision => 12, :scale => 2
   end
 
   create_table "roles", :force => true do |t|

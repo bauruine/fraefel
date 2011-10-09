@@ -46,6 +46,10 @@ img#logo {
 	color: #ffffff;
 }
 
+.yellow_background {
+	background-color: yellow !important;
+}
+
 .white_font {
 	color: #fff;
 }

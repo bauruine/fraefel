@@ -32,7 +32,7 @@
           <tbody>
             <% @assigned_pallets.each do |pallet| %>
               <tr>
-                <td class="align-center"><%= link_to(pallet.id, pallet_path(pallet)) %></td>
+                <td class="align-center"><%= pallet.id %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
                 <td class="align-center"><%= pallet.purchase_order.customer.company %></td>
@@ -79,7 +79,7 @@
           <tbody>
             <% @pallets.each do |pallet| %>
               <tr>
-                <td class="align-center"><%= link_to(pallet.id, pallet_path(pallet)) %></td>
+                <td class="align-center"><%= pallet.id %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>

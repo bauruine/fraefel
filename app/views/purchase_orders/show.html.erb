@@ -31,16 +31,20 @@
           </thead>
           <tbody>
             <% @purchase_positions.each do |purchase_position| %>
-              <tr>
-                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
-                <td class="align-center"><%= purchase_position.article_number %></td>
-                <td class="align-center"><%= purchase_position.article %></td>
-                <td class="align-center"><%= purchase_position.product_line %></td>
-                <td class="align-center"><%= purchase_position.quantity %></td>
-                <td class="align-center"><%= purchase_position.storage_location %></td>
-                <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
-              </tr>
+              <% if (!purchase_position.storage_location.present?) or (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
+                <tr class="yellow_background">
+              <% else %>
+                <tr>
+              <% end %>
+                  <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                  <td class="align-center"><%= purchase_position.article_number %></td>
+                  <td class="align-center"><%= purchase_position.article %></td>
+                  <td class="align-center"><%= purchase_position.product_line %></td>
+                  <td class="align-center"><%= purchase_position.quantity %></td>
+                  <td class="align-center"><%= purchase_position.storage_location %></td>
+                  <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+                  <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                </tr>
             <% end %>
           </tbody>
           <tfoot>
@@ -90,11 +94,15 @@
           </thead>
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
-              <tr>
+              <% if (!purchase_position.storage_location.present?) or (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
+                <tr class="yellow_background">
+              <% else %>
+                <tr>
+              <% end %>
                 <% if purchase_position.purchase_order != @purchase_order %>
-                  <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
+                  <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
                 <% else %>
-                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position)) %></td>
+                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
                 <% end %>
                 <td class="align-center"><%= purchase_position.article_number %></td>
                 <td class="align-center"><%= purchase_position.article %></td>

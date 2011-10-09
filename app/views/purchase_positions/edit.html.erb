@@ -19,6 +19,12 @@
   <p class="formInput">
     <%= f.text_field :amount %>
   </p>
+  <p class="formLabel">
+    <%= f.label :commodity_code, "Zoll Position" %>
+  </p>
+  <p class="formInput">
+    <%= f.collection_select(:commodity_code_id, CommodityCode.all, :id, :content) %>
+  </p>
   <p class="formInput">
     <%= f.submit("Artikel ändern") %>
   </p>

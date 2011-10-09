@@ -114,10 +114,15 @@ button {width: auto; overflow: visible;}
 .ie6 html {filter: expression(document.execCommand("BackgroundImageCache", false, true));}
 
 /* let's clear some floats */
+/*
+.clearfix { display: inline-block }
+.clearfix:after { display: block; visibility: hidden; clear: both; height: 0; content: "."; }
+*/
+
+
 .clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }  
 .clearfix:after { clear: both; }  
 .clearfix { zoom: 1; }  
-
 
 
 /* Ok, this is where the fun starts.
