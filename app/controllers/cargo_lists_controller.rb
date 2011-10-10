@@ -98,7 +98,7 @@ class CargoListsController < ApplicationController
     #@customer_address = @customer.shipping_addresses.first
     @ordered_commodity_codes = PurchasePosition.sum("amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
     @purchase_positions_amount = PurchasePosition.calculate_for_invoice("total_amount", [@cargo_list.id])
-    @pallets_additional_space = @cargo_list.pallets.sum("additional_space") / 120
+    @pallets_additional_space = @cargo_list.pallets.sum("additional_space").to_f / 120
     @pallets_weight = PurchasePosition.calculate_for_invoice("weight_total", [@cargo_list.id])
     @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
     @vat = ((@purchase_positions_amount / 100.to_f) * 19.to_f)

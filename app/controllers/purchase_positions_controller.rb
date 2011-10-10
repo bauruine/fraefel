@@ -5,7 +5,7 @@ class PurchasePositionsController < ApplicationController
   end
   
   def index
-    
+    @purchase_orders = PurchaseOrder.all
   end
   
   def edit
