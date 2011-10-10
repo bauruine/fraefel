@@ -21,25 +21,13 @@
         <%= f.datetime_select :pick_up_time_latest %>
       </p>
       <p class="formLabel">
-        <%= f.label :shipper %>
-      </p>
-      <p class="formInput">
-        <%= f.collection_select(:shipper_id, Shipper.all, :id, :name, {:include_blank => true}) %>
-      </p>
-      <p class="formLabel">
-        <%= f.label :shipper_location %>
-      </p>
-      <p class="formInput">
-        <%= f.collection_select(:shipper_location_id, ShipperLocation.all, :id, :name, {:include_blank => true}) %>
-      </p>
-      <p class="formLabel">
         <%= f.label :referee, "Kunden Name" %>
       </p>
       <p class="formInput">
         <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
       </p>
       <p class="formLabel">
-        <%= f.label :zip, "ZIP" %>
+        <%= f.label :zip, "PLZ" %>
       </p>
       <p class="formInput">
         <%= f.text_field :zip %>

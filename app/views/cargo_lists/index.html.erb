@@ -33,8 +33,7 @@
           <tr>
             <th>Versand NR</th>
             <th>Anz. Paletten</th>
-            <th>Spediteur</th>
-            <th>Ablade Ort</th>
+            <th>Für</th>
             <th>Abholtermin von</th>
             <th>Abholtermin bis</th>
           </tr>
@@ -44,8 +43,7 @@
             <tr>
               <td class="align-center"><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
               <td class="align-center"><%= cargo_list.pallets.count %></td>
-              <td></td>
-              <td></td>
+              <td class="align-center"><%= cargo_list.referee.present? ? cargo_list.referee : "Bitte Name eintragen!"%></td>
               <td class="align-center"><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
               <td class="align-center"><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
             </tr>
@@ -53,6 +51,7 @@
         </tbody>
         <tfoot>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

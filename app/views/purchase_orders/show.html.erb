@@ -31,7 +31,7 @@
           </thead>
           <tbody>
             <% @purchase_positions.each do |purchase_position| %>
-              <% if (!purchase_position.storage_location.present?) or (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
+              <% if (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
                 <tr class="yellow_background">
               <% else %>
                 <tr>
@@ -94,7 +94,7 @@
           </thead>
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
-              <% if (!purchase_position.storage_location.present?) or (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
+              <% if (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
                 <tr class="yellow_background">
               <% else %>
                 <tr>
