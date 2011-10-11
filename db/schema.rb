@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111010223420) do
+ActiveRecord::Schema.define(:version => 20111011224320) do
 
   create_table "cargo_lists", :force => true do |t|
     t.datetime "pick_up_time_earliest"
@@ -20,13 +20,16 @@ ActiveRecord::Schema.define(:version => 20111010223420) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "delivered",                                            :default => false
+    t.boolean  "delivered",                                               :default => false
     t.string   "referee"
     t.integer  "zip"
     t.string   "country"
     t.string   "street"
     t.string   "city"
-    t.decimal  "vat",                   :precision => 12, :scale => 2
+    t.decimal  "vat",                      :precision => 12, :scale => 2
+    t.decimal  "effective_invoice_amount", :precision => 12, :scale => 2
+    t.decimal  "subtotal",                 :precision => 12, :scale => 2
+    t.decimal  "total_amount",             :precision => 12, :scale => 2
   end
 
   create_table "commodity_codes", :force => true do |t|
@@ -98,7 +101,7 @@ ActiveRecord::Schema.define(:version => 20111010223420) do
     t.decimal  "weight_single",     :precision => 10, :scale => 0
     t.decimal  "weight_total",      :precision => 10, :scale => 0
     t.decimal  "quantity",          :precision => 10, :scale => 0
-    t.decimal  "amount",            :precision => 10, :scale => 0
+    t.decimal  "amount",            :precision => 12, :scale => 2
     t.datetime "delivery_date"
     t.datetime "created_at"
     t.datetime "updated_at"

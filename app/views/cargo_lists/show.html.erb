@@ -24,6 +24,7 @@
             <tr>
               <th>Paletten NR</th>
               <th>Positionen</th>
+              <th>Mehrplatz</th>
               <th>Tour</th>
               <th>Empfänger</th>
               <th>Auswahl</th>
@@ -34,6 +35,7 @@
               <tr>
                 <td class="align-center"><%= pallet.id %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
+                <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
                 <td class="align-center"><%= pallet.purchase_order.purchase_positions.first.consignee_full %></td>
                 <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
@@ -42,6 +44,7 @@
           </tbody>
           <tfoot>
             <tr>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -81,7 +84,7 @@
               <tr>
                 <td class="align-center"><%= pallet.id %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
-                <td class="align-center"></td>
+                <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
                 <td class="align-center"><%= pallet.purchase_order.purchase_positions.first.consignee_full %></td>
                 <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>

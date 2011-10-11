@@ -1,3 +1,9 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">VK-Positions Liste</h1>
+  <%= link_to("Alle", purchase_positions_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Fehlerhaft", purchase_positions_path(:to_be_checked => true), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
+
 <% @purchase_orders.each do |purchase_order| %>
   <section class="filter_box">
     <header class="filter_box_header clearfix">

@@ -5,7 +5,7 @@
 </header>
 
 <ul class="ul_summary">
-  <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @purchase_order.customer.company %></p></li>
+  <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @purchase_order.purchase_positions.first.consignee_full %></p></li>
 </ul>
 
 <% if @purchase_positions.present? %>

@@ -1,4 +1,5 @@
 class CargoListsController < ApplicationController
+  before_filter :calculate_cargo_list, :only => [:collective_invoice]
   
   def show
     @cargo_list = CargoList.find(params[:id])
@@ -101,8 +102,6 @@ class CargoListsController < ApplicationController
     @pallets_additional_space = @cargo_list.pallets.sum("additional_space").to_f / 120
     @pallets_weight = PurchasePosition.calculate_for_invoice("weight_total", [@cargo_list.id])
     @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
-    @vat = ((@purchase_positions_amount / 100.to_f) * 19.to_f)
-    @cargo_list.update_attributes(:vat => @vat)
     
     respond_to do |format|
       format.pdf do
@@ -140,6 +139,18 @@ class CargoListsController < ApplicationController
   
   def heydo
     PurchasePosition.sum("amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => 2}})
+  end
+  
+  private
+  
+  def calculate_cargo_list
+    cargo_list = CargoList.find(params[:id])
+    purchase_positions_amount = PurchasePosition.calculate_for_invoice("total_amount", [cargo_list.id])
+    vat = ((purchase_positions_amount / 100.to_f) * 19.to_f)
+    effective_invoice_amount = purchase_positions_amount + vat
+    cargo_list.update_attributes(:vat => vat, :total_amount => effective_invoice_amount, :effective_invoice_amount => effective_invoice_amount, :subtotal => purchase_positions_amount)
+    
+    
   end
   
 end

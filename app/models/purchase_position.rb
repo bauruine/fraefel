@@ -6,6 +6,8 @@ class PurchasePosition < ActiveRecord::Base
   after_save :update_purchase_order_date
   after_update :update_weight_total
   
+  scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")
+  search_methods :to_be_checked
   
   protected
   

@@ -88,7 +88,7 @@
         <td></td>
         <td class="bold">Total Stücke</td>
         <td class="align-center border-top bold"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id]).to_i %></td>
-        <td class="align-right border-top"><%= @purchase_positions_amount %></td>
+        <td class="align-right border-top"><%= @cargo_list.subtotal %></td>
       </tr>
       <tr>
         <td class="white_color">.</td>
@@ -102,21 +102,21 @@
         <td></td>
         <td></td>
         <td>Zwischentotal</td>
-        <td class="align-right"><%= @purchase_positions_amount %></td>
+        <td class="align-right"><%= @cargo_list.subtotal %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>MwSt 19.00%</td>
-        <td class="align-right"><%= @cargo_list.vat %></td>
+        <td class="align-right"><%= @cargo_list.vat.to_f %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>Total</td>
-        <td class="align-right"><%= @purchase_positions_amount + @cargo_list.vat %></td>
+        <td class="align-right"><%= @cargo_list.total_amount %></td>
       </tr>
       <tr>
         <td></td>
@@ -130,7 +130,7 @@
         <td class="bold">Total brutto kg</td>
         <td class="bold"><%= @pallets_weight + (@pallets_count * 20) %></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= @purchase_positions_amount + @cargo_list.vat %></td>
+        <td class="align-right bold"><%= @cargo_list.effective_invoice_amount %></td>
       </tr>
     </tbody>
   </table>

@@ -5,7 +5,11 @@ class PurchasePositionsController < ApplicationController
   end
   
   def index
-    @purchase_orders = PurchaseOrder.all
+    if params[:to_be_checked] && params[:to_be_checked] == "true"
+      @purchase_orders = PurchaseOrder.where("purchase_positions.amount = 0 OR purchase_positions.quantity = 0 OR purchase_positions.weight_single = 0").includes(:purchase_positions)
+    else
+      @purchase_orders = PurchaseOrder.all
+    end
   end
   
   def edit

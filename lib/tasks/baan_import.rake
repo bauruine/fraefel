@@ -4,10 +4,11 @@ namespace :baan do
   namespace :import do
     
     desc "Load Baan-Users from CSV into Database"
-    task :users => :environment do
+    task :users, [:import_path] => :environment do |t, args|
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/ivo/csv/"
+      
+      csv_folder = args[:import_path] ? ("/Users/sufu/code/rails/fraefel" + "/import/csv/") : "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Benutzer.csv')]
       
       current_checksum = import_yaml["csv"]["users"]["checksum"]
@@ -40,22 +41,21 @@ namespace :baan do
     end
     
     desc "Load Baan-HandelsPartner from CSV into Database"
-    task :customers => :environment do
+    task :customers, [:import_path] => :environment do |t, args|
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/ivo/csv/"
-      csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
-      
+      csv_folder = args[:import_path] ? ("/Users/sufu/code/rails/fraefel" + "/import/csv/") : "/home/ivo/csv/"
+      csv_file = csv_folder + 'BaanRead_Versand.csv'
       current_checksum = import_yaml["csv"]["customers"]["checksum"]
-      csv_checksum = Digest::SHA1.hexdigest(File.read(csv_file[0]))
+      csv_checksum = Digest::SHA1.hexdigest(File.read(csv_file))
       
       if current_checksum.to_s == csv_checksum.to_s
         puts "Already newest version of HANDELSPARTNER... ABORTING TASK!"
       else
         puts "Current HANDELSPARTNER VERSION --> #{import_yaml["csv"]["customers"]["import_count"]}"
 
-        CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
+        CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
           company = Iconv.conv('UTF-8', 'iso-8859-1', row[5]).to_s.chomp.lstrip.rstrip
           #baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip
           baan_id = row[6].to_s.chomp.lstrip.rstrip
@@ -78,10 +78,10 @@ namespace :baan do
         end
         
         puts "Recalculate IMPORT_COUNTER..."
-        import_yaml["csv"]["customers"]["import_count"] = import_yaml["csv"]["customers"]["import_count"] + 1 if import_yaml["csv"]["customers"]["checksum"] != Digest::SHA1.hexdigest(File.read(csv_file[0]))
+        import_yaml["csv"]["customers"]["import_count"] = import_yaml["csv"]["customers"]["import_count"] + 1 if import_yaml["csv"]["customers"]["checksum"] != Digest::SHA1.hexdigest(File.read(csv_file))
         
         puts "Recalculate CHECKSUM..."
-        import_yaml["csv"]["customers"]["checksum"] = Digest::SHA1.hexdigest(File.read(csv_file[0]))
+        import_yaml["csv"]["customers"]["checksum"] = Digest::SHA1.hexdigest(File.read(csv_file))
         
         puts "Update CONFIG_FILE..."
         File.open("#{RAILS_ROOT}/import/import.yml", 'w') { |f| YAML.dump(import_yaml, f) }
@@ -92,11 +92,12 @@ namespace :baan do
     
     
     desc "Load Baan-HandelsPartnerAdressen from CSV into Database"
-    task :shipping_addresses => :environment do
+    task :shipping_addresses, [:import_path] => :environment do |t, args|
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/ivo/csv/"
+      
+      csv_folder = args[:import_path] ? ("/Users/sufu/code/rails/fraefel" + "/import/csv/") : "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["shipping_addresses"]["checksum"]
@@ -147,11 +148,12 @@ namespace :baan do
     end
     
     desc "Load CommodityCodes from CSV into Database"
-    task :commodity_codes => :environment do
+    task :commodity_codes, [:import_path] => :environment do |t, args|
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/ivo/csv/"
+      
+      csv_folder = args[:import_path] ? ("/Users/sufu/code/rails/fraefel" + "/import/csv/") : "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["commodity_codes"]["checksum"]
@@ -195,11 +197,12 @@ namespace :baan do
     end
     
     desc "Load Purchase Orders from CSV into Database"
-    task :purchase_orders => :environment do
+    task :purchase_orders, [:import_path] => :environment do |t, args|
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/ivo/csv/"
+      
+      csv_folder = args[:import_path] ? ("/Users/sufu/code/rails/fraefel" + "/import/csv/") : "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["purchase_orders"]["checksum"]
@@ -251,11 +254,12 @@ namespace :baan do
     end
     
     desc "Load Purchase Positions from CSV into Database"
-    task :purchase_positions => :environment do
+    task :purchase_positions, [:import_path] => :environment do |t, args|
       PaperTrail.whodunnit = 'System'
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = "/home/ivo/csv/"
+      
+      csv_folder = args[:import_path] ? ("/Users/sufu/code/rails/fraefel" + "/import/csv/") : "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       current_checksum = import_yaml["csv"]["purchase_positions"]["checksum"]
@@ -326,10 +330,10 @@ namespace :baan do
     end
     
     desc "Load Delivery Routes from CSV into Database"
-    task :shipping_routes => :environment do
+    task :shipping_routes, [:import_path] => :environment do |t, args|
       PaperTrail.whodunnit = 'System'
       
-      csv_folder = "/home/ivo/csv/"
+      csv_folder = args[:import_path] ? ("/Users/sufu/code/rails/fraefel" + "/import/csv/") : "/home/ivo/csv/"
       csv_file = Dir[File.join(csv_folder, 'BaanRead_Versand.csv')]
       
       CSV.foreach(csv_file[0], {:col_sep => ";", :headers => :first_row}) do |row|
@@ -356,8 +360,8 @@ namespace :baan do
     task :reset => :environment do
       
       import_yaml = YAML.load_file("import/import.yml")
-      csv_folder = File.join(Rails.root, "import/csv/users/")
-      csv_file = Dir[File.join(csv_folder, 'BaanRead_Benutzer.csv')]
+      #csv_folder = File.join(Rails.root, "import/csv/users/")
+      #csv_file = Dir[File.join(csv_folder, 'BaanRead_Benutzer.csv')]
       
       puts "Reset IMPORT_COUNTER..."
       import_yaml["csv"]["users"]["import_count"] = 0
@@ -401,6 +405,18 @@ namespace :baan do
       puts "Update CONFIG_FILE..."
       File.open("#{RAILS_ROOT}/import/import.yml", 'w') { |f| YAML.dump(import_yaml, f) }
     end
+    
+    desc "Developer Re-Import"
+    task :developer_re => :environment do
+      Rake.application.invoke_task("baan:import:customers['/import/csv/']")
+      Rake.application.invoke_task("baan:import:shipping_addresses['/import/csv/']")
+      Rake.application.invoke_task("baan:import:users['/import/csv/']")
+      Rake.application.invoke_task("baan:import:commodity_codes['/import/csv/']")
+      Rake.application.invoke_task("baan:import:shipping_routes['/import/csv/']")
+      Rake.application.invoke_task("baan:import:purchase_orders['/import/csv/']")
+      Rake.application.invoke_task("baan:import:purchase_positions['/import/csv/']")
+    end
+    
     
   end
 end
