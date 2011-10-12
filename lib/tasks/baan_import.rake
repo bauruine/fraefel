@@ -293,8 +293,6 @@ namespace :baan do
           consignee_full = Iconv.conv('UTF-8', 'iso-8859-1', row[33]).to_s.chomp.lstrip.rstrip
           if !consignee_full.present?
             puts "Warning -- No consignee in CSV"
-          else
-            puts consignee_full
           end
           calculated_amount = amount * quantity
           if purchase_order.purchase_positions.where(:position => position).present?
@@ -307,9 +305,7 @@ namespace :baan do
               else
                 purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full)
               end
-              puts "Found differences. Update Position..."
             else
-              puts "Already in database -- No differences"
             end
             purchase_position.update_attributes(:consignee_full => consignee_full)
           else
