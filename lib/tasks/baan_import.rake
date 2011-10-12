@@ -306,6 +306,7 @@ namespace :baan do
             else
               puts "Already in database -- No differences"
             end
+            purchase_position.update_attributes(:consignee_full => consignee_full) if !purchase_position.consignee_full.present?
           else
             purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full)
             if purchase_position.save
