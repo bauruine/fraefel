@@ -302,8 +302,10 @@ namespace :baan do
             if (csv_array != purchase_position_array && purchase_position.status == "open")
               if purchase_position.pallet.present?
                 purchase_position.update_attributes(:article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :consignee_full => consignee_full)
+                puts purchase_position.consignee_full
               else
                 purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full)
+                puts purchase_position.consignee_full
               end
             else
             end
@@ -311,6 +313,7 @@ namespace :baan do
           else
             purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full)
             if purchase_position.save
+              puts purchase_position.consignee_full
               #puts "New Purchase Position has been created: #{purchase_position.attributes}"
             else
               puts "ERROR-- PurchasePosition not saved..."

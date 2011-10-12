@@ -37,7 +37,7 @@
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
-                <td class="align-center"><%= pallet.purchase_order.purchase_positions.first.consignee_full %></td>
+                <td class="align-center"><%= pallet.purchase_order.purchase_positions.first.consignee_full.present? ? pallet.purchase_order.purchase_positions.first.consignee_full : pallet.purchase_order.customer.company %></td>
                 <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
               </tr>
             <% end %>
@@ -86,7 +86,7 @@
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
-                <td class="align-center"><%= pallet.purchase_order.purchase_positions.first.consignee_full %></td>
+                <td class="align-center"><%= pallet.purchase_order.purchase_positions.first.consignee_full.present? ? pallet.purchase_order.purchase_positions.first.consignee_full : pallet.purchase_order.customer.company %></td>
                 <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
               </tr>
             <% end %>
