@@ -44,6 +44,7 @@ Fraefel::Application.routes.draw do
       get 'print_pallets'
       get 'collective_invoice'
       get 'print_lebert'
+      get 'controll_invoice'
     end
   end
 

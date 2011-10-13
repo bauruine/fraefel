@@ -1,3 +1,5 @@
+<% calculated_total_purchase_position_amount = 0 %>
+
 <header id="invoice_header" class="clearfix">
   <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
   <ul class="floatLeft">
@@ -75,6 +77,7 @@
     </thead>
     <tbody>
       <% @ordered_commodity_codes.each do |foo| %>
+      <% calculated_total_purchase_position_amount += foo[1] %>
       <tr>
         <td></td>
         <td></td>
@@ -88,7 +91,7 @@
         <td></td>
         <td class="bold">Total Stücke</td>
         <td class="align-center border-top bold"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id]).to_i %></td>
-        <td class="align-right border-top"><%= @cargo_list.subtotal %></td>
+        <td class="align-right border-top"><%= calculated_total_purchase_position_amount %></td>
       </tr>
       <tr>
         <td class="white_color">.</td>

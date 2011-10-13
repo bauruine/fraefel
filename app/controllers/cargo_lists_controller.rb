@@ -97,7 +97,7 @@ class CargoListsController < ApplicationController
     @cargo_list = CargoList.find(params[:id])
     #@customer = @cargo_list.referee
     #@customer_address = @customer.shipping_addresses.first
-    @ordered_commodity_codes = PurchasePosition.sum("amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
+    @ordered_commodity_codes = PurchasePosition.sum("total_amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
     @purchase_positions_amount = PurchasePosition.calculate_for_invoice("total_amount", [@cargo_list.id])
     @pallets_additional_space = @cargo_list.pallets.sum("additional_space").to_f / 120
     @pallets_weight = PurchasePosition.calculate_for_invoice("weight_total", [@cargo_list.id])
@@ -137,6 +137,27 @@ class CargoListsController < ApplicationController
     
   end
   
+  def controll_invoice
+    @cargo_list = CargoList.find(params[:id])
+    @customer = @cargo_list.referee
+    #@customer_address = @customer.shipping_addresses.first
+    @grouped_commodity_codes_with_amount = PurchasePosition.sum("total_amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => @cargo_list.id }})
+    
+    respond_to do |format|
+      format.pdf do
+        render( 
+          :pdf => "Kontrolle Versand##{@cargo_list.id}-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8'
+        )
+      end
+    end
+    
+  end
+  
   def heydo
     PurchasePosition.sum("amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => 2}})
   end
@@ -145,11 +166,14 @@ class CargoListsController < ApplicationController
   
   def calculate_cargo_list
     cargo_list = CargoList.find(params[:id])
-    purchase_positions_amount = PurchasePosition.calculate_for_invoice("total_amount", [cargo_list.id])
+    purchase_positions_amount = 0
+    
+    PurchasePosition.sum("total_amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => cargo_list.id }}).each do |foo|
+      purchase_positions_amount += foo[1]
+    end
     vat = ((purchase_positions_amount / 100.to_f) * 19.to_f)
     effective_invoice_amount = purchase_positions_amount + vat
     cargo_list.update_attributes(:vat => vat, :total_amount => effective_invoice_amount, :effective_invoice_amount => effective_invoice_amount, :subtotal => purchase_positions_amount)
-    
     
   end
   
