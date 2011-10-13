@@ -173,7 +173,7 @@ class CargoListsController < ApplicationController
     end
     vat = ((purchase_positions_amount / 100.to_f) * 19.to_f)
     effective_invoice_amount = purchase_positions_amount + vat
-    cargo_list.update_attributes(:vat => vat, :total_amount => effective_invoice_amount, :effective_invoice_amount => effective_invoice_amount, :subtotal => purchase_positions_amount)
+    cargo_list.update_attributes(:vat => vat, :total_amount => purchase_positions_amount, :effective_invoice_amount => effective_invoice_amount, :subtotal => purchase_positions_amount)
     
   end
   
