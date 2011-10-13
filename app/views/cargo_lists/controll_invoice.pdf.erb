@@ -11,13 +11,12 @@
             <th>Artikel</th>
             <th>Artikel Linie</th>
             <th>Anzahl</th>
-            <th>Preis einzeln</th>
-            <th>Preis zusammen</th>
+            <th>Preis</th>
           </tr>
         </thead>
         <tbody>
           <% PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} AND commodity_code_id = #{grouped_commodity_code.first.id}").includes(:pallet => :cargo_list).each do |purchase_position| %>
-            <% calculated_total_amount += purchase_position.total_amount %>
+            <% calculated_total_amount += purchase_position.amount %>
             <tr>
               <td class="align-center"><%= purchase_position.purchase_order.baan_id %></td>
               <td class="align-center"><%= purchase_position.article_number %></td>
@@ -25,13 +24,11 @@
               <td class="align-center"><%= purchase_position.product_line %></td>
               <td class="align-center"><%= purchase_position.quantity %></td>
               <td class="align-center"><%= purchase_position.amount %></td>
-              <td class="align-center"><%= purchase_position.total_amount %></td>
             </tr>
           <% end %>
         </tbody>
         <tfoot>
           <tr>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>

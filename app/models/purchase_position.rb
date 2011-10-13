@@ -17,11 +17,6 @@ class PurchasePosition < ActiveRecord::Base
     @purchase_order.update_attributes(:delivery_date => @date_for_update)
   end
   
-  def update_total_amount
-    @cal_total = self.amount * self.quantity
-    self.update_attributes(:total_amount => @cal_total)
-  end
-  
   def update_weight_total
     @calculated_weight = (weight_single * quantity)
     if  @calculated_weight != weight_total

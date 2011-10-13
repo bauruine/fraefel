@@ -83,7 +83,7 @@
         <td></td>
         <td><%= "#{foo.first.code} #{foo.first.content}" %></td>
         <td class="align-center"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id, foo.first.id]).to_i %></td>
-        <td class="align-right"><%= PurchasePosition.calculate_for_invoice("total_amount", [@cargo_list.id, foo.first.id]) %></td>
+        <td class="align-right"><%= PurchasePosition.calculate_for_invoice("amount", [@cargo_list.id, foo.first.id]) %></td>
       </tr>
       <% end %>
       <tr>
