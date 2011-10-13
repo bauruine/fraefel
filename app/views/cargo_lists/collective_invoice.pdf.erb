@@ -77,7 +77,6 @@
     </thead>
     <tbody>
       <% @ordered_commodity_codes.each do |foo| %>
-      <% calculated_total_purchase_position_amount += foo[1] %>
       <tr>
         <td></td>
         <td></td>
@@ -91,7 +90,7 @@
         <td></td>
         <td class="bold">Total Stücke</td>
         <td class="align-center border-top bold"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id]).to_i %></td>
-        <td class="align-right border-top"><%= calculated_total_purchase_position_amount %></td>
+        <td class="align-right border-top"><%= @cargo_list.total_amount %></td>
       </tr>
       <tr>
         <td class="white_color">.</td>
@@ -112,7 +111,7 @@
         <td></td>
         <td></td>
         <td>MwSt 19.00%</td>
-        <td class="align-right"><%= @cargo_list.vat.to_f %></td>
+        <td class="align-right"><%= @cargo_list.vat %></td>
       </tr>
       <tr>
         <td></td>
