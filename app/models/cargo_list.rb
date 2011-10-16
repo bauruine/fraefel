@@ -35,6 +35,14 @@ class CargoList < ActiveRecord::Base
   def change_pallets_status
     if delivered == true
       Pallet.where(:cargo_list => self).update_all(:delivered => true)
+      PurchasePosition.where("cargo_lists.id = #{self.id}").includes(:pallet => :cargo_list).each do |p_p|
+        p_p.update_attribute(:delivered, true)
+      end
+      self.pallets.each do |pallet|
+        if !pallet.purchase_positions.where("delivered = false or delivered IS NULL").present?
+          pallet.purchase_order.update_attribute(:delivered, true)
+        end
+      end
     end
   end
   

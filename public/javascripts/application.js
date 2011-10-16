@@ -39,7 +39,17 @@ $(document).ready(function(){
 	$('a[data-type=modal]').click(function() {
 		var remote_url = $(this).attr("href");
 		$('div[data-type=modal]').load(remote_url + ' form');
+		if ($(this).attr('data-modal_width') != undefined) {
+			$( "div[data-type=modal]" ).dialog( "option", "width", 500 );
+		};
 		$('div[data-type=modal]').dialog('open');
+		$('div[data-type=modal]').dialog("option", "position", "center");
+		
 		return false;
 	});
+	
+	$(window).resize(function() {
+		$('div[data-type=modal]').dialog("option", "position", "center");
+	});
+	
 });

@@ -73,8 +73,8 @@
   
   <section class="filter_box">
     <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Palette NR#<%= pallet.id %></h4>
-      <%= link_to("Mehrplatz", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
+      <h4 class="floatLeft"><%= pallet.pallet_type.description == "coli" ? "Coli" : "Pallet" %> NR#<%= pallet.id %></h4>
+      <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
       <%= link_to("Print", pallet_path(pallet, :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     </header>
     <section class="filter_box_content clearfix">

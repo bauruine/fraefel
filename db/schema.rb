@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111011224320) do
+ActiveRecord::Schema.define(:version => 20111016140910) do
 
   create_table "cargo_lists", :force => true do |t|
     t.datetime "pick_up_time_earliest"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20111011224320) do
     t.string   "article_number"
     t.decimal  "total_amount",      :precision => 12, :scale => 2
     t.string   "consignee_full"
+    t.boolean  "delivered"
   end
 
   create_table "roles", :force => true do |t|

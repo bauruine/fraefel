@@ -16,14 +16,14 @@
   </ul>
   
   <section class="filter_box">
-    <header class="filter_box_header"><h4>Angefügte Paletten</h4></header>
+    <header class="filter_box_header"><h4>Angefügte Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
       <% form_tag(remove_pallets_cargo_lists_path, {:class => "form", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
         <table>
           <thead>
             <tr>
-              <th>Paletten NR</th>
+              <th>NR</th>
               <th>Positionen</th>
               <th>Mehrplatz</th>
               <th>Tour</th>
@@ -34,7 +34,7 @@
           <tbody>
             <% @assigned_pallets.each do |pallet| %>
               <tr>
-                <td class="align-center"><%= pallet.id %></td>
+                <td class="align-center"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>
@@ -65,14 +65,14 @@
 
 <% if @pallets.present? %>
   <section class="filter_box">
-    <header class="filter_box_header"><h4>Verfügbare Paletten</h4></header>
+    <header class="filter_box_header"><h4>Verfügbare Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
       <% form_tag(assign_pallets_cargo_lists_path, {:class => "form", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
         <table>
           <thead>
             <tr>
-              <th>Paletten NR</th>
+              <th>NR</th>
               <th>Positionen</th>
               <th>Mehrplatz</th>
               <th>Tour</th>
@@ -83,7 +83,7 @@
           <tbody>
             <% @pallets.each do |pallet| %>
               <tr>
-                <td class="align-center"><%= pallet.id %></td>
+                <td class="align-center"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_order.shipping_route.name %></td>

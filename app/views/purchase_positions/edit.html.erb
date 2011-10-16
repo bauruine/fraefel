@@ -25,6 +25,12 @@
   <p class="formInput">
     <%= f.collection_select(:commodity_code_id, CommodityCode.all, :id, :content) %>
   </p>
+  <p class="formLabel">
+    <%= f.label :delivered, "Versendet?" %>
+  </p>
+  <p class="formInput">
+    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+  </p>
   <p class="formInput">
     <%= f.submit("Artikel ändern") %>
   </p>

@@ -21,7 +21,7 @@
 
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand Listen</h1>
-  <%= link_to("Papiere erfassen", new_cargo_list_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Papiere erfassen", new_cargo_list_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal", "data-modal_width" => 500) %>
 </header>
 
 <% if @cargo_lists.present? %>
@@ -63,5 +63,6 @@
   </section>
   
 <% else %>
-  <div id="flash_notice">Keine Rüstungs Papiere gefunden...</div>
+  <div id="flash_notice">Keine Liefer Papiere gefunden...</div>
 <% end %>
+<div data-type="modal"></div>

@@ -11,6 +11,12 @@
   <p class="formInput">
     <%= f.collection_select(:pallet_type_id, PalletType.all, :id, :description, :include_blank => true) %>
   </p>
+  <p class="formLabel">
+    <%= f.label :delivered, "Versendet?" %>
+  </p>
+  <p class="formInput">
+    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+  </p>
   <p class="formInput">
     <%= f.submit "Edit", :disable_with => 'Editing...' %>
   </p>

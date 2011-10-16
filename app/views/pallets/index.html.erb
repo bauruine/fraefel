@@ -1,5 +1,5 @@
 <header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Paletten Liste</h1>
+  <h1 class="floatLeft">Paletten / Coli Liste</h1>
   <%= link_to("Print", pallets_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
 
@@ -7,11 +7,11 @@
   
   <section class="filter_box">
     <header class="filter_box_header clearfix">
-      <h4 class="floatLeft m-r_5px">Palette NR#<%= pallet.id %></h4>
+      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id}" : "Palette NR #{pallet.id}" %></h4>
       <% if pallet.cargo_list.present? %>
-        <h4 class="floatLeft"><%= " | Versand NR##{pallet.cargo_list.id}" %></h4>
+        <h4 class="floatLeft"><%= " | Versand NR #{pallet.cargo_list.id}" %></h4>
       <% end %>
-      <%= link_to("Mehrplatz", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
+      <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
       <%= link_to("Print", pallet_path(pallet, :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     </header>
     <section class="filter_box_content clearfix">

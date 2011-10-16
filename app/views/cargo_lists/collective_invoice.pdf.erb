@@ -185,7 +185,7 @@
   
   $(pallet_count).html(<%= @pallets_count %>);
   $(pallet_total).html(<%= (@pallets_additional_space + @pallets_count).round(1) %>);
-  $(coli_count).html(0);
+  $(coli_count).html(<%= @cargo_list.pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
   
   $(pallet_count_value).html("Paletten");
   $(pallet_total_value).html("Palettenplätze");
