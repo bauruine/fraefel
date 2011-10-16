@@ -119,6 +119,7 @@ class CargoListsController < ApplicationController
   
   def print_lebert
     @cargo_list = CargoList.find(params[:id])
+    @purchase_positions_group_consignee_full = PurchasePosition.where("cargo_lists.id = #{@cargo_list.id}").includes(:pallet => :cargo_list).group(:consignee_full)
     @customer = @cargo_list.referee
     #@customer_address = @customer.shipping_addresses.first
     
@@ -130,7 +131,12 @@ class CargoListsController < ApplicationController
           :layout => 'pdf.html',
           :show_as_html => params[:debug].present?,
           :orientation => 'Portrait',
-          :encoding => 'UTF-8'
+          :encoding => 'UTF-8',
+          :footer => {
+            :left => Time.now,
+            :right => "Seite [page] / [topage]",
+            :line => true
+          }
         )
       end
     end
