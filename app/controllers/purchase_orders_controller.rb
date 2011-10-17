@@ -13,7 +13,7 @@ class PurchaseOrdersController < ApplicationController
       @search = PurchaseOrder.where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").search(params[:search])
     end
     
-    @purchase_orders = @search.order("purchase_orders.delivery_date asc, shipping_route_id asc, purchase_positions.consignee_full asc").includes(:purchase_positions).select("purchase_positions.consignee_full")
+    @purchase_orders = @search.order("purchase_positions.consignee_full asc, shipping_route_id asc, purchase_orders.delivery_date asc").includes(:purchase_positions).select("purchase_positions.consignee_full")
   end
   
   def edit
