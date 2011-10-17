@@ -3,7 +3,7 @@
     <%= f.label :additional_space, "Additional Space" %>
   </p>
   <p class="formInput">
-    <%= f.select(:additional_space, '0.5' => 0.5, '1.0' => 1.0, '1.5' => 1.5, '2.0' => 2.0) %>
+    <%= f.select(:additional_space, {'0.5' => 0.5, '1.0' => 1.0, '1.5' => 1.5, '2.0' => 2.0}, :include_blank => true) %>
   </p>
   <p class="formLabel">
     <%= f.label :pallet_type, "Paletten Typ" %>
