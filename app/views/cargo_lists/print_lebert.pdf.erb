@@ -2,10 +2,10 @@
 <h1><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></h1>
 
 <% @purchase_positions_group_consignee_full.each do |p_p_consignee_full| %>
-  <% consignee_full_pallets_additional_space = 0 %>
+  <% consignee_full_pallets_additional_space = 0.to_f %>
   
   <% Pallet.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.consignee_full = '#{p_p_consignee_full.consignee_full}'").includes(:cargo_list, :purchase_positions).each do |pallet| %>
-    <% consignee_full_pallets_additional_space += pallet.additional_space %>
+    <% consignee_full_pallets_additional_space += (pallet.additional_space.present? ? pallet.additional_space : pallet.additional_space.to_f) %>
   <% end %>
   <section class="filter_box">
     <header class="filter_box_header"><h4><%= p_p_consignee_full.consignee_full %></h4></header>
@@ -33,7 +33,7 @@
       </table>
       <hr>
       <ul class="ul_summary">
-        <li class="summary clearfix"><p class="floatLeft bold title">Paletten-Plätze:</p><p class="floatLeft"><%= ((consignee_full_pallets_additional_space.to_f / 120) + Pallet.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.consignee_full = '#{p_p_consignee_full.consignee_full}' and pallet_types.description != 'coli'").includes(:cargo_list, :purchase_positions, :pallet_type).count).round(1) %></p></li>
+        <li class="summary clearfix"><p class="floatLeft bold title">Paletten-Plätze:</p><p class="floatLeft"><%= (consignee_full_pallets_additional_space) + Pallet.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.consignee_full = '#{p_p_consignee_full.consignee_full}' and pallet_types.description != 'coli'").includes(:cargo_list, :purchase_positions, :pallet_type).count %></p></li>
       </ul>
       
     </section>
