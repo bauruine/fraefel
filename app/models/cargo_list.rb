@@ -7,9 +7,9 @@ class CargoList < ActiveRecord::Base
   after_update :change_pallets_status
   
   def additional_space
-    additional_space = 0
+    additional_space = 0.to_f
     pallets.each do |pallet|
-      additional_space = additional_space + pallet.additional_space
+      additional_space = additional_space + (pallet.additional_space.present? ? pallet.additional_space : pallet.additional_space.to_f)
     end
     return additional_space
   end
