@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  purchase_order_id: 1
+  pallet_id: 1
+
+two:
+  purchase_order_id: 1
+  pallet_id: 1

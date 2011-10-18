@@ -52,4 +52,17 @@ $(document).ready(function(){
 		$('div[data-type=modal]').dialog("option", "position", "center");
 	});
 	
+	if ($('form[data-submit_handler=true]').size() != 0) {
+		$("form[data-submit_handler=true]").find($("input[type=submit]")).attr('disabled', 'disabled');
+		
+		$("form[data-submit_handler=true]").find($("input[type=checkbox]")).change(function(){
+			if ($("form[data-submit_handler=true]").find($("input[type=checkbox]:checked")).length >= 1) {
+				$("form[data-submit_handler=true]").find($("input[type=submit]")).removeAttr('disabled');
+			} else {
+				$("form[data-submit_handler=true]").find($("input[type=submit]")).attr('disabled', 'disabled');
+			};
+		});
+		
+	};
+	
 });

@@ -47,6 +47,8 @@ Fraefel::Application.routes.draw do
       get 'controll_invoice'
     end
   end
+  
+  resources :purchase_order_pallet_assignments
 
   match 'login' => 'user_sessions#new', :as => :login
   match 'logout' => 'user_sessions#destroy', :as => :logout

@@ -59,8 +59,8 @@ class PalletsController < ApplicationController
   
   def edit
     @pallet = Pallet.find(params[:id])
-    @purchase_order = @pallet.purchase_order
-    @purchase_positions = @purchase_order.purchase_positions.where("pallet_id IS NULL")
+    #@purchase_order = @pallet.purchase_order
+    #@purchase_positions = @purchase_order.purchase_positions.where("pallet_id IS NULL")
     if request.xhr?
       render :template => 'pallets/ajax_edit'
     end
@@ -90,8 +90,12 @@ class PalletsController < ApplicationController
   
   def remove_positions
     @pallet = Pallet.find(params[:id])
-    @purchase_positions = PurchasePosition.find(params[:purchase_position_ids])
+    @purchase_positions = PurchasePosition.where(:id => params[:purchase_position_ids])
     @pallet.purchase_positions.delete(@purchase_positions)
+    if !PurchasePosition.where(:pallet_id => @pallet.id, :purchase_orders => { :baan_id => @purchase_positions.first.purchase_order.baan_id }).includes(:purchase_order).present?
+      # remove purchase_order assignment from table
+      @pallet.purchase_orders -= [@purchase_positions.first.purchase_order]
+    end
     redirect_to(:back)
   end
   
@@ -106,14 +110,16 @@ class PalletsController < ApplicationController
   end
   
   def assign_positions
+    @purchase_order = PurchaseOrder.where(:id => params[:purchase_order_id]).first
     if params[:pallet_id].present?
-      @pallet = Pallet.find(params[:pallet_id])
-      @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+      @pallet = Pallet.where(:id => params[:pallet_id]).first
+      @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
+      @purchase_order.pallets += [@pallet]
     else
-      @purchase_order = PurchaseOrder.find(params[:purchase_order_id])
-      @pallet = @purchase_order.pallets.build
-      @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+      @pallet = Pallet.new
       @pallet.save
+      @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
+      @purchase_order.pallets += [@pallet]
     end
     redirect_to(:back)
   end

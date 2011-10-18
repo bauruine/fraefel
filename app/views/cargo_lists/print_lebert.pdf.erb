@@ -4,7 +4,7 @@
 <% @purchase_positions_group_consignee_full.each do |p_p_consignee_full| %>
   <% consignee_full_pallets_additional_space = 0.to_f %>
   
-  <% Pallet.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.consignee_full = '#{p_p_consignee_full.consignee_full}'").includes(:cargo_list, :purchase_positions).each do |pallet| %>
+  <% Pallet.where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => p_p_consignee_full.consignee_full}).includes(:cargo_list, :purchase_positions).each do |pallet| %>
     <% consignee_full_pallets_additional_space += (pallet.additional_space.present? ? pallet.additional_space : pallet.additional_space.to_f) %>
   <% end %>
   <section class="filter_box">
@@ -20,8 +20,8 @@
           </tr>
         </thead>
         <tbody>
-          <% PurchaseOrder.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.consignee_full = '#{p_p_consignee_full.consignee_full}'").group("purchase_orders.baan_id").includes(:purchase_positions, :pallets => :cargo_list).each do |purchase_order| %>
-            <% pallets = Pallet.where("pallets.purchase_order_id = #{purchase_order.id} and cargo_lists.id = #{@cargo_list.id}").includes(:cargo_list) %>
+          <% PurchaseOrder.where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => p_p_consignee_full.consignee_full}).group("purchase_orders.baan_id").includes(:purchase_positions, :pallets => :cargo_list).each do |purchase_order| %>
+            <% pallets = Pallet.where(:purchase_orders => {:id => purchase_order.id}, :cargo_lists => {:id => @cargo_list.id}).includes(:purchase_orders, :cargo_list) %>
             <tr>
               <td class="align-center"><%= purchase_order.baan_id %></td>
               <td class="align-center"><%= "Paletten #{pallets.sum("pallet_types.count_as", :include => :pallet_type).to_i} / Coli #{pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count}" %></td>

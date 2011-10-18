@@ -35,7 +35,7 @@
             <% else %>
               <tr>
             <% end %>
-              <% if purchase_position.purchase_order != pallet.purchase_order %>
+              <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
                 <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
               <% else %>
               <td class="align-center"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>

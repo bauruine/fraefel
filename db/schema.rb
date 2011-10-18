@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111016140910) do
+ActiveRecord::Schema.define(:version => 20111017212031) do
 
   create_table "cargo_lists", :force => true do |t|
     t.datetime "pick_up_time_earliest"
@@ -79,9 +79,16 @@ ActiveRecord::Schema.define(:version => 20111016140910) do
     t.datetime "delivery_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "additional_space",  :precision => 10, :scale => 0, :default => 0
+    t.float    "additional_space",                                 :default => 0.0
     t.integer  "pallet_type_id"
     t.boolean  "delivered",                                        :default => false
+  end
+
+  create_table "purchase_order_pallet_assignments", :force => true do |t|
+    t.integer  "purchase_order_id"
+    t.integer  "pallet_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "purchase_orders", :force => true do |t|
@@ -98,9 +105,9 @@ ActiveRecord::Schema.define(:version => 20111016140910) do
   create_table "purchase_positions", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "commodity_code_id"
-    t.decimal  "weight_single",     :precision => 10, :scale => 0
-    t.decimal  "weight_total",      :precision => 10, :scale => 0
-    t.decimal  "quantity",          :precision => 10, :scale => 0
+    t.decimal  "weight_single",     :precision => 12, :scale => 2
+    t.decimal  "weight_total",      :precision => 12, :scale => 2
+    t.decimal  "quantity",          :precision => 12, :scale => 2
     t.decimal  "amount",            :precision => 12, :scale => 2
     t.datetime "delivery_date"
     t.datetime "created_at"

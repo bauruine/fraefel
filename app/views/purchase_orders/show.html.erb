@@ -14,7 +14,7 @@
       <h4 class="floatLeft">Offene Positionen</h4>
     </header>
     <section class="filter_box_content clearfix">
-      <% form_tag(assign_positions_pallets_path, {:class => "form", :method => :post}) do %>
+      <% form_tag(assign_positions_pallets_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
         <table class="margin_bottom_big">
           <thead>
@@ -78,7 +78,20 @@
       <%= link_to("Print", pallet_path(pallet, :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     </header>
     <section class="filter_box_content clearfix">
-      <% form_tag(remove_positions_pallet_path(pallet), {:class => "form", :method => :delete}) do %>
+      <% if pallet.mixed? %>
+        <ul class="ul_summary">
+          <li class="summary clearfix">
+            <p class="floatLeft bold title">Mischpalette:</p>
+            <p class="floatLeft">
+              <% pallet.purchase_orders.each do |p_o| %>
+                <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
+              <% end %>
+            </p>
+          </li>
+        </ul>
+      <% end %>
+      
+      <% form_tag(remove_positions_pallet_path(pallet), {:class => "form", "data-submit_handler" => "true", :method => :delete}) do %>
         <table class="margin_bottom_big">
           <thead>
             <tr>
@@ -110,7 +123,11 @@
                 <td class="align-center"><%= purchase_position.quantity %></td>
                 <td class="align-center"><%= purchase_position.storage_location %></td>
                 <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                <td class="align-center">
+                  <% if purchase_position.purchase_order == @purchase_order %>
+                    <%= check_box_tag "purchase_position_ids[]", purchase_position.id %>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
