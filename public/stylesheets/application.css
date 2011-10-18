@@ -46,6 +46,11 @@ img#logo {
 	color: #ffffff;
 }
 
+.mixed {
+	background-color: #990000;
+	color: #ffffff;
+}
+
 .yellow_background {
 	background-color: yellow !important;
 }

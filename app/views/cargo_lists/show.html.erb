@@ -34,7 +34,7 @@
           <tbody>
             <% @assigned_pallets.each do |pallet| %>
               <tr>
-                <td class="align-center"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
+                <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.name %></td>
@@ -84,7 +84,7 @@
             <% @pallets.each do |pallet| %>
               <% if pallet.purchase_positions.present? %>
                 <tr>
-                  <td class="align-center"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
+                  <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
                   <td class="align-center"><%= pallet.purchase_positions.count %></td>
                   <td class="align-center"><%= pallet.additional_space %></td>
                   <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.name %></td>
