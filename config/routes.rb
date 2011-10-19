@@ -28,6 +28,7 @@ Fraefel::Application.routes.draw do
   resources :pallets do
     member do
       delete 'remove_positions'
+      get 'ajax_show'
     end
     collection do
       post 'assign_positions'

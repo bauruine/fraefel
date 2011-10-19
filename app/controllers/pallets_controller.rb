@@ -27,6 +27,10 @@ class PalletsController < ApplicationController
     end
   end
   
+  def ajax_show
+    @pallet = Pallet.find(params[:id])
+  end
+  
   def index
     @pallets = Pallet.where(:delivered => false)
     @purchase_orders = PurchaseOrder.joins(:pallets)

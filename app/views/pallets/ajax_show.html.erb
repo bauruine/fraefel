@@ -1,0 +1,57 @@
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft m-r_5px"><%= @pallet.pallet_type.description == "coli" ? "Coli NR #{@pallet.id}" : "Palette NR #{@pallet.id}" %></h4>
+    <% if @pallet.cargo_list.present? %>
+      <h4 class="floatLeft"><%= " | Versand NR #{@pallet.cargo_list.id}" %></h4>
+    <% end %>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>VK-Position</th>
+          <th>Artikel NR</th>
+          <th>Zoll</th>
+          <th>Artikel</th>
+          <th>Produktlinie</th>
+          <th>Menge Total</th>
+          <th>Lager Ort</th>
+          <th>Versand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pallet.purchase_positions.each do |purchase_position| %>
+          <% if (!purchase_position.storage_location.present?) or (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
+            <tr class="yellow_background">
+          <% else %>
+            <tr>
+          <% end %>
+            <% if purchase_position.purchase_order != @pallet.purchase_orders.first %>
+              <td class="align-center red"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+            <% else %>
+            <td class="align-center"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+            <% end %>
+            <td class="align-center"><%= purchase_position.article_number %></td>
+            <td class="align-center"><%= purchase_position.commodity_code.content %></td>
+            <td class="align-center"><%= purchase_position.article %></td>
+            <td class="align-center"><%= purchase_position.product_line %></td>
+            <td class="align-center"><%= purchase_position.quantity %></td>
+            <td class="align-center"><%= purchase_position.storage_location %></td>
+            <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="align-center"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+</section>

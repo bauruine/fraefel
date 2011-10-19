@@ -18,7 +18,7 @@
   <section class="filter_box">
     <header class="filter_box_header"><h4>Angefügte Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
-      <% form_tag(remove_pallets_cargo_lists_path, {:class => "form", :method => :post}) do %>
+      <% form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
         <table>
           <thead>
@@ -34,7 +34,7 @@
           <tbody>
             <% @assigned_pallets.each do |pallet| %>
               <tr>
-                <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
+                <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.name %></td>
@@ -67,7 +67,7 @@
   <section class="filter_box">
     <header class="filter_box_header"><h4>Verfügbare Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
-      <% form_tag(assign_pallets_cargo_lists_path, {:class => "form", :method => :post}) do %>
+      <% form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
         <table>
           <thead>
@@ -84,7 +84,7 @@
             <% @pallets.each do |pallet| %>
               <% if pallet.purchase_positions.present? %>
                 <tr>
-                  <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
+                  <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") %></td>
                   <td class="align-center"><%= pallet.purchase_positions.count %></td>
                   <td class="align-center"><%= pallet.additional_space %></td>
                   <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.name %></td>

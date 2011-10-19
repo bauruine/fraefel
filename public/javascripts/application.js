@@ -48,6 +48,18 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	$('a[data-type=modal_index]').click(function() {
+		var remote_url = $(this).attr("href");
+		$('div[data-type=modal]').load(remote_url + ' section.filter_box');
+		if ($(this).attr('data-modal_width') != undefined) {
+			$( "div[data-type=modal]" ).dialog( "option", "width", 1424 );
+		};
+		$('div[data-type=modal]').dialog('open');
+		$('div[data-type=modal]').dialog("option", "position", "center");
+		
+		return false;
+	});
+	
 	$(window).resize(function() {
 		$('div[data-type=modal]').dialog("option", "position", "center");
 	});
