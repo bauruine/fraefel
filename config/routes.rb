@@ -33,6 +33,7 @@ Fraefel::Application.routes.draw do
     collection do
       post 'assign_positions'
       delete 'delete_empty'
+      get 'search_for'
     end
   end
   

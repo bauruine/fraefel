@@ -31,6 +31,10 @@ class PalletsController < ApplicationController
     @pallet = Pallet.find(params[:id])
   end
   
+  def search_for
+    @pallet = Pallet.where(:id => params[:pallet_id])
+  end
+  
   def index
     @pallets = Pallet.where(:delivered => false)
     @purchase_orders = PurchaseOrder.joins(:pallets)

@@ -3,6 +3,25 @@
   <%= link_to("Print", pallets_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
 
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Suche Palette</h4></header>
+  <section class="filter_box_content clearfix">
+    <% form_tag(search_for_pallets_path, {:class => "form", :method => :get}) do %>
+      <ul class="ul_summary">
+
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Palette NR</p>
+          <p class="floatLeft"><%= text_field_tag(:pallet_id) %></p>
+        </li>
+        <li class="summary clearfix">
+          <p class="floatLeft title">Aktion</p>
+          <p class="floatLeft"><%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil %></p>
+        </li>
+      </ul>
+    <% end %>
+  </section>
+</section>
+
 <% @pallets.each do |pallet| %>
   
   <section class="filter_box">

@@ -70,7 +70,7 @@ class PurchaseOrdersController < ApplicationController
   
   def import_orders
     #system('rake routes')
-    system('rake baan:import:re')
+    system('rake baan:import:re RAILS_ENV=production')
     redirect_to(:back)
   end
 end
