@@ -13,28 +13,28 @@
       <table class="margin_bottom_big">
         <thead>
           <tr>
-            <th>VK-Auftrag</th>
-            <th>Anzahl</th>
-            <th>Inhalt</th>
+            <th>Palette / Coli</th>
+            <th>Mischpalette?</th>
             <th>Brutto Kg</th>
+            <th>Mehrplatz</th>
           </tr>
         </thead>
         <tbody>
-          <% PurchaseOrder.where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => p_p_consignee_full.consignee_full}).group("purchase_orders.baan_id").includes(:purchase_positions, :pallets => :cargo_list).each do |purchase_order| %>
-            <% pallets = Pallet.where(:purchase_orders => {:id => purchase_order.id}, :cargo_lists => {:id => @cargo_list.id}).includes(:purchase_orders, :cargo_list) %>
+          <% Pallet.order("pallets.id asc").where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => p_p_consignee_full.consignee_full}).includes(:purchase_positions, :cargo_list).each do |pallet| %>
             <tr>
-              <td class="align-center"><%= purchase_order.baan_id %></td>
-              <td class="align-center"><%= "Paletten #{pallets.sum("pallet_types.count_as", :include => :pallet_type).to_i} / Coli #{pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count}" %></td>
-              <td></td>
-              <td class="align-center"><%= pallets.sum("purchase_positions.weight_total", :include => :purchase_positions) + (pallets.sum("pallet_types.count_as", :include => :pallet_type).to_i * 20) %></td>
+              <td class="align-center"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
+              <td class="align-center"><%= pallet.mixed? ? "Ja" : nil %></td>
+              <td class="align-center"><%= pallet.purchase_positions.sum("weight_total") + (pallet.pallet_type.description == "coli" ? 0 : 20) %></td>
+              <td class="align-center"><%= pallet.additional_space %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
-      <hr>
-      <ul class="ul_summary">
+      
+      <ul class="ul_summary m_top_5px">
         <li class="summary clearfix"><p class="floatLeft bold title">Paletten-Plätze:</p><p class="floatLeft"><%= (consignee_full_pallets_additional_space) + Pallet.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.consignee_full = '#{p_p_consignee_full.consignee_full}' and pallet_types.description != 'coli'").includes(:cargo_list, :purchase_positions, :pallet_type).count %></p></li>
       </ul>
+      
       
     </section>
   </section>

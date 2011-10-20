@@ -51,6 +51,11 @@ img#logo {
 .white_color {
 	color: #FFFFFF;
 }
+
+.m_top_5px {
+	margin-top: 10px;
+}
+
 .light_blue_background {
 	background-color: #75D8FF;
 }
