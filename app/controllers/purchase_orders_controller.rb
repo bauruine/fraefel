@@ -5,6 +5,13 @@ class PurchaseOrdersController < ApplicationController
     @pallets = @purchase_order.pallets
     @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL AND")
   end
+  
+  def search_for
+    @purchase_order = PurchaseOrder.where(:baan_id => params[:purchase_order_id])
+    if @purchase_order.present?
+      redirect_to purchase_order_url(@purchase_order.first)
+    end
+  end
 
   def index
     if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"

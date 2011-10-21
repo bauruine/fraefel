@@ -4,9 +4,13 @@
 </header>
 
 <section class="filter_box">
-  <header class="filter_box_header"><h4>Filter anwenden</h4></header>
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Filter anwenden</h4>
+    <%= link_to("Gehe zu", "#", {"data-type" => "tab", "data-warp" => "goto", :class => "floatRight no_text_decoration link_button"}) %>
+    <%= link_to("Filter", "#", {"data-type" => "tab", "data-warp" => "filter", :class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+  </header>
   <section class="filter_box_content clearfix">
-  <% form_for :search, @search, :html => {:method => :get} do |f| %>
+  <% form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
     <ul class="ul_summary">
       
       <li class="summary clearfix">
@@ -30,6 +34,19 @@
       <li class="summary clearfix">
         <p class="floatLeft title">Aktionen</p>
         <p class="floatLeft"><%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil %></p>
+      </li>
+    </ul>
+  <% end %>
+  <% form_tag(search_for_purchase_orders_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
+    <ul class="ul_summary">
+
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">VK NR</p>
+        <p class="floatLeft"><%= text_field_tag(:purchase_order_id) %></p>
+      </li>
+      <li class="summary clearfix">
+        <p class="floatLeft title">Aktion</p>
+        <p class="floatLeft"><%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil %></p>
       </li>
     </ul>
   <% end %>

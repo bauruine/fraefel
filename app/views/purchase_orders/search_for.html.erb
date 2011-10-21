@@ -1,0 +1,7 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Resultat: Suche nach VK-Auftrag</h1>
+</header>
+
+<% if !@purchase_order.present? %>
+  <div id="flash_error">Es wurde kein VK-Auftrag mit der ID <%= params[:purchase_order_id] %> gefunden! Klicke <%= link_to("hier", :back) %> um zurückzukehren.</div>
+<% end %>

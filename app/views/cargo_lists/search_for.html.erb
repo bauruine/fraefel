@@ -1,0 +1,7 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Resultat: Suche nach Versand</h1>
+</header>
+
+<% if !@cargo_list.present? %>
+  <div id="flash_error">Es wurde kein Versand mit der ID <%= params[:cargo_list_id] %> gefunden! Klicke <%= link_to("hier", :back) %> um zurückzukehren.</div>
+<% end %>

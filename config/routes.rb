@@ -14,7 +14,11 @@ Fraefel::Application.routes.draw do
   
   resources :versions, :only => [:update, :destroy]
   
-  resources :purchase_positions
+  resources :purchase_positions do
+    collection do
+      get 'search_for'
+    end
+  end
   
   resources :purchase_orders do
     member do
@@ -22,6 +26,7 @@ Fraefel::Application.routes.draw do
     end
     collection do
       get 'import_orders'
+      get 'search_for'
     end
   end
   
@@ -41,6 +46,7 @@ Fraefel::Application.routes.draw do
     collection do
       post 'assign_pallets'
       post 'remove_pallets'
+      get 'search_for'
     end
     member do
       get 'print_pallets'

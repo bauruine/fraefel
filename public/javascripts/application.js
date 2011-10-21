@@ -77,4 +77,21 @@ $(document).ready(function(){
 		
 	};
 	
+	if ($("form[data-tab]").size() != 0) {
+		$("form:not([data-tab=filter])").hide()
+	};
+	
+	$("a[data-type=tab]").click(function() {
+		var warpToTab = $(this).attr("data-warp");
+		var currentForm = $("form[data-tab]")
+		$("form:not(:hidden)").hide();
+		$("form[data-tab=" + warpToTab + "]").show();
+		return false;
+	});
+/*	
+	var faye = new Faye.Client('http://localhost:9292/faye');
+	faye.subscribe("/messages/new", function(data) {
+		alert(data);
+	});
+*/	
 });

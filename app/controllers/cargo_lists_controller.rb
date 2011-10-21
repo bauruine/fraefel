@@ -8,6 +8,13 @@ class CargoListsController < ApplicationController
     @pallets = Pallet.order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions]) - @assigned_pallets - Pallet.where("cargo_list_id IS NOT NULL")
   end
   
+  def search_for
+    @cargo_list = CargoList.where(:id => params[:cargo_list_id])
+    if @cargo_list.present?
+      redirect_to cargo_list_url(@cargo_list.first)
+    end
+  end
+  
   def index
     if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"
       @search = CargoList.search(params[:search])

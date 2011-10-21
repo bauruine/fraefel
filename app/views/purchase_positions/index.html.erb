@@ -4,6 +4,25 @@
   <%= link_to("Fehlerhaft", purchase_positions_path(:to_be_checked => true), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
 
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Suche nach VK-Position</h4></header>
+  <section class="filter_box_content clearfix">
+    <% form_tag(search_for_purchase_positions_path, {:class => "form", :method => :get}) do %>
+      <ul class="ul_summary">
+
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">VK-Position NR</p>
+          <p class="floatLeft"><%= text_field_tag(:purchase_position_id) %></p>
+        </li>
+        <li class="summary clearfix">
+          <p class="floatLeft title">Aktion</p>
+          <p class="floatLeft"><%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil %></p>
+        </li>
+      </ul>
+    <% end %>
+  </section>
+</section>
+
 <% @purchase_orders.each do |purchase_order| %>
   <section class="filter_box">
     <header class="filter_box_header clearfix">

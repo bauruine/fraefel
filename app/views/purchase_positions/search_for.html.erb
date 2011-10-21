@@ -1,0 +1,7 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Resultat: Suche nach VK-Position</h1>
+</header>
+
+<% if !@purchase_order.present? %>
+  <div id="flash_error">Zur VK-Position mit der ID <%= params[:purchase_position_id] %> wurde kein passender VK-Auftrag gefunden! Klicke <%= link_to("hier", :back) %> um zurückzukehren.</div>
+<% end %>
