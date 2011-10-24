@@ -1,25 +1,48 @@
-<h1>Listing users</h1>
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Benutzer Liste</h1>
+  <%= link_to("Neuer Benutzer", new_user_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
 
-<table>
-  <tr>
-    <th>Username</th>
-    <th>Email</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
 
-<% @users.each do |user| %>
-  <tr>
-    <td><%= user.username %></td>
-    <td><%= user.email %></td>
-    <td><%= link_to 'Show', user %></td>
-    <td><%= link_to 'Edit', edit_user_path(user) %></td>
-    <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New User', new_user_path %>
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Aktive Benutzer</h4></header>
+  <section class="filter_box_content clearfix">
+    
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>In Gruppe</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <% user_roles = Array.new %>
+          <% user.roles.collect {|role| user_roles += [role.name]} %>
+          <tr>
+            <td class="align-center"><%= user.username %></td>
+            <td class="align-center"><%= user.email %></td>
+            <td class="align-center"><%= user_roles.join(", ") %></td>
+            <td class="align-center"><%= link_to 'Show', user %></td>
+            <td class="align-center"><%= link_to 'Edit', edit_user_path(user) %></td>
+            <td class="align-center"><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    
+  </section>
+</section>

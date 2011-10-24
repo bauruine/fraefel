@@ -50,7 +50,11 @@
             <% else %>
               <tr>
             <% end %>
-              <td class="align-center"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+              <% if permitted_to? :edit, :purchase_positions %>
+                <td class="align-center"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+              <% else %>
+                <td class="align-center"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+              <% end %>
               <td class="align-center"><%= purchase_position.commodity_code.content %></td>
               <td class="align-center"><%= purchase_position.article_number %></td>
               <td class="align-center"><%= purchase_position.article %></td>

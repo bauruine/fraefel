@@ -38,7 +38,9 @@
 
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand Listen</h1>
-  <%= link_to("Papiere erfassen", new_cargo_list_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal", "data-modal_width" => 500) %>
+  <% if permitted_to? :new, :cargo_lists %>
+    <%= link_to("Papiere erfassen", new_cargo_list_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal", "data-modal_width" => 500) %>
+  <% end %>
 </header>
 
 <% if @cargo_lists.present? %>

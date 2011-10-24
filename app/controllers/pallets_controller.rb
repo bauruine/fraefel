@@ -1,4 +1,5 @@
 class PalletsController < ApplicationController
+  filter_access_to :all
   
   def show
     @pallet = Pallet.find(params[:id])

@@ -1,4 +1,6 @@
 class PurchaseOrdersController < ApplicationController
+  filter_access_to :all
+  
   def show
     @purchase_order = PurchaseOrder.find(params[:id])
     @purchase_positions = @purchase_order.purchase_positions.where('pallet_id IS NULL')

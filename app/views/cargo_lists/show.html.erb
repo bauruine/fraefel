@@ -1,7 +1,9 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand NR#<%= @cargo_list.id %></h1>
   <%= link_to("Paletten Liste", cargo_list_path(@cargo_list, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal") %>
+  <% if permitted_to? :edit, :cargo_lists %>
+    <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal") %>
+  <% end %>
   <%= link_to("Zollpapiere", collective_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
   <%= link_to("Lebert", print_lebert_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
   <%= link_to("Kontrolle", controll_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
@@ -40,19 +42,25 @@
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.name %></td>
                 <td class="align-center"><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
-                <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+                <% if permitted_to? :remove_pallets, :cargo_lists %>
+                  <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+                <% else %>
+                  <td></td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>
           <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
-            </tr>
+            <% if permitted_to? :remove_pallets, :cargo_lists %>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+              </tr>
+            <% end %>
           </tfoot>
         </table>
       <% end %>
@@ -85,25 +93,33 @@
             <% @pallets.each do |pallet| %>
               <% if pallet.purchase_positions.present? %>
                 <tr>
-                  <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") %></td>
+                  <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>">
+                    <%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") %>
+                  </td>
                   <td class="align-center"><%= pallet.purchase_positions.count %></td>
                   <td class="align-center"><%= pallet.additional_space %></td>
                   <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.name %></td>
                   <td class="align-center"><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
-                  <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+                  <% if permitted_to? :assign_pallets, :cargo_lists %>
+                    <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
                 </tr>
               <% end %>
             <% end %>
           </tbody>
           <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
-            </tr>
+            <% if permitted_to? :assign_pallets, :cargo_lists %>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+              </tr>
+            <% end %>
           </tfoot>
         </table>
       <% end %>

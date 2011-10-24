@@ -1,11 +1,12 @@
 class CargoListsController < ApplicationController
+  filter_access_to :all
   before_filter :calculate_cargo_list, :only => [:collective_invoice]
   
   def show
     @cargo_list = CargoList.find(params[:id])
     @assigned_pallets = @cargo_list.pallets
     @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
-    @pallets = Pallet.order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions]) - @assigned_pallets - Pallet.where("cargo_list_id IS NOT NULL")
+    @pallets = Pallet.order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions]) - @assigned_pallets - Pallet.where("cargo_list_id IS NOT NULL") - Pallet.where(:purchase_positions => {:id => nil}).includes(:purchase_positions)
     
     respond_to do |format|
       format.html

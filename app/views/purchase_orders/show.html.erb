@@ -1,7 +1,9 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
   <%= link_to("Print", print_pallets_purchase_order_path(@purchase_order, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Edit", edit_purchase_order_path(@purchase_order), {"data-type" => "modal", :class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+  <% if permitted_to? :edit, :purchase_orders %>
+    <%= link_to("Edit", edit_purchase_order_path(@purchase_order), {"data-type" => "modal", :class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+  <% end %>
 </header>
 
 <ul class="ul_summary">
@@ -36,28 +38,38 @@
               <% else %>
                 <tr>
               <% end %>
-                  <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                  <% if permitted_to? :edit, :purchase_positions %>
+                    <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                  <% else %>
+                    <td class="align-center"><%= purchase_position.position %></td>
+                  <% end %>
                   <td class="align-center"><%= purchase_position.article_number %></td>
                   <td class="align-center"><%= purchase_position.article %></td>
                   <td class="align-center"><%= purchase_position.product_line %></td>
                   <td class="align-center"><%= purchase_position.quantity %></td>
                   <td class="align-center"><%= purchase_position.storage_location %></td>
                   <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                  <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                  <% if permitted_to? :assign_positions, :pallets %>
+                    <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
                 </tr>
             <% end %>
           </tbody>
           <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="align-center"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palett NR...") %></td>
-              <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
-            </tr>
+            <% if permitted_to? :assign_positions, :pallets %>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="align-center"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palett NR...") %></td>
+                <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+              </tr>
+            <% end %>
           </tfoot>
         </table>
       <% end %>
@@ -74,7 +86,9 @@
   <section class="filter_box">
     <header class="filter_box_header clearfix">
       <h4 class="floatLeft"><%= pallet.pallet_type.description == "coli" ? "Coli" : "Pallet" %> NR#<%= pallet.id %></h4>
-      <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
+      <% if permitted_to? :edit, :pallets %>
+        <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
+      <% end %>
       <%= link_to("Print", pallet_path(pallet, :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     </header>
     <section class="filter_box_content clearfix">
@@ -112,10 +126,18 @@
               <% else %>
                 <tr>
               <% end %>
-                <% if purchase_position.purchase_order != @purchase_order %>
-                  <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                <% if permitted_to? :remove_positions, :pallets %>
+                  <% if purchase_position.purchase_order != @purchase_order %>
+                    <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                  <% else %>
+                  <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                  <% end %>
                 <% else %>
-                <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                  <% if purchase_position.purchase_order != @purchase_order %>
+                    <td class="align-center red"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+                  <% else %>
+                  <td class="align-center"><%= purchase_position.position %></td>
+                  <% end %>
                 <% end %>
                 <td class="align-center"><%= purchase_position.article_number %></td>
                 <td class="align-center"><%= purchase_position.article %></td>
@@ -124,24 +146,28 @@
                 <td class="align-center"><%= purchase_position.storage_location %></td>
                 <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                 <td class="align-center">
-                  <% if purchase_position.purchase_order == @purchase_order %>
-                    <%= check_box_tag "purchase_position_ids[]", purchase_position.id %>
+                  <% if permitted_to? :remove_positions, :pallets %>
+                    <% if purchase_position.purchase_order == @purchase_order %>
+                      <%= check_box_tag "purchase_position_ids[]", purchase_position.id %>
+                    <% end %>
                   <% end %>
                 </td>
               </tr>
             <% end %>
           </tbody>
           <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="align-center"></td>
-              <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
-            </tr>
+            <% if permitted_to? :remove_positions, :pallets %>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="align-center"></td>
+                <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+              </tr>
+            <% end %>
           </tfoot>
         </table>
       <% end %>

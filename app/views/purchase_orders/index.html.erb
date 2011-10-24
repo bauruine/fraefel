@@ -1,6 +1,8 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Verkaufs Aufträge</h1>
-  <%= link_to("Re-Import", import_orders_purchase_orders_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <% if permitted_to? :purchase_orders, :import_orders %>
+    <%= link_to("Re-Import", import_orders_purchase_orders_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <% end %>
 </header>
 
 <section class="filter_box">

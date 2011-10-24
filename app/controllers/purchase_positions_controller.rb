@@ -1,4 +1,5 @@
 class PurchasePositionsController < ApplicationController
+  filter_access_to :all
   def show
     @purchase_position = PurchasePosition.find(params[:id])
     @purchase_order = @purchase_position.where

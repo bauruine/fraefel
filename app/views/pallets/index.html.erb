@@ -33,7 +33,9 @@
       <% if pallet.purchase_positions.present? %>
         <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
       <% end %>
-      <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
+      <% if permitted_to? :edit, :pallets %>
+        <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
+      <% end %>
       <%= link_to("Print", pallet_path(pallet, :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     </header>
     <section class="filter_box_content clearfix">
@@ -58,9 +60,21 @@
               <tr>
             <% end %>
               <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
-                <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                <td class="align-center red">
+                  <% if permitted_to? :edit, :purchase_positions %>
+                    <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %>
+                  <% else %>
+                    <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
+                  <% end %>
+                </td>
               <% else %>
-              <td class="align-center"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+              <td class="align-center">
+                <% if permitted_to? :edit, :purchase_positions %>
+                  <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %>
+                <% else %>
+                  <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
+                <% end %>
+              </td>
               <% end %>
               <td class="align-center"><%= purchase_position.article_number %></td>
               <td class="align-center"><%= purchase_position.commodity_code.content %></td>
