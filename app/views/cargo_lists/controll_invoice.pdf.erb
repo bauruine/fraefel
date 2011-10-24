@@ -12,6 +12,7 @@
             <th>Artikel Linie</th>
             <th>Anzahl</th>
             <th>Preis</th>
+            <th>Gewicht Total</th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@
               <td class="align-center"><%= purchase_position.product_line %></td>
               <td class="align-center"><%= purchase_position.quantity %></td>
               <td class="align-center"><%= purchase_position.amount %></td>
+              <td class="align-center"><%= purchase_position.weight_total %></td>
             </tr>
           <% end %>
         </tbody>

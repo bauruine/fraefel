@@ -3,9 +3,11 @@
 
 <% @purchase_positions_group_consignee_full.each do |p_p_consignee_full| %>
   <% consignee_full_pallets_additional_space = 0.to_f %>
+  <% pallets_count_as_total = 0.to_f %>
   
   <% Pallet.where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => p_p_consignee_full.consignee_full}).includes(:cargo_list, :purchase_positions).each do |pallet| %>
     <% consignee_full_pallets_additional_space += (pallet.additional_space.present? ? pallet.additional_space : pallet.additional_space.to_f) %>
+    <% pallets_count_as_total += pallet.pallet_type.count_as %>
   <% end %>
   <section class="filter_box">
     <header class="filter_box_header"><h4><%= p_p_consignee_full.consignee_full %></h4></header>
@@ -15,6 +17,7 @@
           <tr>
             <th>Palette / Coli</th>
             <th>Mischpalette?</th>
+            <th>Paletten Typ</th>
             <th>Brutto Kg</th>
             <th>Mehrplatz</th>
           </tr>
@@ -24,6 +27,7 @@
             <tr>
               <td class="align-center"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
               <td class="align-center"><%= pallet.mixed? ? "Ja" : nil %></td>
+              <td class="align-center">"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
               <td class="align-center"><%= pallet.purchase_positions.sum("weight_total") + (pallet.pallet_type.description == "coli" ? 0 : 20) %></td>
               <td class="align-center"><%= pallet.additional_space %></td>
             </tr>
@@ -32,7 +36,12 @@
       </table>
       
       <ul class="ul_summary m_top_5px">
-        <li class="summary clearfix"><p class="floatLeft bold title">Paletten-Plätze:</p><p class="floatLeft"><%= (consignee_full_pallets_additional_space) + Pallet.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.consignee_full = '#{p_p_consignee_full.consignee_full}' and pallet_types.description != 'coli'").includes(:cargo_list, :purchase_positions, :pallet_type).count %></p></li>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Paletten-Plätze:</p>
+          <p class="floatLeft">
+            <%= (consignee_full_pallets_additional_space) + pallets_count_as_total %>
+          </p>
+        </li>
       </ul>
       
       

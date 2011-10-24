@@ -6,6 +6,32 @@ class CargoListsController < ApplicationController
     @assigned_pallets = @cargo_list.pallets
     @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
     @pallets = Pallet.order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions]) - @assigned_pallets - Pallet.where("cargo_list_id IS NOT NULL")
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render( 
+          :pdf => "Paletten-Liste-#{Time.now}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :header => {
+            :left => "Fraefel AG",
+            :right => "#{Time.now}",
+            :line => true,
+            :spacing => 2
+          },
+          :footer => {
+            :left => "#{cargo_list_url(@cargo_list)}",
+            :right => "Seite [page] / [topage]",
+            :line => true
+          }
+        )
+      end
+    end
+    
   end
   
   def search_for
