@@ -383,6 +383,25 @@ footer#invoice_footer ul li {
 	margin-bottom: 9px;
 }
 
+footer#invoice_footer ul li.margin_top_5px {
+	margin-top: 20px;
+}
+
 footer#invoice_footer ul#column_1 {
+	margin-right: 260px;
+}
+
+footer#invoice_footer_2 {
+	margin-top: 30px;
+}
+
+footer#invoice_footer_2 ul li {
+	margin-bottom: 9px;
+}
+footer#invoice_footer_2 ul li.margin_top_5px {
+	margin-top: 20px;
+}
+
+footer#invoice_footer_2 ul#column_1 {
 	margin-right: 260px;
 }
