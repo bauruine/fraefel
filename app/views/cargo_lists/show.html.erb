@@ -8,6 +8,9 @@
   <%= link_to("Lebert", print_lebert_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
   <%= link_to("Kontrolle", controll_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
+<% if @cargo_list.delivered == true %>
+  <div id="flash_notice">Versand NR<%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
+<% end %>
 
 <% if @assigned_pallets.present? %>
   
