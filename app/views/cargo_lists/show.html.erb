@@ -40,7 +40,7 @@
                 <td class="align-center <%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") %></td>
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
-                <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.present? pallet.purchase_orders.first.shipping_route.name : nil %></td>
+                <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
                 <td class="align-center"><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
                 <% if permitted_to? :remove_pallets, :cargo_lists %>
                   <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
@@ -98,7 +98,7 @@
                   </td>
                   <td class="align-center"><%= pallet.purchase_positions.count %></td>
                   <td class="align-center"><%= pallet.additional_space %></td>
-                  <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.present? pallet.purchase_orders.first.shipping_route.name : nil %></td>
+                  <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
                   <td class="align-center"><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
                   <% if permitted_to? :assign_pallets, :cargo_lists %>
                     <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
