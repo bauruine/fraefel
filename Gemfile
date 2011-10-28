@@ -18,6 +18,8 @@ gem 'paper_trail', '~> 2'
 gem 'wicked_pdf'
 gem "meta_search"
 gem 'hirb'
+gem 'exception_notification'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
@@ -41,3 +43,4 @@ gem 'hirb'
 #   gem 'webrat'
 # end
 gem "mocha", :group => :test
+gem 'letter_opener', :group => :development

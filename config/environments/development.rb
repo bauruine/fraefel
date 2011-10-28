@@ -22,5 +22,20 @@ Fraefel::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
+  
+  config.middleware.use ExceptionNotifier,
+    sender_address: 'noreply@doto.ch',
+    exception_recipients: 'michael.balsiger@swisscom.com',
+    ignore_exceptions: ExceptionNotifier.default_ignore_exceptions - [ActiveRecord::RecordNotFound, AbstractController::ActionNotFound, ActionController::RoutingError]
+  
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      :address => "smtp.gmail.com",
+      :port => 587,
+      :user_name => "sufu90",
+      :password => "masT!44!",
+      :authentication => "plain",
+      :enable_starttls_auto => true
+    }
 end
 

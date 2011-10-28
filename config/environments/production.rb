@@ -46,4 +46,20 @@ Fraefel::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  
+  config.middleware.use ExceptionNotifier,
+    sender_address: 'sufu90@gmail.com',
+    exception_recipients: 'michael.balsiger@swisscom.com',
+    ignore_exceptions: ExceptionNotifier.default_ignore_exceptions - [ActiveRecord::RecordNotFound, AbstractController::ActionNotFound, ActionController::RoutingError]
+  
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      :address => "smtp.gmail.com",
+      :port => 587,
+      :user_name => "sufu90",
+      :password => "masT!44!",
+      :authentication => "plain",
+      :enable_starttls_auto => true
+    }
+  
 end
