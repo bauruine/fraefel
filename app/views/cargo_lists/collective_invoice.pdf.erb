@@ -87,7 +87,7 @@
         <td></td>
         <td class="bold">Total Stücke</td>
         <td class="align-center border-top bold"><%= PurchasePosition.calculate_for_invoice("quantity", [@cargo_list.id]).to_i %></td>
-        <td class="align-right border-top"><%= @cargo_list.total_amount %></td>
+        <td class="align-right border-top"></td>
       </tr>
       <tr>
         <td class="white_color">.</td>
