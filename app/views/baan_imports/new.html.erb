@@ -1,0 +1,17 @@
+<% form_for @baan_import, :html => {:multipart => true} do |f| %>
+  <p class="formLabel">
+    <%= f.label :baan_upload, "CSV Datei" %>
+  </p>
+  <p class="formInput">
+    <%= f.file_field :baan_upload %>
+  </p>
+  <p class="formLabel">
+    <%= f.label :baan_import_group, "Import Gruppe" %>
+  </p>
+  <p class="formInput">
+    <%= f.collection_select(:baan_import_group_id, BaanImportGroup.all, :id, :title) %>
+  </p>
+  <p class="formInput">
+    <%= f.submit("Upload") %>
+  </p>
+<% end %>

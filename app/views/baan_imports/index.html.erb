@@ -1,0 +1,42 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Import Wizzard</h1>
+  <%= link_to("Upload", new_baan_import_path(), :class => "floatRight no_text_decoration blue_link_button", "data-type" => "modal") %>
+</header>
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Gespeicherte CSV Dateien</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Datei Name</th>
+          <th>Import Gruppe</th>
+          <th>Datei Typ</th>
+          <th>Datei Grösse</th>
+          <th>Heraufgeladen am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @baan_imports.each do |baan_import| %>
+          <tr>
+            <td class="align-center"><%= baan_import.id %></td>
+            <td class="align-center"><%= baan_import.baan_upload_file_name %></td>
+            <td class="align-center"><%= baan_import.baan_import_group.present? ? baan_import.baan_import_group.title : nil %></td>
+            <td class="align-center"><%= baan_import.baan_upload_content_type %></td>
+            <td class="align-center"><%= baan_import.baan_upload_file_size %></td>
+            <td class="align-center"><%= baan_import.baan_upload_updated_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+    
+  </section>
+</section>
+
+<div data-type="modal"></div>

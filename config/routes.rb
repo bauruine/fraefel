@@ -14,6 +14,8 @@ Fraefel::Application.routes.draw do
   
   resources :versions, :only => [:update, :destroy]
   
+  resources :baan_imports
+  
   resources :purchase_positions do
     collection do
       get 'search_for'
