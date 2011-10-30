@@ -5,7 +5,7 @@ set -e
 
 # Feel free to change any of the following variables for your app:
 TIMEOUT=${TIMEOUT-60}
-APP_ROOT=/home/x/my_app/current
+APP_ROOT=/home/tzhbami7/code/rails/fraefel
 PID=$APP_ROOT/tmp/pids/unicorn.pid
 CMD="/usr/local/rvm/gems/ruby-1.9.2-head@rails3010/bin/unicorn -D -c $APP_ROOT/config/unicorn.rb -E production"
 action="$1"
