@@ -4,6 +4,3 @@ db/*.sqlite3
 log/*.log
 tmp/
 config/database.yml
-config/unicorn.rb
-config/unicorn_init.sh
-config/nginx.conf
