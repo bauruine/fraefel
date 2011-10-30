@@ -10,7 +10,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111017212031) do
+ActiveRecord::Schema.define(:version => 20111030171143) do
+
+  create_table "baan_import_groups", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "baan_imports", :force => true do |t|
+    t.integer  "baan_import_group_id"
+    t.date     "importing_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "baan_upload_file_name"
+    t.string   "baan_upload_content_type"
+    t.integer  "baan_upload_file_size"
+    t.datetime "baan_upload_updated_at"
+  end
 
   create_table "cargo_lists", :force => true do |t|
     t.datetime "pick_up_time_earliest"
