@@ -3,7 +3,7 @@ class BaanImport < ActiveRecord::Base
   
   belongs_to :baan_import_group, :class_name => "BaanImportGroup", :foreign_key => "baan_import_group_id"
   
-  attr_accessible :baan_upload
+  attr_accessible :baan_upload, :baan_import_group_id
   
   validates_attachment_presence :baan_upload
 end
