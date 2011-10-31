@@ -8,11 +8,9 @@ class BaanImportsController < ApplicationController
   end
   
   def create
-    @baan_import = BaanImport.new
-    baan_import_params = params[:baan_import]
-    baan_import_params[:baan_upload_content_type] = baan_import_params[:baan_upload].content_type
-    if @baan_import.save(baan_import_params)
-      redirect_to :back
+    @baan_import = BaanImport.new(params[:baan_import])
+    if @baan_import.save
+      redirect_to(baan_imports_url)
     else
       render 'new'
     end
