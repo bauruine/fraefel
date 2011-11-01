@@ -28,4 +28,18 @@ class BaanImportsController < ApplicationController
       render 'edit'
     end
   end
+  
+  def import
+    @baan_import = BaanImport.find(params[:id])
+    #file_to_import = @baan_import.baan_upload.path
+    
+    Customer.import(@baan_import)
+    ShippingAddress.import(@baan_import)
+    CommodityCode.import(@baan_import)
+    ShippingRoute.import(@baan_import)
+    PurchaseOrder.import(@baan_import)
+    PurchasePosition.import(@baan_import)
+    
+    redirect_to(baan_imports_url)
+  end
 end

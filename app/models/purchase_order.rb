@@ -22,4 +22,33 @@ class PurchaseOrder < ActiveRecord::Base
     return weight_total
   end
   
+  
+  def self.import(arg)
+    @baan_import = arg
+    PaperTrail.whodunnit = 'System'
+    
+    csv_file = @baan_import.baan_upload.path
+    
+    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
+      customer = Customer.find_by_baan_id(Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip)
+      baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
+      csv_customer = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip
+      delivery_route = ShippingRoute.find_by_name(Iconv.conv('UTF-8', 'iso-8859-1', row[21]).to_s.chomp.lstrip.rstrip)
+    
+      purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :shipping_route => delivery_route)
+      if purchase_order.present? && purchase_order.new_record?
+        if purchase_order.save
+          #puts "New Purchase Order has been created: #{purchase_order.attributes}"
+        else
+          puts "ERROR-- PurchaseOrder not saved..."
+        end
+      else
+        if (purchase_order.baan_id == baan_id && purchase_order.status == "open" && purchase_order.customer.baan_id != csv_customer)
+          purchase_order.update_attributes(:customer => customer)
+          puts "Purchase Order #{purchase_order.id} was updated with a different Customer... You should check it manualy!"
+        end
+      end
+    end
+    
+  end
 end

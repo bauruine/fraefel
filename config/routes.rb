@@ -14,7 +14,11 @@ Fraefel::Application.routes.draw do
   
   resources :versions, :only => [:update, :destroy]
   
-  resources :baan_imports
+  resources :baan_imports do
+    member do
+      get 'import'
+    end
+  end
   
   resources :purchase_positions do
     collection do

@@ -18,6 +18,7 @@
           <th>Datei Typ</th>
           <th>Datei Grösse</th>
           <th>Heraufgeladen am</th>
+          <th>Aktion</th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,7 @@
             <td class="align-center"><%= baan_import.baan_upload_content_type %></td>
             <td class="align-center"><%= baan_import.baan_upload_file_size %></td>
             <td class="align-center"><%= baan_import.baan_upload_updated_at %></td>
+            <td class="align-center"><%= link_to("Re-Import", import_baan_import_path(baan_import)) %></td>
           </tr>
         <% end %>
       </tbody>

@@ -63,6 +63,7 @@
       <th>Gebuchte Paletten</th>
       <th>Handelspartner</th>
       <th>Tour</th>
+      <th>PLZ Gebiet</th>
       <th>Versand</th>
     </tr>
   </thead>
@@ -74,6 +75,7 @@
         <td class="align-center"><%= purchase_order.pallets.present? ? purchase_order.pallets.count : "Keine Paletten gefunden" %></td>
         <td class="align-center"><%= purchase_order.purchase_positions.first.consignee_full.present? ? purchase_order.purchase_positions.first.consignee_full : purchase_order.customer.company %></td>
         <td class="align-center"><%= purchase_order.shipping_route.present? ? purchase_order.shipping_route.name : nil %></td>
+        <td class="align-center"><%= purchase_order.purchase_positions.first.zip_location_name %></td>
         <td class="align-center"><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>
       </tr>
     <% end %>
