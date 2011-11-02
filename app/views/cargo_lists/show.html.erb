@@ -33,6 +33,7 @@
               <th>Positionen</th>
               <th>Mehrplatz</th>
               <th>Tour</th>
+              <th>PLZ Gebiet</th>
               <th>Empfänger</th>
               <th>Auswahl</th>
             </tr>
@@ -44,6 +45,7 @@
                 <td class="align-center"><%= pallet.purchase_positions.count %></td>
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
+                <td class="align-center"><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? ? pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name : nil %></td>
                 <td class="align-center"><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
                 <% if permitted_to? :remove_pallets, :cargo_lists %>
                   <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
@@ -56,6 +58,7 @@
           <tfoot>
             <% if permitted_to? :remove_pallets, :cargo_lists %>
               <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -88,6 +91,7 @@
               <th>Positionen</th>
               <th>Mehrplatz</th>
               <th>Tour</th>
+              <th>PLZ Gebiet</th>
               <th>Empfänger</th>
               <th>Auswahl</th>
             </tr>
@@ -102,6 +106,7 @@
                   <td class="align-center"><%= pallet.purchase_positions.count %></td>
                   <td class="align-center"><%= pallet.additional_space %></td>
                   <td class="align-center"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
+                  <td class="align-center"><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? ? pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name : nil %></td>
                   <td class="align-center"><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
                   <% if permitted_to? :assign_pallets, :cargo_lists %>
                     <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
@@ -115,6 +120,7 @@
           <tfoot>
             <% if permitted_to? :assign_pallets, :cargo_lists %>
               <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

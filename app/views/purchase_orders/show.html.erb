@@ -27,6 +27,7 @@
               <th>Produktlinie</th>
               <th>Menge Total</th>
               <th>Lager Ort</th>
+              <th>PLZ Gebiet</th>
               <th>Versand</th>
               <th>Auswahl</th>
             </tr>
@@ -48,6 +49,7 @@
                   <td class="align-center"><%= purchase_position.product_line %></td>
                   <td class="align-center"><%= purchase_position.quantity %></td>
                   <td class="align-center"><%= purchase_position.storage_location %></td>
+                  <td class="align-center"><%= purchase_position.zip_location_name %></td>
                   <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                   <% if permitted_to? :assign_positions, :pallets %>
                     <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
@@ -60,6 +62,7 @@
           <tfoot>
             <% if permitted_to? :assign_positions, :pallets %>
               <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -115,6 +118,7 @@
               <th>Produktlinie</th>
               <th>Menge Total</th>
               <th>Lager Ort</th>
+              <th>PLZ Gebiet</th>
               <th>Versand</th>
               <th>Auswahl</th>
             </tr>
@@ -144,6 +148,7 @@
                 <td class="align-center"><%= purchase_position.product_line %></td>
                 <td class="align-center"><%= purchase_position.quantity %></td>
                 <td class="align-center"><%= purchase_position.storage_location %></td>
+                <td class="align-center"><%= purchase_position.zip_location_name %></td>
                 <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                 <td class="align-center">
                   <% if permitted_to? :remove_positions, :pallets %>
@@ -158,6 +163,7 @@
           <tfoot>
             <% if permitted_to? :remove_positions, :pallets %>
               <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
