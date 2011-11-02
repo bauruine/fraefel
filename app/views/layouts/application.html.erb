@@ -27,6 +27,9 @@
               <li><%= link_to("VK-Position Liste", purchase_positions_path) %></li>
               <li><%= link_to("Versandlisten", cargo_lists_path) %></li>
               <li><%= link_to("Paletten Liste", pallets_path) %></li>
+              <% if permitted_to? :import, :baan_imports %>
+                <li><%= link_to("Import-Wizzard", baan_imports_path) %></li>
+              <% end %>
             <% else %>
               <li><%= link_to("Login", login_path) %></li>
             <% end %>

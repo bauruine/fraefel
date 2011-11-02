@@ -1,6 +1,8 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Import Wizzard</h1>
-  <%= link_to("Upload", new_baan_import_path(), :class => "floatRight no_text_decoration blue_link_button", "data-type" => "modal", "data-modal_width" => "3") %>
+  <% if permitted_to? :import, :baan_imports %>
+    <%= link_to("Upload", new_baan_import_path(), :class => "floatRight no_text_decoration blue_link_button", "data-type" => "modal", "data-modal_width" => "3") %>
+  <% end %>
 </header>
 
 <section class="filter_box">

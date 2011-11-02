@@ -1,4 +1,6 @@
 class BaanImportsController < ApplicationController
+  filter_access_to :all
+  
   def index
     @baan_imports = BaanImport.all
   end
