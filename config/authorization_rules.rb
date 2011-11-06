@@ -21,6 +21,7 @@ authorization do
     has_permission_on [:pallets], :to => [:show, :ajax_show, :index, :search_for, :assign_positions, :remove_positions, :edit, :update]
     has_permission_on [:purchase_orders], :to => [:show, :index, :search_for, :print_pallets, :edit, :update, :import_orders]
     has_permission_on [:purchase_positions], :to => [:index, :search_for, :edit, :update]
+    has_permission_on [:baan_imports], :to => [:index, :new, :create, :edit, :update, :import]
   end
   
   role :guest do
