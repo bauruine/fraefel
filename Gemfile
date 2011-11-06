@@ -20,6 +20,7 @@ gem 'wicked_pdf'
 gem "meta_search"
 gem 'hirb'
 gem 'exception_notification'
+gem 'resque', :require => "resque/server"
 
 # Use unicorn as the web server
 # gem 'unicorn'
