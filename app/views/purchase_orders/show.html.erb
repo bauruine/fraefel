@@ -29,39 +29,44 @@
               <th>Lager Ort</th>
               <th>PLZ Gebiet</th>
               <th>Versand</th>
+              <th></th>
               <th>Auswahl</th>
             </tr>
           </thead>
           <tbody>
             <% @purchase_positions.each do |purchase_position| %>
-              <% if (purchase_position.weight_total.to_i == 0) or (purchase_position.amount.to_i == 0) %>
-                <tr class="yellow_background">
-              <% else %>
-                <tr>
+              <% if purchase_position.pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
+                <% if (purchase_position.weight_total.to_i == 0) or (purchase_position.amount.to_i == 0) %>
+                  <tr class="yellow_background">
+                <% else %>
+                  <tr>
+                <% end %>
+                    <% if permitted_to? :edit, :purchase_positions %>
+                      <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                    <% else %>
+                      <td class="align-center"><%= purchase_position.position %></td>
+                    <% end %>
+                    <td class="align-center"><%= purchase_position.article_number %></td>
+                    <td class="align-center"><%= purchase_position.article %></td>
+                    <td class="align-center"><%= purchase_position.product_line %></td>
+                    <td class="align-center"><%= purchase_position.quantity %></td>
+                    <td class="align-center"><%= purchase_position.storage_location %></td>
+                    <td class="align-center"><%= purchase_position.zip_location_name %></td>
+                    <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+                    <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.available_quantity), :to_i, :to_s, purchase_position.available_quantity) %></td>
+                    <% if permitted_to? :assign_positions, :pallets %>
+                      <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                    <% else %>
+                      <td></td>
+                    <% end %>
+                  </tr>
               <% end %>
-                  <% if permitted_to? :edit, :purchase_positions %>
-                    <td class="align-center"><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
-                  <% else %>
-                    <td class="align-center"><%= purchase_position.position %></td>
-                  <% end %>
-                  <td class="align-center"><%= purchase_position.article_number %></td>
-                  <td class="align-center"><%= purchase_position.article %></td>
-                  <td class="align-center"><%= purchase_position.product_line %></td>
-                  <td class="align-center"><%= purchase_position.quantity %></td>
-                  <td class="align-center"><%= purchase_position.storage_location %></td>
-                  <td class="align-center"><%= purchase_position.zip_location_name %></td>
-                  <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                  <% if permitted_to? :assign_positions, :pallets %>
-                    <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
-                  <% else %>
-                    <td></td>
-                  <% end %>
-                </tr>
             <% end %>
           </tbody>
           <tfoot>
             <% if permitted_to? :assign_positions, :pallets %>
               <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -116,7 +121,7 @@
               <th>Artikel NR</th>
               <th>Artikel</th>
               <th>Produktlinie</th>
-              <th>Menge Total</th>
+              <th>Menge angefügt</th>
               <th>Lager Ort</th>
               <th>PLZ Gebiet</th>
               <th>Versand</th>
@@ -146,7 +151,7 @@
                 <td class="align-center"><%= purchase_position.article_number %></td>
                 <td class="align-center"><%= purchase_position.article %></td>
                 <td class="align-center"><%= purchase_position.product_line %></td>
-                <td class="align-center"><%= purchase_position.quantity %></td>
+                <td class="align-center"><%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet => pallet).first.quantity} / #{purchase_position.quantity}" %></td>
                 <td class="align-center"><%= purchase_position.storage_location %></td>
                 <td class="align-center"><%= purchase_position.zip_location_name %></td>
                 <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>

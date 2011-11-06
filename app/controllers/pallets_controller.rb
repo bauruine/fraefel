@@ -100,8 +100,8 @@ class PalletsController < ApplicationController
   def remove_positions
     @pallet = Pallet.find(params[:id])
     @purchase_positions = PurchasePosition.where(:id => params[:purchase_position_ids])
-    @pallet.purchase_positions.delete(@purchase_positions)
-    if !PurchasePosition.where(:pallet_id => @pallet.id, :purchase_orders => { :baan_id => @purchase_positions.first.purchase_order.baan_id }).includes(:purchase_order).present?
+    @pallet.purchase_positions -= @purchase_positions
+    if !Pallet.find(@pallet).purchase_positions.where(:purchase_order_id => @purchase_positions.first.purchase_order_id).present?
       # remove purchase_order assignment from table
       @pallet.purchase_orders -= [@purchase_positions.first.purchase_order]
     end
@@ -129,6 +129,11 @@ class PalletsController < ApplicationController
       @pallet.save
       @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
       @purchase_order.pallets += [@pallet]
+    end
+    params[:quantity_with_ids].each do |k, v|
+      purchase_position = PurchasePosition.find(k.to_i)
+      pallet_purchase_position_assignment = PalletPurchasePositionAssignment.where(:pallet => @pallet, :purchase_position => purchase_position).first
+      pallet_purchase_position_assignment.update_attribute(:quantity, v.to_i) if pallet_purchase_position_assignment.present?
     end
     redirect_to(:back)
   end

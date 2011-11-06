@@ -1,5 +1,7 @@
 Fraefel::Application.routes.draw do
-
+  
+  mount Resque::Server.new, :at => "/resque"
+  
   resources :users
 
   resources :microsoft_databases

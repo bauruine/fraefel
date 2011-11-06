@@ -1,11 +1,18 @@
 class PurchasePosition < ActiveRecord::Base
   belongs_to :commodity_code, :class_name => "CommodityCode", :foreign_key => "commodity_code_id"
   belongs_to :purchase_order, :class_name => "PurchaseOrder", :foreign_key => "purchase_order_id"
-  belongs_to :pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
+  belongs_to :old_pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
+  
+  has_many :pallet_purchase_position_assignments, :class_name => "PalletPurchasePositionAssignment"
+  has_many :pallets, :class_name => "Pallet", :through => :pallet_purchase_position_assignments
   
   after_save :update_purchase_order_date
   
   scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")
+  
+  def available_quantity
+    self.quantity.to_i - self.pallet_purchase_position_assignments.sum("quantity")
+  end
   
   protected
   

@@ -3,7 +3,7 @@ class PurchaseOrdersController < ApplicationController
   
   def show
     @purchase_order = PurchaseOrder.find(params[:id])
-    @purchase_positions = @purchase_order.purchase_positions.where('pallet_id IS NULL')
+    @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id)
     @pallets = @purchase_order.pallets
     @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL AND")
   end
