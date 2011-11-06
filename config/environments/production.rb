@@ -49,7 +49,7 @@ Fraefel::Application.configure do
   
   config.middleware.use ExceptionNotifier,
     sender_address: 'sufu90@gmail.com',
-    exception_recipients: 'michael.balsiger@swisscom.com',
+    exception_recipients: 'sufu90@gmail.com',
     ignore_exceptions: ExceptionNotifier.default_ignore_exceptions - [ActiveRecord::RecordNotFound, AbstractController::ActionNotFound, ActionController::RoutingError]
   
     config.action_mailer.delivery_method = :smtp
