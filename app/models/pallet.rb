@@ -40,6 +40,13 @@ class Pallet < ActiveRecord::Base
     end
   end
   
+  def self.patch_pallet_purchase_position_assignments_quantity
+    PalletPurchasePositionAssignment.all.each do |p_p_p_a|
+      @p_p = PurchasePosition.find(p_p_p_a.purchase_position_id)
+      p_p_p_a.update_attribute(:quantity, @p_p.quantity)
+    end
+  end
+  
   protected
   
   def assign_default_pallet_type

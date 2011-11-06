@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          <% PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} AND commodity_code_id = #{grouped_commodity_code.first.id}").includes(:pallet => :cargo_list).each do |purchase_position| %>
+          <% PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} AND commodity_code_id = #{grouped_commodity_code.first.id}").includes(:pallets => :cargo_list).each do |purchase_position| %>
             <% calculated_total_amount += purchase_position.amount %>
             <tr>
               <td class="align-center"><%= purchase_position.purchase_order.baan_id %></td>

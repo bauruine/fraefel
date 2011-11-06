@@ -24,9 +24,9 @@ class PurchasePosition < ActiveRecord::Base
   
   def self.calculate_for_invoice(type, attrs)
     if attrs[1].present?
-      sum("#{type}", :include => [:commodity_code, {:pallet => :cargo_list}], :conditions => {:cargo_lists => { :id => attrs[0] }, :commodity_codes => { :id => attrs[1] }})
+      sum("#{type}", :include => [:commodity_code, {:pallets => :cargo_list}], :conditions => {:cargo_lists => { :id => attrs[0] }, :commodity_codes => { :id => attrs[1] }})
     else
-      sum("#{type}", :include => [:pallet => :cargo_list], :conditions => {:cargo_lists => { :id => attrs[0] }})
+      sum("#{type}", :include => [:pallets => :cargo_list], :conditions => {:cargo_lists => { :id => attrs[0] }})
     end
   end
   

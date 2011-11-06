@@ -17,8 +17,8 @@
 <h1 class="logo_title">Sammelrechnung</h1>
 <section class="clearfix">
   <h1 class="floatLeft">Diverse Empfänger in Deutschland</h1>
-  <% if PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and zip_location_id IS NOT NULL").includes(:pallet => [:cargo_list]).present? %>
-    <h1 class="floatRight">Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and zip_location_id IS NOT NULL").includes(:pallet => [:cargo_list]).first.zip_location_name %></h1>
+  <% if PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).present? %>
+    <h1 class="floatRight">Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).first.zip_location_name %></h1>
   <% end %>
 </section>
 <hr>
