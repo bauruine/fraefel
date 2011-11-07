@@ -26,6 +26,7 @@ sig () {
 case "$1" in
     start)
         sig 0 && echo >&2 "Already running" && exit 0
+        cd $APP_ROOT
         su -c "$CMD" - tzhbami7
         ;;
     stop)
@@ -33,9 +34,9 @@ case "$1" in
         echo >&2 "Not running"
         ;;
     restart)
-        /opt/beispiel restart
         sig HUP && echo reloaded OK && exit 0
         echo >&2 "Couldn't reload, starting '$CMD' instead"
+        cd $APP_ROOT
         su -c "$CMD" - tzhbami7
         ;;
 esac
