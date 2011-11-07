@@ -12,9 +12,15 @@
 
 # Aktionen
 
+set -e
+
 APP_ROOT=/home/tzhbami7/code/rails/fraefel
 PID=$APP_ROOT/tmp/pids/resque.pid
 CMD="PIDFILE=$PID BACKGROUND=yes QUEUE=* rake environment resque:work"
+
+action="$1"
+
+set -u
 
 sig () {
   test -s "$PID" && kill -$1 `cat $PID`
