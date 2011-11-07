@@ -46,7 +46,7 @@
                 <td class="align-center"><%= pallet.additional_space %></td>
                 <td class="align-center"><%= pallet.purchase_orders.where("shipping_route_id IS NOT NULL").present? ? pallet.purchase_orders.where("shipping_route_id IS NOT NULL").first.shipping_route.name : nil %></td>
                 <td class="align-center"><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? ? pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name : nil %></td>
-                <td class="align-center"><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
+                <td class="align-center"><%= pallet.purchase_positions.where("consignee_full IS NOT NULL").present? ? pallet.purchase_positions.where("consignee_full IS NOT NULL").first.consignee_full : nil %></td>
                 <% if permitted_to? :remove_pallets, :cargo_lists %>
                   <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
                 <% else %>
