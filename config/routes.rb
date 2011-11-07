@@ -1,6 +1,6 @@
 Fraefel::Application.routes.draw do
   
-  #mount Resque::Server.new, :at => "/resque"
+  mount Resque::Server.new, :at => "/resque"
   
   resources :users
 
