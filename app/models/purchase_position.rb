@@ -62,7 +62,7 @@ class PurchasePosition < ActiveRecord::Base
         csv_array = [weight_single.to_s, weight_total.to_s, quantity.to_s, amount.to_s, position, delivery_date]
         purchase_position_array = [purchase_position.weight_single.to_s, purchase_position.weight_total.to_s, purchase_position.quantity.to_s, purchase_position.amount.to_s, purchase_position.position, purchase_position.delivery_date]
         if (csv_array != purchase_position_array && purchase_position.status == "open")
-          if purchase_position.pallet.present?
+          if purchase_position.pallets.present?
             purchase_position.update_attributes(:article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
             #puts purchase_position.consignee_full
           else
