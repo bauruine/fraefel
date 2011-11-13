@@ -1,0 +1,23 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>Artikel</th>
+      <th>Masseinheit</th>
+      <th>Menge (Lagerungseinheit)</th>
+      <th>Gezählt</th>
+      <th>Zähldatum</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% CSV.foreach('/home/sufu/Downloads/whinh501.csv', {:col_sep => ";"}) do |row| %>
+    <tr>
+      <td><%= Iconv.conv('UTF-8', 'us-ascii', row[5]).to_s.chomp.lstrip.rstrip %></td>
+      <td><%= Iconv.conv('UTF-8', 'us-ascii', row[8]).to_s.chomp.lstrip.rstrip %></td>
+      <td><%= Iconv.conv('UTF-8', 'us-ascii', row[10]).to_s.chomp.lstrip.rstrip %></td>
+      <td><%= Iconv.conv('UTF-8', 'us-ascii', row[15]).to_s.chomp.lstrip.rstrip %></td>
+      <td><%= Iconv.conv('UTF-8', 'us-ascii', row[16]).to_s.chomp.lstrip.rstrip %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
