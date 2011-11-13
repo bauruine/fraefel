@@ -28,7 +28,7 @@
               <td class="align-center"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
               <td class="align-center"><%= pallet.mixed? ? "Ja" : nil %></td>
               <td class="align-center">"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
-              <td class="align-center"><%= pallet.purchase_positions.sum("weight_total") + (pallet.pallet_type.description == "coli" ? 0 : 20) %></td>
+              <td class="align-center"><%= pallet.purchase_positions.sum("weight_total") + (pallet.pallet_type.description == "coli" ? 0 : (pallet.pallet_type.count_as * 20)) %></td>
               <td class="align-center"><%= pallet.additional_space %></td>
             </tr>
           <% end %>
