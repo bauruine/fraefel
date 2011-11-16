@@ -93,7 +93,14 @@
   
   <section class="filter_box">
     <header class="filter_box_header clearfix">
-      <h4 class="floatLeft"><%= pallet.pallet_type.description == "coli" ? "Coli" : "Pallet" %> NR#<%= pallet.id %></h4>
+      <% if pallet.cargo_list.present? %>
+        <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
+      <% end %>
+      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
+      <% if pallet.purchase_positions.present? %>
+        <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
+      <% end %>
+      
       <% if permitted_to? :edit, :pallets %>
         <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
       <% end %>

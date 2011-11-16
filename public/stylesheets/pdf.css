@@ -40,6 +40,15 @@ img#logo {
 .bold {
 	font-weight: bold;
 }
+
+.margin_top_15px {
+  margin-top: 15px;
+}
+
+.margin_bottom_20px {
+  margin-bottom: 20px;
+}
+
 .red {
 	background-color: #FCC;
 }
