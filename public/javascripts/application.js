@@ -50,7 +50,7 @@ $(document).ready(function(){
 	
 	$('a[data-type=modal_index]').click(function() {
 		var remote_url = $(this).attr("href");
-		$('div[data-type=modal]').load(remote_url + ' section.filter_box');
+		$('div[data-type=modal]').load(remote_url + ' table');
 		if ($(this).attr('data-modal_width') != undefined) {
 			$( "div[data-type=modal]" ).dialog( "option", "width", 1424 );
 		};
