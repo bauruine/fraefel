@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-  <% CSV.foreach('/home/sufu/Downloads/whinh501.csv', {:col_sep => ";"}) do |row| %>
+  <% CSV.foreach('/Users/sufu/Downloads/whinh501.csv', {:col_sep => ";"}) do |row| %>
     <tr>
       <td><%= Iconv.conv('UTF-8', 'us-ascii', row[5]).to_s.chomp.lstrip.rstrip %></td>
       <td><%= Iconv.conv('UTF-8', 'us-ascii', row[8]).to_s.chomp.lstrip.rstrip %></td>

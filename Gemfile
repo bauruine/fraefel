@@ -46,3 +46,4 @@ gem 'resque', :require => "resque/server"
 # end
 gem "mocha", :group => :test
 gem 'letter_opener', :group => :development
+gem 'ruby_parser', :group => :development

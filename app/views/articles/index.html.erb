@@ -1,0 +1,96 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Baan Artikel</h1>
+  <%= link_to("Zählliste komplett", articles_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button") %>
+</header>
+
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Filter anwenden</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+  <% form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+    <ul class="ul_summary">
+      
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Gruppe</p>
+        <p class="floatLeft"><%= f.text_field :rack_group_number_equals %></p>
+      </li>
+      
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Stamm NR</p>
+        <p class="floatLeft"><%= f.text_field :rack_root_number_equals %></p>
+      </li>
+      
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Teil NR</p>
+        <p class="floatLeft"><%= f.text_field :rack_part_number_equals %></p>
+      </li>
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Fach NR</p>
+        <p class="floatLeft"><%= f.text_field :rack_tray_number_equals %></p>
+      </li>
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">Kiste</p>
+        <p class="floatLeft"><%= f.text_field :rack_box_number_equals %></p>
+      </li>
+      <li class="summary clearfix">
+        <p class="floatLeft title">Aktionen</p>
+        <p class="floatLeft"><%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil %></p>
+      </li>
+    </ul>
+  <% end %>
+  </section>
+</section>
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Gefundene Artikel: <%= @articles.count %></h4>
+    <% if params[:search].present? && params[:search][:rack_group_number_equals].present? %>
+      <%= link_to("Drucke Gruppe", articles_path(:group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+    <% end %>
+  </header>
+  <section class="filter_box_content clearfix">
+
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>Artikel Index</th>
+          <th>Artikel Code</th>
+          <th>Lager Code</th>
+          <th>Artikelart</th>
+          <th>Bezeichnung Signalcode</th>
+          <th>Bezeichnung</th>
+          <th>Einheit</th>
+          <th>Gruppe</th>
+          <th>Stamm NR</th>
+          <th>Teil NR</th>
+          <th>Fach NR</th>
+          <th>Kiste</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @articles.each do |article| %>
+          <tr>
+            <td class="align-center"><%= article.baan_acces_id %></td>
+            <td class="align-center"><%= article.article_code %></td>
+            <td class="align-center"><%= article.depot.present? ? article.depot.code : nil %></td>
+            <td class="align-center"><%= article.article_type %></td>
+            <td class="align-center"><%= article.signal_code_description %></td>
+            <td class="align-center"><%= article.description %></td>
+            <td class="align-center"><%= article.stock_unit %></td>
+            <td class="align-center"><%= article.rack_group_number %></td>
+            <td class="align-center"><%= article.rack_root_number %></td>
+            <td class="align-center"><%= article.rack_part_number %></td>
+            <td class="align-center"><%= article.rack_tray_number %></td>
+            <td class="align-center"><%= article.rack_box_number %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+    
+  </section>
+</section>
+
+<div data-type="modal"></div>

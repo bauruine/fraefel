@@ -10,7 +10,32 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111030171143) do
+ActiveRecord::Schema.define(:version => 20111122100110) do
+
+  create_table "articles", :force => true do |t|
+    t.string   "baan_acces_id"
+    t.string   "article_code"
+    t.integer  "depot_id"
+    t.integer  "article_type"
+    t.string   "signal_code_description"
+    t.string   "description"
+    t.string   "search_key_01"
+    t.string   "search_key_02"
+    t.string   "material"
+    t.string   "factor"
+    t.string   "zone_code"
+    t.string   "stock_unit"
+    t.string   "order_unit"
+    t.string   "trade_partner_name"
+    t.string   "trade_partner_additional_info"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "rack_group_number"
+    t.string   "rack_root_number"
+    t.string   "rack_part_number"
+    t.string   "rack_tray_number"
+    t.string   "rack_box_number"
+  end
 
   create_table "baan_import_groups", :force => true do |t|
     t.string   "title"
@@ -66,6 +91,24 @@ ActiveRecord::Schema.define(:version => 20111030171143) do
     t.string   "baan_id"
   end
 
+  create_table "depot_types", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "depots", :force => true do |t|
+    t.integer  "code"
+    t.text     "description"
+    t.integer  "depot_type_id"
+    t.string   "address_code"
+    t.string   "phone_number"
+    t.string   "fax_number"
+    t.string   "web_address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "microsoft_database_types", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -78,6 +121,14 @@ ActiveRecord::Schema.define(:version => 20111030171143) do
     t.integer  "database_type_id"
     t.string   "file"
     t.string   "file_directory"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pallet_purchase_position_assignments", :force => true do |t|
+    t.integer  "pallet_id"
+    t.integer  "purchase_position_id"
+    t.integer  "quantity"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -125,7 +176,7 @@ ActiveRecord::Schema.define(:version => 20111030171143) do
     t.integer  "commodity_code_id"
     t.decimal  "weight_single",     :precision => 12, :scale => 2
     t.decimal  "weight_total",      :precision => 12, :scale => 2
-    t.decimal  "quantity",          :precision => 12, :scale => 2
+    t.integer  "quantity"
     t.decimal  "amount",            :precision => 12, :scale => 2
     t.datetime "delivery_date"
     t.datetime "created_at"
@@ -140,6 +191,8 @@ ActiveRecord::Schema.define(:version => 20111030171143) do
     t.decimal  "total_amount",      :precision => 12, :scale => 2
     t.string   "consignee_full"
     t.boolean  "delivered"
+    t.integer  "zip_location_id"
+    t.string   "zip_location_name"
   end
 
   create_table "roles", :force => true do |t|
