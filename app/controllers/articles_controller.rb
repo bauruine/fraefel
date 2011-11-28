@@ -23,7 +23,7 @@ class ArticlesController < ApplicationController
             :spacing => 2
           },
           :footer => {
-            :left => "#{articles_url(@pallet, :format => :pdf)}",
+            :left => "#{articles_url(:format => :pdf)}",
             :right => "Seite [page] / [topage]",
             :line => true
           }

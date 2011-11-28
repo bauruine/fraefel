@@ -46,7 +46,7 @@
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Gefundene Artikel: <%= @articles.count %></h4>
     <% if params[:search].present? && params[:search][:rack_group_number_equals].present? %>
-      <%= link_to("Drucke Gruppe", articles_path(:group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+      <%= link_to("Drucke Gruppe", articles_path(:search => params[:search], :group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     <% end %>
   </header>
   <section class="filter_box_content clearfix">
