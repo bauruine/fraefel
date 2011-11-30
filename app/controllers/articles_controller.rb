@@ -37,10 +37,19 @@ class ArticlesController < ApplicationController
     
   end
   
+  def edit_multiple
+    @articles = Article.where(:rack_group_number => params[:rack_group_number])
+  end
+  
+  def update_multiple
+    @articles = Article.update(params[:articles].keys, params[:articles].values)
+    redirect_to(articles_url)
+  end
+  
   def search_for
   end
   
   def get_results_for
-    redirect_to(articles_path(:search => {:rack_group_number_equals => params[:rack_group_number]}))
+    redirect_to(edit_multiple_articles_path(:rack_group_number => params[:rack_group_number]))
   end
 end

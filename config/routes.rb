@@ -6,6 +6,8 @@ Fraefel::Application.routes.draw do
     collection do
       get 'search_for'
       get 'get_results_for'
+      get 'edit_multiple'
+      put 'update_multiple'
     end
   end
   
