@@ -1,0 +1,17 @@
+<%= form_tag(get_results_for_articles_path, {:class => "form", :method => :get}) do %>
+  <p class="formLabel">
+    <%= label_tag :baan_acces_code, "Baan-Access Code" %>
+  </p>
+  <p class="formInput">
+    <%= text_field_tag :baan_acces_code, nil, :placeholder => "Bitte Access Code eingeben!" %>
+  </p>
+  <p class="formLabel">
+    <%= label_tag :rack_group_number, "Gruppen NR" %>
+  </p>
+  <p class="formInput">
+    <%= text_field_tag :rack_group_number, nil, :placeholder => "Bitte Gruppen NR eingeben!" %>
+  </p>
+  <p class="formInput">
+    <%= submit_tag("Gehe zur eingabe") %>
+  </p>
+<% end %>

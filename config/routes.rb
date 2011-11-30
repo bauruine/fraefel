@@ -2,7 +2,12 @@ Fraefel::Application.routes.draw do
   
   mount Resque::Server.new, :at => "/resque"
   
-  resources :articles
+  resources :articles do
+    collection do
+      get 'search_for'
+      get 'get_results_for'
+    end
+  end
   
   resources :users
 

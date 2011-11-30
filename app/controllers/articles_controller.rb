@@ -33,4 +33,14 @@ class ArticlesController < ApplicationController
     
   end
   
+  def edit
+    
+  end
+  
+  def search_for
+  end
+  
+  def get_results_for
+    redirect_to(articles_path(:search => {:rack_group_number_equals => params[:rack_group_number]}))
+  end
 end

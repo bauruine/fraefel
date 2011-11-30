@@ -1,7 +1,9 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Baan Artikel</h1>
   <%= link_to("Zählliste komplett", articles_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button") %>
+  <%= link_to("Daten eingeben", search_for_articles_path, :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal", "data-modal_width" => 500) %>
 </header>
+
 
 
 <section class="filter_box">
