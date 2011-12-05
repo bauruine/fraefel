@@ -1,17 +1,44 @@
 <%= form_tag(get_results_for_articles_path, {:class => "form", :method => :get}) do %>
-  <p class="formLabel">
-    <%= label_tag :baan_acces_code, "Baan-Access Code" %>
-  </p>
-  <p class="formInput">
-    <%= text_field_tag :baan_acces_code, nil, :placeholder => "Bitte Access Code eingeben!" %>
-  </p>
-  <p class="formLabel">
-    <%= label_tag :rack_group_number, "Gruppen NR" %>
-  </p>
-  <p class="formInput">
-    <%= text_field_tag :rack_group_number, nil, :placeholder => "Bitte Gruppen NR eingeben!" %>
-  </p>
-  <p class="formInput">
-    <%= submit_tag("Gehe zur eingabe") %>
-  </p>
+
+  <div class="clearfix formRow">
+    <p class="ajaxFormLabel">
+      <%= label_tag :baan_acces_code, "Baan-Access Code" %>
+    </p>
+    <p class="ajaxFormInput">
+      <%= text_field_tag :baan_acces_code, nil, :placeholder => "bsp. 000014x100" %>
+    </p>
+  </div>
+  
+  <div class="clearfix formRow">
+    <p class="ajaxFormLabel">
+      <%= label_tag :rack_group_number, "Gruppen NR" %>
+    </p>
+    <p class="ajaxFormInput">
+      <%= text_field_tag :rack_group_number, nil, :placeholder => "bsp. 07" %>
+    </p>
+  </div>
+  
+  <div class="clearfix formRow">
+    <p class="ajaxFormLabel">
+      <%= label_tag :rack_root_number, "Regal NR" %>
+    </p>
+    <p class="ajaxFormInput">
+      <%= text_field_tag :rack_root_number, nil, :placeholder => "bsp. 07/01" %>
+    </p>
+  </div>
+  
+  <div class="clearfix formRow">
+    <p class="ajaxFormLabel">
+      <%= label_tag :rack_part_number, "Regal + Teil NR" %>
+    </p>
+    <p class="ajaxFormInput">
+      <%= text_field_tag :rack_part_number, nil, :placeholder => "bsp. 07/01/3" %>
+    </p>
+  </div>
+  <div class="clearfix formRow">
+    <p class="ajaxFormInput">
+      <%= submit_tag("Gehe zur eingabe") %>
+    </p>
+  </div>
+  
 <% end %>

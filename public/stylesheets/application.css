@@ -305,3 +305,19 @@ header.resource_header h1 {
 	font-size: 20px;
 	padding: 0px;
 }
+
+/*** ajax_form ***/
+
+div.formRow {
+  margin-bottom: 10px;
+}
+
+div.formRow p.ajaxFormLabel {
+  float: left;
+  width: 40%;
+}
+
+div.formRow p.ajaxFormInput {
+  float: left;
+  width: auto;
+}
