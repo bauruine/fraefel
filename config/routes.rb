@@ -13,6 +13,8 @@ Fraefel::Application.routes.draw do
   
   resources :users
 
+  resource :dashboard, :only => [:show]
+  
   resources :microsoft_databases
 
   resources :user_sessions
