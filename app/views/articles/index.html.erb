@@ -1,6 +1,7 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Baan Artikel</h1>
-  <%= link_to("Zählliste komplett", articles_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button") %>
+  <%= link_to("Export", export_articles_path(), :class => "floatRight no_text_decoration blue_link_button") %>
+  <%= link_to("Zählliste komplett", articles_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
   <%= link_to("Daten eingeben", search_for_articles_path, :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal", "data-modal_width" => 500) %>
 </header>
 
@@ -48,6 +49,7 @@
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Gefundene Artikel: <%= @articles.count %></h4>
     <% if params[:search].present? && params[:search][:rack_group_number_equals].present? %>
+      <%= link_to("Abweichung", calculate_difference_for_articles_path(:group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
       <%= link_to("Drucke Gruppe", articles_path(:search => params[:search], :group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     <% end %>
   </header>
@@ -59,10 +61,9 @@
           <th>Artikel Index</th>
           <th>Artikel Code</th>
           <th>Lager Code</th>
-          <th>Artikelart</th>
-          <th>Bezeichnung Signalcode</th>
           <th>Bezeichnung</th>
           <th>Einheit</th>
+          <th>Old Stack</th>
           <th>Gruppe</th>
           <th>Stamm NR</th>
           <th>Teil NR</th>
@@ -76,10 +77,9 @@
             <td class="align-center"><%= article.baan_acces_id %></td>
             <td class="align-center"><%= article.article_code %></td>
             <td class="align-center"><%= article.depot.present? ? article.depot.code : nil %></td>
-            <td class="align-center"><%= article.article_type %></td>
-            <td class="align-center"><%= article.signal_code_description %></td>
             <td class="align-center"><%= article.description %></td>
             <td class="align-center"><%= article.stock_unit %></td>
+            <td class="align-center"><%= article.old_stock %></td>
             <td class="align-center"><%= article.rack_group_number %></td>
             <td class="align-center"><%= article.rack_root_number %></td>
             <td class="align-center"><%= article.rack_part_number %></td>

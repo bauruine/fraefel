@@ -8,6 +8,8 @@ Fraefel::Application.routes.draw do
       get 'get_results_for'
       get 'edit_multiple'
       put 'update_multiple'
+      get 'calculate_difference_for'
+      get 'export'
     end
   end
   

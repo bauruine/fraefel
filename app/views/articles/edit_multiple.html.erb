@@ -1,4 +1,4 @@
-<% form_tag update_multiple_articles_path, :method => :put do %>
+<% form_tag update_multiple_articles_path(:rack_group_number => params[:rack_group_number]), :method => :put do %>
 
   <header class="resource_header margin_bottom_big clearfix">
     <h1 class="floatLeft">Artikel Zählliste erfassen</h1>

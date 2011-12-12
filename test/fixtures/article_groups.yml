@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  description: MyText
+  warn_on: 1
+  baan_id: 1
+
+two:
+  description: MyText
+  warn_on: 1
+  baan_id: 1
