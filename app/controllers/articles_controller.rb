@@ -85,7 +85,8 @@ class ArticlesController < ApplicationController
   def export
     # generates ugly csv for baan
     # should make a method to fill with empty spaces...
-    CSV.open("/Users/sufu/code/rails/fraefel/public/csv/file.csv", "wb") do |csv|
+    csv_file_full_path = Rails.public_path + "/csv/file.csv"
+    CSV.open(csv_file_full_path, "wb") do |csv|
       Article.where(:considered => true).order("baan_pono ASC").each do |article|
         baan_orno = article.baan_orno.present? ? article.baan_orno : ""
         baan_cntn = article.baan_cntn.present? ? article.baan_cntn : ""
@@ -101,7 +102,7 @@ class ArticlesController < ApplicationController
         csv << ["#{baan_orno}", "#{baan_cntn}", "#{baan_pono}", "#{article_depot}", "#{baan_loca}", "#{article.baan_item}", "#{baan_clot}", "#{article.baan_date}", "#{article.baan_stun}", "#{baan_qstk}", "#{baan_qstr}", "#{baan_cstk}", "#{baan_cstk}", "14", "15", "#{baan_csts}", "#{Time.now.to_i}", "#{baan_recd}", "#{article.baan_reco}", "#{article.baan_appr}", "#{article.baan_cadj}"]
       end
     end
-    csv_file = File.open("/Users/sufu/code/rails/fraefel/public/csv/file.csv")
+    csv_file = File.open(csv_file_full_path)
     send_file(csv_file, :filename => "file.csv", :type => "text/csv")
     #redirect_to(:back)
   end
