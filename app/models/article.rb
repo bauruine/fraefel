@@ -119,12 +119,18 @@ class Article < ActiveRecord::Base
       baan_orno = Iconv.conv('UTF-8', 'us-ascii', row[0]).to_s.chomp.lstrip.rstrip
       baan_cntn = Iconv.conv('UTF-8', 'us-ascii', row[1]).to_s.chomp.lstrip.rstrip
       baan_pono = Iconv.conv('UTF-8', 'us-ascii', row[2]).to_s.chomp.lstrip.rstrip
-      baan_loca = Iconv.conv('UTF-8', 'us-ascii', row[4]).to_s.chomp.lstrip.rstrip
-      baan_clot = Iconv.conv('UTF-8', 'us-ascii', row[6]).to_s.chomp.lstrip.rstrip
+      baan_loca = Iconv.conv('UTF-8', 'us-ascii', row[4]).to_s
+      baan_item = Iconv.conv('UTF-8', 'us-ascii', row[5]).to_s
+      baan_clot = Iconv.conv('UTF-8', 'us-ascii', row[6]).to_s
+      baan_stun = Iconv.conv('UTF-8', 'us-ascii', row[8]).to_s.chomp.lstrip.rstrip
       baan_qstk = Iconv.conv('UTF-8', 'us-ascii', row[9]).to_s.chomp.lstrip.rstrip
       baan_qstr = Iconv.conv('UTF-8', 'us-ascii', row[10]).to_s.chomp.lstrip.rstrip
       baan_csts = Iconv.conv('UTF-8', 'us-ascii', row[15]).to_s.chomp.lstrip.rstrip
       baan_recd = Iconv.conv('UTF-8', 'us-ascii', row[17]).to_s.chomp.lstrip.rstrip
+      baan_reco = Iconv.conv('UTF-8', 'us-ascii', row[18]).to_s.chomp.lstrip.rstrip
+      baan_appr = Iconv.conv('UTF-8', 'us-ascii', row[19]).to_s.chomp.lstrip.rstrip
+      baan_cadj = Iconv.conv('UTF-8', 'us-ascii', row[20]).to_s.chomp.lstrip.rstrip
+      
       article_code = Iconv.conv('UTF-8', 'us-ascii', row[5]).to_s.chomp.lstrip.rstrip
       depot_number = Iconv.conv('UTF-8', 'us-ascii', row[3]).to_s.chomp.lstrip.rstrip
       old_stock = Iconv.conv('UTF-8', 'us-ascii', row[11]).to_s.chomp.lstrip.rstrip
@@ -138,11 +144,17 @@ class Article < ActiveRecord::Base
                                     :baan_cntn => baan_cntn,
                                     :baan_pono => baan_pono,
                                     :baan_loca => baan_loca,
+                                    :baan_item => baan_item,
                                     :baan_clot => baan_clot,
+                                    :baan_stun => baan_stun,
                                     :baan_qstk => baan_qstk,
                                     :baan_qstr => baan_qstr,
                                     :baan_csts => baan_csts,
-                                    :baan_recd => baan_recd)
+                                    :baan_recd => baan_recd,
+                                    :baan_reco => baan_reco,
+                                    :baan_appr => baan_appr,
+                                    :baan_cadj => baan_cadj,
+                                    :considered => true)
         end
       end
       
