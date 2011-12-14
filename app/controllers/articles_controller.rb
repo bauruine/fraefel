@@ -7,7 +7,7 @@ class ArticlesController < ApplicationController
   
   def index
     @search = Article.where(:considered => true).search(params[:search])
-    @articles = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC")
+    @articles = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
     respond_to do |format|
       format.html
       format.pdf do
