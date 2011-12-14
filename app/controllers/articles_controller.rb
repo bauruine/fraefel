@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  filter_access_to :all
+  
   def show
     
   end

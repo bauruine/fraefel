@@ -35,7 +35,7 @@
               <% if permitted_to? :index, :pallets %>
                 <li><%= link_to("Paletten Liste", pallets_path) %></li>
               <% end %>
-              <% if permitted_to? :articles, :index %>
+              <% if permitted_to? :index, :articles %>
                 <li><%= link_to("Inventar", articles_path) %></li>
               <% end %>
               <% if permitted_to? :import, :baan_imports %>

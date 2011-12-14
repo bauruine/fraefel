@@ -1,8 +1,12 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Baan Artikel</h1>
-  <%= link_to("Export", export_articles_path(), :class => "floatRight no_text_decoration blue_link_button") %>
+  <% if permitted_to? :export, :articles %>
+    <%= link_to("Export", export_articles_path(), :class => "floatRight no_text_decoration blue_link_button") %>
+  <% end %>
   <%= link_to("Zählliste komplett", articles_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Daten eingeben", search_for_articles_path, :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal", "data-modal_width" => 500) %>
+  <% if permitted_to? :edit_multiple, :articles %>
+    <%= link_to("Daten eingeben", search_for_articles_path, :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal", "data-modal_width" => 500) %>
+  <% end %>
 </header>
 
 
@@ -49,7 +53,9 @@
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Gefundene Artikel: <%= @articles.count %></h4>
     <% if params[:search].present? && params[:search][:rack_group_number_equals].present? %>
-      <%= link_to("Abweichung", calculate_difference_for_articles_path(:group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+      <% if permitted_to? :calculate_difference_for, :articles %>
+        <%= link_to("Abweichung", calculate_difference_for_articles_path(:group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+      <% end %>
       <%= link_to("Drucke Gruppe", articles_path(:search => params[:search], :group => params[:search][:rack_group_number_equals], :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
     <% end %>
   </header>
