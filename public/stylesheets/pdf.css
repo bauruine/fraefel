@@ -269,6 +269,11 @@ select {
 section.filter_box:nth-of-type(3) {
 	page-break-after: always;
 }
+
+section.new_page {
+  page-break-after: always;
+}
+
 section.filter_box {
 	margin-bottom: 20px;
 }
