@@ -16,10 +16,10 @@
         <table class="margin_bottom_big">
           <thead>
             <tr>
-              <th>Artikel Index</th>
-              <th>Art_Bezeichnung</th>
+              <th>Access Code</th>
+              <th>Artikel</th>
+              <th>Bezeichnung</th>
               <th>Groesse</th>
-              <th>Art. Code</th>
               <th>Einheit</th>
               <th>Menge</th>
               <th>Fach</th>
@@ -31,9 +31,9 @@
               <%= fields_for "articles[]", article do |f| %>
                 <tr>
                   <td class="align-center"><%= article.baan_acces_id %></td>
+                  <td class="align-center"><%= article.article_code %></td>
                   <td><%= article.description %></td>
                   <td class="align-center"><%= article.factor %></td>
-                  <td class="align-center"><%= article.article_code %></td>
                   <td class="align-center"><%= article.stock_unit %></td>
                   <td class="align-center"><%= f.text_field :in_stock %></td>
                   <td class="align-center"><%= article.rack_tray_number %></td>

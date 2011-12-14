@@ -10,9 +10,9 @@
       <table>
         <thead>
           <tr>
-            <th>Art_Bezeichnung</th>
+            <th>Artikel</th>
+            <th>Bezeichnung</th>
             <th>Groesse</th>
-            <th>Art. Code</th>
             <th>Einheit</th>
             <th>Menge</th>
             <th>Fach</th>
@@ -20,11 +20,11 @@
           </tr>
         </thead>
         <tbody>
-          <% @articles.where(:rack_root_number => r_r_n.rack_root_number).order("rack_tray_number ASC, rack_box_number ASC").each do |article| %>
+          <% @articles.where(:rack_root_number => r_r_n.rack_root_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
             <tr>
+              <td class="align-center"><%= article.article_code %></td>
               <td><%= article.description %></td>
               <td class="align-center"><%= article.factor %></td>
-              <td class="align-center"><%= article.article_code %></td>
               <td class="align-center"><%= article.stock_unit %></td>
               <td class="align-center"><%= article.in_stock %></td>
               <td class="align-center"><%= article.rack_tray_number %></td>

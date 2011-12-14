@@ -20,7 +20,7 @@ class ArticlesController < ApplicationController
           :encoding => 'UTF-8',
           :header => {
             :left => "Fraefel AG",
-            :right => "#{Time.now}",
+            :right => "#{Time.now.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
           },
@@ -70,7 +70,7 @@ class ArticlesController < ApplicationController
           :encoding => 'UTF-8',
           :header => {
             :left => "Fraefel AG",
-            :right => "#{Time.now}",
+            :right => "#{Date.today.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
           },

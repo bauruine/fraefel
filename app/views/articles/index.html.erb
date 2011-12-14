@@ -25,7 +25,7 @@
       </li>
       
       <li class="summary clearfix">
-        <p class="floatLeft bold title">Stamm NR</p>
+        <p class="floatLeft bold title">Gestell</p>
         <p class="floatLeft"><%= f.text_field :rack_root_number_equals %></p>
       </li>
       
@@ -34,7 +34,7 @@
         <p class="floatLeft"><%= f.text_field :rack_part_number_equals %></p>
       </li>
       <li class="summary clearfix">
-        <p class="floatLeft bold title">Fach NR</p>
+        <p class="floatLeft bold title">Fach</p>
         <p class="floatLeft"><%= f.text_field :rack_tray_number_equals %></p>
       </li>
       <li class="summary clearfix">
@@ -64,16 +64,16 @@
     <table class="margin_bottom_big">
       <thead>
         <tr>
-          <th>Artikel Index</th>
-          <th>Artikel Code</th>
-          <th>Lager Code</th>
+          <th>Access Code</th>
+          <th>Artikel</th>
+          <th>Lager</th>
           <th>Bezeichnung</th>
           <th>Einheit</th>
           <th>Old Stack</th>
           <th>Gruppe</th>
-          <th>Stamm NR</th>
+          <th>Gestell</th>
           <th>Teil NR</th>
-          <th>Fach NR</th>
+          <th>Fach</th>
           <th>Kiste</th>
         </tr>
       </thead>
@@ -83,7 +83,7 @@
             <td class="align-center"><%= article.baan_acces_id %></td>
             <td class="align-center"><%= article.article_code %></td>
             <td class="align-center"><%= article.depot.present? ? article.depot.code : nil %></td>
-            <td class="align-center"><%= article.description %></td>
+            <td><%= article.description %></td>
             <td class="align-center"><%= article.stock_unit %></td>
             <td class="align-center"><%= article.old_stock %></td>
             <td class="align-center"><%= article.rack_group_number %></td>
