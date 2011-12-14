@@ -40,12 +40,20 @@ class ArticlesController < ApplicationController
   end
   
   def edit_multiple
-    @articles = Article.where(:considered => true).where(:rack_group_number => params[:rack_group_number])
+    if params[:baan_acces_code].present? && !params[:rack_group_number].present?
+      rack_group_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_group_number
+      rack_root_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_root_number
+      @articles = Article.where(:considered => true).where(:rack_group_number=> rack_group_number, :rack_root_number => rack_root_number)
+    elsif params[:rack_group_number].present? && params[:rack_root_number].present?
+      @articles = Article.where(:considered => true).where(:rack_group_number => params[:rack_group_number], :rack_root_number => params[:rack_root_number])
+    else
+      @articles = nil
+    end
   end
   
   def update_multiple
     @articles = Article.update(params[:articles].keys, params[:articles].values)
-    Resque.enqueue(BaanCalculator, params[:rack_group_number])
+    Resque.enqueue(BaanCalculator, @articles.first.rack_group_number)
     redirect_to(articles_url)
   end
   
@@ -53,7 +61,7 @@ class ArticlesController < ApplicationController
   end
   
   def get_results_for
-    redirect_to(edit_multiple_articles_path(:rack_group_number => params[:rack_group_number]))
+    redirect_to(edit_multiple_articles_path(:rack_group_number => params[:rack_group_number], :baan_acces_code => params[:baan_acces_code], :rack_root_number => params[:rack_root_number]))
   end
   
   def calculate_difference_for

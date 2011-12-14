@@ -27,7 +27,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @articles.where(:rack_root_number => r_r_n.rack_root_number).order("rack_tray_number ASC, rack_box_number ASC").each do |article| %>
+            <% @articles.where(:rack_root_number => r_r_n.rack_root_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
               <%= fields_for "articles[]", article do |f| %>
                 <tr>
                   <td class="align-center"><%= article.baan_acces_id %></td>
