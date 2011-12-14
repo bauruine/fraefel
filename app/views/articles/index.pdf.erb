@@ -1,7 +1,7 @@
 <h1>Zählliste Gruppe <%= params[:group] %></h1>
 
 <% @articles.group(:rack_root_number).each do |r_r_n| %>
-  <section class="filter_box new_page">
+  <section class="filter_box">
     <header class="filter_box_header clearfix">
       <h4 class="floatLeft m-r_5px">Gruppe <%= params[:group] %> | </h4>
       <h4 class="floatLeft m-r_5px">Gestell <%= r_r_n.rack_root_number %></h4>
@@ -35,4 +35,19 @@
       </table>
     </section>
   </section>
+  
+  <section class="margin_bottom_20px">
+    <ul>
+      <li class="bold">Kontrolle:</li>
+      <li class="margin_top_15px">__________________________________________</li>
+    </ul>
+  </section>
+  
+  <section class="margin_bottom_20px new_page">
+    <ul>
+      <li class="bold">Vollständigkeit:</li>
+      <li class="margin_top_15px">__________________________________________</li>
+    </ul>
+  </section>
+  
 <% end %>
