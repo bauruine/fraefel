@@ -96,7 +96,7 @@ class ArticlesController < ApplicationController
     # generates ugly csv for baan
     # should make a method to fill with empty spaces...
     csv_file_full_path = Rails.public_path + "/csv/file.csv"
-    CSV.open(csv_file_full_path, "wb") do |csv|
+    CSV.open(csv_file_full_path, "wb", {:col_sep => ";"}) do |csv|
       Article.where(:considered => true).order("baan_pono ASC").each do |article|
         baan_orno = article.baan_orno.present? ? article.baan_orno : ""
         baan_cntn = article.baan_cntn.present? ? article.baan_cntn : ""
