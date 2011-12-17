@@ -114,7 +114,7 @@ class Article < ActiveRecord::Base
     
     csv_file = @baan_import.baan_upload.path
     
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
+    CSV.foreach(csv_file, {:col_sep => ";"}) do |row|
       
       baan_orno = Iconv.conv('UTF-8', 'us-ascii', row[0]).to_s.chomp.lstrip.rstrip
       baan_cntn = Iconv.conv('UTF-8', 'us-ascii', row[1]).to_s.chomp.lstrip.rstrip
