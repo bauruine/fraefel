@@ -167,11 +167,16 @@ class Article < ActiveRecord::Base
       article_warn_on = article.article_group.present? ? article.article_group.warn_on : 10
       a = article.old_stock.to_f
       b = article.in_stock.to_f
+      if article.in_stock.split(".").size > 1
+        baan_vstk = (BigDecimal(article.old_stock) - BigDecimal(article.in_stock)) * -1
+      else
+        baan_vstk = (Integer(article.old_stock) - Integer(article.in_stock)) * -1
+      end
       a_b_difference = a - b < 0 ? (a - b * -1) : (a - b)
       if a_b_difference >= ((a / 100) * article_warn_on)
-        article.update_attributes(:should_be_checked => true, :baan_vstk => a_b_difference, :baan_vstr => a_b_difference)
+        article.update_attributes(:should_be_checked => true, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
       else
-        article.update_attributes(:should_be_checked => false, :baan_vstk => a_b_difference, :baan_vstr => a_b_difference)
+        article.update_attributes(:should_be_checked => false, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
       end
     end
   end
