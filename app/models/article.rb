@@ -169,9 +169,9 @@ class Article < ActiveRecord::Base
       b = article.in_stock.to_f
       a_b_difference = a - b < 0 ? (a - b * -1) : (a - b)
       if a_b_difference >= ((a / 100) * article_warn_on)
-        article.update_attributes(:should_be_checked => true)
+        article.update_attributes(:should_be_checked => true, :baan_vstk => a_b_difference, :baan_vstr => a_b_difference)
       else
-        article.update_attributes(:should_be_checked => false)
+        article.update_attributes(:should_be_checked => false, :baan_vstk => a_b_difference, :baan_vstr => a_b_difference)
       end
     end
   end

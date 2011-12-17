@@ -104,6 +104,7 @@ class ArticlesController < ApplicationController
         article_depot = article.baan_acces_id.split("x")[1].present? ? article.baan_acces_id.split("x")[1] : "0"
         baan_loca = article.baan_loca.present? ? article.baan_loca : "          "
         baan_clot = article.baan_clot.present? ? article.baan_clot : "                "
+        baan_date = article.baan_date.present? ? article.baan_date : article.baan_date.to_i
         baan_qstk = article.baan_qstk.present? ? "#{article.baan_qstk}" : "0"
         baan_qstr = article.baan_qstr.present? ? "#{article.baan_qstr}" : "0"
         baan_cstk = article.in_stock.present? ? "#{article.in_stock}" : "0"
@@ -111,8 +112,8 @@ class ArticlesController < ApplicationController
         baan_recd = article.baan_recd.present? ? "#{article.baan_recd}" : ""
         baan_reco = article.baan_reco.present? ? "#{article.baan_reco}" : "0"
         baan_appr = article.baan_appr.present? ? "#{article.baan_appr}" : "0"
-        baan_cadj = article.baan_cadj.present? ? "#{article.baan_cadj}" : "000"
-        csv << ["#{baan_orno}", "#{baan_cntn}", "#{baan_pono}", "#{article_depot}", "#{baan_loca}", "#{article.baan_item}", "#{baan_clot}", "#{article.baan_date}", "#{article.baan_stun}", "#{baan_qstk}", "#{baan_qstr}", "#{baan_cstk}", "#{baan_cstk}", "14", "15", "#{baan_csts}", "#{Time.now.to_i}", "#{baan_recd}", "#{baan_reco}", "#{baan_appr}", "#{baan_cadj}"]
+        baan_cadj = article.baan_cadj.present? ? "#{article.baan_cadj}" : ""
+        csv << ["#{baan_orno}", "#{baan_cntn}", "#{baan_pono}", "#{article_depot}", "#{baan_loca}", "#{article.baan_item}", "#{baan_clot}", "#{baan_date}", "#{article.baan_stun}", "#{baan_qstk}", "#{baan_qstr}", "#{baan_cstk}", "#{baan_cstk}", "#{article.baan_vstk}", "#{article.baan_vstr}", "#{baan_csts}", "#{Time.now.to_i}", "#{baan_recd}", "#{baan_reco}", "#{baan_appr}", "#{baan_cadj}"]
       end
     end
     csv_file = File.open(csv_file_full_path)
