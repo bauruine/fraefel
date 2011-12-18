@@ -46,14 +46,18 @@
       </li>
     </ul>
     <h4>Offene Artikel gruppiert nach Gruppe</h4><br />
-    <ul class="ul_summary">
-      <% @open_articles_by_group.each do |k,v| %>
-        <li class="summary clearfix">
-          <p class="floatLeft bold title"><%= "#{k}:"%></p>
-          <p class="floatLeft"><%= v %></p>
-        </li>
-      <% end %>
-    </ul>
+    <% if @open_articles_by_group.size > 0 %>
+      <ul class="ul_summary">
+        <% @open_articles_by_group.each do |k,v| %>
+          <li class="summary clearfix">
+            <p class="floatLeft bold title"><%= "#{k}:"%></p>
+            <p class="floatLeft"><%= v %></p>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div id="flash_notice">Alle Artikel wurden gezählt. Export kann nun gestartet werden.</div>
+    <% end %>
     
   </section>
 </section>
