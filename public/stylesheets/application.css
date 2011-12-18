@@ -189,7 +189,9 @@ table th {
 table td.align-center {
 	text-align: center;
 }
-
+table td.align-right {
+  text-align: right;
+}
 table tfoot td .bulk-actions {
   padding: 15px 0 5px 0;
 }

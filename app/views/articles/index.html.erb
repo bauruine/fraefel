@@ -9,7 +9,7 @@
   <% end %>
 </header>
 
-
+<div data-type="modal"></div>
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
@@ -65,7 +65,8 @@
           <th>Lager</th>
           <th>Bezeichnung</th>
           <th>Einheit</th>
-          <th>Old Stack</th>
+          <th>Bestand alt</th>
+          <th>Bestand neu</th>
           <th>Gruppe</th>
           <th>Gestell</th>
           <th>Fach</th>
@@ -80,7 +81,8 @@
             <td class="align-center"><%= article.depot.present? ? article.depot.code : nil %></td>
             <td><%= article.description %></td>
             <td class="align-center"><%= article.stock_unit %></td>
-            <td class="align-center"><%= article.old_stock %></td>
+            <td class="align-right"><%= article.old_stock %></td>
+            <td class="align-right"><%= article.in_stock %></td>
             <td class="align-center"><%= article.rack_group_number %></td>
             <td class="align-center"><%= article.rack_root_part_number %></td>
             <td class="align-center"><%= article.rack_tray_number %></td>
@@ -94,5 +96,3 @@
     
   </section>
 </section>
-
-<div data-type="modal"></div>

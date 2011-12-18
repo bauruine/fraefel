@@ -23,6 +23,7 @@
               <% if permitted_to? :index, :microsoft_databases %>
                 <li><%= link_to("Datenbanken", microsoft_databases_path) %></li>
               <% end %>
+              <li><%= link_to("Dashboard", dashboard_path()) %></li>
               <% if permitted_to? :index, :purchase_orders %>
                 <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
               <% end %>

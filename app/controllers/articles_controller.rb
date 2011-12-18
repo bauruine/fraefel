@@ -54,7 +54,7 @@ class ArticlesController < ApplicationController
   def update_multiple
     @articles = Article.update(params[:articles].keys, params[:articles].values)
     Resque.enqueue(BaanCalculator, @articles.first.rack_group_number)
-    redirect_to(articles_url)
+    redirect_to(articles_url(:search => {:rack_group_number_equals => @articles.first.rack_group_number, :rack_root_part_number_equals => @articles.first.rack_root_part_number}))
   end
   
   def search_for
