@@ -11,7 +11,7 @@
   
   <div class="clearfix formRow">
     <p class="ajaxFormLabel">
-      <%= label_tag :rack_group_number, "Gruppen NR" %>
+      <%= label_tag :rack_group_number, "Gruppe" %>
     </p>
     <p class="ajaxFormInput">
       <%= text_field_tag :rack_group_number, nil, :placeholder => "bsp. 07" %>
@@ -20,21 +20,13 @@
   
   <div class="clearfix formRow">
     <p class="ajaxFormLabel">
-      <%= label_tag :rack_root_number, "Regal NR" %>
+      <%= label_tag :rack_root_number, "Regal" %>
     </p>
     <p class="ajaxFormInput">
-      <%= text_field_tag :rack_root_number, nil, :placeholder => "bsp. 01" %>
+      <%= text_field_tag :rack_root_number, nil, :placeholder => "bsp. 012" %>
     </p>
   </div>
   
-  <div class="clearfix formRow">
-    <p class="ajaxFormLabel">
-      <%= label_tag :rack_part_number, "Regal + Teil NR" %>
-    </p>
-    <p class="ajaxFormInput">
-      <%= text_field_tag :rack_part_number, nil, :placeholder => "bsp. 07/01/3" %>
-    </p>
-  </div>
   <div class="clearfix formRow">
     <p class="ajaxFormInput">
       <%= submit_tag("Gehe zur eingabe") %>

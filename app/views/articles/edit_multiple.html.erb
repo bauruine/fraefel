@@ -1,50 +1,109 @@
-<% form_tag update_multiple_articles_path(:rack_group_number => params[:rack_group_number]), :method => :put do %>
+<% if @articles.present? %>
+  <% form_tag update_multiple_articles_path(:rack_group_number => params[:rack_group_number]), :method => :put do %>
 
+    <header class="resource_header margin_bottom_big clearfix">
+      <h1 class="floatLeft">Artikel Zählliste erfassen</h1>
+      <%= link_to("Abbrechen", :back, {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+      <%= submit_tag "Speichern", :class => "floatRight no_text_decoration link_button m-r_5px" %>
+    </header>
+    <% @articles.group(:rack_root_part_number).each do |r_r_n| %>
+      <section class="filter_box">
+        <header class="filter_box_header clearfix">
+          <h4 class="floatLeft m-r_5px">Gruppe <%= r_r_n.rack_group_number %> | </h4>
+          <h4 class="floatLeft m-r_5px">Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></h4>
+        </header>
+        <section class="filter_box_content clearfix">
+
+          <table class="margin_bottom_big">
+            <thead>
+              <tr>
+                <th>Access Code</th>
+                <th>Artikel</th>
+                <th>Bezeichnung</th>
+                <th>Groesse</th>
+                <th>Einheit</th>
+                <th>Menge</th>
+                <th>Fach</th>
+                <th>Kiste</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @articles.where(:rack_root_part_number => r_r_n.rack_root_part_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
+                <%= fields_for "articles[]", article do |f| %>
+                  <tr>
+                    <td class="align-center"><%= article.baan_acces_id %></td>
+                    <td class="align-center"><%= article.article_code %></td>
+                    <td><%= article.description %></td>
+                    <td class="align-center"><%= article.factor %></td>
+                    <td class="align-center"><%= article.stock_unit %></td>
+                    <td class="align-center"><%= f.text_field :in_stock %></td>
+                    <td class="align-center"><%= article.rack_tray_number %></td>
+                    <td class="align-center"><%= article.rack_box_number %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+      
+        </section>
+      </section>
+    <% end %>
+  <% end %>
+  
+<% else %>
   <header class="resource_header margin_bottom_big clearfix">
     <h1 class="floatLeft">Artikel Zählliste erfassen</h1>
-    <%= link_to("Abbrechen", :back, {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
-    <%= submit_tag "Speichern", :class => "floatRight no_text_decoration link_button m-r_5px" %>
   </header>
-  <% @articles.group(:rack_root_number).each do |r_r_n| %>
-    <section class="filter_box">
-      <header class="filter_box_header clearfix">
-        <h4 class="floatLeft m-r_5px">Gruppe <%= r_r_n.rack_group_number %> | </h4>
-        <h4 class="floatLeft m-r_5px">Gestell <%= r_r_n.rack_root_number %></h4>
-      </header>
-      <section class="filter_box_content clearfix">
-
-        <table class="margin_bottom_big">
-          <thead>
-            <tr>
-              <th>Access Code</th>
-              <th>Artikel</th>
-              <th>Bezeichnung</th>
-              <th>Groesse</th>
-              <th>Einheit</th>
-              <th>Menge</th>
-              <th>Fach</th>
-              <th>Kiste</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @articles.where(:rack_root_number => r_r_n.rack_root_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
-              <%= fields_for "articles[]", article do |f| %>
-                <tr>
-                  <td class="align-center"><%= article.baan_acces_id %></td>
-                  <td class="align-center"><%= article.article_code %></td>
-                  <td><%= article.description %></td>
-                  <td class="align-center"><%= article.factor %></td>
-                  <td class="align-center"><%= article.stock_unit %></td>
-                  <td class="align-center"><%= f.text_field :in_stock %></td>
-                  <td class="align-center"><%= article.rack_tray_number %></td>
-                  <td class="align-center"><%= article.rack_box_number %></td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
+  
+  <div id="flash_error">Keine Daten gefunden</div>
+  
+  <section class="filter_box">
+    <header class="filter_box_header clearfix">
+      <h4 class="floatLeft">Erklärung</h4>
+      <%= link_to("Zurück", :back, {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+    </header>
+    <section class="filter_box_content clearfix">
+      Es wurden keine Daten mit den eingegebenen Suchkriterien gefunden.<br /></br />
       
-      </section>
+      <ul class="ul_summary">
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Access-Code:</p>
+          <p class="floatLeft"><%= params[:baan_acces_code].present? ? params[:baan_acces_code] : "Keine Eingabe" %></p>
+        </li>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Gruppe:</p>
+          <p class="floatLeft"><%= params[:rack_group_number].present? ? params[:rack_group_number] : "Keine Eingabe" %></p>
+        </li>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Gestell:</p>
+          <p class="floatLeft"><%= params[:rack_root_number].present? ? params[:rack_root_number] : "Keine Eingabe" %></p>
+        </li>
+      </ul>
+      
+      <h4>Variante 1 (Suche mit Access-Code)</h4><br />
+      Bei dieser Variante muss das Feld Access-Code ausgefüllt werden. Die Felder Gruppe und Gestell müssen bei dieser Variante leer bleiben.
+      
+      <ul class="ul_summary">
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Access-Code:</p>
+          <p class="floatLeft">004927x102</p>
+        </li>
+      </ul>
+      
+      <h4>Variante 2 (Suche mit Gruppe UND Gestell)</h4><br />
+      Bei dieser Variante müssen die Felder Gruppe und Gestell ausgefüllt werden. Das Feld Access-Code muss bei dieser Variante leer bleiben.
+      
+      <ul class="ul_summary">
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Gruppe:</p>
+          <p class="floatLeft">02</p>
+        </li>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Gestell:</p>
+          <p class="floatLeft">012</p>
+        </li>
+      </ul>
+      
     </section>
-  <% end %>
+  </section>
 <% end %>

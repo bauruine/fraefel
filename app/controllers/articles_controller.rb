@@ -41,11 +41,11 @@ class ArticlesController < ApplicationController
   
   def edit_multiple
     if params[:baan_acces_code].present? && !params[:rack_group_number].present?
-      rack_group_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_group_number
-      rack_root_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_root_number
+      rack_group_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).present? ? Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_group_number : nil
+      rack_root_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).present? ? Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_root_number : nil
       @articles = Article.where(:considered => true).where(:rack_group_number=> rack_group_number, :rack_root_number => rack_root_number)
     elsif params[:rack_group_number].present? && params[:rack_root_number].present?
-      @articles = Article.where(:considered => true).where(:rack_group_number => params[:rack_group_number], :rack_root_number => params[:rack_root_number])
+      @articles = Article.where(:considered => true).where(:rack_group_number => params[:rack_group_number], :rack_root_part_number => params[:rack_root_number])
     else
       @articles = nil
     end
