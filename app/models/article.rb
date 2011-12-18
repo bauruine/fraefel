@@ -164,18 +164,20 @@ class Article < ActiveRecord::Base
   end
   
   def self.calculate_difference(arg)
-    @articles = Article.where(:rack_group_number => arg).where("old_stock IS NOT NULL").where("in_stock IS NOT NULL").where("in_stock != ''")
+    @articles = Article.where(:rack_group_number => arg, :considered => true).where("old_stock IS NOT NULL").where("in_stock IS NOT NULL").where("in_stock != ''")
     @articles.each do |article|
       article_warn_on = article.article_group.present? ? article.article_group.warn_on : 10
-      a = article.old_stock.to_f
-      b = article.in_stock.to_f
       if article.in_stock.split(".").size > 1
-        baan_vstk = (BigDecimal(article.old_stock) - BigDecimal(article.in_stock)) * -1
+        a = BigDecimal(article.old_stock)
+        b = BigDecimal(article.in_stock)
+        baan_vstk = (a - b) * -1
       else
-        baan_vstk = (Integer(article.old_stock) - Integer(article.in_stock)) * -1
+        a = Integer(article.old_stock)
+        b = Integer(article.in_stock)
+        baan_vstk = (a - b) * -1
       end
       a_b_difference = a - b < 0 ? (a - b * -1) : (a - b)
-      if a_b_difference >= ((a / 100) * article_warn_on)
+      if a_b_difference > 0 && a_b_difference >= ((a / 100) * article_warn_on)
         article.update_attributes(:should_be_checked => true, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
       else
         article.update_attributes(:should_be_checked => false, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
