@@ -75,7 +75,7 @@ class Article < ActiveRecord::Base
       rack_group_number = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
       rack_root_number = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
       rack_part_number = Iconv.conv('UTF-8', 'iso-8859-1', row[3]).to_s.chomp.lstrip.rstrip
-      rack_root_part_number = rack_root_number + rack_part_number
+      rack_root_part_number = rack_root_number + "." + rack_part_number
       rack_tray_number = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.chomp.lstrip.rstrip
       rack_box_number = Iconv.conv('UTF-8', 'iso-8859-1', row[5]).to_s.chomp.lstrip.rstrip
     
