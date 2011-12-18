@@ -5,7 +5,7 @@
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft m-r_5px">Infos VK-Aufträge</h4>
+    <h4 class="floatLeft m-r_5px">VK-Aufträge</h4>
   </header>
   <section class="filter_box_content clearfix">
     <ul class="ul_summary">
@@ -27,9 +27,10 @@
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft m-r_5px">Infos Inventar</h4>
+    <h4 class="floatLeft m-r_5px">Inventar</h4>
   </header>
   <section class="filter_box_content clearfix">
+    <h4>Infos Inventar</h4><br />
     <ul class="ul_summary">
       <li class="summary clearfix">
         <p class="floatLeft bold title">Gruppen anz.:</p>
@@ -37,12 +38,22 @@
       </li>
       <li class="summary clearfix">
         <p class="floatLeft bold title">Erledigt:</p>
-        <p class="floatLeft"><%= 0 %></p>
+        <p class="floatLeft"><%= @finished_articles %></p>
       </li>
       <li class="summary clearfix">
         <p class="floatLeft bold title">Offen:</p>
         <p class="floatLeft"><%= @open_articles %></p>
       </li>
     </ul>
+    <h4>Offene Artikel gruppiert nach Gruppe</h4><br />
+    <ul class="ul_summary">
+      <% @open_articles_by_group.each do |k,v| %>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title"><%= "#{k}:"%></p>
+          <p class="floatLeft"><%= v %></p>
+        </li>
+      <% end %>
+    </ul>
+    
   </section>
 </section>

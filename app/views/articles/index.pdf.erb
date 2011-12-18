@@ -1,53 +1,53 @@
-<h1>Zählliste Gruppe <%= params[:group] %></h1>
-
-<% @articles.group(:rack_root_part_number).each do |r_r_n| %>
-  <section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft m-r_5px">Gruppe <%= params[:group] %> | </h4>
-      <h4 class="floatLeft m-r_5px">Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <table>
-        <thead>
-          <tr>
-            <th>Artikel</th>
-            <th>Bezeichnung</th>
-            <th>Groesse</th>
-            <th>Einheit</th>
-            <th>Menge</th>
-            <th>Fach</th>
-            <th>Kiste</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @articles.where(:rack_root_part_number => r_r_n.rack_root_part_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
+<% @articles.group(:rack_group_number).each do |r_g_n| %>
+  <% @articles.where(:rack_group_number => r_g_n.rack_group_number).group(:rack_root_part_number).each do |r_r_n| %>
+    <section class="filter_box">
+      <header class="filter_box_header clearfix">
+        <h4 class="floatLeft m-r_5px">Gruppe <%= r_r_n.rack_group_number %> | </h4>
+        <h4 class="floatLeft m-r_5px">Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></h4>
+      </header>
+      <section class="filter_box_content clearfix">
+        <table>
+          <thead>
             <tr>
-              <td class="align-center"><%= article.article_code %></td>
-              <td><%= article.description %></td>
-              <td class="align-center"><%= article.factor %></td>
-              <td class="align-center"><%= article.stock_unit %></td>
-              <td class="align-center"><%= article.in_stock %></td>
-              <td class="align-center"><%= article.rack_tray_number %></td>
-              <td class="align-center"><%= article.rack_box_number %></td>
+              <th>Artikel</th>
+              <th>Bezeichnung</th>
+              <th>Groesse</th>
+              <th>Einheit</th>
+              <th>Menge</th>
+              <th>Fach</th>
+              <th>Kiste</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @articles.where(:rack_root_part_number => r_r_n.rack_root_part_number, :rack_group_number => r_g_n.rack_group_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
+              <tr>
+                <td class="align-center"><%= article.article_code %></td>
+                <td><%= article.description %></td>
+                <td class="align-center"><%= article.factor %></td>
+                <td class="align-center"><%= article.stock_unit %></td>
+                <td class="align-center"><%= article.in_stock %></td>
+                <td class="align-center"><%= article.rack_tray_number %></td>
+                <td class="align-center"><%= article.rack_box_number %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
     </section>
-  </section>
   
-  <section class="margin_bottom_20px">
-    <ul>
-      <li class="bold">Kontrolle:</li>
-      <li class="margin_top_15px">__________________________________________</li>
-    </ul>
-  </section>
+    <section class="margin_bottom_20px">
+      <ul>
+        <li class="bold">Kontrolle:</li>
+        <li class="margin_top_15px">__________________________________________</li>
+      </ul>
+    </section>
   
-  <section class="margin_bottom_20px new_page">
-    <ul>
-      <li class="bold">Vollständigkeit:</li>
-      <li class="margin_top_15px">__________________________________________</li>
-    </ul>
-  </section>
+    <section class="margin_bottom_20px new_page">
+      <ul>
+        <li class="bold">Vollständigkeit:</li>
+        <li class="margin_top_15px">__________________________________________</li>
+      </ul>
+    </section>
   
+  <% end %>
 <% end %>
