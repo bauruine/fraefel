@@ -10,6 +10,7 @@
           <thead>
             <tr>
               <th>Artikel</th>
+              <th>Lager Platz</th>
               <th>Bezeichnung</th>
               <th>Groesse</th>
               <th>Einheit</th>
@@ -22,6 +23,7 @@
             <% @articles.where(:rack_root_part_number => r_r_n.rack_root_part_number, :rack_group_number => r_g_n.rack_group_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
               <tr>
                 <td class="align-center"><%= article.article_code %></td>
+                <td class="align-center"><%= article.baan_loca %></td>
                 <td><%= article.description %></td>
                 <td class="align-center"><%= article.factor %></td>
                 <td class="align-center"><%= article.stock_unit %></td>

@@ -63,6 +63,7 @@
           <th>Access Code</th>
           <th>Artikel</th>
           <th>Lager</th>
+          <th>Lager Platz</th>
           <th>Bezeichnung</th>
           <th>Einheit</th>
           <th>Bestand alt</th>
@@ -79,6 +80,7 @@
             <td class="align-center"><%= article.baan_acces_id %></td>
             <td class="align-center"><%= article.article_code %></td>
             <td class="align-center"><%= article.depot.present? ? article.depot.code : nil %></td>
+            <td class="align-center"><%= article.baan_loca %></td>
             <td><%= article.description %></td>
             <td class="align-center"><%= article.stock_unit %></td>
             <td class="align-right"><%= article.old_stock %></td>
