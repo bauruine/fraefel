@@ -3,7 +3,7 @@ class DashboardsController < ApplicationController
     @articles = Article.where(:considered => true)
     @user = current_user
     @open_purchase_orders = PurchaseOrder.where(:delivered => false)
-    @bad_purchase_orders = PurchaseOrder.where("delivery_date < #{Date.today - 1.day}")
+    @bad_purchase_orders = PurchaseOrder.where(:delivered => false).where("delivery_date < ?", Date.today - 5.days)
     @delivered_purchase_orders = PurchaseOrder.where(:delivered => true)
     
     @article_rack_group_number_total = @articles.group(:rack_group_number).count.size
