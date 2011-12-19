@@ -19,7 +19,7 @@ class ArticlesController < ApplicationController
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
           :header => {
-            :left => "Fraefel AG",
+            :left => "Fraefel AG - Inventar Dez. 2011",
             :right => "#{Time.now.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
@@ -79,7 +79,7 @@ class ArticlesController < ApplicationController
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
           :header => {
-            :left => "Fraefel AG",
+            :left => "Fraefel AG - Inventar Dez. 2011",
             :right => "#{Date.today.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
