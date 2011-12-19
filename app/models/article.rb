@@ -26,39 +26,24 @@ class Article < ActiveRecord::Base
       order_unit = Iconv.conv('UTF-8', 'iso-8859-1', row[12]).to_s.chomp.lstrip.rstrip
       trade_partner_name = Iconv.conv('UTF-8', 'iso-8859-1', row[13]).to_s.chomp.lstrip.rstrip
       trade_partner_additional_info = Iconv.conv('UTF-8', 'iso-8859-1', row[14]).to_s.chomp.lstrip.rstrip
-    
-      article = Article.find_or_initialize_by_baan_acces_id(:baan_acces_id => baan_acces_id)
-      if article.present? && article.new_record?
-        article.baan_acces_id = baan_acces_id
-        article.article_code = article_code
-        article.depot = depot
-        article.signal_code_description = signal_code_description
-        article.description = description
-        article.search_key_01 = search_key_01
-        article.search_key_02 = search_key_02
-        article.material = material
-        article.factor = factor
-        article.zone_code = zone_code
-        article.stock_unit = stock_unit
-        article.order_unit = order_unit
-        article.trade_partner_name = trade_partner_name
-        article.trade_partner_additional_info = trade_partner_additional_info
-        article.save
-      else
-        article.update_attributes(:baan_acces_id => baan_acces_id,
-                                  :article_code => article_code,
-                                  :depot => depot,
-                                  :signal_code_description => signal_code_description,
-                                  :description => description,
-                                  :search_key_01 => search_key_01,
-                                  :search_key_02 => search_key_02,
-                                  :material => material,
-                                  :factor => factor,
-                                  :zone_code => zone_code,
-                                  :stock_unit => stock_unit,
-                                  :order_unit => order_unit,
-                                  :trade_partner_name => trade_partner_name,
-                                  :trade_partner_additional_info => trade_partner_additional_info)
+      
+      articles = Article.where(:baan_acces_id => baan_acces_id)
+      if articles.present?
+        articles.each do |article|
+          article.update_attributes(:article_code => article_code,
+                                    :depot => depot,
+                                    :signal_code_description => signal_code_description,
+                                    :description => description,
+                                    :search_key_01 => search_key_01,
+                                    :search_key_02 => search_key_02,
+                                    :material => material,
+                                    :factor => factor,
+                                    :zone_code => zone_code,
+                                    :stock_unit => stock_unit,
+                                    :order_unit => order_unit,
+                                    :trade_partner_name => trade_partner_name,
+                                    :trade_partner_additional_info => trade_partner_additional_info)
+        end
       end
     end
   end
@@ -79,14 +64,16 @@ class Article < ActiveRecord::Base
       rack_tray_number = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.chomp.lstrip.rstrip
       rack_box_number = Iconv.conv('UTF-8', 'iso-8859-1', row[5]).to_s.chomp.lstrip.rstrip
     
-      article = Article.find_or_initialize_by_baan_acces_id(:baan_acces_id => baan_acces_id)
-      if article.present?
-        article.update_attributes(:rack_group_number => rack_group_number,
-                                  :rack_root_number => rack_root_number,
-                                  :rack_part_number => rack_part_number,
-                                  :rack_root_part_number => rack_root_part_number,
-                                  :rack_tray_number => rack_tray_number,
-                                  :rack_box_number => rack_box_number)
+      articles = Article.where(:baan_acces_id => baan_acces_id)
+      if articles.present?
+        articles.each do |article|
+          article.update_attributes(:rack_group_number => rack_group_number,
+                                    :rack_root_number => rack_root_number,
+                                    :rack_part_number => rack_part_number,
+                                    :rack_root_part_number => rack_root_part_number,
+                                    :rack_tray_number => rack_tray_number,
+                                    :rack_box_number => rack_box_number)
+        end
       end
     end
   end
@@ -103,9 +90,12 @@ class Article < ActiveRecord::Base
       baan_article_group_id = Iconv.conv('UTF-8', 'iso-8859-1', row[3]).to_s.chomp.lstrip.rstrip
       price = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
       article_group = ArticleGroup.find_by_baan_id(baan_article_group_id)
-    
-      Article.where(:article_code => article_code).each do |article|
-        article.update_attributes(:article_group => article_group, :price => price)
+      
+      articles = Article.where(:article_code => article_code)
+      if articles.present?
+        articles.each do |article|
+          article.update_attributes(:article_group => article_group, :price => price)
+        end
       end
     end
   end
@@ -137,29 +127,25 @@ class Article < ActiveRecord::Base
       depot_number = Iconv.conv('UTF-8', 'us-ascii', row[3]).to_s.chomp.lstrip.rstrip
       old_stock = Iconv.conv('UTF-8', 'us-ascii', row[11]).to_s.chomp.lstrip.rstrip
       baan_acces_id = "#{article_code}x#{depot_number}"
-      articles = Article.where(:baan_acces_id => baan_acces_id)
+      #articles = Article.where(:baan_acces_id => baan_acces_id)
       
-      if articles.present?
-        articles.each do |article|
-          article.update_attributes(:old_stock => old_stock,
-                                    :baan_orno => baan_orno,
-                                    :baan_cntn => baan_cntn,
-                                    :baan_pono => baan_pono,
-                                    :baan_loca => baan_loca,
-                                    :baan_item => baan_item,
-                                    :baan_clot => baan_clot,
-                                    :baan_stun => baan_stun,
-                                    :baan_qstk => baan_qstk,
-                                    :baan_qstr => baan_qstr,
-                                    :baan_csts => baan_csts,
-                                    :baan_recd => baan_recd,
-                                    :baan_reco => baan_reco,
-                                    :baan_appr => baan_appr,
-                                    :baan_cadj => baan_cadj,
-                                    :considered => true)
-        end
-      end
-      
+      Article.create(:old_stock => old_stock,
+                     :baan_orno => baan_orno,
+                     :baan_cntn => baan_cntn,
+                     :baan_pono => baan_pono,
+                     :baan_loca => baan_loca,
+                     :baan_item => baan_item,
+                     :baan_clot => baan_clot,
+                     :baan_stun => baan_stun,
+                     :baan_qstk => baan_qstk,
+                     :baan_qstr => baan_qstr,
+                     :baan_csts => baan_csts,
+                     :baan_recd => baan_recd,
+                     :baan_reco => baan_reco,
+                     :baan_appr => baan_appr,
+                     :baan_cadj => baan_cadj,
+                     :considered => true,
+                     :baan_acces_id => baan_acces_id)
     end
   end
   
