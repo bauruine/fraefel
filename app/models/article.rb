@@ -1,6 +1,9 @@
 class Article < ActiveRecord::Base
   belongs_to :depot, :class_name => "Depot", :foreign_key => "depot_id"
   belongs_to :article_group, :class_name => "ArticleGroup", :foreign_key => "article_group_id"
+  attr_accessor :scii_sia
+  
+  validates_presence_of :in_stock, :if => Proc.new { |article| article.scii_sia }
   
   def self.import(arg)
     @baan_import = arg
@@ -154,14 +157,17 @@ class Article < ActiveRecord::Base
     @articles.each do |article|
       article_warn_on = article.article_group.present? ? article.article_group.warn_on : 10
       if article.in_stock.split(".").size > 1
-        a = BigDecimal(article.old_stock)
         b = BigDecimal(article.in_stock)
-        baan_vstk = (a - b) * -1
+      else
+        b = Integer(article.in_stock)
+      end
+      if article.old_stock.split(".").size > 1
+        a = BigDecimal(article.old_stock)
       else
         a = Integer(article.old_stock)
-        b = Integer(article.in_stock)
-        baan_vstk = (a - b) * -1
       end
+      
+      baan_vstk = (a - b) * -1
       a_b_difference = a - b < 0 ? (a - b * -1) : (a - b)
       if a_b_difference > 0 && a_b_difference >= ((a / 100) * article_warn_on)
         article.update_attributes(:should_be_checked => true, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
