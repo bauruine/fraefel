@@ -171,7 +171,7 @@ class Article < ActiveRecord::Base
       
       baan_vstk = (a - b) * -1
       a_b_difference = a - b < 0 ? (a - b * -1) : (a - b)
-      price_difference = article.price * b
+      price_difference = (article.price.present? ? article.price : article.price.to_f) * b
       if (a_b_difference > 0 && a_b_difference >= ((a / 100) * article_warn_on)) or (price_difference > article_warn_on_price)
         article.update_attributes(:should_be_checked => true, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
       else
