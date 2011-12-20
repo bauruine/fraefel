@@ -156,6 +156,8 @@ class Article < ActiveRecord::Base
     @articles = Article.where(:rack_group_number => arg, :considered => true).where("old_stock IS NOT NULL").where("in_stock IS NOT NULL").where("in_stock != ''")
     @articles.each do |article|
       article_warn_on = article.article_group.present? ? article.article_group.warn_on : 10
+      article_warn_on_price = article.article_group.present? && article.article_group.warn_on_price.present? ? article.article_group.warn_on_price.to_f : 3000
+      
       if article.in_stock.split(".").size > 1
         b = BigDecimal(article.in_stock)
       else
@@ -169,7 +171,8 @@ class Article < ActiveRecord::Base
       
       baan_vstk = (a - b) * -1
       a_b_difference = a - b < 0 ? (a - b * -1) : (a - b)
-      if a_b_difference > 0 && a_b_difference >= ((a / 100) * article_warn_on)
+      price_difference = article.price * b
+      if (a_b_difference > 0 && a_b_difference >= ((a / 100) * article_warn_on)) or (price_difference > article_warn_on_price)
         article.update_attributes(:should_be_checked => true, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
       else
         article.update_attributes(:should_be_checked => false, :baan_vstk => baan_vstk, :baan_vstr => baan_vstk)
