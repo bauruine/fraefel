@@ -25,11 +25,13 @@ authorization do
   end
   
   role :inventar do
-    has_permission_on [:articles], :to => [:show, :index, :edit, :edit_multiple, :update_multiple, :search_for, :get_results_for, :calculate_difference_for, :export]
+    #has_permission_on [:articles], :to => [:show, :index, :edit, :edit_multiple, :update_multiple, :search_for, :get_results_for, :calculate_difference_for, :export]
+    has_permission_on [:articles], :to => [:show, :index, :export]
   end
   
   role :inventar_admin do
-    has_permission_on [:articles], :to => [:show, :index, :edit, :edit_multiple, :update_multiple, :search_for, :get_results_for, :calculate_difference_for, :export]
+    #has_permission_on [:articles], :to => [:show, :index, :edit, :edit_multiple, :update_multiple, :search_for, :get_results_for, :calculate_difference_for, :export]
+    has_permission_on [:articles], :to => [:show, :index, :export]
   end
   
   role :guest do
