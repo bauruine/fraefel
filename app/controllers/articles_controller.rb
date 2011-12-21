@@ -111,7 +111,7 @@ class ArticlesController < ApplicationController
         baan_qstr = article.baan_qstr.present? ? "#{article.baan_qstr}" : "0"
         baan_cstk = article.in_stock.present? ? "#{article.in_stock}" : "0"
         baan_csts = article.baan_csts.present? ? "#{article.baan_csts}" : "0"
-        baan_recd = article.baan_recd.present? ? "#{article.baan_recd}" : ""
+        baan_recd = article.baan_recd.present? ? "#{article.baan_recd}" : nil
         baan_reco = article.baan_reco.present? ? "#{article.baan_reco}" : "0"
         baan_appr = article.baan_appr.present? ? "#{article.baan_appr}" : "0"
         baan_cadj = nil
