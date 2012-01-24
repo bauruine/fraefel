@@ -1,32 +1,38 @@
 <%= form_for(@user) do |f| %>
-
-  <p class="formLabel">
-    <%= f.label :username %>
-  </p>
-  <p class="formInput">
-    <%= f.text_field :username, :class => "fullWidth" %>
-  </p>
-  <p class="formLabel">
-    <%= f.label :email %>
-  </p>
-  <p class="formInput">
-    <%= f.text_field :email, :class => "fullWidth" %>
-  </p>
-  <p class="formLabel">
-    <%= label_tag :password %>
-  </p>
-  <p class="formInput">
-    <%= f.password_field :password, :class => "fullWidth" %>
-  </p>
-  <p class="formLabel">
-    <%= label_tag :password_confirmation %>
-  </p>
-  <p class="formInput">
-    <%= f.password_field :password_confirmation, :class => "fullWidth" %>
-  </p>
-  <p class="formInput">
-    <%= f.submit("Benutzer erstellen") %>
-  </p>
+  <div class="form-element">
+    <%= f.label :username, @user.new_record? ? "Benutzername wählen" : "Benutzername ändern" %>
+    <%= f.text_field :username%>
+  </div>
+  
+  <div class="form-element">
+    <%= f.label :email, @user.new_record? ? "Email angeben" : "Email ändern" %>
+    <%= f.text_field :email %>
+  </div>
+  
+  <div class="form-element">
+    <%= f.label :password, @user.new_record? ? "Passwort wählen" : "Passwort ändern" %>
+    <%= f.password_field :password %>
+  </div>
+  
+  <div class="form-element">
+    <%= f.label :password_confirmation, "Passwort bestätigen" %>
+    <%= f.password_field :password_confirmation %>
+  </div>
+  
+  <div class="form-element">
+    <%= f.label :roles, "Rollen verwalten" %>
+    <% for role in Role.all %>
+      <div>
+        <%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
+        <span class="checkboxLabel"><%= role.name %></span>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="form-element clearfix">
+    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= f.submit(@user.new_record? ? "Benutzer erstellen" : "Änderungen Sichern", :class => "blueSubmit floatLeft") %>
+  </div>
 
   <% if @user.errors.any? %>
     <script>

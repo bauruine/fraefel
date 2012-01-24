@@ -10,7 +10,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111122100110) do
+ActiveRecord::Schema.define(:version => 20120122020634) do
+
+  create_table "article_groups", :force => true do |t|
+    t.text     "description"
+    t.integer  "warn_on"
+    t.integer  "baan_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "warn_on_price"
+  end
 
   create_table "articles", :force => true do |t|
     t.string   "baan_acces_id"
@@ -35,6 +44,32 @@ ActiveRecord::Schema.define(:version => 20111122100110) do
     t.string   "rack_part_number"
     t.string   "rack_tray_number"
     t.string   "rack_box_number"
+    t.string   "in_stock"
+    t.string   "old_stock"
+    t.integer  "article_group_id"
+    t.decimal  "price",                         :precision => 12, :scale => 2
+    t.boolean  "should_be_checked"
+    t.string   "baan_orno"
+    t.string   "baan_cntn"
+    t.string   "baan_pono"
+    t.string   "baan_loca"
+    t.string   "baan_clot"
+    t.string   "baan_qstk"
+    t.string   "baan_qstr"
+    t.string   "baan_csts"
+    t.string   "baan_recd"
+    t.string   "baan_item"
+    t.string   "baan_date"
+    t.string   "baan_stun"
+    t.string   "baan_reco"
+    t.string   "baan_appr"
+    t.string   "baan_cadj"
+    t.boolean  "considered"
+    t.string   "baan_vstk"
+    t.string   "baan_vstr"
+    t.string   "baan_cstk"
+    t.string   "baan_cstr"
+    t.string   "rack_root_part_number"
   end
 
   create_table "baan_import_groups", :force => true do |t|
@@ -251,6 +286,15 @@ ActiveRecord::Schema.define(:version => 20111122100110) do
     t.datetime "updated_at"
     t.string   "forename"
     t.string   "surname"
+    t.string   "single_access_token",                :null => false
+    t.string   "perishable_token",                   :null => false
+    t.integer  "login_count",         :default => 0, :null => false
+    t.integer  "failed_login_count",  :default => 0, :null => false
+    t.datetime "last_request_at"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
+    t.string   "current_login_ip"
+    t.string   "last_login_ip"
   end
 
   create_table "versions", :force => true do |t|

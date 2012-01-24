@@ -1,0 +1,20 @@
+<section id="loginRight">
+<%= form_tag password_resets_path do %>
+
+  <div class="form-element">
+    <%= label_tag :username, "Benutzername" %>
+    <%= text_field_tag :username %>
+  </div>
+  
+  <div class="form-element">
+    <%= label_tag :email, "Email" %>
+    <%= text_field_tag :email %>
+  </div>
+  
+  <div class="form-element clearfix">
+    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= f.submit_tag("Weiter", :class => "blueSubmit floatLeft") %>
+  </div>
+  
+<% end %>
+</section>

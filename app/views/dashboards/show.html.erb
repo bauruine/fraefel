@@ -8,20 +8,30 @@
     <h4 class="floatLeft m-r_5px">VK-Aufträge</h4>
   </header>
   <section class="filter_box_content clearfix">
-    <ul class="ul_summary">
-      <li class="summary clearfix">
-        <p class="floatLeft bold title">Offen:</p>
-        <p class="floatLeft"><%= @open_purchase_orders.count %></p>
-      </li>
-      <li class="summary clearfix">
-        <p class="floatLeft bold title">Überfällig 5 Tage:</p>
-        <p class="floatLeft"><%= @bad_purchase_orders.count %></p>
-      </li>
-      <li class="summary clearfix">
-        <p class="floatLeft bold title">Versendet:</p>
-        <p class="floatLeft"><%= @delivered_purchase_orders.count %></p>
-      </li>
-    </ul>
+    <div class="box-padder clearfix">
+      
+      <div class="w140 floatLeft">
+        <div class="widget black ac">
+          <header><h2>Offen</h2></header>
+          <section><h1><%= @open_purchase_orders.count %></h1></section>
+        </div>
+      </div>
+      
+      <div class="w140 floatLeft">
+        <div class="widget black ac">
+          <header><h2>Überfällig 5</h2></header>
+          <section><h1><%= @bad_purchase_orders.count %></h1></section>
+        </div>
+      </div>
+      
+      <div class="w140 floatLeft">
+        <div class="widget black ac">
+          <header><h2>Versendet</h2></header>
+          <section><h1><%= @delivered_purchase_orders.count %></h1></section>
+        </div>
+      </div>
+      
+    </div>
   </section>
 </section>
 
@@ -30,34 +40,35 @@
     <h4 class="floatLeft m-r_5px">Inventar</h4>
   </header>
   <section class="filter_box_content clearfix">
-    <h4>Infos Inventar</h4><br />
-    <ul class="ul_summary">
-      <li class="summary clearfix">
-        <p class="floatLeft bold title">Gruppen anz.:</p>
-        <p class="floatLeft"><%= @article_rack_group_number_total %></p>
-      </li>
-      <li class="summary clearfix">
-        <p class="floatLeft bold title">Erledigt:</p>
-        <p class="floatLeft"><%= @finished_articles %></p>
-      </li>
-      <li class="summary clearfix">
-        <p class="floatLeft bold title">Offen:</p>
-        <p class="floatLeft"><%= @open_articles %></p>
-      </li>
-    </ul>
-    <h4>Offene Artikel gruppiert nach Gruppe</h4><br />
-    <% if @open_articles_by_group.size > 0 %>
+    <div class="box-padder">
+      <h4>Infos Inventar</h4><br />
       <ul class="ul_summary">
-        <% @open_articles_by_group.each do |k,v| %>
-          <li class="summary clearfix">
-            <p class="floatLeft bold title"><%= "#{k}:"%></p>
-            <p class="floatLeft"><%= v %></p>
-          </li>
-        <% end %>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Gruppen anz.:</p>
+          <p class="floatLeft"><%= @article_rack_group_number_total %></p>
+        </li>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Erledigt:</p>
+          <p class="floatLeft"><%= @finished_articles %></p>
+        </li>
+        <li class="summary clearfix">
+          <p class="floatLeft bold title">Offen:</p>
+          <p class="floatLeft"><%= @open_articles %></p>
+        </li>
       </ul>
-    <% else %>
-      <div id="flash_notice">Alle Artikel wurden gezählt. Export kann nun gestartet werden.</div>
-    <% end %>
-    
+      <h4>Offene Artikel gruppiert nach Gruppe</h4><br />
+      <% if @open_articles_by_group.size > 0 %>
+        <ul class="ul_summary">
+          <% @open_articles_by_group.each do |k,v| %>
+            <li class="summary clearfix">
+              <p class="floatLeft bold title"><%= "#{k}:"%></p>
+              <p class="floatLeft"><%= v %></p>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div id="flash_notice">Alle Artikel wurden gezählt. Export kann nun gestartet werden.</div>
+      <% end %>
+    </div>
   </section>
 </section>

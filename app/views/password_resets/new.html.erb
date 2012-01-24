@@ -1,0 +1,27 @@
+<section id="login" class="clearfix">
+<section id="loginLeft" class="floatLeft">
+  <%= image_tag("blau_kreuz_klein_01.gif")%>
+</section>
+
+<section id="loginRight">
+  <%= form_tag password_resets_path, {:id => "new_user_session"} do %>
+
+    <div class="form-element">
+      <%= label_tag :username, "Benutzername" %>
+      <%= text_field_tag :username, nil, :size => 30 %>
+    </div>
+  
+    <div class="form-element">
+      <%= label_tag :email, "Email" %>
+      <%= text_field_tag :email, nil, :size => 30 %>
+    </div>
+  
+    <div class="form-element clearfix">
+      <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
+      <%= submit_tag("Weiter", :class => "blueSubmit floatLeft") %>
+    </div>
+  
+  <% end %>
+</section>
+
+</section>

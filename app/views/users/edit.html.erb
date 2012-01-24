@@ -1,6 +1,10 @@
-<h1>Editing user</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
+<section class="filter_box">
+    <header class="filter_box_header clearfix">
+      <h4 class="floatLeft">Editiere Benutzer <%= @user.username %></h4>
+    </header>
+    <section class="filter_box_content clearfix">
+      <div class="box-padder">
+        <%= render 'form' %>
+      </div>
+    </section>
+</section>

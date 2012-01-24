@@ -8,7 +8,7 @@ gem 'rails', '3.0.9'
 gem 'mysql2', '~> 0.2.6'
 gem "nifty-generators", :group => :development
 gem "fastercsv"
-gem "authlogic"
+gem "authlogic", "~> 3.1.0"
 gem "kaminari"
 gem "meta_where"
 gem "sqlite3"
