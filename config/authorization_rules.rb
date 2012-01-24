@@ -24,6 +24,13 @@ authorization do
     has_permission_on [:baan_imports], :to => [:index, :new, :create, :edit, :update, :import]
   end
   
+  role :verkauf_view do
+    has_permission_on [:cargo_lists], :to => [:show, :index, :controll_invoice, :collective_invoice, :calculate_cargo_list, :print_lebert, :search_for]
+    has_permission_on [:pallets], :to => [:show, :ajax_show, :index, :search_for]
+    has_permission_on [:purchase_orders], :to => [:show, :index, :search_for, :print_pallets]
+    has_permission_on [:purchase_positions], :to => [:index, :search_for]
+  end
+  
   role :inventar do
     #has_permission_on [:articles], :to => [:show, :index, :edit, :edit_multiple, :update_multiple, :search_for, :get_results_for, :calculate_difference_for, :export]
     has_permission_on [:articles], :to => [:show, :index, :export]
