@@ -45,7 +45,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        Notifications.new_user(@user.id).deliver
+        Notifications.user_signed_up(@user.id).deliver
         format.html { redirect_to(users_path, :notice => 'User was successfully created.') }
         format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
