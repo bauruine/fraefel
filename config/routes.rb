@@ -2,6 +2,8 @@ Fraefel::Application.routes.draw do
   
   mount Resque::Server.new, :at => "/resque"
   
+  resources :password_resets, :only => [ :new, :create, :edit, :update ]
+  
   resources :articles do
     collection do
       get 'search_for'
