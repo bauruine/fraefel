@@ -5,6 +5,8 @@
     <%= stylesheet_link_tag "reset" %>
     <%= stylesheet_link_tag "application" %>
     <%= stylesheet_link_tag "jquery_ui" %>
+    <%= stylesheet_link_tag "widgets" %>
+    <%= stylesheet_link_tag "utopian-menus" %>
     <%= javascript_include_tag "jquery" %>
     <%= javascript_include_tag "jquery_ui" %>
     <%= javascript_include_tag "jquery.ui.datepicker-de.js" %>
@@ -17,28 +19,41 @@
     <section id="pageContainer" class="clearfix">
       <header id="containerHeader" class="clearfix">
         <nav id="applicationNavigation" class="floatLeft">
-          <ul class="clearfix">
+          <ul id="utopian-navigation" class="horizontal white">
             <% if current_user %>
+              
               <li><%= link_to("Logout: #{current_user.username}", logout_path) %></li>
+              
               <% if permitted_to? :index, :microsoft_databases %>
                 <li><%= link_to("Datenbanken", microsoft_databases_path) %></li>
               <% end %>
+              
               <li><%= link_to("Dashboard", dashboard_path()) %></li>
+              
               <% if permitted_to? :index, :purchase_orders %>
-                <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
+                <li class="dropdown">
+                  <%= link_to("Versand", purchase_orders_path) %>
+                  <ul>
+                    <% if permitted_to? :index, :purchase_orders %>
+                      <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
+                    <% end %>
+                    <% if permitted_to? :index, :purchase_positions %>
+                      <li><%= link_to("VK-Position Liste", purchase_positions_path) %></li>
+                    <% end %>
+                    <% if permitted_to? :index, :pallets %>
+                      <li><%= link_to("Paletten Liste", pallets_path) %></li>
+                    <% end %>
+                    <% if permitted_to? :index, :cargo_lists %>
+                      <li><%= link_to("Versandlisten", cargo_lists_path) %></li>
+                    <% end %>
+                  </ul>
+                </li>
               <% end %>
-              <% if permitted_to? :index, :purchase_positions %>
-                <li><%= link_to("VK-Position Liste", purchase_positions_path) %></li>
-              <% end %>
-              <% if permitted_to? :index, :cargo_lists %>
-                <li><%= link_to("Versandlisten", cargo_lists_path) %></li>
-              <% end %>
-              <% if permitted_to? :index, :pallets %>
-                <li><%= link_to("Paletten Liste", pallets_path) %></li>
-              <% end %>
+              
               <% if permitted_to? :index, :articles %>
                 <li><%= link_to("Inventar", articles_path) %></li>
               <% end %>
+              
               <% if permitted_to? :import, :baan_imports %>
                 <li><%= link_to("Import-Wizzard", baan_imports_path) %></li>
               <% end %>

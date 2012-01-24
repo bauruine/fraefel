@@ -1,0 +1,59 @@
+.w140 {
+  width: 140px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.w140:first-child {
+  margin-left: 0;
+}
+.w140:last-child {
+  margin-right: 0;
+}
+
+.w150 {
+  width: 150px;
+}
+
+.widget {
+  border-radius: 5px 5px 5px 5px;
+  margin-bottom: 18px;
+  display: block;
+}
+
+.widget.black header {
+  background: -moz-linear-gradient(center top , #434343, #222222) repeat scroll 0 0 transparent;
+}
+
+.widget header {
+  border-radius: 4px 4px 0 0;
+  font-size: 13px;
+  margin: 0;
+  padding: 0 4px;
+  position: relative;
+}
+
+.widget.black header h2 {
+  color: #FFFFFF;
+  text-shadow: 0 -1px 0 #000000;
+}
+
+.widget header h2 {
+  font-size: 13px;
+  line-height: 30px;
+  margin: 0;
+}
+
+.widget.black section {
+  border-color: #222222;
+}
+
+.widget section {
+  background: none repeat scroll 0 0 #FEFEFE;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5) inset;
+  padding: 10px;
+}
+
+.ac {
+  text-align: center !important;
+}

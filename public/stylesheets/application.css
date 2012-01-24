@@ -125,6 +125,7 @@ nav#applicationNavigation {
   padding-top: 30px;
   padding-left: 30px;
 }
+/*
 nav ul li {
   float: left;
   padding: 0 15px 0 0;
@@ -136,7 +137,7 @@ nav ul li a {
 nav ul li a:hover {
   color: #005D91;
 }
-
+*/
 ul.ul_summary {
 padding-bottom: 20px;	
 }
@@ -221,6 +222,182 @@ input {
   border: 1px solid #D5D5D5;
 }
 
+/*** Form ELEMENTS ***/
+span.checkboxLabel {
+  display: inline-block;
+  line-height: 17px;
+  margin: 0 0 0 5px;
+  font-size: 13px;
+}
+
+label {
+  display: block;
+  margin: 0 0 0.5em;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 13px;
+}
+input[type="text"], input[type="password"] {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #C0C0C0 #D9D9D9 #D9D9D9;
+  border-radius: 1px 1px 1px 1px;
+  border-right: 1px solid #D9D9D9;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 13px;
+  height: 25px;
+  padding: 1px 8px;
+}
+input[type="email"]:hover, input[type="number"]:hover, input[type="password"]:hover, input[type="tel"]:hover, input[type="text"]:hover, input[type="url"]:hover {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #A0A0A0 #B9B9B9 #B9B9B9;
+  border-right: 1px solid #B9B9B9;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+input[type="email"]:focus, input[type="number"]:focus, input[type="password"]:focus, input[type="tel"]:focus, input[type="text"]:focus, input[type="url"]:focus {
+  border: 1px solid #4D90FE;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset;
+  outline: medium none;
+}
+input[type="email"][disabled="disabled"], input[type="number"][disabled="disabled"], input[type="password"][disabled="disabled"], input[type="tel"][disabled="disabled"], input[type="text"][disabled="disabled"], input[type="url"][disabled="disabled"] {
+  background: none repeat scroll 0 0 #F5F5F5;
+  border: 1px solid #E5E5E5;
+}
+input[type="email"][disabled="disabled"]:hover, input[type="number"][disabled="disabled"]:hover, input[type="password"][disabled="disabled"]:hover, input[type="tel"][disabled="disabled"]:hover, input[type="text"][disabled="disabled"]:hover, input[type="url"][disabled="disabled"]:hover {
+  box-shadow: none;
+}
+input[type="email"][readonly="readonly"], input[type="number"][readonly="readonly"], input[type="password"][readonly="readonly"], input[type="text"][readonly="readonly"], input[type="url"][readonly="readonly"] {
+  border: 1px solid #D9D9D9;
+}
+input[type="email"][readonly="readonly"]:hover, input[type="number"][readonly="readonly"]:hover, input[type="password"][readonly="readonly"]:hover, input[type="text"][readonly="readonly"]:hover, input[type="url"][readonly="readonly"]:hover, input[type="email"][readonly="readonly"]:focus, input[type="number"][readonly="readonly"]:focus, input[type="password"][readonly="readonly"]:focus, input[type="text"][readonly="readonly"]:focus, input[type="url"][readonly="readonly"]:focus {
+  box-shadow: none;
+}
+input.form-error[type="checkbox"], input.form-error[type="email"], input.form-error[type="number"], input.form-error[type="password"], input.form-error[type="text"], input.form-error[type="url"] {
+  border: 1px solid #DD4B39;
+}
+input[type="checkbox"], input[type="radio"] {
+  -moz-box-sizing: border-box;
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: 1px solid #DCDCDC;
+  border-radius: 1px 1px 1px 1px;
+  cursor: pointer;
+  height: 13px;
+  margin: 0 0 1px 0;
+  position: relative;
+  vertical-align: bottom;
+  width: 13px;
+  display: inline-block;
+}
+input[type="checkbox"]:active, input[type="radio"]:active {
+  background: none repeat scroll 0 0 #EBEBEB;
+  border-color: #C6C6C6;
+}
+input[type="checkbox"]:hover {
+  border-color: #C6C6C6;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+}
+input[type="radio"] {
+  border-radius: 1em 1em 1em 1em;
+  height: 15px;
+  width: 15px;
+}
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+  background: none repeat scroll 0 0 #FFFFFF;
+}
+input[type="radio"]:checked:after {
+  background: none repeat scroll 0 0 #666666;
+  border-radius: 1em 1em 1em 1em;
+  content: "";
+  display: block;
+  height: 7px;
+  left: 3px;
+  position: relative;
+  top: 3px;
+  width: 7px;
+}
+input[type="checkbox"]:checked:after {
+  content: url("//ssl.gstatic.com/ui/v1/menu/checkmark.png");
+  display: block;
+  left: -5px;
+  position: absolute;
+  top: -6px;
+}
+input[type="checkbox"]:focus {
+  border-color: #4D90FE;
+  outline: medium none;
+}
+
+.form-element {
+  margin: 0 0 1.5em;
+  position: relative;
+}
+.form-element div {
+  margin: 0 0 1em;
+}
+
+/*** END OF FORM ELEMENTS ***/
+
+/*** SUBMITER ***/
+input[type="submit"], a.linkSubmit {
+  border-radius: 2px 2px 2px 2px;
+  cursor: default;
+  font-size: 11px;
+  font-weight: bold;
+  height: 27px;
+  line-height: 27px;
+  margin-right: 16px;
+  min-width: 54px;
+  outline: 0 none;
+  padding: 0 8px;
+  text-align: center;
+}
+input[type="submit"]:hover, a.linkSubmit:hover {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+input.blueSubmit[type="submit"] {
+  background-color: #4D90FE;
+  background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED);
+  border: 1px solid #3079ED;
+  color: #FFFFFF;
+}
+input.blueSubmit[type="submit"]:hover {
+  background-color: #357AE8;
+  background-image: -moz-linear-gradient(center, top, #4D90FE, #357AE8);
+  border: 1px solid #2F5BB7;
+}
+input.greySubmit[type="submit"], a.greySubmit {
+  background-color: #F5F5F5;
+  background-image: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #444444;
+}
+input.greySubmit[type="submit"]:hover, a.greySubmit:hover {
+  background-color: #F8F8F8;
+  background-image: -moz-linear-gradient(center, top, #F8F8F8, #F1F1F1);
+  border: 1px solid #C6C6C6;
+  color: #333333;
+}
+
+a.linkSubmit {
+  height: 25px;
+  display: inline-block;
+  text-decoration: none;
+}
+/*** END OF SUBMITER ***/
+
+
+input.styled-text
+
 input.link_button {
 	background-color: #F3F3F3;
 	padding: 3px;
@@ -291,6 +468,12 @@ select {
   resize: none;
 }
 
+
+/*** Box Padders ***/
+div.box-padder {
+  padding: 25px;
+}
+
 /*** Filter Box***/
 section.filter_box {
 	margin-bottom: 20px;
@@ -305,8 +488,11 @@ section.filter_box header.filter_box_header h4 {
 }
 
 section.filter_box section.filter_box_content {
-	background-color: #f3f3f3;
-	padding: 5px;
+  background: none repeat scroll 0 0 #F5F5F5;
+  border: 1px solid #E5E5E5;
+  /*
+  padding: 5px;
+  */
 }
 
 /*** Resource Header ***/
