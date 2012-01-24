@@ -57,6 +57,17 @@
               <% if permitted_to? :import, :baan_imports %>
                 <li><%= link_to("Import-Wizzard", baan_imports_path) %></li>
               <% end %>
+              
+              <% if permitted_to? :index, :users %>
+                <li class="dropdown">
+                  <%= link_to("Verwaltung", users_path) %>
+                  <ul>
+                    <li><%= link_to("Benutzer", users_path) %></li>
+                  </ul>
+                </li>
+              <% end %>
+              
+              
             <% else %>
               <li><%= link_to("Login", login_path) %></li>
             <% end %>
