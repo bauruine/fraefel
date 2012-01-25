@@ -10,7 +10,7 @@
   </header>
   <section class="filter_box_content clearfix">
     <div class="box-padder">
-      <% form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+      <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
         <div class="form-element">
           <%= f.label(:shipping_route_id_equals, "Tour") %>
           <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.all, :id, :name, {:include_blank => true, :placeholder => "Tour"}) %>
@@ -37,7 +37,7 @@
         </div>
       <% end %>
       
-      <% form_tag(search_for_purchase_orders_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
+      <%= form_tag(search_for_purchase_orders_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
         <div class="form-element">
           <%= label_tag(:purchase_order_id, "VK NR") %>
           <%= text_field_tag(:purchase_order_id, nil, :size => 30) %>
@@ -51,31 +51,29 @@
   </section>
 </section>
 
-<table>
-  <thead>
-    <tr>
-      <th>VK-Auftrag</th>
-      <th>Positionen</th>
-      <th>Gebuchte Paletten</th>
-      <th>Handelspartner</th>
-      <th>Tour</th>
-      <th>PLZ Gebiet</th>
-      <th>Versand</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @purchase_orders.each do |purchase_order| %>
-      <tr>
-        <td class="align-center"><%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %></td>
-        <td class="align-center"><%= purchase_order.purchase_positions.count %></td>
-        <td class="align-center"><%= purchase_order.pallets.present? ? purchase_order.pallets.count : "Keine Paletten gefunden" %></td>
-        <td class="align-center"><%= purchase_order.purchase_positions.first.consignee_full.present? ? purchase_order.purchase_positions.first.consignee_full : purchase_order.customer.company %></td>
-        <td class="align-center"><%= purchase_order.shipping_route.present? ? purchase_order.shipping_route.name : nil %></td>
-        <td class="align-center"><%= purchase_order.purchase_positions.first.zip_location_name %></td>
-        <td class="align-center"><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-  <tfoot>
-  </tfoot>
-</table>
+<section class="filter_box endless">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">VK-Aufträge</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>VK-Auftrag</th>
+          <th>Positionen</th>
+          <th>Gebuchte Paletten</th>
+          <th>Handelspartner</th>
+          <th>Tour</th>
+          <th>PLZ Gebiet</th>
+          <th>Versand</th>
+        </tr>
+      </thead>
+      <tbody id="purchase_orders">
+        <%= render @purchase_orders %>
+        <%= paginate(@purchase_orders) %>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+  </section>
+</section>

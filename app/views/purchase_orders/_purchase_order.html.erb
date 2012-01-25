@@ -1,0 +1,9 @@
+<tr class="purchase_order">
+  <td class="align-center"><%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %></td>
+  <td class="align-center"><%= purchase_order.purchase_positions.count %></td>
+  <td class="align-center"><%= purchase_order.pallets.present? ? purchase_order.pallets.count : "Keine Paletten gefunden" %></td>
+  <td class="align-center"><%= purchase_order.purchase_positions.first.consignee_full.present? ? purchase_order.purchase_positions.first.consignee_full : purchase_order.customer.company %></td>
+  <td class="align-center"><%= purchase_order.shipping_route.present? ? purchase_order.shipping_route.name : nil %></td>
+  <td class="align-center"><%= purchase_order.purchase_positions.first.zip_location_name %></td>
+  <td class="align-center"><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>
+</tr>
