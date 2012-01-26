@@ -55,7 +55,7 @@
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">VK-Aufträge</h4>
   </header>
-  <section class="filter_box_content clearfix">
+  <section class="filter_box_content clearfix appending-fix">
     <table>
       <thead>
         <tr>
@@ -70,7 +70,6 @@
       </thead>
       <tbody id="purchase_orders">
         <%= render @purchase_orders %>
-        <%= paginate(@purchase_orders) %>
       </tbody>
       <tfoot>
       </tfoot>

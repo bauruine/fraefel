@@ -89,15 +89,15 @@ $(document).ready(function(){
     return false;
   });
 
-  if ($("nav.pagination").length) {
-    $("nav.pagination").hide();
-    $(window).scroll(function () {
-      var url = $("nav.pagination span.next a").attr('href');
-      if (url && $(window).scrollTop() > ($(document).height() - $(window).height() - 50)) {
-        $("nav.pagination").text("Fetching...");
-        $.getScript(url);
-      };
-    });
-  };
+  //if ($("nav.pagination").length) {
+    //$("nav.pagination").hide();
+//    $(window).scroll(function () {
+//      var url = $("nav.pagination span.next a").attr('href');
+//      if (url && $(window).scrollTop() > ($(document).height() - $(window).height() - 50)) {
+//        $("nav.pagination").text("Fetching...");
+//        $.getScript(url);
+//      };
+//    });
+  //};
   
 });

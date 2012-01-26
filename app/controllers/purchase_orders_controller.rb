@@ -29,11 +29,11 @@ class PurchaseOrdersController < ApplicationController
     end
     
     #@purchase_orders = @search.order("shipping_route_id asc, purchase_positions.consignee_full asc, purchase_orders.delivery_date asc, purchase_orders.id asc").includes(:purchase_positions).select("purchase_positions.consignee_full")
-    @purchase_orders = @search.page(params[:page]).per(15)
+    @purchase_orders = @search.page(params[:page]).per(4000)
     
     respond_to do |format|
       format.html
-      format.js
+      #format.js
     end
   end
   
