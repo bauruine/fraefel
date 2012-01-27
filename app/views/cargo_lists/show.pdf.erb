@@ -37,8 +37,8 @@
               <td class="align-center"><%= purchase_position.article_number %></td>
               <td class="align-center"><%= purchase_position.article %></td>
               <td class="align-center"><%= purchase_position.product_line %></td>
-              <td class="align-center"><%= purchase_position.quantity %></td>
-              <td class="align-center"><%= purchase_position.weight_total %></td>
+              <td class="align-center"><%= purchase_position.pallet_purchase_position_assignments.where(:pallet => pallet).first.quantity %></td>
+              <td class="align-center"><%= purchase_position.pallet_purchase_position_assignments.where(:pallet => pallet).first.quantity * purchase_position.weight_single %></td>
               <td class="align-center"><%= purchase_position.storage_location %></td>
               <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
             </tr>
