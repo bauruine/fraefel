@@ -1,19 +1,33 @@
 <h1>Versand NR#<%= @cargo_list.id %></h3>
 
 <% form_for @cargo_list do |f| %>
-  <p class="formLabel">
+
+  <div class="form-element">
+    <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
+    <%= f.datetime_select :pick_up_time_earliest %>
+  </div>
+
+  <div class="form-element">
+    <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
+    <%= f.datetime_select :pick_up_time_latest %>
+  </div>
+
+  <div class="form-element">
     <%= f.label :referee, "Kunden Name" %>
-  </p>
-  <p class="formInput">
     <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
-  </p>
-  <p class="formLabel">
+  </div>
+
+  <div class="form-element">
+    <%= f.label :country, "Versand nach" %>
+    <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
+  </div>
+  
+  <div class="form-element">
     <%= f.label :delivered, "Versendet?" %>
-  </p>
-  <p class="formInput">
     <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-  </p>
-  <p class="formInput">
+  </div>
+  
+  <div class="form-element">
     <%= f.submit("Speichern") %>
-  </p>
+  </div>
 <% end %>

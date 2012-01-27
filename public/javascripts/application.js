@@ -34,7 +34,7 @@ $(document).ready(function(){
 
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
 
-  $('div[data-type=modal]').dialog({ autoOpen: false, modal: true, draggable: false, resizable: false });
+  $('div[data-type=modal]').dialog({ autoOpen: false, modal: true, draggable: false, resizable: false, width: 'auto' });
   
   $('a[data-type=modal]').click(function() {
     var remote_url = $(this).attr("href");
@@ -89,15 +89,27 @@ $(document).ready(function(){
     return false;
   });
 
-  //if ($("nav.pagination").length) {
-    //$("nav.pagination").hide();
-//    $(window).scroll(function () {
-//      var url = $("nav.pagination span.next a").attr('href');
-//      if (url && $(window).scrollTop() > ($(document).height() - $(window).height() - 50)) {
-//        $("nav.pagination").text("Fetching...");
-//        $.getScript(url);
-//      };
-//    });
-  //};
+  /*
+  if ($(".section.endless")) {
+    var num_pages = $("tbody#purchase_orders").attr("data-num-pages");
+    var data_params = $("tbody#purchase_orders").attr("data-params").length ? "/purchase_orders?" + $("tbody#purchase_orders").attr("data-params") + "&" : "/purchase_orders?";
+    for (var i=2; i <= parseInt(num_pages); i++) {
+      var url = data_params + 'page=' + i
+      $.getScript(url);
+    };
+  };
+  */
+  /*
+  if ($("nav.pagination").length) {
+    $("nav.pagination").hide();
+    $(window).scroll(function () {
+      var url = $("nav.pagination span.next a").attr('href');
+      if (url && $(window).scrollTop() > ($(document).height() - $(window).height() - 50)) {
+        $("nav.pagination").text("Fetching...");
+        $.getScript(url);
+      };
+    });
+  };
+  */
   
 });
