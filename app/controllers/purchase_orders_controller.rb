@@ -17,23 +17,16 @@ class PurchaseOrdersController < ApplicationController
 
   def index
     if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"
-      #@search = PurchaseOrder.where(:status => "open").where("customer_id IS NOT NULL").search(params[:search])
-      ##@search = PurchaseOrder.order("shipping_route_id asc, purchase_positions.consignee_full asc, purchase_orders.delivery_date asc, purchase_orders.id asc").includes(:purchase_positions).select("purchase_positions.consignee_full").search(params[:search])
-      
-      @search = PurchaseOrder.order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc").search(params[:search])
+      @search = PurchaseOrder.search(params[:search])
+      @purchase_orders = @search.relation.order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
     else
-      ###@search = PurchaseOrder.order("shipping_route_id asc, purchase_positions.consignee_full asc, purchase_orders.delivery_date asc, purchase_orders.id asc").includes(:purchase_positions).select("purchase_positions.consignee_full").where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").search(params[:search])
-      
-      @search = PurchaseOrder.where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc").search(params[:search])
-      #@search = PurchaseOrder.where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").search(params[:search])
+      @search = PurchaseOrder.search(params[:search])
+      @purchase_orders = @search.relation.where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
     end
-    
-    #@purchase_orders = @search.order("shipping_route_id asc, purchase_positions.consignee_full asc, purchase_orders.delivery_date asc, purchase_orders.id asc").includes(:purchase_positions).select("purchase_positions.consignee_full")
-    @purchase_orders = @search.page(params[:page]).per(4000)
     
     respond_to do |format|
       format.html
-      #format.js
+      format.js
     end
   end
   

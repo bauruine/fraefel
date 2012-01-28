@@ -1,5 +1,1 @@
-$('nav.pagination').remove();
 $('#purchase_orders').append('<%= escape_javascript(render(@purchase_orders)) %>');
-$('section.appending-fix').append('<%= escape_javascript(paginate(@purchase_orders)) %>');
-//$('nav.pagination').replaceWith('<%= escape_javascript(paginate(@purchase_orders)) %>');
-//$("nav.pagination").hide();

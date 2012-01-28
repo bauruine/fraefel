@@ -519,3 +519,13 @@ div.formRow p.ajaxFormInput {
   float: left;
   width: auto;
 }
+
+/*** MOVE out to some where else...***/
+.two_third {
+  width: 100em;
+  float: left;
+}
+.one_third {
+  width: 20em;
+  float: right;
+}

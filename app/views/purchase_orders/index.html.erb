@@ -2,7 +2,33 @@
   <h1 class="floatLeft">Verkaufs Aufträge</h1>
 </header>
 
-<section class="filter_box">
+<section class="filter_box two_third">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">VK-Aufträge</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>VK-Auftrag</th>
+          <th>Positionen</th>
+          <th>Gebuchte Paletten</th>
+          <th>Handelspartner</th>
+          <th>Tour</th>
+          <th>PLZ Gebiet</th>
+          <th>Versand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @purchase_orders %>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+  </section>
+</section>
+
+<section class="filter_box one_third">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Filter anwenden</h4>
     <%= link_to("Gehe zu", "#", {"data-type" => "tab", "data-warp" => "goto", :class => "floatRight no_text_decoration link_button"}) %>
@@ -48,31 +74,5 @@
         </div>
       <% end %>
     </div>
-  </section>
-</section>
-
-<section class="filter_box endless">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">VK-Aufträge</h4>
-  </header>
-  <section class="filter_box_content clearfix appending-fix">
-    <table>
-      <thead>
-        <tr>
-          <th>VK-Auftrag</th>
-          <th>Positionen</th>
-          <th>Gebuchte Paletten</th>
-          <th>Handelspartner</th>
-          <th>Tour</th>
-          <th>PLZ Gebiet</th>
-          <th>Versand</th>
-        </tr>
-      </thead>
-      <tbody id="purchase_orders">
-        <%= render @purchase_orders %>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
   </section>
 </section>
