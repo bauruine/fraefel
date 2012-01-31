@@ -1,12 +1,12 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand NR#<%= @cargo_list.id %></h1>
-  <%= link_to("Paletten Liste", cargo_list_path(@cargo_list, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Paletten Liste", cargo_list_path(@cargo_list, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
   <% if permitted_to? :edit, :cargo_lists %>
     <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal") %>
   <% end %>
-  <%= link_to("Zollpapiere", collective_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Lebert", print_lebert_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Kontrolle", controll_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Zollpapiere", collective_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+  <%= link_to("Lebert", print_lebert_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+  <%= link_to("Kontrolle", controll_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
 </header>
 <% if @cargo_list.delivered == true %>
   <div id="flash_notice">Versand NR<%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
@@ -22,7 +22,7 @@
   </ul>
   
   <section class="filter_box">
-    <header class="filter_box_header"><h4>Angefügte Paletten / Coli</h4></header>
+    <header class="filter_box_header green_background"><h4>Angefügte Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
       <% form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
@@ -80,7 +80,7 @@
 
 <% if @pallets.present? %>
   <section class="filter_box">
-    <header class="filter_box_header"><h4>Verfügbare Paletten / Coli</h4></header>
+    <header class="filter_box_header orange_background"><h4>Verfügbare Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
       <% form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>

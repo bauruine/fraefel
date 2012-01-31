@@ -40,6 +40,13 @@ img#logo {
 .red {
 	background-color: #FCC;
 }
+.orange_background {
+  background-color: #DE7600 !important;
+}
+
+.green_background {
+  background-color: rgba(112, 171, 2, 1) !important;
+}
 
 .red_background {
 	background-color: #990000;
@@ -111,8 +118,8 @@ p.formInput {
 }
 
 section#pageContainer {
-  width: 93%;
-	min-height: 500px;
+  width: 128em;
+  min-height: 500px;
   margin: 0 auto;
   background-color: #FFF;
   border: solid 1px black;
