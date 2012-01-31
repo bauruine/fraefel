@@ -1,0 +1,19 @@
+Hallo <%= @user.username %>,
+
+
+Herzlich willkommen! Damit die Registration abgeschlossen werden kann muss noch ein neues Passwort gesetzt werden.
+  
+Über folgenden link kann dies gemacht werden:
+  
+<%= new_password_reset_url %>
+
+  Benutzername: <%= @user.username %>
+  Email: <%= @user.email %>
+
+Über folgende Adresse kann auf die Applikation zugegriffen werden:
+  
+<%= root_url %>
+
+Freundliche Grüsse,
+
+Das Admin Team
