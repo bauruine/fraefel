@@ -47,6 +47,9 @@ GEM
     fastercsv (1.5.4)
     hirb (0.6.0)
     i18n (0.5.0)
+    jquery-rails (1.0.19)
+      railties (~> 3.0)
+      thor (~> 0.14)
     json (1.6.5)
     kaminari (0.13.0)
       actionpack (>= 3.0.0)
@@ -56,6 +59,7 @@ GEM
       addressable (~> 2.2.6)
     letter_opener (0.0.2)
       launchy
+    magic_user (0.0.2)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -142,8 +146,10 @@ DEPENDENCIES
   exception_notification
   fastercsv
   hirb
+  jquery-rails
   kaminari
   letter_opener
+  magic_user
   meta_search
   meta_where
   mocha

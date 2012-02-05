@@ -21,6 +21,8 @@ gem "meta_search"
 gem 'hirb'
 gem 'exception_notification'
 gem 'resque', :require => "resque/server"
+gem "jquery-rails"
+gem "magic_user"
 
 # Use unicorn as the web server
 # gem 'unicorn'
