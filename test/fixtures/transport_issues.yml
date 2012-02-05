@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  purchase_position_id: 1
+  delivery_rejection_id: 1
+  created_by: 1
+  updated_by: 1
+
+two:
+  purchase_position_id: 1
+  delivery_rejection_id: 1
+  created_by: 1
+  updated_by: 1

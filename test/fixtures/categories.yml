@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: MyString
+  description: MyText
+  categorizable_type: MyString
+  created_by: 1
+  updated_by: 1
+
+two:
+  title: MyString
+  description: MyText
+  categorizable_type: MyString
+  created_by: 1
+  updated_by: 1

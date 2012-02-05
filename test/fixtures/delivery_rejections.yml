@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  customer_id: 1
+  referee_id: 1
+  address_id: 1
+  category_id: 1
+  status_id: 1
+  created_by: 1
+  updated_by: 1
+
+two:
+  customer_id: 1
+  referee_id: 1
+  address_id: 1
+  category_id: 1
+  status_id: 1
+  created_by: 1
+  updated_by: 1
