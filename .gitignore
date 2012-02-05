@@ -6,3 +6,8 @@ tmp/
 config/database.yml
 public/system/
 config/unicorn_local.rb
+public/.DS_Store
+public/csv/
+public/images/.DS_Store
+public/javascripts/.DS_Store
+.DS_Store

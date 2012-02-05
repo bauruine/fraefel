@@ -118,7 +118,8 @@ p.formInput {
 }
 
 section#pageContainer {
-  width: 128em;
+  width: 95%;
+  min-width: 91.429em;
   min-height: 500px;
   margin: 0 auto;
   background-color: #FFF;
@@ -165,14 +166,23 @@ nav.form_navigation {
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 12px;
 }
-                
+
+table thead {
+  line-height: 40px;
+  background: #e8e8e8 url("back_header_table.jpg") repeat-x left top;
+}
+
 table thead th {
+  text-align: left;
+  padding: 0 20px;
+  border-left: 1px solid #d6d6d6;
+  text-transform: capitalize;
   font-weight: bold;
-  font-size: 15px;
-  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
 }
-                
+
 table tbody {
   border-bottom: 1px solid #ddd;
 }
@@ -181,19 +191,28 @@ table tbody tr {
   background: #fff;
 }
 
-table tbody tr:nth-child(2n+1) {
-  background: #f3f3f3;
+
+table tbody tr:nth-child(even) {
+  background: #f7f7f7;
+  height: 40px;
 }
+
+table tbody tr:nth-child(odd) {
+  background: #FFFFFF;
+  height: 40px;
+}
+
 table tbody tr input[type="submit"] {
 	float:left;
 	margin-right: 5px;
 }
 
-table td,
-table th {
-  padding: 10px;
-  line-height: 1.3em;
+table td {
+  text-align: left;
+  padding: 0 10px 0 20px;
+  vertical-align: middle;
 }
+
 table td.align-center {
 	text-align: center;
 }
@@ -202,6 +221,9 @@ table td.align-right {
 }
 table tfoot td .bulk-actions {
   padding: 15px 0 5px 0;
+}
+table tfoot td {
+  line-height: 40px;
 }
 
 table tfoot td .bulk-actions select {
@@ -352,6 +374,11 @@ input[type="checkbox"]:focus {
   margin: 0 0 1em;
 }
 
+div.field_with_errors input[type="text"], div.field_with_errors input[type="password"] {
+  background-color: #FFD1D1;
+  border: 1px solid #F8ACAC;
+}
+
 /*** END OF FORM ELEMENTS ***/
 
 /*** SUBMITER ***/
@@ -434,7 +461,7 @@ select {
   background-color: #FCC;
   border: solid 1px #C66;
 }
-
+/*
 .fieldWithErrors {
   display: inline;
 }
@@ -448,24 +475,21 @@ select {
   background-color: #f0f0f0;
   font-size: 12px;
 }
-
+*/
 .error_messages h2 {
   text-align: left;
   font-weight: bold;
-  padding: 5px 10px;
   font-size: 12px;
-  margin: 0;
-  background-color: #c00;
-  color: #fff;
 }
 
 .error_messages p {
   margin: 8px 10px;
 }
-
+/*
 .error_messages ul {
   margin: 0;
 }
+*/
 .fullWidth {
   width: 100%;
 }
@@ -529,7 +553,7 @@ div.formRow p.ajaxFormInput {
 
 /*** MOVE out to some where else...***/
 .two_third {
-  width: 100em;
+  width: 75%;
   float: left;
 }
 .one_third {
