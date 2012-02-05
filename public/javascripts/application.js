@@ -60,6 +60,13 @@ $(document).ready(function(){
     return false;
   });
   
+  $('a[data-role="dialog-remote"]').click(function() {
+    $('.dialog').show();
+    
+    $('.dialog').dialog('open');
+    return false;
+  });
+  
   $(window).resize(function() {
     $('div[data-type=modal]').dialog("option", "position", "center");
   });
@@ -88,7 +95,11 @@ $(document).ready(function(){
     $("form[data-tab=" + warpToTab + "]").show();
     return false;
   });
-
+  
+  $('input#delivery_rejection_customer_company').autocomplete({
+    source: $('input#delivery_rejection_customer_company').data("autocomplete_source")
+  });
+  
   /*
   if ($(".section.endless")) {
     var num_pages = $("tbody#purchase_orders").attr("data-num-pages");
