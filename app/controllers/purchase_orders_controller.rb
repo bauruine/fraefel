@@ -16,11 +16,11 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
+    @search = PurchaseOrder.search(params[:search])
+    
     if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"
-      @search = PurchaseOrder.search(params[:search])
       @purchase_orders = @search.relation.order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
     else
-      @search = PurchaseOrder.search(params[:search])
       @purchase_orders = @search.relation.where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
     end
     

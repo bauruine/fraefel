@@ -22,11 +22,11 @@
         <tbody>
           <% @cargo_lists.each do |cargo_list| %>
             <tr>
-              <td class="align-center"><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
-              <td class="align-center"><%= cargo_list.pallets.count %></td>
-              <td class="align-center"><%= cargo_list.referee.present? ? cargo_list.referee : "Bitte Name eintragen!"%></td>
-              <td class="align-center"><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
-              <td class="align-center"><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
+              <td><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
+              <td><%= cargo_list.pallets.count %></td>
+              <td><%= cargo_list.referee.present? ? cargo_list.referee : "Bitte Name eintragen!"%></td>
+              <td><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
+              <td><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
             </tr>
           <% end %>
         </tbody>

@@ -1,0 +1,24 @@
+<% if @purchase_positions.present? %>
+
+  <% @purchase_position = @purchase_positions.first %>
+  
+  if ($('input[type="checkbox"]').attr("value", <%= @purchase_position.id %>).length) {
+    alert("Position bereits hinzugefügt...");
+  } else {
+    var purchase_position = '';
+    purchase_position += '<div>';
+    purchase_position += '<input type="checkbox" '
+    purchase_position += 'value=<%= @purchase_positions.first.id.inspect %> '
+    purchase_position += 'name="delivery_rejection[purchase_position_ids][]">'
+    purchase_position += '<span class="checkboxLabel">'
+    purchase_position += '<%= "#{@purchase_positions.first.purchase_order.baan_id}-#{@purchase_positions.first.position} #{@purchase_positions.first.article}" %>'
+    purchase_position += '</span>'
+    purchase_position += '</div>'
+
+    $('div[data-role="appending"]').append(purchase_position);
+    $('input[type="checkbox"]:last').attr('checked', true);
+  };
+  
+<% else %>
+  alert("nothing found");
+<% end %>

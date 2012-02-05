@@ -27,17 +27,17 @@
             <tr>
           <% end %>
             <% if purchase_position.purchase_order != @pallet.purchase_orders.first %>
-              <td class="align-center red"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+              <td class="red"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
             <% else %>
-            <td class="align-center"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+            <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
             <% end %>
-            <td class="align-center"><%= purchase_position.article_number %></td>
-            <td class="align-center"><%= purchase_position.commodity_code.content %></td>
-            <td class="align-center"><%= purchase_position.article %></td>
-            <td class="align-center"><%= purchase_position.product_line %></td>
-            <td class="align-center"><%= purchase_position.quantity %></td>
-            <td class="align-center"><%= purchase_position.storage_location %></td>
-            <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.commodity_code.content %></td>
+            <td><%= purchase_position.article %></td>
+            <td><%= purchase_position.product_line %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.storage_location %></td>
+            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
           </tr>
         <% end %>
       </tbody>

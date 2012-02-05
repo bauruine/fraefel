@@ -6,16 +6,13 @@ class CustomersController < ApplicationController
   end
   
   def index
-    yaml_file = YAML.load_file("import/import.yml")
-    @csv_checksum = yaml_file["csv"]["customers"]["checksum"]
-    @import_version = yaml_file["csv"]["customers"]["import_count"]
-    if @csv_checksum.to_s != Digest::SHA1.hexdigest(File.read("import/csv/customers/BaanRead_Handelspartner.csv"))
-      flash[:error] = "Achtung! Neue Daten vorhanden! Bitte Daten neu importieren."
+    respond_to do |format|
+      format.html
+      format.json do
+        @customers = Customer.order(:id).where("company like ?", "%#{params[:term]}%")
+        render json: @customers.map(&:company)
+      end
     end
-    if PurchaseOrder.where(:customer_id => nil)
-      flash[:error] = "Achtung! #{PurchaseOrder.where(:customer_id => nil).count} Orders ohne Kunde."
-    end
-    @customers = Customer.includes(:purchase_orders => [:purchase_positions]).where("purchase_orders.id IS NOT NULL").where(:company.matches => "%#{params[:search]}%").order("purchase_positions.delivery_date asc")
   end
   
   def new

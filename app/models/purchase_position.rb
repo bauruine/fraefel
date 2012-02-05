@@ -6,6 +6,9 @@ class PurchasePosition < ActiveRecord::Base
   has_many :pallet_purchase_position_assignments, :class_name => "PalletPurchasePositionAssignment"
   has_many :pallets, :class_name => "Pallet", :through => :pallet_purchase_position_assignments
   
+  has_many :transport_issues
+  has_many :delivery_rejections, :through => :transport_issues
+  
   after_save :update_purchase_order_date
   
   scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")

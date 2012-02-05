@@ -1,0 +1,7 @@
+<tr>
+  <td><%= link_to(category.id, edit_category_path(category)) %></td>
+  <td><%= category.title %></td>
+  <td><%= category.categorizable_type %></td>
+  <td><%= category.created_at.to_formatted_s(:swiss_date) %></td>
+  <td><%= category.updated_at.to_formatted_s(:swiss_date) %></td>
+</tr>

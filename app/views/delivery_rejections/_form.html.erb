@@ -1,0 +1,61 @@
+<% if @delivery_rejection.errors.present? %>
+
+  <div class="error_messages">
+    <h2>Fehlerhafte Eingabe</h2>
+    <p>Bitte überprüfen Sie die folgenden Fehler:</p>
+    <ul>
+      <% @delivery_rejection.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+  
+  <hr />
+<% end %>
+
+<%= form_for(@delivery_rejection) do |f| %>
+  
+  <div class="form-element">
+    <%= f.label(:category, @delivery_rejection.new_record? ? "Grund wählen" : "Grund ändern") %>
+    <%= f.collection_select(:category_id, Category.where(:categorizable_type => "delivery_rejection"), :id, :title, {:include_blank => true}, {:class => "chzn-select", "data-placeholder" => "Grund wählen...", :style => "width:350px;"}) %>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Was ist der Grund der Konflikterfassung?</small>
+  </div>
+
+  <div class="form-element">
+    <%= f.label(:status, @delivery_rejection.new_record? ? "Status wählen" : "Status ändern") %>
+    <%= f.collection_select(:status_id, Status.where(:statusable_type => "delivery_rejection"), :id, :title, {}, {:class => "chzn-select", "data-placeholder" => "Status wählen...", :style => "width:350px;"}) %>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Status wählen / ändern. Wenn möglich immer aktuell halten.</small>
+    
+  </div>
+  
+  <hr />
+  
+  <div class="form-element">
+    <%= f.label :customer_company, "Kunde" %>
+    <%= f.text_field :customer_company, "data-autocomplete_source" => customers_path(:format => :json) %>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Welcher Handelspartner ist in diesen Konflikt verwickelt?</small>
+  </div>
+  
+  <hr />
+  
+  <div class="form-element" data-role="appending">
+    <%= f.label :purchase_positions, "Betreffende Artikel" %>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">VK-Positionen können auf der rechten Seite hinzugefügt werden.</small>
+  </div>
+  
+  <hr />
+  
+  <%= f.fields_for :comments do |co_f| %>
+    <div class="form-element">
+      <%= co_f.label(:content, "Kommentar", :class => "required") %>
+      <%= co_f.text_area(:content, "data-editor" => "wysiwyg", :style => "width: 475px; height: 145px;") %>
+      <div class="clear"></div>
+    </div>
+  <% end %>
+  
+  <div class="form-element clearfix">
+    <%= link_to("Abbrechen", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= f.submit(@delivery_rejection.new_record? ? "Konflikt speichern" : "Änderungen Sichern", :class => "blueSubmit floatLeft") %>
+  </div>
+  
+<% end %>

@@ -13,4 +13,12 @@ class User < ActiveRecord::Base
     Notifications.password_reset_instructions(self).deliver
   end
   
+  def self.current=(user)
+    @current_user = user
+  end
+  
+  def self.current
+    @current_user
+  end
+  
 end

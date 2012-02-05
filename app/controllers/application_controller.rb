@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   helper_method :current_user
-  before_filter :require_user, :prepare_authorization
+  before_filter :require_user, :user_setup
   # before_filter { |c| Authorization.current_user = c.current_user }
   
   private
@@ -34,7 +34,9 @@ class ApplicationController < ActionController::Base
     session[:return_to] = request.request_uri
   end
   
-  def prepare_authorization
+  def user_setup
+    # Find the current user
+    User.current = current_user
     Authorization.current_user = current_user
   end
   

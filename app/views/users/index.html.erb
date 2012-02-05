@@ -23,11 +23,11 @@
         <% @users.each do |user| %>
           <tr>
             <td><%= link_to(user.id, edit_user_path(user)) %></td>
-            <td class="align-center"><%= user.username %></td>
+            <td><%= user.username %></td>
             <td><%= user.email %></td>
-            <td class="align-center"><%= user.roles.present? ? user.roles.map(&:name).join(", ") : nil %></td>
-            <td class="align-center"><%= user.login_count %></td>
-            <td class="align-center"><%= user.last_login_at.present? ? user.last_login_at.to_formatted_s(:swiss_date) : nil %></td>
+            <td><%= user.roles.present? ? user.roles.map(&:name).join(", ") : nil %></td>
+            <td><%= user.login_count %></td>
+            <td><%= user.last_login_at.present? ? user.last_login_at.to_formatted_s(:swiss_date) : nil %></td>
           </tr>
         <% end %>
       </tbody>

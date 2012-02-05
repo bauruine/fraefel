@@ -1,0 +1,44 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Konflikt #<%= @delivery_rejection.id %> / <%= @delivery_rejection.customer.try(:company) %></h1>
+    <%= link_to("Lieferschein", new_delivery_rejection_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
+
+<section class="filter_box two_third">
+  <header class="filter_box_header"><h4>&nbsp;</h4></header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Artikel Nummer</th>
+          <th>Artikel</th>
+          <th>Menge</th>
+          <th>Versand #</th>
+          <th>Versendet am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_positions.each do |purchase_position| %>
+          <tr>
+            <td><%= link_to(purchase_position.id, purchase_position) %></td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.article %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.id %></td>
+            <td><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</section>
+
+<section class="filter_box one_third">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Filter anwenden</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <div class="box-padder">
+    </div>
+  </section>
+</section>

@@ -1,0 +1,7 @@
+<tr>
+  <td><%= link_to(status.id, edit_status_path(status)) %></td>
+  <td><%= status.title %></td>
+  <td><%= status.statusable_type %></td>
+  <td><%= status.created_at.to_formatted_s(:swiss_date) %></td>
+  <td><%= status.updated_at.to_formatted_s(:swiss_date) %></td>
+</tr>

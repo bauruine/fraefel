@@ -1,0 +1,30 @@
+<section class="filter_box two_third">
+    <header class="filter_box_header clearfix">
+      <h4 class="floatLeft">Erfasse neuen Konflikt</h4>
+    </header>
+    <section class="filter_box_content clearfix">
+      <div class="box-padder">
+        <%= render 'form' %>
+      </div>
+    </section>
+</section>
+
+<section class="filter_box one_third">
+    <header class="filter_box_header clearfix">
+      <h4 class="floatLeft">Position Hinzufügen</h4>
+    </header>
+    <section class="filter_box_content clearfix">
+      <div class="box-padder">
+        <%= form_for(@search, :remote => true) do |f| %>
+          <div class="form-element">
+            <%= f.label(:id_equals, "VK-Position") %>
+            <%= f.text_field(:baan_id_equals) %>
+            <small style="display: block; font-size: 10px; margin-top: 5px;">VK-Position NR eingeben</small>
+          </div>
+          <div class="form-element clearfix">
+            <%= f.submit("Hinzufügen", :class => "blueSubmit floatLeft") %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+</section>

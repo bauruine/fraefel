@@ -1,0 +1,18 @@
+<%= form_for(@status) do |f| %>
+
+  <div class="form-element">
+    <%= f.label(:title, "Status", :class => "required") %>
+    <%= f.text_field(:title, :size => 100) %>
+  </div>
+  
+  <div class="form-element">
+    <%= f.label(:statusable_type, "Gehört zu", :class => "required") %>
+    <%= f.select(:statusable_type, Status::STATUSABLE_ITEMS, {}, {:class => "chzn-select", "data-placeholder" => "Verbindung wählen...", :style => "width:350px;"}) %>
+  </div>
+  
+  <div class="form-element clearfix">
+    <%= link_to("Abbrechen", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= f.submit(@status.new_record? ? "Erstellen" : "Ändern", :class => "blueSubmit floatLeft") %>
+  </div>
+
+<% end %>

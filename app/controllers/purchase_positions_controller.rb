@@ -14,10 +14,20 @@ class PurchasePositionsController < ApplicationController
   end
   
   def index
-    if params[:to_be_checked] && params[:to_be_checked] == "true"
-      @purchase_orders = PurchaseOrder.where("purchase_positions.amount = 0 OR purchase_positions.quantity = 0 OR purchase_positions.weight_single = 0").where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:purchase_positions)
-    else
-      @purchase_orders = PurchaseOrder.where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:purchase_positions)
+    respond_to do |format|
+      
+      format.html do
+        if params[:to_be_checked] && params[:to_be_checked] == "true"
+          @purchase_orders = PurchaseOrder.where("purchase_positions.amount = 0 OR purchase_positions.quantity = 0 OR purchase_positions.weight_single = 0").where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:purchase_positions)
+        else
+          @purchase_orders = PurchaseOrder.where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:purchase_positions)
+        end
+      end
+      
+      format.js do
+        @search = PurchasePosition.search(params[:search])
+        @purchase_positions = @search.relation
+      end
     end
   end
   

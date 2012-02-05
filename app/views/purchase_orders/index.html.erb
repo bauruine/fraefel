@@ -2,9 +2,11 @@
   <h1 class="floatLeft">Verkaufs Aufträge</h1>
 </header>
 
-<section class="filter_box two_third">
+<section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">VK-Aufträge</h4>
+    <%= link_to("Gehe zu", "#", {"data-type" => "tab", "data-warp" => "goto", "data-role" => "dialog-remote", :class => "floatRight no_text_decoration link_button"}) %>
+    <%= link_to("Filter", "#", {"data-type" => "tab", "data-warp" => "filter", "data-role" => "dialog-remote", :class => "floatRight no_text_decoration link_button m-r_5px"}) %>
   </header>
   <section class="filter_box_content clearfix">
     <table>
@@ -15,7 +17,7 @@
           <th>Gebuchte Paletten</th>
           <th>Handelspartner</th>
           <th>Tour</th>
-          <th>PLZ Gebiet</th>
+          <th>Gebiet</th>
           <th>Versand</th>
         </tr>
       </thead>
@@ -28,51 +30,44 @@
   </section>
 </section>
 
-<section class="filter_box one_third">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Filter anwenden</h4>
-    <%= link_to("Gehe zu", "#", {"data-type" => "tab", "data-warp" => "goto", :class => "floatRight no_text_decoration link_button"}) %>
-    <%= link_to("Filter", "#", {"data-type" => "tab", "data-warp" => "filter", :class => "floatRight no_text_decoration link_button m-r_5px"}) %>
-  </header>
-  <section class="filter_box_content clearfix">
-    <div class="box-padder">
-      <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
-        <div class="form-element">
-          <%= f.label(:shipping_route_id_equals, "Tour") %>
-          <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.all, :id, :name, {:include_blank => true, :placeholder => "Tour"}) %>
-        </div>
-        
-        <div class="form-element">
-          <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
-          <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker", :size => 30 %>
-        </div>
-        
-        <div class="form-element">
-          <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
-          <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker", :size => 30 %>
-        </div>
-        
-        <div class="form-element">
-          <%= f.label(:delivered_equals, "Versendet?") %>
-          <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
-        </div>
-        
-        <div class="form-element clearfix">
-          <%= link_to("Löschen", purchase_orders_path, :class => "linkSubmit greySubmit floatLeft") %>
-          <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
-        </div>
-      <% end %>
+<div class="dialog" data-type="modal" style="display: none;">
+  <div class="box-padder">
+    <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+      <div class="form-element">
+        <%= f.label(:shipping_route_id_equals, "Tour") %>
+        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.all, :id, :name, {:include_blank => true, :placeholder => "Tour"}) %>
+      </div>
       
-      <%= form_tag(search_for_purchase_orders_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
-        <div class="form-element">
-          <%= label_tag(:purchase_order_id, "VK NR") %>
-          <%= text_field_tag(:purchase_order_id, nil, :size => 30) %>
-        </div>
-        
-        <div class="form-element clearfix">
-          <%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit floatLeft" %>
-        </div>
-      <% end %>
-    </div>
-  </section>
-</section>
+      <div class="form-element">
+        <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
+        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
+        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:delivered_equals, "Versendet?") %>
+        <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
+      </div>
+      
+      <div class="form-element clearfix">
+        <%= link_to("Löschen", purchase_orders_path, :class => "linkSubmit greySubmit floatLeft") %>
+        <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
+      </div>
+    <% end %>
+    
+    <%= form_tag(search_for_purchase_orders_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
+      <div class="form-element">
+        <%= label_tag(:purchase_order_id, "VK NR") %>
+        <%= text_field_tag(:purchase_order_id, nil, :size => 30) %>
+      </div>
+      
+      <div class="form-element clearfix">
+        <%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit floatLeft" %>
+      </div>
+    <% end %>
+  </div>
+</div>

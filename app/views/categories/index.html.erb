@@ -1,0 +1,38 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Kategorie Verwaltung</h1>
+    <%= link_to("Kategorie erfassen", new_category_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
+
+<section class="filter_box two_third">
+  <header class="filter_box_header"><h4>&nbsp;</h4></header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Kategorie</th>
+          <th>Verbindung</th>
+          <th>Erstellt am</th>
+          <th>Editiert am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @categories %>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+  </section>
+</section>
+
+<section class="filter_box one_third">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Filter anwenden</h4>
+    <%= link_to("Gehe zu", "#", {"data-type" => "tab", "data-warp" => "goto", :class => "floatRight no_text_decoration link_button"}) %>
+    <%= link_to("Filter", "#", {"data-type" => "tab", "data-warp" => "filter", :class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+    </header>
+  <section class="filter_box_content clearfix">
+    <div class="box-padder">
+    </div>
+  </section>
+</section>
