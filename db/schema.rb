@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120122020634) do
+ActiveRecord::Schema.define(:version => 20120129153804) do
 
   create_table "article_groups", :force => true do |t|
     t.text     "description"
@@ -110,6 +110,27 @@ ActiveRecord::Schema.define(:version => 20120122020634) do
     t.decimal  "total_amount",             :precision => 12, :scale => 2
   end
 
+  create_table "categories", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "categorizable_type"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "comments", :force => true do |t|
+    t.string   "subject"
+    t.text     "content"
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "commodity_codes", :force => true do |t|
     t.string   "code"
     t.text     "content"
@@ -124,6 +145,18 @@ ActiveRecord::Schema.define(:version => 20120122020634) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "baan_id"
+  end
+
+  create_table "delivery_rejections", :force => true do |t|
+    t.integer  "customer_id"
+    t.integer  "referee_id"
+    t.integer  "address_id"
+    t.integer  "category_id"
+    t.integer  "status_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "depot_types", :force => true do |t|
@@ -228,6 +261,7 @@ ActiveRecord::Schema.define(:version => 20120122020634) do
     t.boolean  "delivered"
     t.integer  "zip_location_id"
     t.string   "zip_location_name"
+    t.string   "baan_id"
   end
 
   create_table "roles", :force => true do |t|
@@ -272,6 +306,25 @@ ActiveRecord::Schema.define(:version => 20120122020634) do
   create_table "shipping_routes", :force => true do |t|
     t.string   "name"
     t.boolean  "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "statuses", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.string   "statusable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "transport_issues", :force => true do |t|
+    t.integer  "purchase_position_id"
+    t.integer  "delivery_rejection_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
