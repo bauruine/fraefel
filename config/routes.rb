@@ -25,6 +25,10 @@ Fraefel::Application.routes.draw do
   
   resources :roles
   
+  resources :categories
+  
+  resources :statuses
+  
   resources :customers
   
   resources :export_declarations
@@ -78,6 +82,8 @@ Fraefel::Application.routes.draw do
       get 'controll_invoice'
     end
   end
+  
+  resources :delivery_rejections
   
   resources :purchase_order_pallet_assignments
 

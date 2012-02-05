@@ -146,7 +146,7 @@ de-CH:
         format: "%n %u"
         units:
           byte:
-            one:   "Byte"
+            one: "Byte"
             other: "Bytes"
           kb: "KB"
           mb: "MB"
@@ -178,8 +178,8 @@ de-CH:
     errors:
       template:
         header:
-          one:    "Konnte %{model} nicht speichern: ein Fehler."
-          other:  "Konnte %{model} nicht speichern: %{count} Fehler."
+          one: "Konnte %{model} nicht speichern: ein Fehler."
+          other: "Konnte %{model} nicht speichern: %{count} Fehler."
         body: "Bitte überprüfen Sie die folgenden Felder:"
   helpers:
     select:
@@ -191,7 +191,13 @@ de-CH:
       submit: '%{model} speichern'
 
   errors:
-    format: "%{attribute} %{message}"
+    format: "%{message}"
+
+    template:
+      header:
+        one: "Impossible d'enregistrer %{model} : 1 erreur"
+        other: "Impossible d'enregistrer %{model} : %{count} erreurs"
+      body: "Veuillez vérifier les champs suivants : "
 
     messages: &errors_messages
       inclusion: "ist kein gültiger Wert"
@@ -215,11 +221,13 @@ de-CH:
       not_an_integer: "muss ganzzahlig sein"
 
   activerecord:
+    models:
+      purchase_position: "Podago"
     errors:
       template:
         header:
-          one:    "Konnte %{model} nicht speichern: ein Fehler."
-          other:  "Konnte %{model} nicht speichern: %{count} Fehler."
+          one: "Konnte %{model} nicht speichern: ein Fehler."
+          other: "Konnte %{model} nicht speichern: %{count} Fehler."
         body: "Bitte überprüfen Sie die folgenden Felder:"
 
       messages:
