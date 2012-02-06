@@ -41,6 +41,10 @@ authorization do
     has_permission_on [:articles], :to => [:show, :index, :export]
   end
   
+  role :admin_beta do
+    has_permission_on [:delivery_rejections], :to => [:index, :show, :new, :create, :edit, :update, :destroy]
+  end
+  
   role :guest do
     has_permission_on :user_sessions, :to => [:new, :create]
   end

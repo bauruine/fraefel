@@ -44,7 +44,9 @@
                     <% if permitted_to? :index, :cargo_lists %>
                       <li><%= link_to("Versandlisten", cargo_lists_path) %></li>
                     <% end %>
-                    <li><%= link_to("Konflikte", delivery_rejections_path) %></li>
+                    <% if permitted_to? :index, :delivery_rejections %>
+                      <li><%= link_to("Konflikte", delivery_rejections_path) %></li>
+                    <% end %>
                   </ul>
                 </li>
               <% end %>
