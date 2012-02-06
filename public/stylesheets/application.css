@@ -171,7 +171,7 @@ table {
 
 table thead {
   line-height: 40px;
-  background: #e8e8e8 url("back_header_table.jpg") repeat-x left top;
+  background: #e8e8e8 url("../images/back_header_table.jpg") repeat-x left top;
 }
 
 table thead th {
@@ -188,9 +188,9 @@ table tbody {
 }
                 
 table tbody tr {
+  height: 40px;
   background: #fff;
 }
-
 
 table tbody tr:nth-child(even) {
   background: #f7f7f7;
