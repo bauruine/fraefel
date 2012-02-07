@@ -1,6 +1,8 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Konflikt #<%= @delivery_rejection.id %> / <%= @delivery_rejection.customer.try(:company) %></h1>
-    <%= link_to("Lieferschein", new_delivery_rejection_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+    <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+    <%= link_to("Detail", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+    
 </header>
 
 <section class="filter_box two_third">

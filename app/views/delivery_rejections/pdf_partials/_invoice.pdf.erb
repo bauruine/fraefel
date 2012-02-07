@@ -1,0 +1,198 @@
+<header id="invoice_header" class="clearfix">
+  <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
+  <ul class="floatLeft">
+    <li class="bold">Verkaufsinnendienst</li>
+    <li>Telefon +41 71 982 80 84</li>
+    <li>Telefax +41 71 982 80 77</li>
+  </ul>
+
+  <ul class="floatLeft">
+    <li class="bold">Fraefel AG</li>
+    <li>Lerchenfeld</li>
+    <li>CH-9601 Lütisburg-Station</li>
+    <li>www.fraefel.ag</li>
+  </ul>
+</header>
+
+<h1 class="logo_title">Sammelrechnung</h1>
+<section class="clearfix">
+  <h1 class="floatLeft">Diverse Empfänger in Deutschland</h1>
+    <h1 class="floatRight">Lebert Gruppe: ???</h1>
+</section>
+<hr>
+
+<section id="customer_attributes_1" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>DE-ST-Nr.</li>
+    <li>DE-Zollnummer Fraefel</li>
+  </ul>
+  <ul id="column_2" class="floatLeft">
+    <li class="bold">DE 09408/24772</li>
+    <li class="bold">6207308</li>
+  </ul>
+  <ul id="column_3" class="floatLeft">
+    <li>U/Z</li>
+    <li>U/V</li>
+  </ul>
+  <ul id="column_4" class="floatLeft">
+    <li><%= current_user.username %></li>
+    <li><%= @delivery_rejection.id %></li>
+  </ul>
+  <ul id="column_5" class="floatLeft">
+    <li class="white_color">.</li>
+    <li class="white_color">.</li>
+  </ul>
+</section>
+
+<section id="customer_attributes_2" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>Kunde</li>
+    <li>Transport/Lieferung</li>
+  </ul>
+  <ul id="column_2" class="floatLeft">
+    <li class="bold"><%= @delivery_rejection.customer.try(:company) %></li>
+    <li class="bold"><%= @delivery_rejection.created_at.to_formatted_s(:swiss_date) %></li>
+  </ul>
+  <ul id="column_3" class="floatLeft">
+    <li class="white_color">.</li>
+    <li class="white_color">.</li>
+  </ul>
+  <ul id="column_4" class="floatLeft">
+    <li class="white_color">.</li>
+    <li class="bold">Lebert Fax: +41 71 677 22 66</li>
+  </ul>
+</section>
+
+<section id="price_table">
+  <table>
+    <thead>
+      <tr>
+        <th>Menge Coli</th>
+        <th></th>
+        <th>Pos. Artikel</th>
+        <th class="align-center">Stückzahl Total</th>
+        <th class="align-right">Warenwert / Euro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @purchase_positions.group(:commodity_code_id).count.each do |k, v| %>
+      <tr>
+        <td></td>
+        <td></td>
+        <td><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></td>
+        <td class="align-center"><%= @purchase_positions.where(:commodity_code_id => k).sum(:quantity) %></td>
+        <td class="align-right"><%= @purchase_positions.where(:commodity_code_id => k).sum(:amount) %></td>
+      </tr>
+      <% end %>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="bold">Total Stücke</td>
+        <td class="align-center border-top bold"><%= @purchase_positions.sum(:quantity) %></td>
+        <td class="align-right border-top"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Zwischentotal</td>
+        <td class="align-right"><%= "@cargo_list.subtotal" %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>MwSt 19.00%</td>
+        <td class="align-right"><%= "@cargo_list.vat" %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total</td>
+        <td class="align-right"><%= "@cargo_list.total_amount" %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Total netto kg</td>
+        <td><%= "@pallets_weight" %></td>
+        <td>Sonderrabat 100%</td>
+        <td class="align-right"><%= 0.to_f %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="bold">Total brutto kg</td>
+        <td class="bold"><%= "@pallets_weight + (@pallets_count * 20)" %></td>
+        <td class="bold">Rechnungswert Euro</td>
+        <td class="align-right bold"><%= "@cargo_list.effective_invoice_amount" %></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<section id="conditions" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>Lieferbedingung</li>
+    <li>Versandbedingung</li>
+    <li>Zahlungsbedingung</li>
+  </ul>
+  <ul id="column_2" class="floatLeft">
+    <li>frei Haus, verzollt, versteuert (DDP)</li>
+    <li>per LKW</li>
+    <li>30 Tage netto</li>
+  </ul>
+</section>
+
+<section id="declaration">
+  <p>
+    Der Ausführer ( Ermächtigter Ausführer; Bewilligungs-Nr.4218 ) der Waren, auf die sich dieses
+  </p>
+  <p>
+    Handelspapier bezieht, erklärt, dass diese Waren, soweit nicht anders angegeben, präferenzbegünstigte
+  </p>
+  <p>
+    schweizerische Ursprungswaren sind.
+  </p>
+</section>
+
+<footer id="invoice_footer" class="clearfix">
+  <ul id="column_1" class="floatLeft">
+    <li>Lütisburg-Station,</li>
+    <li>Unterschrift des Ausführers</li>
+    <li class="margin_top_5px">___________________________</li>
+  </ul>
+</footer>
+
+<footer id="invoice_footer_2" class="clearfix">
+  <ul id="column_2" class="floatLeft">
+    <li>Name + Vorname ( in Druckschrift anführen )</li>
+    <li class="margin_top_5px">___________________________</li>
+  </ul>
+</footer>
+
+
+<script type="text/javascript" charset="utf-8">
+  var pallet_count = $("tr")[1].children[0];
+  var pallet_total = $("tr")[2].children[0];
+  var coli_count = $("tr")[3].children[0];
+  
+  var pallet_count_value = $("tr")[1].children[1];
+  var pallet_total_value = $("tr")[2].children[1];
+  var coli_count_value = $("tr")[3].children[1];
+  
+  $(pallet_count).html(<%=  %>);
+  $(pallet_total).html(<%=  %>);
+  $(coli_count).html(<%=  %>);
+  
+  $(pallet_count_value).html("Paletten");
+  $(pallet_total_value).html("Palettenplätze");
+  $(coli_count_value).html("Colli / POST");
+</script>

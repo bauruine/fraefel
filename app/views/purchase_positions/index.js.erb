@@ -2,7 +2,7 @@
 
   <% @purchase_position = @purchase_positions.first %>
   
-  if ($('input[type="checkbox"]').attr("value", <%= @purchase_position.id %>).length) {
+  if ($('input[type="checkbox"]').attr("value") == <%= @purchase_position.id %>) {
     alert("Position bereits hinzugefügt...");
   } else {
     var purchase_position = '';

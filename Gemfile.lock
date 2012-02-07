@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    RedCloth (4.2.9)
     abstract (1.0.0)
     actionmailer (3.0.9)
       actionpack (= 3.0.9)
@@ -140,6 +141,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
   authlogic (~> 3.1.0)
   declarative_authorization
   dummy_data

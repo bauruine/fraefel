@@ -41,6 +41,14 @@
   <div class="form-element" data-role="appending">
     <%= f.label :purchase_positions, "Betreffende Artikel" %>
     <small style="display: block; font-size: 10px; margin-top: 5px;">VK-Positionen können auf der rechten Seite hinzugefügt werden.</small>
+    <% if !@delivery_rejection.new_record? %>
+      <% for purchase_position in @delivery_rejection.purchase_positions %>
+        <div>
+          <%= check_box_tag "delivery_rejection[purchase_position_ids][]", purchase_position.id, @delivery_rejection.purchase_positions.include?(purchase_position) %>
+          <span class="checkboxLabel"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position} #{purchase_position.article}" %></span>
+        </div>
+      <% end %>
+    <% end %>
   </div>
   
   <hr />

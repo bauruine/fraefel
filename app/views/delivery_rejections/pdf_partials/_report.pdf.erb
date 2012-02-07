@@ -1,0 +1,145 @@
+<fieldset class="floatLeft">
+  <h3>Detail Auszug Konflikt Nummer <%= @delivery_rejection.id %></h3>
+</fieldset>
+<fieldset class="floatRight">
+  gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
+</fieldset>
+<%= content_tag(:div, nil, :class => "clear") %>
+<div class="floatLeft" style="width: 48%;">
+  <table>
+    <tbody>
+      <tr class="dark">
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Grund:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= @delivery_rejection.category.title or nil %>
+        </td>
+      </tr>
+      <tr>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Status:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= @delivery_rejection.status.title or nil %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="floatRight" style="width: 48%;">
+  <table>
+    <tbody>
+      <tr class="dark">
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Versand Nummer:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.id %>
+        </td>
+      </tr>
+      <tr>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Versendet am:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<%= content_tag(:div, nil, :class => "clear") %>
+
+<h6>Kunden Informationen</h6>
+<table>
+  <tbody>
+    <tr>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <strong>Firma:</strong>
+      </td>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <%= @delivery_rejection.customer.try(:company) %>
+      </td>
+    </tr>
+    <tr>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <strong>Referenz:</strong>
+      </td>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <%= "Hans Müller" %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="1" style="line-height: 20px; padding: 0 5px;">
+        <strong>Strasse:</strong>
+      </td>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <%= "Untertannhüsern 23" %>
+      </td>
+    </tr>
+    <tr>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <strong>PLZ:</strong>
+      </td>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <%= "6016" %>
+      </td>
+    </tr>
+    <tr>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <strong>Ort:</strong>
+      </td>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <%= "Hellbühl" %>
+      </td>
+    </tr>
+    <tr>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <strong>Telefon:</strong>
+      </td>
+      <td style="line-height: 20px; padding: 0 5px;">
+        <%= "0414672351" %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h6>Vk-Positionen</h6>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left;">#</th>
+      <th style="text-align: left;">Artikel Nummer</th>
+      <th style="text-align: left;">Artikel</th>
+      <th style="text-align: left;">Menge</th>
+      <th style="text-align: left;">Versand #</th>
+      <th style="text-align: left;">Versendet am</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @purchase_positions.each do |purchase_position| %>
+      <tr>
+        <td style="line-height: 20px; padding: 0 5px;"><%= link_to(purchase_position.id, purchase_position) %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.article_number %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.article %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.quantity %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.id %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h6>Kommentare</h6>
+<% for comment in @delivery_rejection.comments %>
+  <div class="content-box">
+    <div class="content-box-header">
+      <h3>Erstellt: <%= comment.created_at.to_formatted_s(:swiss_date) %></h3>
+    </div>
+    <div class="content-box-content">
+      <%= raw RedCloth.new(comment.content).to_html %>
+    </div>
+  </div>
+<% end %>
