@@ -26,8 +26,8 @@
             <td><%= purchase_position.article_number %></td>
             <td><%= purchase_position.article %></td>
             <td><%= purchase_position.quantity %></td>
-            <td><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.id %></td>
-            <td><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
+            <td><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.id %></td>
+            <td><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
           </tr>
         <% end %>
       </tbody>

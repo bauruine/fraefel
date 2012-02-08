@@ -1,11 +1,12 @@
 <fieldset class="floatLeft">
-  <h3>Detail Auszug Konflikt Nummer <%= @delivery_rejection.id %></h3>
+  <h3 style="font-size: 15px;">Detail Auszug Konflikt Nummer <%= @delivery_rejection.id %></h3>
 </fieldset>
-<fieldset class="floatRight">
+<fieldset class="floatRight" style="font-size: 8px;">
   gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
 </fieldset>
 <%= content_tag(:div, nil, :class => "clear") %>
-<div class="floatLeft" style="width: 48%;">
+<hr style="margin-bottom: 20px;" />
+<div class="floatLeft" style="width: 48%; margin-bottom: 20px;">
   <table>
     <tbody>
       <tr class="dark">
@@ -35,7 +36,7 @@
           <strong>Versand Nummer:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.id %>
+          <%= CargoList.where("purchase_positions.id = ?", @purchase_positions.first.id).includes(:pallets => :purchase_positions).first.id %>
         </td>
       </tr>
       <tr>
@@ -43,7 +44,7 @@
           <strong>Versendet am:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %>
+          <%= CargoList.where("purchase_positions.id = ?", @purchase_positions.first.id).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %>
         </td>
       </tr>
     </tbody>
@@ -51,8 +52,8 @@
 </div>
 <%= content_tag(:div, nil, :class => "clear") %>
 
-<h6>Kunden Informationen</h6>
-<table>
+<h6 style="font-size: 13px; margin-bottom: 10px;">Kunden Informationen</h6>
+<table style="margin-bottom: 20px;">
   <tbody>
     <tr>
       <td style="line-height: 20px; padding: 0 5px;">
@@ -105,36 +106,38 @@
   </tbody>
 </table>
 
-<h6>Vk-Positionen</h6>
+<h6 style="font-size: 13px; margin-bottom: 10px;">Vk-Positionen</h6>
 
-<table>
+<table style="margin-bottom: 20px;">
   <thead>
     <tr>
-      <th style="text-align: left;">#</th>
-      <th style="text-align: left;">Artikel Nummer</th>
-      <th style="text-align: left;">Artikel</th>
-      <th style="text-align: left;">Menge</th>
-      <th style="text-align: left;">Versand #</th>
-      <th style="text-align: left;">Versendet am</th>
+      <th style="text-align: left; font-size: 10px;">#</th>
+      <th style="text-align: left; font-size: 10px;">Artikel</th>
+      <th style="text-align: left; font-size: 10px;">Menge</th>
+      <th style="text-align: left; font-size: 10px;">Gewicht</th>
+      <th style="text-align: left; font-size: 10px;">Preis</th>
+      <th style="text-align: left; font-size: 10px;">Versand</th>
+      <th style="text-align: left; font-size: 10px;">Versendet am</th>
     </tr>
   </thead>
   <tbody>
     <% @purchase_positions.each do |purchase_position| %>
       <tr>
-        <td style="line-height: 20px; padding: 0 5px;"><%= link_to(purchase_position.id, purchase_position) %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.article_number %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.baan_id %></td>
         <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.article %></td>
         <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.quantity %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.id %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", 1249).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.weight_total %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.amount %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.id %></td>
+        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<h6>Kommentare</h6>
+<h6 style="font-size: 13px; padding-bottom: 10px;">Kommentare</h6>
 <% for comment in @delivery_rejection.comments %>
-  <div class="content-box">
+  <div class="content-box" style="margin-bottom: 15px;">
     <div class="content-box-header">
       <h3>Erstellt: <%= comment.created_at.to_formatted_s(:swiss_date) %></h3>
     </div>
