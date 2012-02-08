@@ -20,7 +20,10 @@ class UserSessionsController < ApplicationController
       if @user_session.save
         format.html { redirect_back_or_default(root_path) }
       else
-        format.html { render :action => "new" }
+        format.html do
+          flash.now[:error] = "Falsches Passwort und / oder Benutzer"
+          render "new"
+        end
       end
     end
   end

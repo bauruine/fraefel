@@ -1,3 +1,4 @@
+#encoding: utf-8
 class PasswordResetsController < ApplicationController
   skip_before_filter :require_user
   before_filter :load_user_using_perishable_token, :only => [ :edit, :update ]
@@ -7,30 +8,35 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    @user = User.find_by_email(params[:email])
+    @user = User.where("username = '#{params[:username]}' or email = '#{params[:email]}'")
     respond_to do |format|
-      if @user
-        @user.deliver_password_reset_instructions!
-        format.html { redirect_to root_path, notice: 'Die Instruktionen wurden per Email versendet.' }
+      if @user.present?
+        @user.first.deliver_password_reset_instructions!
+        format.html { redirect_to login_path, :notice => "Die Instruktionen wurden per Email versendet." }
       else
-        format.html { render action: "new" }
+        format.html do
+          flash[:error] = "Benutzer nicht gefunden."
+          render "new"
+        end
       end
     end
     
   end
 
   def edit
+    flash[:notice] = "Bitte neues Passwort setzten. Wird das Formular leer abgesendet wird der Vorgang abgebrochen."
   end
 
   def update
     @user.password = params[:password]
     @user.password_confirmation = params[:password_confirmation]
-    @user.save_without_session_maintenance
+    #@user.save_without_session_maintenance
     
-    if @user.save
-      flash[:success] = "Password wurde erfolgreich gesetzt"
-      redirect_to root_path
+    if @user.save_without_session_maintenance
+      flash[:notice] = "Neues Password wurde erfolgreich gesetzt"
+      redirect_to login_path
     else
+      flash.now[:error] = "Password konnte nicht gesetzt werden. Bitte anderes Passwort wählen."
       render 'edit'
     end
   end
@@ -41,7 +47,7 @@ class PasswordResetsController < ApplicationController
     @user = User.find_using_perishable_token(params[:id])
     unless @user
       flash[:error] = "Benutzer wurde nicht gefunden."
-      redirect_to root_url
+      redirect_to login_url
     end
   end
 end
