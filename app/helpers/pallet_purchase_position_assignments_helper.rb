@@ -1,0 +1,2 @@
+module PalletPurchasePositionAssignmentsHelper
+end

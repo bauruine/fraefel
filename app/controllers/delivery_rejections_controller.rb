@@ -1,7 +1,12 @@
 class DeliveryRejectionsController < ApplicationController
   def show
     @delivery_rejection = DeliveryRejection.find(params[:id])
-    @purchase_positions = @delivery_rejection.purchase_positions
+    @cargo_list = @delivery_rejection.cargo_list
+    @purchase_positions = PurchasePosition.where("delivery_rejections.id = ?", @delivery_rejection.id).includes(:pallets => :delivery_rejection)
+    @pallets = @delivery_rejection.pallets
+    @referee = @delivery_rejection.referee
+    @address = @delivery_rejection.address
+    
     respond_to do |format|
       format.html
       format.pdf do
@@ -43,16 +48,18 @@ class DeliveryRejectionsController < ApplicationController
   def edit
     @delivery_rejection = DeliveryRejection.find(params[:id])
     @comment = @delivery_rejection.comments.build
+    @referee = @delivery_rejection.build_referee
+    @address = @delivery_rejection.build_address
     @search = PurchasePosition.search(params[:search])
   end
   
   def update
     @delivery_rejection = DeliveryRejection.find(params[:id])
     #@comment = @delivery_rejection.comments.build
-    @search = PurchasePosition.search(params[:search])
+    #@search = PurchasePosition.search(params[:search])
     
     if @delivery_rejection.update_attributes(params[:delivery_rejection])
-      redirect_to delivery_rejections_url
+      redirect_to delivery_rejection_path(@delivery_rejection)
     else
       render 'edit'
     end
@@ -60,6 +67,36 @@ class DeliveryRejectionsController < ApplicationController
   
   def destroy
     
+  end
+  
+  def assign_positions
+    @delivery_rejection = DeliveryRejection.where(:id => params[:delivery_rejection_id]).first
+    if params[:pallet_id].present?
+      @pallet = Pallet.where(:id => params[:pallet_id]).first
+      @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
+      @delivery_rejection.pallets += [@pallet]
+    else
+      @pallet = Pallet.new
+      @pallet.save
+      @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
+      @delivery_rejection.pallets += [@pallet]
+    end
+    params[:quantity_with_ids].each do |k, v|
+      purchase_position = PurchasePosition.find(k.to_i)
+      pallet_purchase_position_assignment = PalletPurchasePositionAssignment.where(:pallet => @pallet, :purchase_position => purchase_position).first
+      pallet_purchase_position_assignment.update_attributes(:quantity => v.to_i, :amount => (pallet_purchase_position_assignment.purchase_position.amount * v.to_i), :weight => (pallet_purchase_position_assignment.purchase_position.weight_single * v.to_i)) if pallet_purchase_position_assignment.present?
+    end
+    redirect_to(:back)
+  end
+  
+  def remove_positions
+    @pallet = Pallet.find(params[:pallet_id])
+    @purchase_positions = PurchasePosition.where(:id => params[:purchase_position_ids])
+    @pallet.purchase_positions -= @purchase_positions
+    if @pallet.purchase_positions.empty?
+      @pallet.update_attribute(:delivery_rejection_id, nil)
+    end
+    redirect_to(:back)
   end
   
 end

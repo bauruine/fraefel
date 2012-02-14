@@ -33,6 +33,8 @@ Fraefel::Application.routes.draw do
   
   resources :export_declarations
   
+  resources :pallet_purchase_position_assignments
+  
   resources :versions, :only => [:update, :destroy]
   
   resources :baan_imports do
@@ -83,7 +85,12 @@ Fraefel::Application.routes.draw do
     end
   end
   
-  resources :delivery_rejections
+  resources :delivery_rejections do
+    member do
+      post 'assign_positions'
+      delete 'remove_positions'
+    end
+  end
   
   resources :purchase_order_pallet_assignments
 

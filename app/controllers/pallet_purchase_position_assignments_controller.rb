@@ -1,0 +1,2 @@
+class PalletPurchasePositionAssignmentsController < ApplicationController
+end

@@ -1,10 +1,21 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Konflikte / Annahme Verweigerung</h1>
-    <%= link_to("Konflikt erfassen", new_delivery_rejection_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
 
-<section class="filter_box two_third">
-  <header class="filter_box_header"><h4>&nbsp;</h4></header>
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">&nbsp;</h4>
+    <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+      <span class="header_pack _14"></span>
+    </a>
+    <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+      <span class="header_pack _283"></span>
+    </a>
+    
+    <a href="<%= new_delivery_rejection_path %>" class="header_link" data-role="add" data-show-tooltip="true" title="Neuer Auftrag">
+      <span class="header_pack _74"></span>
+    </a>
+  </header>
   <section class="filter_box_content clearfix">
     <table>
       <thead>
@@ -24,17 +35,5 @@
       <tfoot>
       </tfoot>
     </table>
-  </section>
-</section>
-
-<section class="filter_box one_third">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Filter anwenden</h4>
-    <%= link_to("Gehe zu", "#", {"data-type" => "tab", "data-warp" => "goto", :class => "floatRight no_text_decoration link_button"}) %>
-    <%= link_to("Filter", "#", {"data-type" => "tab", "data-warp" => "filter", :class => "floatRight no_text_decoration link_button m-r_5px"}) %>
-    </header>
-  <section class="filter_box_content clearfix">
-    <div class="box-padder">
-    </div>
   </section>
 </section>

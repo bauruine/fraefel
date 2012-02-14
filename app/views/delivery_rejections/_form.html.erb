@@ -17,15 +17,23 @@
   
   <div class="form-element">
     <%= f.label(:category, @delivery_rejection.new_record? ? "Grund wählen" : "Grund ändern") %>
-    <%= f.collection_select(:category_id, Category.where(:categorizable_type => "delivery_rejection"), :id, :title, {:include_blank => true}, {:class => "chzn-select", "data-placeholder" => "Grund wählen...", :style => "width:350px;"}) %>
+    <%= f.collection_select(:category_id, Category.where(:categorizable_type => "delivery_rejection"), :id, :title, {}, {:class => "chzn-select", :style => "width:350px;"}) %>
     <small style="display: block; font-size: 10px; margin-top: 5px;">Was ist der Grund der Konflikterfassung?</small>
   </div>
 
   <div class="form-element">
     <%= f.label(:status, @delivery_rejection.new_record? ? "Status wählen" : "Status ändern") %>
-    <%= f.collection_select(:status_id, Status.where(:statusable_type => "delivery_rejection"), :id, :title, {}, {:class => "chzn-select", "data-placeholder" => "Status wählen...", :style => "width:350px;"}) %>
+    <%= f.collection_select(:status_id, Status.where(:statusable_type => "delivery_rejection"), :id, :title, {}, {:class => "chzn-select", :style => "width:350px;"}) %>
     <small style="display: block; font-size: 10px; margin-top: 5px;">Status wählen / ändern. Wenn möglich immer aktuell halten.</small>
     
+  </div>
+  
+  <hr />
+  
+  <div class="form-element" data-role="appending">
+    <%= f.label :cargo_list_id, "Begroffener Versand" %>
+    <%= f.text_field :cargo_list_id %>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Bitte Versand NR eingeben.</small>
   </div>
   
   <hr />
@@ -38,27 +46,56 @@
   
   <hr />
   
-  <div class="form-element" data-role="appending">
-    <%= f.label :purchase_positions, "Betreffende Artikel" %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">VK-Positionen können auf der rechten Seite hinzugefügt werden.</small>
-    <% if !@delivery_rejection.new_record? %>
-      <% for purchase_position in @delivery_rejection.purchase_positions %>
-        <div>
-          <%= check_box_tag "delivery_rejection[purchase_position_ids][]", purchase_position.id, @delivery_rejection.purchase_positions.include?(purchase_position) %>
-          <span class="checkboxLabel"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position} #{purchase_position.article}" %></span>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
+  <%= f.fields_for :referee do |r_f| %>
+    <div class="form-element">
+      <%= r_f.label :forename, "Vorname" %>
+      <%= r_f.text_field :forename %>
+      <small style="display: block; font-size: 10px; margin-top: 5px;">Wer hat den Konflikt gemeldet?</small>
+    </div>
+    
+    <div class="form-element">
+      <%= r_f.label :surname, "Nachname" %>
+      <%= r_f.text_field :surname %>
+    </div>
+    
+    <div class="form-element">
+      <%= r_f.label :phone_number, "Telefon" %>
+      <%= r_f.text_field :phone_number %>
+    </div>
+    
+  <% end %>
+  
+  <hr />
+  
+  <%= f.fields_for :address do |a_f| %>
+    <div class="form-element">
+      <%= a_f.label :street, "Strasse + Nr" %>
+      <%= a_f.text_field :street %>
+      <small style="display: block; font-size: 10px; margin-top: 5px;">Wo befindet sich im Momment die Ware?</small>
+    </div>
+    
+    <div class="form-element">
+      <%= a_f.label :postal_code, "PLZ" %>
+      <%= a_f.text_field :postal_code %>
+    </div>
+    
+    <div class="form-element">
+      <%= a_f.label :city, "Ort" %>
+      <%= a_f.text_field :city %>
+    </div>
+    
+  <% end %>
   
   <hr />
   
   <%= f.fields_for :comments do |co_f| %>
-    <div class="form-element">
-      <%= co_f.label(:content, "Kommentar", :class => "required") %>
-      <%= co_f.text_area(:content, "data-editor" => "wysiwyg", :style => "width: 475px; height: 145px;") %>
-      <div class="clear"></div>
-    </div>
+    <% unless !co_f.object.new_record? %>
+      <div class="form-element">
+        <%= co_f.label(:content, "Kommentar", :class => "required") %>
+        <%= co_f.text_area(:content, "data-editor" => "wysiwyg", :style => "width: 475px; height: 145px;") %>
+        <div class="clear"></div>
+      </div>
+    <% end %>
   <% end %>
   
   <div class="form-element clearfix">

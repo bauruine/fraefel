@@ -10,6 +10,7 @@ class Pallet < ActiveRecord::Base
   has_many :pallet_purchase_position_assignments, :class_name => "PalletPurchasePositionAssignment"
   has_many :purchase_positions, :class_name => "PurchasePosition", :through => :pallet_purchase_position_assignments
   
+  belongs_to :delivery_rejection, :class_name => "DeliveryRejection", :foreign_key => "delivery_rejection_id"
   after_create :assign_default_pallet_type
   
   

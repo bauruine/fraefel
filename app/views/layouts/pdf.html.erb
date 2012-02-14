@@ -2,7 +2,11 @@
 <html>
   <head>
     <%= wicked_pdf_stylesheet_link_tag "reset" %>
-    <%= wicked_pdf_stylesheet_link_tag "pdf" %>
+    <% if params[:pdf_type] == "report" %>
+      <%= wicked_pdf_stylesheet_link_tag "report" %>
+    <% else %>
+      <%= wicked_pdf_stylesheet_link_tag "pdf" %>
+    <% end %>
     <%= wicked_pdf_javascript_include_tag "jquery.js" %>
   </head>
   <body>

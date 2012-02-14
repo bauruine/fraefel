@@ -52,88 +52,116 @@
 </div>
 <%= content_tag(:div, nil, :class => "clear") %>
 
-<h6 style="font-size: 13px; margin-bottom: 10px;">Kunden Informationen</h6>
-<table style="margin-bottom: 20px;">
-  <tbody>
-    <tr>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <strong>Firma:</strong>
-      </td>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <%= @delivery_rejection.customer.try(:company) %>
-      </td>
-    </tr>
-    <tr>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <strong>Referenz:</strong>
-      </td>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <%= "Hans Müller" %>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="1" style="line-height: 20px; padding: 0 5px;">
-        <strong>Strasse:</strong>
-      </td>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <%= "Untertannhüsern 23" %>
-      </td>
-    </tr>
-    <tr>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <strong>PLZ:</strong>
-      </td>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <%= "6016" %>
-      </td>
-    </tr>
-    <tr>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <strong>Ort:</strong>
-      </td>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <%= "Hellbühl" %>
-      </td>
-    </tr>
-    <tr>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <strong>Telefon:</strong>
-      </td>
-      <td style="line-height: 20px; padding: 0 5px;">
-        <%= "0414672351" %>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">Kunden Informationen</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <strong>Firma:</strong>
+          </td>
+          <td>
+            <%= @delivery_rejection.customer.try(:company) %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Referenz:</strong>
+          </td>
+          <td>
+            <%= "#{@referee.forename} #{@referee.surname}" %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="1">
+            <strong>Strasse:</strong>
+          </td>
+          <td>
+            <%= @address.street %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>PLZ:</strong>
+          </td>
+          <td>
+            <%= @address.postal_code %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Ort:</strong>
+          </td>
+          <td>
+            <%= @address.city %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Telefon:</strong>
+          </td>
+          <td>
+            <%= @referee.phone_number %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>
 
-<h6 style="font-size: 13px; margin-bottom: 10px;">Vk-Positionen</h6>
+<hr />
 
-<table style="margin-bottom: 20px;">
-  <thead>
-    <tr>
-      <th style="text-align: left; font-size: 10px;">#</th>
-      <th style="text-align: left; font-size: 10px;">Artikel</th>
-      <th style="text-align: left; font-size: 10px;">Menge</th>
-      <th style="text-align: left; font-size: 10px;">Gewicht</th>
-      <th style="text-align: left; font-size: 10px;">Preis</th>
-      <th style="text-align: left; font-size: 10px;">Versand</th>
-      <th style="text-align: left; font-size: 10px;">Versendet am</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @purchase_positions.each do |purchase_position| %>
-      <tr>
-        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.baan_id %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.article %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.quantity %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.weight_total %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= purchase_position.amount %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.id %></td>
-        <td style="line-height: 20px; padding: 0 5px;"><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<% @pallets.each do |pallet| %>
+
+  <section class="filter_box">
+    <header class="filter_box_header">
+      <h4 class="floatLeft">Palette NR <%= pallet.id %></h4>
+    </header>
+    <section class="filter_box_content clearfix">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Artikel</th>
+            <th>Menge</th>
+            <th>Gewicht</th>
+            <th>Preis</th>
+            <th>Versand</th>
+            <th>Versendet am</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% pallet.purchase_positions.each do |purchase_position| %>
+            <tr>
+              <td><%= purchase_position.baan_id %></td>
+              <td><%= purchase_position.article %></td>
+              <td><%= purchase_position.quantity %></td>
+              <td><%= purchase_position.weight_total %></td>
+              <td><%= purchase_position.amount %></td>
+              <td><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.id %></td>
+              <td><%= CargoList.where("purchase_positions.id = ?", purchase_position.id).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:weight) %></td>
+            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:amount) %></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </section>
+  
+<% end %>
 
 <h6 style="font-size: 13px; padding-bottom: 10px;">Kommentare</h6>
 <% for comment in @delivery_rejection.comments %>

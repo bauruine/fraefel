@@ -103,26 +103,26 @@
         <td></td>
         <td></td>
         <td>Zwischentotal</td>
-        <td class="align-right"><%= "@cargo_list.subtotal" %></td>
+        <td class="align-right"><%= @purchase_positions.sum(:amount) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>MwSt 19.00%</td>
-        <td class="align-right"><%= "@cargo_list.vat" %></td>
+        <td class="align-right"><%= ((@purchase_positions.sum(:amount) / 100) * 19).round(2) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>Total</td>
-        <td class="align-right"><%= "@cargo_list.total_amount" %></td>
+        <td class="align-right"><%= ((@purchase_positions.sum(:amount) / 100) * 19).round(2) + @purchase_positions.sum(:amount) %></td>
       </tr>
       <tr>
         <td></td>
         <td>Total netto kg</td>
-        <td><%= "@pallets_weight" %></td>
+        <td><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:weight) %></td>
         <td>Sonderrabat 100%</td>
         <td class="align-right"><%= 0.to_f %></td>
       </tr>
@@ -131,7 +131,7 @@
         <td class="bold">Total brutto kg</td>
         <td class="bold"><%= "@pallets_weight + (@pallets_count * 20)" %></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= "@cargo_list.effective_invoice_amount" %></td>
+        <td class="align-right bold"><%= ((@purchase_positions.sum(:amount) / 100) * 19).round(2) + @purchase_positions.sum(:amount) %></td>
       </tr>
     </tbody>
   </table>
@@ -188,9 +188,9 @@
   var pallet_total_value = $("tr")[2].children[1];
   var coli_count_value = $("tr")[3].children[1];
   
-  $(pallet_count).html(<%=  %>);
-  $(pallet_total).html(<%=  %>);
-  $(coli_count).html(<%=  %>);
+  $(pallet_count).html(<%= @pallets.count %>);
+  $(pallet_total).html(<%= @pallets.count %>);
+  $(coli_count).html(<%= @pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
   
   $(pallet_count_value).html("Paletten");
   $(pallet_total_value).html("Palettenplätze");

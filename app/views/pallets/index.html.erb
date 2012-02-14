@@ -34,9 +34,13 @@
         <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
       <% end %>
       <% if permitted_to? :edit, :pallets %>
-        <%= link_to("Edit", edit_pallet_path(pallet), {"data-type" => "modal", :class => "floatRight no_text_decoration link_button"}) %>
+        <a href="<%= edit_pallet_path(pallet) %>" data-type="modal" data-dialog-id="fobar" class="header_link" data-role="search" data-show-tooltip="true" title="Zeige Filter-Optionen">
+          <span class="header_pack _1"></span>
+        </a>
       <% end %>
-      <%= link_to("Print", pallet_path(pallet, :format => :pdf), {:class => "floatRight no_text_decoration link_button m-r_5px"}) %>
+      <a href="<%= pallet_path(pallet, :format => :pdf) %>" class="header_link" data-role="add" data-show-tooltip="true" title="Neuer Auftrag">
+        <span class="header_pack _193"></span>
+      </a>
     </header>
     <section class="filter_box_content clearfix">
       <% if pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? %>
