@@ -48,9 +48,14 @@ class DeliveryRejectionsController < ApplicationController
   def edit
     @delivery_rejection = DeliveryRejection.find(params[:id])
     @comment = @delivery_rejection.comments.build
-    @referee = @delivery_rejection.build_referee
-    @address = @delivery_rejection.build_address
+    if @delivery_rejection.referee.nil?
+      @referee = @delivery_rejection.build_referee
+    end
     @search = PurchasePosition.search(params[:search])
+    if @delivery_rejection.addresses.empty?
+        @delivery_rejection.addresses.build(:category_id => 4)
+        @delivery_rejection.addresses.build(:category_id => 3)
+    end
   end
   
   def update

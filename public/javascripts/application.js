@@ -31,21 +31,29 @@ $(document).ready(function(){
       window.open('file:///' + $(this).attr("data-link"));
       return true;
   });
+  
+  $('a[data-show-tooltip="true"]').qtip({
+    position: {
+       my: 'bottom center',
+       at: 'top center',
+       adjust: {
+          method: "filp",
+          x: 0,
+          y: 0
+       }
+    },
+    style: {
+       classes: 'ui-tooltip-youtube'
+    }
+  });
 
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
-
-  $('div[data-type=modal]').dialog({ autoOpen: false, modal: true, draggable: false, resizable: false, width: 'auto' });
   
-  $('a[data-type=modal]').click(function() {
-    var remote_url = $(this).attr("href");
-    $('div[data-type=modal]').load(remote_url + ' form');
-    if ($(this).attr('data-modal_width') != undefined) {
-      $( "div[data-type=modal]" ).dialog( "option", "width", 500 );
-    };
-    $('div[data-type=modal]').dialog('open');
-    $('div[data-type=modal]').dialog("option", "position", "center");
-    
-    return false;
+  $('div[data-type="modal"]').dialog({
+    autoOpen: false,
+    width: 800,
+    height: 'auto',
+    modal: true
   });
   
   $('a[data-type=modal_index]').click(function() {
@@ -67,23 +75,6 @@ $(document).ready(function(){
     return false;
   });
   
-  $(window).resize(function() {
-    $('div[data-type=modal]').dialog("option", "position", "center");
-  });
-  
-  if ($('form[data-submit_handler=true]').size() != 0) {
-    $("form[data-submit_handler=true]").find($("input[type=submit]")).attr('disabled', 'disabled');
-    
-    $("form[data-submit_handler=true]").find($("input[type=checkbox]")).change(function(){
-      if ($("form[data-submit_handler=true]").find($("input[type=checkbox]:checked")).length >= 1) {
-        $("form[data-submit_handler=true]").find($("input[type=submit]")).removeAttr('disabled');
-      } else {
-        $("form[data-submit_handler=true]").find($("input[type=submit]")).attr('disabled', 'disabled');
-      };
-    });
-    
-  };
-  
   if ($("form[data-tab]").size() != 0) {
     $("form:not([data-tab=filter])").hide()
   };
@@ -98,6 +89,15 @@ $(document).ready(function(){
   
   $('input#delivery_rejection_customer_company').autocomplete({
     source: $('input#delivery_rejection_customer_company').data("autocomplete_source")
+  });
+  
+  $('a[data-role="edit_remote"]').click(function() {
+    var remote_url = $(this).attr("href");
+    $('div[data-type="modal"]').load(remote_url + ' form');
+    
+    $('div[data-type="modal"]').show();
+    $('div[data-type="modal"]').dialog('open');
+    return false;
   });
   
   /*

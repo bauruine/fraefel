@@ -1,5 +1,5 @@
 <fieldset class="floatLeft">
-  <h3 style="font-size: 15px;">Detail Auszug Konflikt Nummer <%= @delivery_rejection.id %></h3>
+  <h3 style="font-size: 15px;">Lieferschein - Konflikt Nummer <%= @delivery_rejection.id %></h3>
 </fieldset>
 <fieldset class="floatRight" style="font-size: 8px;">
   gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
@@ -11,34 +11,18 @@
     <tbody>
       <tr class="dark">
         <td style="line-height: 20px; padding: 0 5px;">
-          <strong>Handelspartner:</strong>
-        </td>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <%= @delivery_rejection.customer.try(:company) %>
-        </td>
-      </tr>
-      <tr>
-        <td style="line-height: 20px; padding: 0 5px;">
           <strong>Grund:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
           <%= @delivery_rejection.category.title or nil %>
         </td>
       </tr>
-      <tr class="dark">
+      <tr>
         <td style="line-height: 20px; padding: 0 5px;">
           <strong>Status:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
           <%= @delivery_rejection.status.title or nil %>
-        </td>
-      </tr>
-      <tr class="dark">
-        <td style="line-height: 20px; padding: 0 5px;">
-          <strong>Warenwert:</strong>
-        </td>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <%= "#{@delivery_rejection.discount}%" %>
         </td>
       </tr>
     </tbody>
@@ -203,9 +187,6 @@
             <th>#</th>
             <th>Artikel</th>
             <th>Menge</th>
-            <th>Gewicht</th>
-            <th>Alter Preis</th>
-            <th>Neuer Preis</th>
           </tr>
         </thead>
         <tbody>
@@ -214,9 +195,6 @@
               <td><%= purchase_position.baan_id %></td>
               <td><%= purchase_position.article %></td>
               <td><%= purchase_position.quantity %></td>
-              <td><%= purchase_position.weight_total %></td>
-              <td><%= purchase_position.amount %></td>
-              <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.reduced_price %></td>
             </tr>
           <% end %>
         </tbody>
@@ -225,25 +203,10 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:weight) %></td>
-            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:amount) %></td>
-            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:reduced_price) %></td>
           </tr>
         </tfoot>
       </table>
     </section>
   </section>
   
-<% end %>
-
-<h6 style="font-size: 13px; padding-bottom: 10px;">Kommentare</h6>
-<% for comment in @delivery_rejection.comments %>
-  <div class="content-box" style="margin-bottom: 15px;">
-    <div class="content-box-header">
-      <h3>Erstellt: <%= comment.created_at.to_formatted_s(:swiss_date) %></h3>
-    </div>
-    <div class="content-box-content">
-      <%= raw RedCloth.new(comment.content).to_html %>
-    </div>
-  </div>
 <% end %>

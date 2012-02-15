@@ -28,9 +28,9 @@
   </div>
   
   <div class="form-element">
-    <%= f.label :discount, "Rabatt" %>
+    <%= f.label :discount, "Warenwert" %>
     <%= f.text_field :discount %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Rabatt in %. Wird nur bei Defekter Lieferung berücksichtigt.</small>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Warenwert in %. Wird nur bei Defekter Lieferung berücksichtigt.</small>
   </div>
   
   <hr />
@@ -72,11 +72,15 @@
   
   <hr />
   
-  <%= f.fields_for :address do |a_f| %>
+  <%= f.fields_for :addresses do |a_f| %>
+    <div class="form-element">
+      <%= a_f.label(:category, "Adressen Art", :class => "required") %>
+      <%= a_f.collection_select(:category_id, Category.where(:categorizable_type => "address"), :id, :title, {}, {:style => "width:350px;"}) %>
+    </div>
+    
     <div class="form-element">
       <%= a_f.label :street, "Strasse + Nr" %>
       <%= a_f.text_field :street %>
-      <small style="display: block; font-size: 10px; margin-top: 5px;">Wo befindet sich im Momment die Ware?</small>
     </div>
     
     <div class="form-element">

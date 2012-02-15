@@ -514,7 +514,7 @@ section.filter_box {
 	margin-bottom: 20px;
 }
 section.filter_box header.filter_box_header {
-  background: url("back_h2_box_white.jpg") repeat-x scroll left top #ECECEC;
+  background: url("../images/back_h2_box_white.jpg") repeat-x scroll left top #ECECEC;
   border: 1px solid #D8D8D8;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;

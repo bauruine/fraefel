@@ -13,13 +13,16 @@ class DeliveryRejection < ActiveRecord::Base
   has_many :transport_issues
   has_many :purchase_positions, :through => :transport_issues, :foreign_key => "purchase_position_id", :source => :purchase_position
   has_many :pallets, :class_name => "Pallet", :foreign_key => "delivery_rejection_id"
+  has_many :addresses, :class_name => "Address", :foreign_key => "delivery_rejection_id"
   
-  accepts_nested_attributes_for :comments, :address, :referee
+  accepts_nested_attributes_for :comments, :address, :addresses, :referee
   
   validates_presence_of :category, :message => "Es wurde kein Grund angegeben"
   validates_presence_of :status, :message => "Es wurde kein Status gewählt"
   validates_presence_of :customer_company, :message => "Es wurde kein Handelspartner angegeben"
   validates_presence_of :cargo_list_id, :message => "Es wurde keine Versand NR angegeben"
+  
+  after_update :check_assigned_positions
   
   def customer_company
     customer.try(:company)
@@ -29,4 +32,12 @@ class DeliveryRejection < ActiveRecord::Base
     self.customer = Customer.find_by_company(name) if name.present?
   end
   
+  private
+    def check_assigned_positions
+      if self.discount.present? and PurchasePosition.where("delivery_rejections.id = ?", self.id).includes(:pallets => :delivery_rejection).present?
+        PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", self.id).includes(:pallet => :delivery_rejection).each do |pppa|
+          pppa.update_attribute(:reduced_price, ((pppa.amount / 100) * self.discount))
+        end
+      end
+    end
 end

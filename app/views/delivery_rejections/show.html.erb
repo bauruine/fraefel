@@ -1,21 +1,20 @@
+<div data-type="modal" style="display:none;">
+  
+</div>
+
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Konflikt #<%= @delivery_rejection.id %> / <%= @delivery_rejection.customer.try(:company) %></h1>
   <%= link_to("Edit", edit_delivery_rejection_path(@delivery_rejection), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Detail Ansicht", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
   <%= link_to("Zollpapiere", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
 
 <% @delivery_rejection.pallets.each do |pallet| %>
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft">Palette Nr <%= pallet.id %></h4>
-        <a data-show-tooltip="true" data-role="search" class="header_link" href="<%= delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice") %>" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
-          <span class="header_pack _96"></span>
-        </a>
-        <a data-show-tooltip="true" data-role="search" class="header_link" href="<%= delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report") %>" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
-          <span class="header_pack _7"></span>
-        </a>
-        <a data-show-tooltip="true" data-role="search" class="header_link" href="<%= edit_delivery_rejection_path(@delivery_rejection) %>" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+        <a data-show-tooltip="true" data-role="edit_remote" class="header_link" href="<%= edit_pallet_path(pallet) %>" title="Zeige Palette-Optionen">
           <span class="header_pack _1"></span>
         </a>
     </header>
@@ -28,7 +27,8 @@
               <th>#</th>
               <th>Artikel</th>
               <th>Menge</th>
-              <th>Preis</th>
+              <th>Alter Preis</th>
+              <th>Neuer Preis</th>
               <th>Gewicht</th>
               <th></th>
               <th></th>
@@ -41,6 +41,7 @@
                 <td><%= purchase_position.article %></td>
                 <td><%= purchase_position.quantity %></td>
                 <td><%= purchase_position.amount %></td>
+                <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.reduced_price %></td>
                 <td><%= purchase_position.weight_single %></td>
                 <td></td>
                 <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
@@ -53,6 +54,7 @@
               <td></td>
               <td></td>
               <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:amount) %></td>
+              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:reduced_price) %></td>
               <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:weight) %></td>
               <td></td>
               <td class="align-center"><%= submit_tag "Entfernen", :class => "form_submit" %></td>

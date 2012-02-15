@@ -2,7 +2,7 @@
 <html>
   <head>
     <%= wicked_pdf_stylesheet_link_tag "reset" %>
-    <% if params[:pdf_type] == "report" %>
+    <% if params[:pdf_type] == "report" or params[:pdf_type] == "report_external" %>
       <%= wicked_pdf_stylesheet_link_tag "report" %>
     <% else %>
       <%= wicked_pdf_stylesheet_link_tag "pdf" %>

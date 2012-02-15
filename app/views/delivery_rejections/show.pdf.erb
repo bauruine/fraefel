@@ -4,6 +4,8 @@
     <%= render "delivery_rejections/pdf_partials/invoice.pdf.erb" %>
   <% elsif params[:pdf_type] == "report" %>
     <%= render "delivery_rejections/pdf_partials/report.pdf.erb" %>
+  <% elsif params[:pdf_type] == "report_external" %>
+    <%= render "delivery_rejections/pdf_partials/report_external.pdf.erb" %>
   <% end %>
 
 <% end %>

@@ -1,23 +1,17 @@
 <% form_for @pallet do |f| %>
-  <p class="formLabel">
-    <%= f.label :additional_space, "Additional Space" %>
-  </p>
-  <p class="formInput">
-    <%= f.select(:additional_space, {'0.5' => 0.5, '1.0' => 1.0, '1.5' => 1.5, '2.0' => 2.0}, :include_blank => true) %>
-  </p>
-  <p class="formLabel">
+  <div class="form-element">
+    <%= f.label :additional_space, "Zusätzlicher Platz" %>
+    <%= f.select(:additional_space, {'0.5' => 0.5, '1.0' => 1.0, '1.5' => 1.5, '2.0' => 2.0}, {:include_blank => true}, {:style => "width:350px;"}) %>
+  </div>
+  <div class="form-element">
     <%= f.label :pallet_type, "Paletten Typ" %>
-  </p>
-  <p class="formInput">
-    <%= f.collection_select(:pallet_type_id, PalletType.all, :id, :description, :include_blank => true) %>
-  </p>
-  <p class="formLabel">
+    <%= f.collection_select(:pallet_type_id, PalletType.all, :id, :description, {:include_blank => true}, {:style => "width:350px;"}) %>
+  </div>
+  <div class="form-element">
     <%= f.label :delivered, "Versendet?" %>
-  </p>
-  <p class="formInput">
-    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-  </p>
-  <p class="formInput">
-    <%= f.submit "Edit", :disable_with => 'Editing...' %>
-  </p>
+    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }, {}, {:style => "width:350px;"}) %>
+  </div>
+  <div class="form-element">
+    <%= f.submit "Edit" %>
+  </div>
 <% end %>
