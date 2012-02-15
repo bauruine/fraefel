@@ -1,3 +1,6 @@
+<div data-type="modal" style="display:none;">
+</div>
+
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">VK-Positions Liste</h1>
   <%= link_to("Alle", purchase_positions_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
@@ -51,7 +54,7 @@
               <tr>
             <% end %>
               <% if permitted_to? :edit, :purchase_positions %>
-                <td><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %></td>
+                <td><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
               <% else %>
                 <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
               <% end %>
@@ -81,5 +84,3 @@
     </section>
   </section>
 <% end %>
-
-<div data-type="modal"></div>

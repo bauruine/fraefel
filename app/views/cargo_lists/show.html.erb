@@ -1,8 +1,11 @@
+<div data-type="modal" style="display:none;">
+</div>
+
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand NR#<%= @cargo_list.id %></h1>
   <%= link_to("Paletten Liste", cargo_list_path(@cargo_list, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
   <% if permitted_to? :edit, :cargo_lists %>
-    <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-type" => "modal") %>
+    <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-role" => "edit_remote") %>
   <% end %>
   <%= link_to("Zollpapiere", collective_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
   <%= link_to("Lebert", print_lebert_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
@@ -41,7 +44,7 @@
           <tbody>
             <% @assigned_pallets.each do |pallet| %>
               <tr>
-                <td class="<%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") %></td>
+                <td class="<%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %></td>
                 <td><%= pallet.purchase_positions.count %></td>
                 <td><%= pallet.additional_space %></td>
                 <td><%= pallet.purchase_orders.where("shipping_route_id IS NOT NULL").present? ? pallet.purchase_orders.where("shipping_route_id IS NOT NULL").first.shipping_route.name : nil %></td>
@@ -101,7 +104,7 @@
               <% if pallet.purchase_positions.present? %>
                 <tr>
                   <td class="<%= pallet.mixed? ? "mixed" : "not_mixed" %>">
-                    <%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-type" => "modal_index", "data-modal_width" => "3") %>
+                    <%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
                   </td>
                   <td><%= pallet.purchase_positions.count %></td>
                   <td><%= pallet.additional_space %></td>
@@ -138,4 +141,3 @@
 <% else %>
   <div id="flash_notice">Es wurden bereits alle Palleten bearbeitet!</div>
 <% end %>
-<div data-type="modal"></div>

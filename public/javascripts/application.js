@@ -56,15 +56,12 @@ $(document).ready(function(){
     modal: true
   });
   
-  $('a[data-type=modal_index]').click(function() {
+  $('a[data-role="table_remote"]').click(function() {
     var remote_url = $(this).attr("href");
     $('div[data-type=modal]').load(remote_url + ' table');
-    if ($(this).attr('data-modal_width') != undefined) {
-      $( "div[data-type=modal]" ).dialog( "option", "width", 1424 );
-    };
-    $('div[data-type=modal]').dialog('open');
-    $('div[data-type=modal]').dialog("option", "position", "center");
     
+    $('div[data-type="modal"]').show();
+    $('div[data-type=modal]').dialog('open');
     return false;
   });
   
@@ -79,11 +76,14 @@ $(document).ready(function(){
     $("form:not([data-tab=filter])").hide()
   };
   
-  $("a[data-type=tab]").click(function() {
+  $('a[data-role="tab"]').click(function() {
     var warpToTab = $(this).attr("data-warp");
     var currentForm = $("form[data-tab]")
-    $("form:not(:hidden)").hide();
+    $("form").hide();
     $("form[data-tab=" + warpToTab + "]").show();
+    $('div[data-type="modal"]').show();
+    $('div[data-type=modal]').dialog('open');
+    
     return false;
   });
   

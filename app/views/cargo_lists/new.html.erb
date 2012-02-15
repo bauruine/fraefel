@@ -6,33 +6,35 @@
 <section class="filter_box">
   <header class="filter_box_header"><h4>Versand</h4></header>
   <section class="filter_box_content clearfix">
-    <%= form_for(@cargo_list) do |f| %>
+    <div class="box-padder">
+      <%= form_for(@cargo_list) do |f| %>
 
-      <div class="form-element">
-        <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
-        <%= f.datetime_select :pick_up_time_earliest %>
-      </div>
+        <div class="form-element">
+          <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
+          <%= f.datetime_select :pick_up_time_earliest %>
+        </div>
       
-      <div class="form-element">
-        <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
-        <%= f.datetime_select :pick_up_time_latest %>
-      </div>
+        <div class="form-element">
+          <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
+          <%= f.datetime_select :pick_up_time_latest %>
+        </div>
       
-      <div class="form-element">
-        <%= f.label :referee, "Kunden Name" %>
-        <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
-      </div>
+        <div class="form-element">
+          <%= f.label :referee, "Kunden Name" %>
+          <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
+        </div>
       
-      <div class="form-element">
-        <%= f.label :country, "Versand nach" %>
-        <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
-      </div>
+        <div class="form-element">
+          <%= f.label :country, "Versand nach" %>
+          <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
+        </div>
       
-      <div class="form-element clearfix">
-        <%= f.submit("Papiere erfassen", :class => "blueSubmit floatLeft") %>
-      </div>
+        <div class="form-element clearfix">
+          <%= f.submit("Papiere erfassen", :class => "blueSubmit floatLeft") %>
+        </div>
 
-    <% end %>
+      <% end %>
+    </div>
   </section>
 </section>
 

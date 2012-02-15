@@ -5,10 +5,10 @@
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">VK-Aufträge</h4>
-    <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+    <a data-show-tooltip="true" data-role="tab" data-warp="goto" class="header_link" href="/purchase_orders?data_role=search" title="Springe zu VK-Auftrag...">
       <span class="header_pack _14"></span>
     </a>
-    <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/purchase_orders?data_role=search" title="Zeige Filter-Optionen">
       <span class="header_pack _283"></span>
     </a>
   </header>
@@ -34,7 +34,7 @@
   </section>
 </section>
 
-<div class="dialog" data-type="modal" style="display: none;">
+<div data-type="modal" style="display: none;">
   <div class="box-padder">
     <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
       <div class="form-element">
@@ -58,7 +58,6 @@
       </div>
       
       <div class="form-element clearfix">
-        <%= link_to("Löschen", purchase_orders_path, :class => "linkSubmit greySubmit floatLeft") %>
         <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
       </div>
     <% end %>

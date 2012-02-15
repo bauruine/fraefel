@@ -1,13 +1,11 @@
 <h1>VK-Auftrag NR#<%= @purchase_order.baan_id %></h3>
 
 <% form_for @purchase_order do |f| %>
-  <p class="formLabel">
+  <div class="form-element">
     <%= f.label :delivered, "Versendet?" %>
-  </p>
-  <p class="formInput">
     <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-  </p>
-  <p class="formInput">
-    <%= f.submit("Speichern") %>
-  </p>
+  </div>
+  <div class="form-element clearfix">
+    <%= f.submit("Speichern", :class => "blueSubmit floatLeft") %>
+  </div>
 <% end %>

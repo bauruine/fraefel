@@ -1,37 +1,27 @@
 <h1>VK-Position NR#<%= @purchase_position.position %></h3>
 
 <% form_for @purchase_position do |f| %>
-  <p class="formLabel">
+  <div class="form-element">
     <%= f.label :weight_total, "Gewicht Total" %>
-  </p>
-  <p class="formInput">
     <%= f.text_field :weight_total %>
-  </p>
-  <p class="formLabel">
+  </div>
+  <div class="form-element">
     <%= f.label :quantity, "Anzahl" %>
-  </p>
-  <p class="formInput">
     <%= f.text_field :quantity %>
-  </p>
-  <p class="formLabel">
+  </div>
+  <div class="form-element">
     <%= f.label :amount, "Preis" %>
-  </p>
-  <p class="formInput">
     <%= f.text_field :amount %>
-  </p>
-  <p class="formLabel">
+  </div>
+  <div class="form-element">
     <%= f.label :commodity_code, "Zoll Position" %>
-  </p>
-  <p class="formInput">
     <%= f.collection_select(:commodity_code_id, CommodityCode.all, :id, :content) %>
-  </p>
-  <p class="formLabel">
+  </div>
+  <div class="form-element">
     <%= f.label :delivered, "Versendet?" %>
-  </p>
-  <p class="formInput">
     <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-  </p>
-  <p class="formInput">
-    <%= f.submit("Artikel ändern") %>
-  </p>
+  </div>
+  <div class="form-element clearfix">
+    <%= f.submit("Artikel ändern", :class => "blueSubmit floatLeft") %>
+  </div>
 <% end %>

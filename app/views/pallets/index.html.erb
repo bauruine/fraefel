@@ -1,3 +1,6 @@
+<div data-type="modal" style="display:none;">
+</div>
+
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Paletten / Coli Liste</h1>
   <%= link_to("Print", pallets_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
@@ -34,11 +37,11 @@
         <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
       <% end %>
       <% if permitted_to? :edit, :pallets %>
-        <a href="<%= edit_pallet_path(pallet) %>" data-type="modal" data-dialog-id="fobar" class="header_link" data-role="search" data-show-tooltip="true" title="Zeige Filter-Optionen">
+        <a href="<%= edit_pallet_path(pallet) %>" class="header_link" data-role="edit_remote" data-show-tooltip="true" title="Zeige Palette-Optionen">
           <span class="header_pack _1"></span>
         </a>
       <% end %>
-      <a href="<%= pallet_path(pallet, :format => :pdf) %>" class="header_link" data-role="add" data-show-tooltip="true" title="Neuer Auftrag">
+      <a href="<%= pallet_path(pallet, :format => :pdf) %>" class="header_link" data-show-tooltip="true" title="Drucke Pelette">
         <span class="header_pack _193"></span>
       </a>
     </header>
@@ -74,7 +77,7 @@
               <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
                 <td class="red">
                   <% if permitted_to? :edit, :purchase_positions %>
-                    <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %>
+                    <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
                   <% else %>
                     <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
                   <% end %>
@@ -82,7 +85,7 @@
               <% else %>
               <td>
                 <% if permitted_to? :edit, :purchase_positions %>
-                  <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-type" => "modal") %>
+                  <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
                 <% else %>
                   <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
                 <% end %>
@@ -113,4 +116,3 @@
     </section>
   </section>
 <% end %>
-<div data-type="modal"></div>

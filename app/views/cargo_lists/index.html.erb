@@ -6,14 +6,14 @@
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft">&nbsp;</h4>
-      <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+      <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" title="Gehe zum Versand...">
         <span class="header_pack _14"></span>
       </a>
-      <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+      <a data-show-tooltip="true" data-role="search" class="header_link" href="/assignments?data_role=search" title="Zeige Filter-Optionen">
         <span class="header_pack _283"></span>
       </a>
       <% if permitted_to? :new, :cargo_lists %>
-        <a data-show-tooltip="true" data-role="search" class="header_link" href="<%= new_cargo_list_path() %>" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
+        <a data-show-tooltip="true" class="header_link" href="<%= new_cargo_list_path() %>" title="Erfasse neuen Versand">
           <span class="header_pack _74"></span>
         </a>
       <% end %>
