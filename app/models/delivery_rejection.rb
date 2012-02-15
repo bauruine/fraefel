@@ -21,6 +21,7 @@ class DeliveryRejection < ActiveRecord::Base
   validates_presence_of :status, :message => "Es wurde kein Status gewählt"
   validates_presence_of :customer_company, :message => "Es wurde kein Handelspartner angegeben"
   validates_presence_of :cargo_list_id, :message => "Es wurde keine Versand NR angegeben"
+  validates_presence_of :discount, :message => "Es wurde kein Warenwert definiert."
   
   after_update :check_assigned_positions
   

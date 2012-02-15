@@ -30,13 +30,13 @@
   <div class="form-element">
     <%= f.label :discount, "Warenwert" %>
     <%= f.text_field :discount %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Warenwert in %. Wird nur bei Defekter Lieferung berücksichtigt.</small>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Warenwert in % angeben.</small>
   </div>
   
   <hr />
   
   <div class="form-element" data-role="appending">
-    <%= f.label :cargo_list_id, "Begroffener Versand" %>
+    <%= f.label :cargo_list_id, "Betroffener Versand" %>
     <%= f.text_field :cargo_list_id %>
     <small style="display: block; font-size: 10px; margin-top: 5px;">Bitte Versand NR eingeben.</small>
   </div>
@@ -44,7 +44,7 @@
   <hr />
   
   <div class="form-element">
-    <%= f.label :customer_company, "Kunde" %>
+    <%= f.label :customer_company, "Handelspartner" %>
     <%= f.text_field :customer_company, "data-autocomplete_source" => customers_path(:format => :json) %>
     <small style="display: block; font-size: 10px; margin-top: 5px;">Welcher Handelspartner ist in diesen Konflikt verwickelt?</small>
   </div>
@@ -108,7 +108,7 @@
   <% end %>
   
   <div class="form-element clearfix">
-    <%= link_to("Abbrechen", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= link_to("Abbrechen", delivery_rejection_path(@delivery_rejection), :class => "linkSubmit greySubmit floatLeft") %>
     <%= f.submit(@delivery_rejection.new_record? ? "Konflikt speichern" : "Änderungen Sichern", :class => "blueSubmit floatLeft") %>
   </div>
   
