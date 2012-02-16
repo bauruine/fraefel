@@ -1,4 +1,6 @@
 class DeliveryRejectionsController < ApplicationController
+  filter_access_to :all
+  
   def show
     @delivery_rejection = DeliveryRejection.find(params[:id])
     @cargo_list = @delivery_rejection.cargo_list

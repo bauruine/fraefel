@@ -45,6 +45,14 @@ authorization do
     has_permission_on [:delivery_rejections], :to => [:index, :show, :new, :create, :edit, :update, :destroy]
   end
   
+  role :delivery_rejection_admin do
+    has_permission_on [:delivery_rejections], :to => [:index, :show, :new, :create, :edit, :update, :destroy, :assign_positions, :remove_positions]
+  end
+  
+  role :delivery_rejection_show do
+    has_permission_on [:delivery_rejections], :to => [:index, :show]
+  end
+  
   role :guest do
     has_permission_on :user_sessions, :to => [:new, :create]
   end
