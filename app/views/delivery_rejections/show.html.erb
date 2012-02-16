@@ -5,10 +5,17 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Konflikt #<%= @delivery_rejection.id %> / <%= @delivery_rejection.customer.try(:company) %></h1>
   <%= link_to("Edit", edit_delivery_rejection_path(@delivery_rejection), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Detail Ansicht", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Zollpapiere", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  
+  <% if @delivery_rejection.pallets.present? %>
+    <%= link_to("Detail Ansicht", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+    <%= link_to("Zollpapiere", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+    <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+  <% end %>
 </header>
+
+<% if @delivery_rejection.pallets.empty? %>
+  <div id="flash_notice">Es wurden noch keine Positionen zugewiesen.</div>
+<% end %>
 
 <% @delivery_rejection.pallets.each do |pallet| %>
   <section class="filter_box">
@@ -37,7 +44,7 @@
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
               <tr>
-                <td><%= link_to(purchase_position.baan_id, purchase_position) %></td>
+                <td><%= purchase_position.baan_id %></td>
                 <td><%= purchase_position.article %></td>
                 <td><%= purchase_position.quantity %></td>
                 <td><%= purchase_position.amount %></td>
@@ -88,15 +95,17 @@
         </thead>
         <tbody>
             <% PurchasePosition.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list).each do |purchase_position| %>
-              <tr>
-                <td><%= link_to(purchase_position.baan_id, purchase_position) %></td>
-                <td><%= purchase_position.article %></td>
-                <td><%= purchase_position.quantity %></td>
-                <td><%= purchase_position.amount %></td>
-                <td><%= purchase_position.weight_single %></td>
-                <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.quantity), :to_i, :to_s, purchase_position.quantity) %></td>
-                <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id, @delivery_rejection.purchase_positions.include?(purchase_position) %></td>
-              </tr>
+              <% if purchase_position.pallet_purchase_position_assignments.where("pallets.cargo_list_id is NULL").includes(:pallet).sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
+                <tr>
+                  <td><%= purchase_position.baan_id %></td>
+                  <td><%= purchase_position.article %></td>
+                  <td><%= purchase_position.quantity %></td>
+                  <td><%= purchase_position.amount %></td>
+                  <td><%= purchase_position.weight_single %></td>
+                  <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.quantity), :to_i, :to_s, purchase_position.quantity) %></td>
+                  <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id, @delivery_rejection.purchase_positions.include?(purchase_position) %></td>
+                </tr>
+              <% end %>
             <% end %>
         </tbody>
         <tfoot>

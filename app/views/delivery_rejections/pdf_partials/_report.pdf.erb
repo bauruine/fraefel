@@ -80,7 +80,7 @@
             <strong>Firma:</strong>
           </td>
           <td>
-            <%= @delivery_rejection.customer.try(:company) %>
+            <%= "" %>
           </td>
         </tr>
         <tr>
@@ -117,6 +117,14 @@
         </tr>
         <tr>
           <td>
+            <strong>Land:</strong>
+          </td>
+          <td>
+            <%= @delivery_rejection.addresses.where(:category_id => 4).first.country %>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <strong>Telefon:</strong>
           </td>
           <td>
@@ -140,7 +148,7 @@
             <strong>Firma:</strong>
           </td>
           <td>
-            <%= @delivery_rejection.customer.try(:company) %>
+            <%= "" %>
           </td>
         </tr>
         <tr>
@@ -148,7 +156,7 @@
             <strong>Referenz:</strong>
           </td>
           <td>
-            <%= "#{@referee.forename} #{@referee.surname}" %>
+            <%= "" %>
           </td>
         </tr>
         <tr>
@@ -177,10 +185,18 @@
         </tr>
         <tr>
           <td>
+            <strong>Land:</strong>
+          </td>
+          <td>
+            <%= @delivery_rejection.addresses.where(:category_id => 3).first.country %>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <strong>Telefon:</strong>
           </td>
           <td>
-            <%= @referee.phone_number %>
+            <%= "" %>
           </td>
         </tr>
       </tbody>
@@ -237,7 +253,7 @@
 <% end %>
 
 <h6 style="font-size: 13px; padding-bottom: 10px;">Kommentare</h6>
-<% for comment in @delivery_rejection.comments %>
+<% for comment in @delivery_rejection.comments.where("content IS NOT NULL AND content != ''") %>
   <div class="content-box" style="margin-bottom: 15px;">
     <div class="content-box-header">
       <h3>Erstellt: <%= comment.created_at.to_formatted_s(:swiss_date) %></h3>

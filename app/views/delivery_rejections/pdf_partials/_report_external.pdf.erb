@@ -11,13 +11,21 @@
     <tbody>
       <tr class="dark">
         <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Handelspartner:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= @delivery_rejection.customer.try(:company) %>
+        </td>
+      </tr>
+      <tr>
+        <td style="line-height: 20px; padding: 0 5px;">
           <strong>Grund:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
           <%= @delivery_rejection.category.title or nil %>
         </td>
       </tr>
-      <tr>
+      <tr class="dark">
         <td style="line-height: 20px; padding: 0 5px;">
           <strong>Status:</strong>
         </td>
@@ -64,7 +72,7 @@
             <strong>Firma:</strong>
           </td>
           <td>
-            <%= @delivery_rejection.customer.try(:company) %>
+            <%= "" %>
           </td>
         </tr>
         <tr>
@@ -101,6 +109,14 @@
         </tr>
         <tr>
           <td>
+            <strong>Land:</strong>
+          </td>
+          <td>
+            <%= @delivery_rejection.addresses.where(:category_id => 4).first.country %>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <strong>Telefon:</strong>
           </td>
           <td>
@@ -124,7 +140,7 @@
             <strong>Firma:</strong>
           </td>
           <td>
-            <%= @delivery_rejection.customer.try(:company) %>
+            <%= "" %>
           </td>
         </tr>
         <tr>
@@ -132,7 +148,7 @@
             <strong>Referenz:</strong>
           </td>
           <td>
-            <%= "#{@referee.forename} #{@referee.surname}" %>
+            <%= "" %>
           </td>
         </tr>
         <tr>
@@ -161,10 +177,18 @@
         </tr>
         <tr>
           <td>
+            <strong>Land:</strong>
+          </td>
+          <td>
+            <%= @delivery_rejection.addresses.where(:category_id => 3).first.country %>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <strong>Telefon:</strong>
           </td>
           <td>
-            <%= @referee.phone_number %>
+            <%= "" %>
           </td>
         </tr>
       </tbody>

@@ -93,6 +93,11 @@
       <%= a_f.text_field :city %>
     </div>
     
+    <div class="form-element">
+      <%= a_f.label :country, "Land" %>
+      <%= a_f.select(:country, { 'Deutschland'=>"Deutschland", 'Schweiz'=>"Schweiz" }, {}, {:style => "width:350px;"}) %>
+    </div>
+    
   <% end %>
   
   <hr />
