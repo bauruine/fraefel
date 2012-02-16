@@ -518,7 +518,7 @@ section.filter_box header.filter_box_header {
   border: 1px solid #D8D8D8;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  box-shadow: 0 0 2px #DDDDDD;
+  /*box-shadow: 0 0 2px #DDDDDD;*/
   color: #4D7D18;
   font-size: 14px;
   font-weight: bold;
@@ -534,19 +534,20 @@ section.filter_box header.filter_box_header h4 {
 }
 
 section.filter_box section.filter_box_content {
-  -moz-border-bottom-colors: none;
+  /*-moz-border-bottom-colors: none;
   -moz-border-image: none;
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
+  -moz-border-top-colors: none;*/
   background: none repeat scroll 0 0 white;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  border-color: -moz-use-text-color #D8D8D8 #D8D8D8;
-  border-right: 1px solid #D8D8D8;
+  /*border-color: -moz-use-text-color #D8D8D8 #D8D8D8;*/
+  /*border-right: 1px solid #D8D8D8;*/
+  border: 1px solid #D8D8D8;
   border-style: none solid solid;
   border-width: 0 1px 1px;
-  box-shadow: 0 2px 2px #DDDDDD;
+  /*box-shadow: 0 2px 2px #DDDDDD;*/
   /*padding: 10px;*/
 }
 
