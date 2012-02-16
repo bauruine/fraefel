@@ -16,8 +16,8 @@
 
 <h1 class="logo_title">Sammelrechnung</h1>
 <section class="clearfix">
-  <h1 class="floatLeft">Diverse Empfänger in Deutschland</h1>
-    <h1 class="floatRight">Lebert Gruppe: ???</h1>
+  <h1 class="floatLeft">Empfänger - Fraefel AG</h1>
+    <h1 class="floatRight">&nbsp;</h1>
 </section>
 <hr>
 
@@ -32,7 +32,7 @@
   </ul>
   <ul id="column_3" class="floatLeft">
     <li>U/Z</li>
-    <li>U/V</li>
+    <li>U/K</li>
   </ul>
   <ul id="column_4" class="floatLeft">
     <li><%= current_user.username %></li>
@@ -51,7 +51,7 @@
   </ul>
   <ul id="column_2" class="floatLeft">
     <li class="bold"><%= @delivery_rejection.customer.try(:company) %></li>
-    <li class="bold"><%= @delivery_rejection.created_at.to_formatted_s(:swiss_date) %></li>
+    <li class="bold">&nbsp;</li>
   </ul>
   <ul id="column_3" class="floatLeft">
     <li class="white_color">.</li>
@@ -81,7 +81,7 @@
         <td></td>
         <td><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></td>
         <td class="align-center"><%= @purchase_positions.where(:commodity_code_id => k).sum(:quantity) %></td>
-        <td class="align-right"><%= @purchase_positions.where(:commodity_code_id => k).sum(:amount) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id).where("commodity_codes.id = ?", k).includes(:pallet => [:delivery_rejection], :purchase_position => [:commodity_code]).sum(:reduced_price) %></td>
       </tr>
       <% end %>
       <tr>
@@ -103,35 +103,35 @@
         <td></td>
         <td></td>
         <td>Zwischentotal</td>
-        <td class="align-right"><%= @purchase_positions.sum(:amount) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:reduced_price) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
-        <td>MwSt 19.00%</td>
-        <td class="align-right"><%= ((@purchase_positions.sum(:amount) / 100) * 19).round(2) %></td>
+        <td>MwSt 8.00%</td>
+        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:reduced_price) / 100) * 8).round(2) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>Total</td>
-        <td class="align-right"><%= ((@purchase_positions.sum(:amount) / 100) * 19).round(2) + @purchase_positions.sum(:amount) %></td>
+        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:reduced_price) / 100) * 8).round(2) + PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:reduced_price) %></td>
       </tr>
       <tr>
         <td></td>
         <td>Total netto kg</td>
         <td><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:weight) %></td>
-        <td>Sonderrabat 100%</td>
-        <td class="align-right"><%= 0.to_f %></td>
+        <td>&nbsp;</td>
+        <td class="align-right">&nbsp;</td>
       </tr>
       <tr>
         <td></td>
         <td class="bold">Total brutto kg</td>
-        <td class="bold"><%= "@pallets_weight + (@pallets_count * 20)" %></td>
+        <td class="bold"><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:weight) + (@delivery_rejection.pallets.sum("count_as", :include => [:pallet_type]) * 20) %></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= ((@purchase_positions.sum(:amount) / 100) * 19).round(2) + @purchase_positions.sum(:amount) %></td>
+        <td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:reduced_price) / 100) * 8).round(2) + PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:reduced_price) %></td>
       </tr>
     </tbody>
   </table>
