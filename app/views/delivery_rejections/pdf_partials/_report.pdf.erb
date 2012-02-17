@@ -230,7 +230,7 @@
               <td><%= purchase_position.baan_id %></td>
               <td><%= purchase_position.article %></td>
               <td><%= purchase_position.quantity %></td>
-              <td><%= purchase_position.weight_total %></td>
+              <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.weight %></td>
               <td><%= purchase_position.amount %></td>
               <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.reduced_price %></td>
             </tr>
