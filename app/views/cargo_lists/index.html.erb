@@ -53,40 +53,31 @@
     </section>
   </section>
   
-  <section style="display:none;" class="filter_box one_third">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Filter anwenden</h4>
-      <%= link_to("Gehe zu", "#", {"data-type" => "tab", "data-warp" => "goto", :class => "floatRight no_text_decoration link_button"}) %>
-      <%= link_to("Filter", "#", {"data-type" => "tab", "data-warp" => "filter", :class => "floatRight no_text_decoration link_button m-r_5px"}) %>
-      </header>
-    <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <% form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+  <div data-type="modal" style="display: none;">
+    <div class="box-padder">
+      <% form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+        <div class="form-element">
+          <%= f.label :delivered_equals, "Versendet" %>
+          <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
+        </div>
 
-            <div class="form-element">
-              <%= f.label :delivered_equals, "Versendet" %>
-              <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
-            </div>
-
-            <div class="form-element">
-              <%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit" %>
-            </div>
-        <% end %>
-    
-        <% form_tag(search_for_cargo_lists_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
-          <div class="form-element">
-            <%= label_tag(:cargo_list_id, "Versand NR") %>
-            <%= text_field_tag(:cargo_list_id) %>
-          </div>
-          <div class="form-element">
-            <%= submit_tag "Gehe zu Versand", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit" %>
-          </div>
-        <% end %>
-      </div>
-    </section>
-  </section>
+        <div class="form-element">
+          <%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit" %>
+        </div>
+      <% end %>
+  
+      <% form_tag(search_for_cargo_lists_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
+        <div class="form-element">
+          <%= label_tag(:cargo_list_id, "Versand NR") %>
+          <%= text_field_tag(:cargo_list_id) %>
+        </div>
+        <div class="form-element">
+          <%= submit_tag "Gehe zu Versand", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
   
 <% else %>
   <div id="flash_notice">Keine Liefer Papiere gefunden...</div>
 <% end %>
-<div data-type="modal"></div>
