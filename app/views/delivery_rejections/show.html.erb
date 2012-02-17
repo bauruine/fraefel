@@ -101,7 +101,7 @@
                   <td><%= purchase_position.article %></td>
                   <td><%= purchase_position.quantity %></td>
                   <td><%= purchase_position.amount %></td>
-                  <td><%= purchase_position.weight_single %></td>
+                  <td><%= purchase_position.weight_single * purchase_position.quantity %></td>
                   <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.quantity), :to_i, :to_s, purchase_position.quantity) %></td>
                   <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id, @delivery_rejection.purchase_positions.include?(purchase_position) %></td>
                 </tr>

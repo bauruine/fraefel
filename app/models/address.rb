@@ -3,8 +3,6 @@ class Address < ActiveRecord::Base
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
   belongs_to :referee, :class_name => "Referee", :foreign_key => "referee_id"
   
-  validates_presence_of [:street, :postal_code, :city]
-  
   def location_full
     "#{self.postal_code} #{self.city}"
   end
@@ -15,5 +13,9 @@ class Address < ActiveRecord::Base
     else
       "#{self.street}, #{self.postal_code} #{self.city}"
     end
+  end
+  
+  def valid_for_printing
+    (self.postal_code.present? && self.city.present? && self.city.present?) ? true : false
   end
 end

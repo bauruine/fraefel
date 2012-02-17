@@ -41,7 +41,7 @@ class DeliveryRejectionsController < ApplicationController
     @search = PurchasePosition.search(params[:search])
     
     if @delivery_rejection.save
-      redirect_to edit_delivery_rejection_url(@delivery_rejection)
+      redirect_to delivery_rejection_url(@delivery_rejection)
     else
       render 'new'
     end

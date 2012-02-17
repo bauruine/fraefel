@@ -79,6 +79,11 @@
     </div>
     
     <div class="form-element">
+      <%= a_f.label :company_name, "Firma" %>
+      <%= a_f.text_field :company_name %>
+    </div>
+    
+    <div class="form-element">
       <%= a_f.label :street, "Strasse + Nr" %>
       <%= a_f.text_field :street %>
     </div>
@@ -98,9 +103,9 @@
       <%= a_f.select(:country, { 'Deutschland'=>"Deutschland", 'Schweiz'=>"Schweiz" }, {}, {:style => "width:350px;"}) %>
     </div>
     
+    <hr />
+    
   <% end %>
-  
-  <hr />
   
   <%= f.fields_for :comments do |co_f| %>
     <% unless !co_f.object.new_record? %>
