@@ -65,10 +65,9 @@ $(document).ready(function(){
     return false;
   });
   
-  $('a[data-role="dialog-remote"]').click(function() {
-    $('.dialog').show();
-    
-    $('.dialog').dialog('open');
+  $('a[data-role="edit_local"]').click(function() {
+    $('div[data-type="modal"]').show();
+    $('div[data-type="modal"]').dialog('open');
     return false;
   });
   

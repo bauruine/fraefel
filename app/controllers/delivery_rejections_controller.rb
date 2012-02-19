@@ -106,4 +106,10 @@ class DeliveryRejectionsController < ApplicationController
     redirect_to(:back)
   end
   
+  def search
+    @cargo_list = CargoList.where("purchase_orders.baan_id = ?", params[:purchase_order_baan_id]).includes(:pallets => :purchase_orders)
+    respond_to do |format|
+      format.js
+    end
+  end
 end

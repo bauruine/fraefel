@@ -90,6 +90,9 @@ Fraefel::Application.routes.draw do
       post 'assign_positions'
       delete 'remove_positions'
     end
+    collection do
+      post 'search'
+    end
   end
   
   resources :purchase_order_pallet_assignments

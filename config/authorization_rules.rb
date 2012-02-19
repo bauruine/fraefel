@@ -46,7 +46,7 @@ authorization do
   end
   
   role :delivery_rejection_admin do
-    has_permission_on [:delivery_rejections], :to => [:index, :show, :new, :create, :edit, :update, :destroy, :assign_positions, :remove_positions]
+    has_permission_on [:delivery_rejections], :to => [:index, :show, :new, :create, :edit, :update, :destroy, :assign_positions, :remove_positions, :search]
   end
   
   role :delivery_rejection_show do
