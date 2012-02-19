@@ -38,6 +38,7 @@
   <div class="form-element" data-role="appending">
     <%= f.label :cargo_list_id, "Betroffener Versand" %>
     <%= f.text_field :cargo_list_id %>
+    <%= link_to("Suche", new_delivery_rejection_path(), "data-role" => "edit_local") %>
     <small style="display: block; font-size: 10px; margin-top: 5px;">Bitte Versand NR eingeben.</small>
   </div>
   

@@ -1,3 +1,18 @@
+<div data-type="modal" style="display: none;">
+  <div class="box-padder">
+    <%= form_tag(search_delivery_rejections_path, {:method => :post, :remote => true}) do %>
+      <div class="form-element">
+        <%= label_tag "purchase_order_baan_id", "VK-Auftrag" %>
+        <%= text_field_tag "purchase_order_baan_id" %>
+      </div>
+      
+      <div class="form-element">
+        <%= submit_tag "Suche", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
 <section class="filter_box two_third">
     <header class="filter_box_header clearfix">
       <h4 class="floatLeft">Editiere Konflikt</h4>
