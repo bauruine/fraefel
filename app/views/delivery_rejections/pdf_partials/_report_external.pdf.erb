@@ -224,7 +224,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td class="bold"><%= "Paletten-Plätze #{pallet.pallet_type.count_as + pallet.additional_space}" %></td>
+            <td class="bold"><%= "Paletten-Plätze #{pallet.pallet_type.count_as.to_f + pallet.additional_space.to_f}" %></td>
             <td class="bold"><%= "Gewicht Brutto #{PalletPurchasePositionAssignment.where("pallet_id = ?", pallet.id ).sum(:weight) + (pallet.pallet_type.count_as * 20)} kg" %></td>
             <td></td>
           </tr>

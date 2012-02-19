@@ -188,8 +188,8 @@
   var pallet_total_value = $("tr")[2].children[1];
   var coli_count_value = $("tr")[3].children[1];
   
-  $(pallet_count).html(<%= @pallets.count %>);
-  $(pallet_total).html(<%= @pallets.count %>);
+  $(pallet_count).html(<%= @pallets.sum('count_as', :include => :pallet_type) %>);
+  $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallets.sum('count_as', :include => :pallet_type) %>);
   $(coli_count).html(<%= @pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
   
   $(pallet_count_value).html("Paletten");
