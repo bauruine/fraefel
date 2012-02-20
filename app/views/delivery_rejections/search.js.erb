@@ -1,5 +1,5 @@
 <% if @cargo_list.present? %>
-  $('input#delivery_rejection_cargo_list_id').val("<%= @cargo_list.first.id %>");
+  $('input#delivery_rejection_f_cargo_list_ids').val("<%= @cargo_list.first.id %>");
   $('div[data-type=modal]').dialog('close');
 <% else %>
   alert("Kein Versand für VK-Auftrag <%= params[:purchase_order_baan_id] %> gefunden...");

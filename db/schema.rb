@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120217101631) do
+ActiveRecord::Schema.define(:version => 20120220201118) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -104,6 +104,13 @@ ActiveRecord::Schema.define(:version => 20120217101631) do
     t.string   "baan_upload_content_type"
     t.integer  "baan_upload_file_size"
     t.datetime "baan_upload_updated_at"
+  end
+
+  create_table "cargo_list_delivery_rejection_assignments", :force => true do |t|
+    t.integer  "delivery_rejection_id"
+    t.integer  "cargo_list_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "cargo_lists", :force => true do |t|

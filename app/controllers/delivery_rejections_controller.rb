@@ -3,7 +3,7 @@ class DeliveryRejectionsController < ApplicationController
   
   def show
     @delivery_rejection = DeliveryRejection.find(params[:id])
-    @cargo_list = @delivery_rejection.cargo_list
+    @cargo_lists = @delivery_rejection.cargo_lists
     @purchase_positions = PurchasePosition.where("delivery_rejections.id = ?", @delivery_rejection.id).includes(:pallets => :delivery_rejection)
     @pallets = @delivery_rejection.pallets
     @referee = @delivery_rejection.referee

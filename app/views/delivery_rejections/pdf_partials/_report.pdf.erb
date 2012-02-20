@@ -52,7 +52,7 @@
           <strong>Versand Nummer:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= CargoList.where("purchase_positions.id = ?", @purchase_positions.first.id).includes(:pallets => :purchase_positions).first.id %>
+          <%= @cargo_lists.map(&:id) %>
         </td>
       </tr>
       <tr>
@@ -60,7 +60,7 @@
           <strong>Versendet am:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= CargoList.where("purchase_positions.id = ?", @purchase_positions.first.id).includes(:pallets => :purchase_positions).first.pick_up_time_earliest.to_formatted_s(:swiss_date) %>
+          <%=  %>
         </td>
       </tr>
     </tbody>
