@@ -12,9 +12,9 @@
   <section class="filter_box">
     <header class="filter_box_header">
       <% if pallet.cargo_list.present? %>
-        <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
+        <h4 class="floatLeft m-r_5px"><%= "Versand #{pallet.cargo_list.id} |" %></h4>
       <% end %>
-      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id}" : "Palette NR #{pallet.id}" %></h4>
+      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></h4>
       <% if pallet.purchase_positions.present? %>
         <h4 class="floatRight"><%= pallet.purchase_positions.first.consignee_full %></h4>
       <% end %>
