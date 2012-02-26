@@ -1,6 +1,5 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Neuen Versand erfassen</h1>
-  <%= link_to("Abbrechen", :back, :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
 </header>
 
 <section class="filter_box">
@@ -18,18 +17,26 @@
           <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
           <%= f.datetime_select :pick_up_time_latest %>
         </div>
-      
+        
+        <hr />
+        
         <div class="form-element">
           <%= f.label :referee, "Kunden Name" %>
           <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
         </div>
-      
+        
+        <hr />
+        
         <div class="form-element">
           <%= f.label :country, "Versand nach" %>
           <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
+          <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Einzelne Funktionen sind Länderspezifisch</small>
         </div>
-      
+        
+        <hr />
+        
         <div class="form-element clearfix">
+          <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
           <%= f.submit("Papiere erfassen", :class => "blueSubmit floatLeft") %>
         </div>
 

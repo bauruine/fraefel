@@ -1,0 +1,59 @@
+<fieldset class="floatLeft">
+  <h3 style="font-size: 15px;">Kontrolle - Versand Nummer <%= @cargo_list.id %></h3>
+</fieldset>
+<fieldset class="floatRight" style="font-size: 8px;">
+  gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
+</fieldset>
+<%= content_tag(:div, nil, :class => "clear") %>
+<hr style="margin-bottom: 20px;" />
+
+<% @purchase_positions.group(:commodity_code_id).count.each do |k, v| %>
+
+  <section class="filter_box">
+    <header class="filter_box_header">
+      <h4 class="floatLeft"><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></h4>
+    </header>
+    <section class="filter_box_content clearfix">
+      <table>
+        <thead>
+          <tr>
+            <tr>
+              <th>VK-Position</th>
+              <th>Artikel NR</th>
+              <th>Artikel</th>
+              <th>Produktlinie</th>
+              <th>Menge</th>
+              <th>Preis</th>
+              <th>Gewicht</th>
+            </tr>
+          </tr>
+        </thead>
+        <tbody>
+          <% @purchase_positions.where("purchase_positions.commodity_code_id = ?", k).each do |purchase_position| %>
+            <tr>
+              <td><%= purchase_position.baan_id %></td>
+              <td><%= purchase_position.article_number %></td>
+              <td><%= purchase_position.article %></td>
+              <td><%= purchase_position.product_line %></td>
+              <td><%= purchase_position.quantity %></td>
+              <td><%= purchase_position.amount %></td>
+              <td><%= purchase_position.weight_total %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("purchase_positions.commodity_code_id = ?", k).includes(:pallet => [:cargo_list]).includes(:purchase_position).sum(:reduced_price) %></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </section>
+  
+<% end %>

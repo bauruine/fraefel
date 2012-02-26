@@ -9,4 +9,13 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
       end
     end
   end
+  
+  def self.fix_quantity_for_cargo_list
+    self.where("pallets.delivery_rejection_id IS NULL").includes(:pallet).each do |p_p_p_a|
+      if p_p_p_a.purchase_position.present?
+        p_p_p_a.update_attribute(:reduced_price, (p_p_p_a.purchase_position.amount * p_p_p_a.quantity))
+      end
+    end
+  end
+  
 end

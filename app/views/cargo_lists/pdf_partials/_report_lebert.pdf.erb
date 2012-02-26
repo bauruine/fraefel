@@ -1,0 +1,89 @@
+<fieldset class="floatLeft">
+  <h3 style="font-size: 15px;">Lebert - Versand <%= @cargo_list.id %></h3>
+</fieldset>
+<fieldset class="floatRight" style="font-size: 8px;">
+  gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
+</fieldset>
+<%= content_tag(:div, nil, :class => "clear") %>
+<hr style="margin-bottom: 20px;" />
+<div class="floatLeft" style="width: 48%; margin-bottom: 20px;">
+  <table>
+    <tbody>
+      <tr class="dark">
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Handelspartner:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= @cargo_list.referee %>
+        </td>
+      </tr>
+      <tr>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Versandsdatum:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= @cargo_list.pick_up_time_earliest.to_formatted_s(:swiss_date) %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="floatRight" style="width: 48%;">
+  <table>
+    <tbody>
+      <tr class="dark">
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Paletten / Paletten-Plätze:</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= "#{@assigned_pallets.sum('count_as', :include => :pallet_type)} / #{@assigned_pallets.sum('pallets.additional_space') + @assigned_pallets.sum('count_as', :include => :pallet_type)}" %>
+        </td>
+      </tr>
+      <tr>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <strong>Gewicht Brutto</strong>
+        </td>
+        <td style="line-height: 20px; padding: 0 5px;">
+          <%= "#{PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@cargo_list.pallets.sum("count_as", :include => [:pallet_type]) * 20)} kg" %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<%= content_tag(:div, nil, :class => "clear") %>
+
+<hr />
+
+<% @purchase_positions.group("consignee_full").count.each do | k, v | %>
+
+  <section class="filter_box">
+    <header class="filter_box_header">
+      <h4 class="floatLeft"><%= k %></h4>
+    </header>
+    <section class="filter_box_content clearfix">
+      <table>
+        <thead>
+          <tr>
+            <th>Palette / Coli</th>
+            <th>Mischpalette?</th>
+            <th>Paletten Typ</th>
+            <th>Brutto Kg</th>
+            <th>Mehrplatz</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Pallet.order("pallets.id asc").where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => k}).includes(:purchase_positions, :cargo_list).each do |pallet| %>
+            <tr>
+              <td><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
+              <td><%= pallet.mixed? ? "Ja" : nil %></td>
+              <td>"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
+              <td><%= pallet.purchase_positions.sum("weight_total") + (pallet.pallet_type.description == "coli" ? 0 : (pallet.pallet_type.count_as * 20)) %></td>
+              <td><%= pallet.additional_space %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  </section>
+  
+<% end %>

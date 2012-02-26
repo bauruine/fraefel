@@ -1,61 +1,19 @@
-<h1>Paletten Liste für Versand NR <%= @cargo_list.id %></h1>
+<% if params[:pdf_type].present? %>
 
-<% @assigned_pallets.each do |pallet| %>
-  
-  <section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <% if pallet.cargo_list.present? %>
-        <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
-      <% end %>
-      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
-      <% if pallet.purchase_positions.present? %>
-        <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
-      <% end %>
-    </header>
-    <section class="filter_box_content clearfix">
-      <table class="margin_bottom_big">
-        <thead>
-          <tr>
-            <th>VK-Position</th>
-            <th>Artikel NR</th>
-            <th>Artikel</th>
-            <th>Produktlinie</th>
-            <th>Menge Total</th>
-            <th>Gew. Total</th>
-            <th>Lager Ort</th>
-            <th>Versand</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% pallet.purchase_positions.each do |purchase_position| %>
-            <tr>
-              <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
-                <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
-              <% else %>
-              <td class="align-center"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
-              <% end %>
-              <td class="align-center"><%= purchase_position.article_number %></td>
-              <td class="align-center"><%= purchase_position.article %></td>
-              <td class="align-center"><%= purchase_position.product_line %></td>
-              <td class="align-center"><%= purchase_position.pallet_purchase_position_assignments.where(:pallet => pallet).first.quantity %></td>
-              <td class="align-center"><%= purchase_position.pallet_purchase_position_assignments.where(:pallet => pallet).first.quantity * purchase_position.weight_single %></td>
-              <td class="align-center"><%= purchase_position.storage_location %></td>
-              <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-            </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="align-center"></td>
-          </tr>
-        </tfoot>
-      </table>
-    </section>
-  </section>
+  <% if params[:pdf_type] == "invoice" %>
+    <%= render "cargo_lists/pdf_partials/invoice.pdf.erb" %>
+  <% elsif params[:pdf_type] == "report" %>
+    <%= render "cargo_lists/pdf_partials/report.pdf.erb" %>
+  <% elsif params[:pdf_type] == "report_external" %>
+    <%= render "cargo_lists/pdf_partials/report_external.pdf.erb" %>
+  <% elsif params[:pdf_type] == "report_lebert" %>
+    <%= render "cargo_lists/pdf_partials/report_lebert.pdf.erb" %>
+  <% elsif params[:pdf_type] == "report_controll" %>
+    <%= render "cargo_lists/pdf_partials/report_controll.pdf.erb" %>
+  <% elsif params[:pdf_type] == "delivery_receipt" %>
+    <%= render "cargo_lists/pdf_partials/delivery_receipt.pdf.erb" %>
+  <% elsif params[:pdf_type] == "pick_up_receipt" %>
+    <%= render "cargo_lists/pdf_partials/pick_up_receipt.pdf.erb"%>
+  <% end %>
+
 <% end %>

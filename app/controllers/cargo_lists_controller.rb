@@ -4,6 +4,7 @@ class CargoListsController < ApplicationController
   
   def show
     @cargo_list = CargoList.find(params[:id])
+    @purchase_positions = PurchasePosition.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
     @assigned_pallets = @cargo_list.pallets
     @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
     @pallets = Pallet.where("cargo_list_id IS NULL").where("delivery_rejection_id IS NULL").order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions]) - Pallet.where(:purchase_positions => {:id => nil}).includes(:purchase_positions)
@@ -12,22 +13,15 @@ class CargoListsController < ApplicationController
       format.html
       format.pdf do
         render( 
-          :pdf => "Paletten-Liste-#{Time.now}",
+          :pdf => "Kein Titel-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
           :show_as_html => params[:debug].present?,
-          :orientation => 'Landscape',
+          :orientation => 'Portrait',
           :encoding => 'UTF-8',
-          :header => {
-            :left => "Fraefel AG",
-            :right => "#{Time.now}",
-            :line => true,
-            :spacing => 2
-          },
           :footer => {
-            :left => "#{cargo_list_url(@cargo_list)}",
-            :right => "Seite [page] / [topage]",
-            :line => true
+            :right => params[:pdf_type] != "invoice" ? "Seite [page] / [topage]" : "",
+            :line => false
           }
         )
       end

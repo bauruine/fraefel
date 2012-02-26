@@ -3,13 +3,18 @@
 
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Versand NR#<%= @cargo_list.id %></h1>
-  <%= link_to("Paletten Liste", cargo_list_path(@cargo_list, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
   <% if permitted_to? :edit, :cargo_lists %>
     <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-role" => "edit_remote") %>
   <% end %>
-  <%= link_to("Zollpapiere", collective_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
-  <%= link_to("Lebert", print_lebert_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
-  <%= link_to("Kontrolle", controll_invoice_cargo_list_path(:format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+  <%= link_to("Rüstschein", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+  <% unless @cargo_list.country == 'CH' %>
+    <%= link_to("Zollpapiere", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+    <%= link_to("Lebert", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+    <%= link_to("Kontrolle", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+  <% else %>
+    <%= link_to("Lieferschein", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "delivery_receipt"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+    <%= link_to("Abholschein", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "pick_up_receipt"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+  <% end %>
 </header>
 <% if @cargo_list.delivered == true %>
   <div id="flash_notice">Versand NR<%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
@@ -18,7 +23,7 @@
 <% if @assigned_pallets.present? %>
   
   <ul class="ul_summary">
-    <li class="summary clearfix"><p class="floatLeft bold title">Versand:</p><p class="floatLeft"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></p></li>
+    <li class="summary clearfix"><p class="floatLeft bold title">Versand:</p><p class="floatLeft"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %> / <%= @cargo_list.country %></p></li>
     <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @cargo_list.referee %></p></li>
     <li class="summary clearfix"><p class="floatLeft bold title">Anz. Paletten:</p><p class="floatLeft"><%= @pallets_count.to_i %></p></li>
     <li class="summary clearfix"><p class="floatLeft bold title">Mehrplatz:</p><p class="floatLeft"><%= @cargo_list.additional_space %></p></li>

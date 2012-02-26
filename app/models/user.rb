@@ -21,4 +21,7 @@ class User < ActiveRecord::Base
     @current_user
   end
   
+  def full_name
+    "#{self.forename} #{self.surname}"
+  end
 end

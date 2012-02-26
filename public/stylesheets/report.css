@@ -41,7 +41,7 @@ h1.logo_title {
 }
 
 .red {
-	background-color: #FCC;
+	background-color: #FCC !important;
 }
 
 .red_background {
@@ -75,7 +75,7 @@ table thead {
 
 table thead th {
   text-align: left;
-  padding: 0 20px;
+  padding: 0 10px 0 10px;
   border-left: 1px solid #d6d6d6;
   text-transform: capitalize;
   font-weight: bold;
@@ -110,7 +110,7 @@ table tbody tr input[type="submit"] {
 
 table td {
   text-align: left;
-  padding: 0 10px 0 20px;
+  padding: 0 10px 0 10px;
   vertical-align: middle;
 }
 
@@ -172,7 +172,7 @@ section.filter_box header.filter_box_header {
   height: 20px;
   line-height: 20px;
   margin: 0;
-  padding: 0 0 0 10px;
+  padding: 0 10px 0 10px;
 }
 
 section.filter_box header.filter_box_header h4 {

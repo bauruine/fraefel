@@ -25,6 +25,7 @@
             <th>Versand NR</th>
             <th>Anz. Paletten</th>
             <th>Für</th>
+            <th>Land</th>
             <th>Abholtermin von</th>
             <th>Abholtermin bis</th>
           </tr>
@@ -35,6 +36,7 @@
               <td><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
               <td><%= cargo_list.pallets.count %></td>
               <td><%= cargo_list.referee.present? ? cargo_list.referee : "Bitte Name eintragen!"%></td>
+              <td><%= cargo_list.country %></td>
               <td><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
               <td><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
             </tr>
@@ -42,6 +44,7 @@
         </tbody>
         <tfoot>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -59,6 +62,11 @@
         <div class="form-element">
           <%= f.label :delivered_equals, "Versendet" %>
           <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
+        </div>
+        
+        <div class="form-element">
+          <%= f.label :country_equals, "Land" %>
+          <%= f.select(:country_equals, { 'Deutschland' => 'DE', 'Schweiz' => 'CH' }, :include_blank => true) %>
         </div>
 
         <div class="form-element">

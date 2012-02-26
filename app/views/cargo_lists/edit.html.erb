@@ -11,21 +11,31 @@
     <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
     <%= f.datetime_select :pick_up_time_latest %>
   </div>
-
+  
+  <hr />
+  
   <div class="form-element">
     <%= f.label :referee, "Kunden Name" %>
     <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
   </div>
-
+  
+  <hr />
+  
   <div class="form-element">
     <%= f.label :country, "Versand nach" %>
     <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Einzelne Funktionen sind Länderspezifisch</small>
   </div>
+  
+  <hr />
   
   <div class="form-element">
     <%= f.label :delivered, "Versendet?" %>
     <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+    <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Hinzugefügte Paletten und VK-Positionen werden automatisch berücksichtigt</small>
   </div>
+  
+  <hr />
   
   <div class="form-element">
     <%= f.submit("Speichern") %>

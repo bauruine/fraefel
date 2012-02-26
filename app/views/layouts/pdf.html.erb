@@ -2,7 +2,7 @@
 <html>
   <head>
     <%= wicked_pdf_stylesheet_link_tag "reset" %>
-    <% if params[:pdf_type] == "report" or params[:pdf_type] == "report_external" %>
+    <% unless params[:pdf_type] == "invoice" or params[:pdf_type] == "delivery_receipt" or params[:pdf_type] == "pick_up_receipt"%>
       <%= wicked_pdf_stylesheet_link_tag "report" %>
     <% else %>
       <%= wicked_pdf_stylesheet_link_tag "pdf" %>

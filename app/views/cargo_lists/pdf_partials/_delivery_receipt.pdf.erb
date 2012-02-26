@@ -1,0 +1,70 @@
+<div style="width: 85%; margin: 0 auto;">
+  <section class="clearfix" style="margin-bottom: 15px; margin-top: 95px;">
+    <ul class="floatLeft">
+      <li>Fraefel AG</li>
+      <li>Kundendienst</li>
+      <li>Lerchenfeld</li>
+      <li>CH-9601 Lütisburg-Station</li>
+    </ul>
+  </section>
+
+  <section class="clearfix">
+    <ul class="floatLeft">
+      <li>Telefon: +41 71 982 80 80</li>
+      <li>Telefax: +41 71 982 80 70</li>
+      <li>E-Mail: kd@fraefel.ag</li>
+    </ul>
+  </section>
+
+  <section class="clearfix" style="margin-bottom: 140px;">
+    <ul class="floatRight">
+      <li class="bold" style="font-size: 15px;">Läng Schreinerei und Küchenbau AG</li>
+      <li class="bold" style="font-size: 15px;">Huebstrasse 3</li>
+      <li class="bold" style="font-size: 15px;">CH-3423 Ersigen / BE</li>
+    </ul>
+  </section>
+
+  <hr />
+
+  <section class="clearfix">
+    <h1 class="floatLeft" style="font-size: 15px; font-weight: bold;">Lieferschein</h1>
+  </section>
+
+  <section class="clearfix" style="margin-bottom: 30px;">
+    <ul class="floatLeft">
+      <li>Bütschwil, <%= Date.today.to_formatted_s(:swiss_date) %></li>
+      <li><%= User.current.full_name %></li>
+      <li>Versand per Camion</li>
+    </ul>
+    <p class="floatRight">
+      Transportschäden sind unmittelbar, weitere <br />
+      Reklamationen innert 8 Tagen nach Wareneingang <br />
+      schriftlich zu beanstanden.
+    </p>
+  </section>
+
+  <section id="price_table">
+    <table>
+      <thead>
+        <tr>
+          <th class="bold">VK-Auftrag</th>
+          <th class="bold">Pos</th>
+          <th class="bold">Artikel</th>
+          <th class="bold">Anz.</th>
+          <th class="bold">Artikel-Bezeichung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_positions.each do |purchase_position| %>
+          <tr>
+            <td><%= purchase_position.purchase_order.try(:baan_id) %></td>
+            <td><%= purchase_position.position %></td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.article %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</div>

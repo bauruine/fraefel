@@ -38,7 +38,7 @@ img#logo {
   overflow: hidden;
 }
 .bold {
-	font-weight: bold;
+	font-weight: bold !important;
 }
 .m-r_5px {
 	margin-right: 5px;
