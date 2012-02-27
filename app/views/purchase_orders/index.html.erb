@@ -5,12 +5,18 @@
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">VK-Aufträge</h4>
+    <% if permitted_to? :destroy_multiple, :purchase_orders %>
+      <a rel="nofollow" data-method="delete" data-show-tooltip="true" class="header_link" href="/purchase_orders/destroy_multiple" title="Lösche VK ohne Palettenzuweisung">
+        <span class="header_pack _9"></span>
+      </a>
+    <% end %>
     <a data-show-tooltip="true" data-role="tab" data-warp="goto" class="header_link" href="/purchase_orders?data_role=search" title="Springe zu VK-Auftrag...">
       <span class="header_pack _14"></span>
     </a>
     <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/purchase_orders?data_role=search" title="Zeige Filter-Optionen">
       <span class="header_pack _283"></span>
     </a>
+    <%= link_to("lösche", destroy_multiple_purchase_orders_path, :method => :delete) %>
   </header>
   <section class="filter_box_content clearfix">
     <table>

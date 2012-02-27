@@ -87,4 +87,12 @@ class PurchaseOrdersController < ApplicationController
     system('rake baan:import:re RAILS_ENV=production')
     redirect_to(:back)
   end
+  
+  def destroy_multiple
+    PurchaseOrder.where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
+      purchase_order.destroy
+    end
+    redirect_to purchase_orders_path
+  end
+  
 end
