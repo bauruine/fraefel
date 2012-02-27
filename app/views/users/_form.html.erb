@@ -1,5 +1,17 @@
 <%= form_for(@user) do |f| %>
   <div class="form-element">
+    <%= f.label :forename, @user.new_record? ? "Vornamen angeben" : "Vorname ändern" %>
+    <%= f.text_field :forename %>
+  </div>
+  
+  <div class="form-element">
+    <%= f.label :surname, @user.new_record? ? "Nachname angeben" : "Nachname ändern" %>
+    <%= f.text_field :surname %>
+  </div>
+  
+  <hr />
+  
+  <div class="form-element">
     <%= f.label :username, @user.new_record? ? "Benutzername wählen" : "Benutzername ändern" %>
     <%= f.text_field :username%>
   </div>
@@ -8,6 +20,8 @@
     <%= f.label :email, @user.new_record? ? "Email angeben" : "Email ändern" %>
     <%= f.text_field :email %>
   </div>
+  
+  <hr />
   
   <div class="form-element">
     <%= f.label :password, @user.new_record? ? "Passwort wählen" : "Passwort ändern" %>
@@ -18,6 +32,8 @@
     <%= f.label :password_confirmation, "Passwort bestätigen" %>
     <%= f.password_field :password_confirmation %>
   </div>
+  
+  <hr />
   
   <div class="form-element">
     <%= f.label :roles, "Rollen verwalten" %>
