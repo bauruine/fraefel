@@ -82,15 +82,15 @@
         <td></td>
         <td></td>
         <td><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></td>
-        <td class="align-center"><%= @purchase_positions.where(:commodity_code_id => k).sum(:quantity) %></td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:reduced_price) %></td>
+        <td class="align-center"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:quantity) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:amount) %></td>
       </tr>
       <% end %>
       <tr>
         <td></td>
         <td></td>
         <td class="bold">Total Stücke</td>
-        <td class="align-center border-top bold"><%= @purchase_positions.sum(:quantity) %></td>
+        <td class="align-center border-top bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:quantity) %></td>
         <td class="align-right border-top"></td>
       </tr>
       <tr>
@@ -105,21 +105,21 @@
         <td></td>
         <td></td>
         <td>Zwischentotal</td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:reduced_price) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>MwSt 19.00%</td>
-        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:reduced_price) / 100) * 19).round(2) %></td>
+        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>Total</td>
-        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:reduced_price) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:reduced_price) %></td>
+        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
       </tr>
       <tr>
         <td></td>
@@ -133,7 +133,7 @@
         <td class="bold">Total brutto kg</td>
         <td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@assigned_pallets.sum("count_as", :include => [:pallet_type]) * 20) %></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:reduced_price) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:reduced_price) %></td>
+        <td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
       </tr>
     </tbody>
   </table>
