@@ -21,8 +21,15 @@ class PurchasePosition < ActiveRecord::Base
   
   def update_purchase_order_date
     @purchase_order = self.purchase_order
+    @purchase_position = self
     @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
     @purchase_order.update_attributes(:delivery_date => @date_for_update)
+    @purchase_position_assignment = PalletPurchasePositionAssignment.where(:purchase_position_id => self.id)
+    if @purchase_position_assignment.present?
+      @purchase_position_assignment.each do |p_p_p_a|
+        p_p_p_a.update_attributes(:amount => (@purchase_position.amount * p_p_p_a.quantity), :weight => (@purchase_position.weight_single * p_p_p_a.quantity))
+      end
+    end
   end
   
   def self.calculate_for_invoice(type, attrs)
