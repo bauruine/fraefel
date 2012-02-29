@@ -35,9 +35,9 @@
               <td><%= purchase_position.article_number %></td>
               <td><%= purchase_position.article %></td>
               <td><%= purchase_position.product_line %></td>
-              <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:quantity) %></td>
-              <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:amount) %></td>
-              <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:weight) %></td>
+              <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:quantity) %></td>
+              <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:amount) %></td>
+              <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:weight) %></td>
             </tr>
           <% end %>
         </tbody>
