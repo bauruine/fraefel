@@ -10,11 +10,11 @@
   <section class="filter_box_content clearfix">
     <div class="widgets-padder clearfix">
       <ul class="notifications">
-        <li><div>200<span>Pendent Aufträge</span><span class="grey">Deutschland</span></div></li>
-        <li><div>40<span>Pendente Aufträge</span><span class="grey">Schweiz</span></div></li>
+        <li><div>-<span>Pendent Aufträge</span><span class="grey">Deutschland</span></div></li>
+        <li><div>-<span>Pendente Aufträge</span><span class="grey">Schweiz</span></div></li>
         <li><div class="bad"><%= @bad_purchase_orders.count %><span>Überfällige Aufträge</span><span class="grey">5 Tage</span></div></li>
-        <li><div><%= @delivered_purchase_orders.count %> / <%= @delivered_purchase_orders.count %><span>Versendet</span><span class="grey">Deutschland / Schweiz</span></div></li>
-        <li><div>3 / 0<span>Offene Konflikte</span><span class="grey">Deutschland / Schweiz</span></div></li>
+        <li><div>- / -<span>Versendet</span><span class="grey">Deutschland / Schweiz</span></div></li>
+        <li><div><%= DeliveryRejection.where("addresses.country = ?", 'Deutschland').includes(:addresses).count %> / <%= DeliveryRejection.where("addresses.country = ?", 'Schweiz').includes(:addresses).count %><span>Offene Konflikte</span><span class="grey">Deutschland / Schweiz</span></div></li>
       </ul>
     </div>
   </section>
