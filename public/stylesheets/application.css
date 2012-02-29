@@ -510,6 +510,10 @@ div.box-padder {
   padding: 25px;
 }
 
+div.widgets-padder {
+  padding: 10px;
+}
+
 /*** Filter Box***/
 section.filter_box {
 	margin-bottom: 20px;

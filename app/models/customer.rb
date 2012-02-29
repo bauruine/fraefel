@@ -18,6 +18,8 @@ class Customer < ActiveRecord::Base
     
     csv_file = @baan_import.baan_upload.path
     
+    #foobar = CSV.open(csv_file, {:col_sep => ";", :row_sep => "\r\r\n", :headers => :first_row})
+
     CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
       company = Iconv.conv('UTF-8', 'iso-8859-1', row[5]).to_s.chomp.lstrip.rstrip
       #baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip

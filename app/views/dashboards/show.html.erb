@@ -8,29 +8,14 @@
     <h4 class="floatLeft m-r_5px">VK-Aufträge</h4>
   </header>
   <section class="filter_box_content clearfix">
-    <div class="box-padder clearfix">
-      
-      <div class="w140 floatLeft">
-        <div class="widget black ac">
-          <header><h2>Offen</h2></header>
-          <section><h1><%= @open_purchase_orders.count %></h1></section>
-        </div>
-      </div>
-      
-      <div class="w140 floatLeft">
-        <div class="widget black ac">
-          <header><h2>Überfällig 5</h2></header>
-          <section><h1><%= @bad_purchase_orders.count %></h1></section>
-        </div>
-      </div>
-      
-      <div class="w140 floatLeft">
-        <div class="widget black ac">
-          <header><h2>Versendet</h2></header>
-          <section><h1><%= @delivered_purchase_orders.count %></h1></section>
-        </div>
-      </div>
-      
+    <div class="widgets-padder clearfix">
+      <ul class="notifications">
+        <li><div>200<span>Pendent Aufträge</span><span class="grey">Deutschland</span></div></li>
+        <li><div>40<span>Pendente Aufträge</span><span class="grey">Schweiz</span></div></li>
+        <li><div class="bad"><%= @bad_purchase_orders.count %><span>Überfällige Aufträge</span><span class="grey">5 Tage</span></div></li>
+        <li><div><%= @delivered_purchase_orders.count %> / <%= @delivered_purchase_orders.count %><span>Versendet</span><span class="grey">Deutschland / Schweiz</span></div></li>
+        <li><div>3 / 0<span>Offene Konflikte</span><span class="grey">Deutschland / Schweiz</span></div></li>
+      </ul>
     </div>
   </section>
 </section>
@@ -41,24 +26,15 @@
       <h4 class="floatLeft m-r_5px">Inventar</h4>
     </header>
     <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <h4>Infos Inventar</h4><br />
-        <ul class="ul_summary">
-          <li class="summary clearfix">
-            <p class="floatLeft bold title">Gruppen anz.:</p>
-            <p class="floatLeft"><%= @article_rack_group_number_total %></p>
-          </li>
-          <li class="summary clearfix">
-            <p class="floatLeft bold title">Erledigt:</p>
-            <p class="floatLeft"><%= @finished_articles %></p>
-          </li>
-          <li class="summary clearfix">
-            <p class="floatLeft bold title">Offen:</p>
-            <p class="floatLeft"><%= @open_articles %></p>
-          </li>
+      <div class="widgets-padder clearfix">
+        <ul class="notifications">
+          <li><div><%= @article_rack_group_number_total %><span>Anzahl Gruppen</span><span class="grey">&nbsp;</span></div></li>
+          <li><div><%= @finished_articles %><span>Gezählte Artikel</span><span class="grey">&nbsp;</span></div></li>
+          <li><div><%= @open_articles %><span>Pendente Artikel</span><span class="grey">&nbsp;</span></div></li>
         </ul>
-        <h4>Offene Artikel gruppiert nach Gruppe</h4><br />
+        <div class="clear"></div>
         <% if @open_articles_by_group.size > 0 %>
+          <h4>Offene Artikel gruppiert nach Gruppe</h4><br />
           <ul class="ul_summary">
             <% @open_articles_by_group.each do |k,v| %>
               <li class="summary clearfix">
