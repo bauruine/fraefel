@@ -55,7 +55,7 @@
 <hr />
 
 <% @purchase_positions.group("consignee_full").count.each do | k, v | %>
-
+  <% pallet_helper_ids = Pallet.where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => k}).includes(:purchase_positions, :cargo_list).map(&:id) %>
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft"><%= k %></h4>
@@ -82,6 +82,17 @@
             </tr>
           <% end %>
         </tbody>
+        <tfoot>
+          <tr>
+            <td class="bold">
+              <%= "Paletten-Plätze #{Pallet.where(:id => pallet_helper_ids).sum(:additional_space) + Pallet.where(:id => pallet_helper_ids).includes(:pallet_type).sum('pallet_types.count_as')}" %>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </section>
   </section>
