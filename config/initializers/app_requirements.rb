@@ -1,1 +1,2 @@
-require 'iconv'
+# iconv is deprecated...
+# require 'iconv'
