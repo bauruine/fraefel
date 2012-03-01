@@ -12,6 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui-1.8.18.custom.min.js
+//= require jquery.ui.datepicker-de.js
+//= require qtip.js
 //= require_tree .
 
 if (navigator.appName == "Microsoft Internet Explorer") {

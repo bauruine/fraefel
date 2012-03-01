@@ -58,7 +58,7 @@
   
   <div data-type="modal" style="display: none;">
     <div class="box-padder">
-      <% form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+      <%= form_for @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
         <div class="form-element">
           <%= f.label :delivered_equals, "Versendet" %>
           <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
@@ -74,7 +74,7 @@
         </div>
       <% end %>
   
-      <% form_tag(search_for_cargo_lists_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
+      <%= form_tag(search_for_cargo_lists_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
         <div class="form-element">
           <%= label_tag(:cargo_list_id, "Versand NR") %>
           <%= text_field_tag(:cargo_list_id) %>

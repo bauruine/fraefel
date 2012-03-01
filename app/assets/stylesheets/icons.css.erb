@@ -13,14 +13,14 @@ ICONS PACK
 .pack { 
   width: 17px;
   height: 17px;
-  background-image: url("../images/icons_pack.png");
+  background-image: url(<%= asset_path('icons_pack.png') %>);
   display: block;
 }
 
 .header_pack { 
   width: 17px;
   height: 17px;
-  background-image: url("../images/icons_pack.png");
+  background-image: url(<%= asset_path('icons_pack.png') %>);
   display: block;
   position: static;
   margin: 9px auto;
@@ -39,7 +39,7 @@ ICONS PACK
 .pack_white {
   width: 17px;
   height: 17px;
-  background-image: url("../images/icons_pack_white.png");
+  background-image: url(<%= asset_path('icons_pack_white.png') %>);
   display: block;
 }
 
@@ -48,7 +48,7 @@ ICONS PACK
 }
 
 .icons_pack:hover .pack {
-  background-image: url("../images/icons_pack_white.png");
+  background-image: url(<%= asset_path('icons_pack_white.png') %>);
 }
 ._1 {background-position: left top;}
 ._2 {background-position: -32px top;}

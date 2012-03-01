@@ -74,9 +74,9 @@ Version: 1.0
 }
 
 #utopian-navigation > li.dropdown li.dropdown > a:hover, #utopian-navigation > li.dropdown li.dropdown:hover > a {
-  background: #0099ff url(../images/arrow-right-white.gif) no-repeat center right;
-  background-image: url(../images/arrow-right-white.gif), -moz-linear-gradient(100% 100% 90deg, #017bcd, #33adff);
-  background-image: url(../images/arrow-right-white.gif), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33adff), to(#017bcd));
+  background: #0099ff url(<%= asset_path('arrow-right-white.gif') %>) no-repeat center right;
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -moz-linear-gradient(100% 100% 90deg, #017bcd, #33adff);
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33adff), to(#017bcd));
 }
 
 #utopian-navigation li ul ul {
@@ -92,14 +92,14 @@ Version: 1.0
 }
 
 #utopian-navigation > li.dropdown > a {
-  background: url(../images/arrow-down-gray.gif) no-repeat center right;
+  background: url(<%= asset_path('arrow-down-gray.gif') %>) no-repeat center right;
   padding-right: 35px;
 }
 
 #utopian-navigation > li.dropdown:hover > a {
-  background: #666666 url(../images/arrow-down-white.gif) no-repeat center right;
-  background-image: url(../images/arrow-down-white.gif), -moz-radial-gradient(80% 0% 0deg, circle cover, #787878, #666666, #666666 90%);
-  background-image: url(../images/arrow-down-white.gif), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#8a8a8a), to(#666666));
+  background: #666666 url(<%= asset_path('arrow-down-white.gif') %>) no-repeat center right;
+  background-image: url(<%= asset_path('arrow-down-white.gif') %>), -moz-radial-gradient(80% 0% 0deg, circle cover, #787878, #666666, #666666 90%);
+  background-image: url(<%= asset_path('arrow-down-white.gif') %>), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#8a8a8a), to(#666666));
   border-top: 1px solid #8d8d8d;
   border-right: 1px solid #7b7b7b;
   border-bottom: 1px solid #484848;
@@ -113,7 +113,7 @@ Version: 1.0
 }
 
 #utopian-navigation > li.dropdown li.dropdown > a {
-  background: url(../images/arrow-right-gray.gif) no-repeat center right;
+  background: url(<%= asset_path('arrow-right-gray.gif') %>) no-repeat center right;
 }
 
 #utopian-navigation > li.active > a, #utopian-navigation > li.active > a:hover {
@@ -137,13 +137,13 @@ Version: 1.0
 }
 
 #utopian-navigation.vertical > li.dropdown > a {
-  background: url(../images/arrow-right-gray.gif) no-repeat center right;
+  background: url(<%= asset_path('arrow-right-white.gif') %>) no-repeat center right;
   width: 135px;
 }
 #utopian-navigation.vertical > li.dropdown:hover > a {
-  background: #666666 url(../images/arrow-right-white.gif) no-repeat center right;
-  background-image: url(../images/arrow-right-white.gif), -moz-radial-gradient(80% 0% 0deg, circle cover, #787878, #666666, #666666 90%);
-  background-image: url(../images/arrow-right-white.gif), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#8a8a8a), to(#666666));
+  background: #666666 url(<%= asset_path('arrow-right-white.gif') %>) no-repeat center right;
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -moz-radial-gradient(80% 0% 0deg, circle cover, #787878, #666666, #666666 90%);
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#8a8a8a), to(#666666));
 }
 
 
@@ -173,15 +173,15 @@ Version: 1.0
 }
 
 #utopian-navigation.black > li.dropdown li.dropdown > a:hover, #utopian-navigation.black > li.dropdown li.dropdown:hover > a {
-  background: #181818 url(../images/arrow-right-white.gif) no-repeat center right;
-  background-image: url(../images/arrow-right-white.gif), -moz-linear-gradient(100% 100% 90deg, #181818, #252525);
-  background-image: url(../images/arrow-right-white.gif), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#252525), to(#181818));
+  background: #181818 url(<%= asset_path('arrow-right-white.gif') %>) no-repeat center right;
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -moz-linear-gradient(100% 100% 90deg, #181818, #252525);
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#252525), to(#181818));
 }
 
 #utopian-navigation.black > li.dropdown:hover > a {
-  background: #000000 url(../images/arrow-down-white.gif) no-repeat center right;
-  background-image: url(../images/arrow-down-white.gif), -moz-radial-gradient(90% -20% 0deg, circle cover, #191919, #000000, #000000 150%);
-  background-image: url(../images/arrow-down-white.gif), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#444444), to(#000000));
+  background: #000000 url(<%= asset_path('arrow-down-white.gif') %>) no-repeat center right;
+  background-image: url(<%= asset_path('arrow-down-white.gif') %>), -moz-radial-gradient(90% -20% 0deg, circle cover, #191919, #000000, #000000 150%);
+  background-image: url(<%= asset_path('arrow-down-white.gif') %>), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#444444), to(#000000));
   border-top-color: #1c1c1c;
   border-right-color: #1a1a1a;
   border-bottom-color: #000000;
@@ -190,13 +190,13 @@ Version: 1.0
   text-shadow: none;
 }
 #utopian-navigation.vertical.black > li.dropdown:hover > a {
-  background: #000000 url(../images/arrow-right-white.gif) no-repeat center right;
-  background-image: url(../images/arrow-right-white.gif), -moz-radial-gradient(90% 0% 0deg, circle cover, #191919, #000000, #000000 150%);
-  background-image: url(../images/arrow-right-white.gif), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#4d4d4d), to(#000000));
+  background: #000000 url(<%= asset_path('arrow-right-white.gif') %>) no-repeat center right;
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -moz-radial-gradient(90% 0% 0deg, circle cover, #191919, #000000, #000000 150%);
+  background-image: url(<%= asset_path('arrow-right-white.gif') %>), -webkit-gradient(radial, 160 -100, 0, 160 -100, 200, from(#4d4d4d), to(#000000));
 }
 
 #utopian-navigation.black > li.dropdown li.dropdown > a {
-  background: url(../images/arrow-right-darkgray.gif) no-repeat center right;
+  background: url(<%= asset_path('arrow-right-darkgray.gif')%>) no-repeat center right;
   text-shadow: none;
 }
 
@@ -225,13 +225,13 @@ Version: 1.0
 }
 
 #utopian-navigation.white > li.dropdown li.dropdown > a:hover, #utopian-navigation.white > li.dropdown li.dropdown:hover > a {
-  background: #eaeaea url(../images/arrow-right-black.gif) no-repeat center right;
-  background-image: url(../images/arrow-right-black.gif), -moz-linear-gradient(100% 100% 90deg, #eaeaea, #f9f9f9);
-  background-image: url(../images/arrow-right-black.gif), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f9f9f9), to(#eaeaea));
+  background: #eaeaea url(<%= asset_path('arrow-right-black.gif') %>) no-repeat center right;
+  background-image: url(<%= asset_path('arrow-right-black.gif') %>), -moz-linear-gradient(100% 100% 90deg, #eaeaea, #f9f9f9);
+  background-image: url(<%= asset_path('arrow-right-black.gif') %>), -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f9f9f9), to(#eaeaea));
 }
 
 #utopian-navigation.white > li.dropdown:hover > a {
-  background: #ffffff url(../images/arrow-down-black.gif) no-repeat center right;
+  background: #ffffff url(<%= asset_path('arrow-down-black.gif') %>) no-repeat center right;
   border-top-color: #ffffff;
   border-right-color: #e1e1e1;
   border-bottom-color: #dddddd;
@@ -240,10 +240,10 @@ Version: 1.0
   text-shadow: none;
 }
 #utopian-navigation.vertical.white > li.dropdown:hover > a {
-  background: #ffffff url(../images/arrow-right-black.gif) no-repeat center right;
+  background: #ffffff url(<%= asset_path('arrow-right-black.gif') %>) no-repeat center right;
 }
 
 #utopian-navigation.white > li.dropdown li.dropdown > a {
-  background: url(../images/arrow-right-darkgray.gif) no-repeat center right;
+  background: url(<%= asset_path('arrow-right-darkgray.gif') %>) no-repeat center right;
   text-shadow: none;
 }

@@ -6,7 +6,8 @@ class CargoListsController < ApplicationController
     @cargo_list = CargoList.find(params[:id])
     @purchase_positions = PurchasePosition.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
     @assigned_pallets = @cargo_list.pallets
-    @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
+    @pallets_count = PalletType.includes(:pallets => :cargo_list).where("cargo_lists.id = ?", @cargo_list.id).sum(:count_as)
+    # @cargo_list.pallets.includes(:pallet_type).sum("pallet_types.count_as")
     @pallets = Pallet.where("cargo_list_id IS NULL").where("delivery_rejection_id IS NULL").order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions]) - Pallet.where(:purchase_positions => {:id => nil}).includes(:purchase_positions)
     
     respond_to do |format|
