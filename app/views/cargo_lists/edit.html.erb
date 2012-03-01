@@ -1,6 +1,6 @@
 <h1>Versand NR#<%= @cargo_list.id %></h3>
 
-<% form_for @cargo_list do |f| %>
+<%= form_for @cargo_list do |f| %>
 
   <div class="form-element">
     <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
@@ -38,6 +38,6 @@
   <hr />
   
   <div class="form-element">
-    <%= f.submit("Speichern") %>
+    <%= f.submit("Speichern", :class => "blueSubmit") %>
   </div>
 <% end %>

@@ -9,7 +9,7 @@
 <section class="filter_box">
   <header class="filter_box_header"><h4>Suche Palette</h4></header>
   <section class="filter_box_content clearfix">
-    <% form_tag(search_for_pallets_path, {:class => "form", :method => :get}) do %>
+    <%= form_tag(search_for_pallets_path, {:class => "form", :method => :get}) do %>
       <ul class="ul_summary">
 
         <li class="summary clearfix">
@@ -46,15 +46,7 @@
       </a>
     </header>
     <section class="filter_box_content clearfix">
-      <% if pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? %>
-        <ul class="ul_summary">
-          <li class="summary clearfix">
-            <p class="floatLeft bold title">PLZ Gebiet:</p>
-            <p class="floatLeft"><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name %></p>
-          </li>
-        </ul>
-      <% end %>
-      <table class="margin_bottom_big">
+      <table>
         <thead>
           <tr>
             <th>VK-Position</th>
@@ -95,7 +87,7 @@
               <td><%= purchase_position.commodity_code.content %></td>
               <td><%= purchase_position.article %></td>
               <td><%= purchase_position.product_line %></td>
-              <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet => pallet).first.quantity %></td>
+              <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity %></td>
               <td><%= purchase_position.storage_location %></td>
               <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
             </tr>
@@ -103,7 +95,11 @@
         </tbody>
         <tfoot>
           <tr>
-            <td></td>
+            <% if pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? %>
+              <td class="bold">PLZ Gebiet: <%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name %></td>
+            <% else %>
+              <td></td>
+            <% end %>
             <td></td>
             <td></td>
             <td></td>

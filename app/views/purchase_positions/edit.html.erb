@@ -1,6 +1,6 @@
 <h1>VK-Position NR#<%= @purchase_position.position %></h3>
 
-<% form_for @purchase_position do |f| %>
+<%= form_for @purchase_position do |f| %>
   <div class="form-element">
     <%= f.label :weight_single, "Gewicht Einzeln" %>
     <%= f.text_field :weight_single %>

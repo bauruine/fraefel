@@ -72,7 +72,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "greySubmit", :disabled => false, :disable_with => "Please wait..." %></td>
               </tr>
             <% end %>
           </tfoot>
@@ -85,6 +85,7 @@
   <div id="flash_notice">Es sind noch keine Paletten zugewiesen worden.</div>
 <% end %>
 
+<hr />
 
 <% if @pallets.present? %>
   <section class="filter_box">
@@ -134,7 +135,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "greySubmit", :disabled => false, :disable_with => "Please wait..." %></td>
               </tr>
             <% end %>
           </tfoot>

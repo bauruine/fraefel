@@ -1,4 +1,4 @@
-<% form_for @pallet do |f| %>
+<%= form_for @pallet do |f| %>
   <div class="form-element">
     <%= f.label :additional_space, "Zusätzlicher Platz" %>
     <%= f.select(:additional_space, {'0.5' => 0.5, '1.0' => 1.0, '1.5' => 1.5, '2.0' => 2.0}, {:include_blank => true}, {:style => "width:350px;"}) %>

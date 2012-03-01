@@ -1,6 +1,6 @@
 <h1>VK-Auftrag NR#<%= @purchase_order.baan_id %></h3>
 
-<% form_for @purchase_order do |f| %>
+<%= form_for @purchase_order do |f| %>
   <div class="form-element">
     <%= f.label :delivered, "Versendet?" %>
     <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>

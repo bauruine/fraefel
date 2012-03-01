@@ -19,7 +19,7 @@
       <h4 class="floatLeft">Offene Positionen</h4>
     </header>
     <section class="filter_box_content clearfix">
-      <% form_tag(assign_positions_pallets_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+      <%= form_tag(assign_positions_pallets_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
         <table>
           <thead>
@@ -127,7 +127,7 @@
         </ul>
       <% end %>
       
-      <% form_tag(remove_positions_pallet_path(pallet), {:class => "form", "data-submit_handler" => "true", :method => :delete}) do %>
+      <%= form_tag(remove_positions_pallet_path(pallet), {:class => "form", "data-submit_handler" => "true", :method => :delete}) do %>
         <table>
           <thead>
             <tr>
@@ -165,7 +165,7 @@
                 <td><%= purchase_position.article_number %></td>
                 <td><%= purchase_position.article %></td>
                 <td><%= purchase_position.product_line %></td>
-                <td><%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet => pallet).first.quantity} / #{purchase_position.quantity}" %></td>
+                <td><%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity} / #{purchase_position.quantity}" %></td>
                 <td><%= purchase_position.storage_location %></td>
                 <td><%= purchase_position.zip_location_name %></td>
                 <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>

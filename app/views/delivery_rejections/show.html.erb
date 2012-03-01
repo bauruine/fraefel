@@ -60,11 +60,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:amount) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:reduced_price) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:weight) %></td>
+              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:amount) %></td>
+              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
+              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
               <td></td>
-              <td class="align-center"><%= submit_tag "Entfernen", :class => "form_submit" %></td>
+              <td class="align-center"><%= submit_tag "Entfernen", :class => "greySubmit" %></td>
             </tr>
           </tfoot>
         </table>
@@ -79,7 +79,7 @@
     <h4 class="floatLeft"></h4>
   </header>
   <section class="filter_box_content clearfix">
-    <% form_tag(assign_positions_delivery_rejection_path, {:class => "form", :method => :post}) do %>
+    <%= form_tag(assign_positions_delivery_rejection_path, {:class => "form", :method => :post}) do %>
       <%= hidden_field_tag(:delivery_rejection_id, @delivery_rejection.id) %>
       <table>
         <thead>
@@ -116,7 +116,7 @@
             <td></td>
             <td></td>
             <td class="align-center"><%= text_field_tag(:pallet_id, nil) %></td>
-            <td class="align-center"><%= submit_tag "Hinzufügen", :class => "form_submit" %></td>
+            <td class="align-center"><%= submit_tag "Hinzufügen", :class => "greySubmit" %></td>
           </tr>
         </tfoot>
       </table>
