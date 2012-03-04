@@ -1,18 +1,22 @@
-<%= form_for(@status) do |f| %>
+<%= form_for(@status, :html => {:class => "form-horizontal"}) do |f| %>
 
-  <div class="form-element">
-    <%= f.label(:title, "Status", :class => "required") %>
-    <%= f.text_field(:title, :size => 100) %>
+  <div class="control-group">
+    <%= f.label(:title, "Status", :class => "control-label") %>
+    <div class="controls">
+      <%= f.text_field(:title, :class => "text_field") %>
+    </div>
   </div>
   
-  <div class="form-element">
-    <%= f.label(:statusable_type, "Gehört zu", :class => "required") %>
-    <%= f.select(:statusable_type, Status::STATUSABLE_ITEMS, {}, {:class => "chzn-select", "data-placeholder" => "Verbindung wählen...", :style => "width:350px;"}) %>
+  <div class="control-group">
+    <%= f.label(:statusable_type, "Gehört zu", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:statusable_type, Status::STATUSABLE_ITEMS, {}, {}) %>
+    </div>
   </div>
   
-  <div class="form-element clearfix">
-    <%= link_to("Abbrechen", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(@status.new_record? ? "Erstellen" : "Ändern", :class => "blueSubmit floatLeft") %>
+  <div class="form-actions">
+    <%= f.submit(@status.new_record? ? "Erstellen" : "Ändern", :class => "btn btn-primary") %>
+    <%= link_to("Abbrechen", :back, :class => "btn") %>
   </div>
 
 <% end %>

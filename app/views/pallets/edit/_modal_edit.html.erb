@@ -1,0 +1,42 @@
+<div class="modal fade" id="pallet_<%= pallet.id %>">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Optionen - Pallet #<%= pallet.id %></h3>
+  </div>
+  
+  <%= form_for pallet, :html => { :class => 'form-horizontal' } do |f| %>
+    <div class="modal-body">
+      <fieldset>
+        
+        <div class="control-group">
+          <%= f.label :additional_space, "Zusätzlicher Platz", :class => 'control-label' %>
+          <div class="controls">
+            <%= f.select(:additional_space, {'0.5' => 0.5, '1.0' => 1.0, '1.5' => 1.5, '2.0' => 2.0}, {:include_blank => true}, {}) %>
+            <p class="help-block"><strong>Info:</strong> Mehrplatz wird in in Berechnung berücksichtigt.</p>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <%= f.label :pallet_type_id, "Paletten Typ", :class => 'control-label' %>
+          <div class="controls">
+            <%= f.collection_select(:pallet_type_id, PalletType.all, :id, :description, {:include_blank => true}, {}) %>
+            <p class="help-block"><strong>Info:</strong> Um was für eine Palette handelt es sich?</p>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <%= f.label :delivered, "Versendet?", :class => 'control-label' %>
+          <div class="controls">
+            <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }, {}, {}) %>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <%= f.submit "Änderungen Speichern", :class => 'btn btn-primary' %>
+        </div>
+        
+      </fieldset>
+    </div>
+  <% end %>
+
+</div>

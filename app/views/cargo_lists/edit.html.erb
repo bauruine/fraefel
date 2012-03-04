@@ -1,43 +1,17 @@
-<h1>Versand NR#<%= @cargo_list.id %></h3>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/cargo_lists"><i class="icon-folder-open"></i> Versand</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="<%= edit_cargo_list_path(@cargo_list) %>"><%= @cargo_list.id %></a>
+  </li>
+</ul>
 
-<%= form_for @cargo_list do |f| %>
+<div class="page-header">
+  <h1>Versand # <%= @cargo_list.id %> - Edit</h1>
+</div>
 
-  <div class="form-element">
-    <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
-    <%= f.datetime_select :pick_up_time_earliest %>
-  </div>
-
-  <div class="form-element">
-    <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
-    <%= f.datetime_select :pick_up_time_latest %>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :referee, "Kunden Name" %>
-    <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :country, "Versand nach" %>
-    <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Einzelne Funktionen sind Länderspezifisch</small>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :delivered, "Versendet?" %>
-    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Hinzugefügte Paletten und VK-Positionen werden automatisch berücksichtigt</small>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.submit("Speichern", :class => "blueSubmit") %>
-  </div>
-<% end %>
+<%= render 'form' %>

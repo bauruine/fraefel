@@ -38,9 +38,10 @@
 <% end %>
 
 <% @delivery_rejection.pallets.each do |pallet| %>
+  <%= render "pallets/edit/modal_edit", :pallet => pallet %>
   <section class="filter_box">
       <blockquote>
-        <p>Palette Nr <%= pallet.id %> <%= link_to("Edit", edit_pallet_path(pallet.id), :class => "btn btn-mini btn-info") %></p>
+        <p>Palette Nr <%= pallet.id %> <%= link_to("Edit", "#pallet_#{pallet.id}", :class => "btn btn-mini btn-info", "data-toggle" => "modal") %></p>
       </blockquote>
     <section class="filter_box_content clearfix">
       <%= form_tag(remove_positions_delivery_rejection_path(@delivery_rejection), {:method => :delete}) do %>

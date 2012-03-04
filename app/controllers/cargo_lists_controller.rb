@@ -53,10 +53,12 @@ class CargoListsController < ApplicationController
   
   def create
     @cargo_list = CargoList.new(params[:cargo_list])
-    if @cargo_list.save
-      redirect_to(cargo_list_url(@cargo_list))
-    else
-      render 'new'
+    respond_to do |format|
+      if @cargo_list.save
+        format.html { redirect_to cargo_list_url(@cargo_list), :notice => "Versand - #{@cargo_list.id} wurde erfolgreich erstellt." }
+      else
+        format.html { render 'new' }
+      end
     end
   end
   
@@ -66,10 +68,12 @@ class CargoListsController < ApplicationController
   
   def update
     @cargo_list = CargoList.find(params[:id])
-    if @cargo_list.update_attributes(params[:cargo_list])
-      redirect_to(cargo_list_url(@cargo_list))
-    else
-      render 'edit'
+    respond_to do |format|
+      if @cargo_list.update_attributes(params[:cargo_list])
+        format.html { redirect_to(cargo_list_url(@cargo_list), :notice => "Versand - #{@cargo_list.id} wurde erfolgreich editiert.") }
+      else
+        format.html { render 'edit' }
+      end
     end
   end
   

@@ -39,11 +39,12 @@ class DeliveryRejectionsController < ApplicationController
     @delivery_rejection = DeliveryRejection.new(params[:delivery_rejection])
     #@comment = @delivery_rejection.comments.build
     @search = PurchasePosition.search(params[:search])
-    
-    if @delivery_rejection.save
-      redirect_to delivery_rejection_url(@delivery_rejection)
-    else
-      render 'new'
+    respond_to do |format|
+      if @delivery_rejection.save
+        format.html { redirect_to delivery_rejection_url(@delivery_rejection), :notice => "Konflikt - #{@delivery_rejection.id} wurde erfolgreich erstellt." }
+      else
+        format.html { render 'new' }
+      end
     end
   end
   
@@ -65,10 +66,12 @@ class DeliveryRejectionsController < ApplicationController
     #@comment = @delivery_rejection.comments.build
     #@search = PurchasePosition.search(params[:search])
     
-    if @delivery_rejection.update_attributes(params[:delivery_rejection])
-      redirect_to delivery_rejection_path(@delivery_rejection)
-    else
-      render 'edit'
+    respond_to do |format|
+      if @delivery_rejection.update_attributes(params[:delivery_rejection])
+        format.html { redirect_to delivery_rejection_path(@delivery_rejection), :notice => "Konflikt - #{@delivery_rejection.id} wurde erfolgreich editiert." }
+      else
+        format.html { render 'edit' }
+      end
     end
   end
   

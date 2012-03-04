@@ -77,13 +77,15 @@ class PalletsController < ApplicationController
   
   def update
     @pallet = Pallet.find(params[:id])
-    if @pallet.update_attributes(params[:pallet])
-      if params[:purchase_position_ids].present?
-        @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+    respond_to do |format|
+      if @pallet.update_attributes(params[:pallet])
+        if params[:purchase_position_ids].present?
+          @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+        end
+        format.html { redirect_to(:back, :notice => "Palette - #{@pallet.id} wurde erfolgreich editiert.") }
+      else
+        format.html { render 'edit' }
       end
-      redirect_to(:back)
-    else
-      render 'edit'
     end
   end
   

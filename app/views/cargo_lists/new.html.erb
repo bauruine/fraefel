@@ -1,47 +1,17 @@
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Neuen Versand erfassen</h1>
-</header>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/cargo_lists"><i class="icon-folder-open"></i> Versand</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/cargo_lists/new">Neu</a>
+  </li>
+</ul>
 
-<section class="filter_box">
-  <header class="filter_box_header"><h4>Versand</h4></header>
-  <section class="filter_box_content clearfix">
-    <div class="box-padder">
-      <%= form_for(@cargo_list) do |f| %>
+<div class="page-header">
+  <h1>Neuen Versand erfassen</h1>
+</div>
 
-        <div class="form-element">
-          <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
-          <%= f.datetime_select :pick_up_time_earliest %>
-        </div>
-      
-        <div class="form-element">
-          <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
-          <%= f.datetime_select :pick_up_time_latest %>
-        </div>
-        
-        <hr />
-        
-        <div class="form-element">
-          <%= f.label :referee, "Kunden Name" %>
-          <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
-        </div>
-        
-        <hr />
-        
-        <div class="form-element">
-          <%= f.label :country, "Versand nach" %>
-          <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
-          <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Einzelne Funktionen sind Länderspezifisch</small>
-        </div>
-        
-        <hr />
-        
-        <div class="form-element clearfix">
-          <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
-          <%= f.submit("Papiere erfassen", :class => "blueSubmit floatLeft") %>
-        </div>
-
-      <% end %>
-    </div>
-  </section>
-</section>
-
+<%= render 'form' %>

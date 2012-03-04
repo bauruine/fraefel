@@ -13,58 +13,71 @@
   <hr />
 <% end %>
 
-<%= form_for(@delivery_rejection) do |f| %>
+<%= form_for @delivery_rejection, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> Konflikt</legend>
   
-  <div class="form-element">
-    <%= f.label(:category, @delivery_rejection.new_record? ? "Grund wählen" : "Grund ändern") %>
-    <%= f.collection_select(:category_id, Category.where(:categorizable_type => "delivery_rejection"), :id, :title, {}, {:class => "chzn-select", :style => "width:350px;"}) %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Was ist der Grund der Konflikterfassung?</small>
-  </div>
-
-  <div class="form-element">
-    <%= f.label(:status, @delivery_rejection.new_record? ? "Status wählen" : "Status ändern") %>
-    <%= f.collection_select(:status_id, Status.where(:statusable_type => "delivery_rejection"), :id, :title, {}, {:class => "chzn-select", :style => "width:350px;"}) %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Status wählen / ändern. Wenn möglich immer aktuell halten.</small>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :discount, "Warenwert" %>
-    <%= f.text_field :discount %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Warenwert in % angeben.</small>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element" data-role="appending">
-    <%= f.label :f_cargo_list_ids, "Betroffener Versand" %>
-    <%= f.text_field :f_cargo_list_ids %>
-    <%= link_to("Suche", new_delivery_rejection_path(), "data-role" => "edit_local") %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Bitte Versand NR eingeben.</small>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :customer_company, "Handelspartner" %>
-    <%= f.text_field :customer_company, "data-autocomplete_source" => customers_path(:format => :json) %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Welcher Handelspartner ist in diesen Konflikt verwickelt?</small>
-  </div>
-  
-  <hr />
-  
-  <%= f.fields_for :comments do |co_f| %>
-    <% unless !co_f.object.new_record? %>
-      <div class="form-element">
-        <%= co_f.label(:content, "Kommentar", :class => "required") %>
-        <%= co_f.text_area(:content, "data-editor" => "wysiwyg", :style => "width: 475px; height: 145px;") %>
-        <div class="clear"></div>
+    <div class="control-group">
+      <%= f.label(:category, @delivery_rejection.new_record? ? "Grund wählen" : "Grund ändern", :class => "control-label") %>
+      <div class="controls">
+        <%= f.collection_select(:category_id, Category.where(:categorizable_type => "delivery_rejection"), :id, :title, {}, {}) %>
+        <p class="help-block"><strong>Info:</strong> Was ist der Grund der Konflikterfassung?</p>
       </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label(:status, @delivery_rejection.new_record? ? "Status wählen" : "Status ändern", :class => "control-label") %>
+      <div class="controls">
+        <%= f.collection_select(:status_id, Status.where(:statusable_type => "delivery_rejection"), :id, :title, {}, {}) %>
+        <p class="help-block"><strong>Info:</strong> Status wählen / ändern. Wenn möglich immer aktuell halten.</p>
+      </div>
+    </div>
+  
+    <div class="control-group">
+      <%= f.label :discount, "Warenwert", :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :discount, :class => "text_field" %>
+        <p class="help-block"><strong>Info:</strong> Warenwert in % angeben.</p>
+      </div>
+    </div>
+  
+    <hr />
+  
+    <div class="control-group" data-role="appending">
+      <%= f.label :f_cargo_list_ids, "Betroffener Versand", :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :f_cargo_list_ids, :class => "text_field" %>
+        <%= link_to("suche", nil, :class => "btn btn-primary", "data-toggle" => "modal", "data-target" => "#search_delivery_rejection_id") %>
+        <p class="help-block"><strong>Info:</strong> Bitte Versand NR eingeben.</p>
+      </div>
+    </div>
+  
+    <hr />
+  
+    <div class="control-group">
+      <%= f.label :customer_company, "Handelspartner", :class => "control-label" %>
+      <div class="controls">
+        <%= f.text_field :customer_company, "data-autocomplete_source" => customers_path(:format => :json), :class => "text_field" %>
+        <p class="help-block"><strong>Info:</strong> Welcher Handelspartner ist in diesen Konflikt verwickelt?</p>
+      </div>
+    </div>
+  
+    <hr />
+  
+    <%= f.fields_for :comments do |co_f| %>
+      <% unless !co_f.object.new_record? %>
+        <div class="control-group">
+          <%= co_f.label(:content, "Kommentar", :class => "control-label") %>
+          <div class="controls">
+            <%= co_f.text_area(:content) %>
+          </div>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
-  
-  <div class="form-element clearfix">
-    <%= link_to("Abbrechen", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(@delivery_rejection.new_record? ? "Konflikt speichern" : "Änderungen Sichern", :class => "blueSubmit floatLeft") %>
-  </div>
-  
+    
+    <div class="form-actions">
+      <%= f.submit @delivery_rejection.new_record? ? "Konflikt speichern" : "Änderungen Sichern", :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', :back, :class => 'btn' %>
+    </div>
+  </fieldset>
 <% end %>

@@ -1,10 +1,17 @@
-<section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Neuen Status erfassen</h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <%= render 'form' %>
-      </div>
-    </section>
-</section>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/statuses"><i class="icon-folder-open"></i> Status</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/statuses/new">Neu</a>
+  </li>
+</ul>
+
+<div class="page-header">
+  <h1>Neuen Status erfassen</h1>
+</div>
+
+<%= render 'form' %>

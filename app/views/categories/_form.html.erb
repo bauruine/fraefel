@@ -1,18 +1,22 @@
-<%= form_for(@category) do |f| %>
+<%= form_for(@category, :html => {:class => "form-horizontal"}) do |f| %>
   
-  <div class="form-element">
-    <%= f.label(:title, "Kategorie", :class => "required") %>
-    <%= f.text_field(:title, :size => 100) %>
+  <div class="control-group">
+    <%= f.label(:title, "Kategorie", :class => "control-label") %>
+    <div class="controls">
+      <%= f.text_field(:title, :class => "text_field") %>
+    </div>
   </div>
   
-  <div class="form-element">
-    <%= f.label(:categorizable_type, "Gehört zu", :class => "required") %>
-    <%= f.select(:categorizable_type, Category::CATEGORIZABLE_ITEMS, {}, {:class => "chzn-select", "data-placeholder" => "Verbindung wählen...", :style => "width:350px;"}) %>
+  <div class="control-group">
+    <%= f.label(:categorizable_type, "Gehört zu", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:categorizable_type, Category::CATEGORIZABLE_ITEMS, {}, {}) %>
+    </div>
   </div>
   
-  <div class="form-element clearfix">
-    <%= link_to("Abbrechen", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(@category.new_record? ? "Erstellen" : "Ändern", :class => "blueSubmit floatLeft") %>
+  <div class="form-actions">
+    <%= f.submit(@category.new_record? ? "Erstellen" : "Ändern", :class => "btn btn-primary") %>
+    <%= link_to 'Cancel', :back, :class => 'btn' %>
   </div>
   
 <% end %>

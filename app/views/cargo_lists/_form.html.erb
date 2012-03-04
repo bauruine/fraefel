@@ -1,0 +1,41 @@
+<%= form_for(@cargo_list, :html => {:class => "form-horizontal"}) do |f| %>
+
+  <div class="control-group">
+    <%= f.label :pick_up_time_earliest, "Früheste Abholzeit", :class => "control-label" %>
+    <div class="controls">
+      <%= f.datetime_select :pick_up_time_earliest, {}, :class => "span2" %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :pick_up_time_latest, "Späteste Abholzeit", :class => "control-label" %>
+    <div class="controls">
+      <%= f.datetime_select :pick_up_time_latest, {}, :class => "span2" %>
+    </div>
+  </div>
+  
+  <hr />
+  
+  <div class="control-group">
+    <%= f.label :referee, "Kunden Name", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :referee, :class => "text_field" %>
+    </div>
+  </div>
+  
+  <hr />
+  
+  <div class="control-group">
+    <%= f.label :country, "Versand nach", :class => "control-label" %>
+    <div class="controls">
+      <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
+      <p class="help-block"><strong>Achtung</strong> Einzelne Funktionen sind Länderspezifisch</p>
+    </div>
+  </div>
+  
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to 'Cancel', cargo_lists_path, :class => 'btn' %>
+  </div>
+
+<% end %>

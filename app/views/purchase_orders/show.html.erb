@@ -109,12 +109,12 @@
 <% end %>
 <hr />
 <% @pallets.each do |pallet| %>
-  
+      <%= render "pallets/edit/modal_edit", :pallet => pallet %>
       <blockquote>
         <% if pallet.cargo_list.present? %>
           <p><%= "Versand NR #{pallet.cargo_list.id}" %></p>
         <% end %>
-        <p><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id}" : "Palette NR #{pallet.id}" %> <%= link_to("Edit", "#test_id", :class => "btn btn-mini btn-info", "data-toggle" => "modal") %></p>
+        <p><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id}" : "Palette NR #{pallet.id}" %> <%= link_to("Edit", "#pallet_#{pallet.id}", :class => "btn btn-mini btn-info", "data-toggle" => "modal") %></p>
         <% if pallet.purchase_positions.present? %>
           <p><%= pallet.purchase_positions.first.consignee_full %></p>
         <% end %>
