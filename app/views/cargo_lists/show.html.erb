@@ -1,49 +1,85 @@
-<div data-type="modal" style="display:none;">
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/purchase_orders"><i class="icon-folder-open"></i> Versand</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/cargo_lists/<%= @cargo_list.id %>"><%= @cargo_list.id %></a>
+  </li>
+</ul>
+
+<div class="page-header">
+  <h1>Versand NR#<%= @cargo_list.id %> <small><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %> / <%= @cargo_list.country %></small></h1>
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Versand NR#<%= @cargo_list.id %></h1>
+<div class="btn-toolbar">
   <% if permitted_to? :edit, :cargo_lists %>
-    <%= link_to("Edit", edit_cargo_list_path(@cargo_list), :class => "floatRight no_text_decoration blue_link_button m-r_5px", "data-role" => "edit_remote") %>
+    <div class="btn-group">
+      <a class="btn" href="<%= edit_cargo_list_path(@cargo_list) %>"><i class="icon-edit"></i> Edit</a>
+    </div>
   <% end %>
-  <%= link_to("Rüstschein", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
-  <%= link_to("Transport Anmeldung", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
-  <% unless @cargo_list.country == 'CH' %>
-    <%= link_to("Zollpapiere", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
-    <%= link_to("Kontrolle", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
-  <% else %>
-    <%= link_to("Lieferschein", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "delivery_receipt"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
-    <%= link_to("Abholschein", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "pick_up_receipt"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
+  <% if @assigned_pallets.present? %>
+    <div class="btn-group">
+      <a class="btn" href="<% cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert") %>"><i class="icon-print"></i> Transport Anmeldung</a>
+      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report") %>"><i class="icon-print"></i> Rüstschein</a></li>
+      </ul>
+    </div>
+    <% unless @cargo_list.country == 'CH' %>
+      <div class="btn-group">
+        <a class="btn" href="<% cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice") %>"><i class="icon-print"></i> Zollpapiere</a>
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll") %>"><i class="icon-print"></i> Kontrolle</a></li>
+        </ul>
+      </div>
+    <% else %>
+      <div class="btn-group">
+        <a class="btn" href="<% cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "delivery_receipt") %>"><i class="icon-print"></i> Lieferschein</a>
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "pick_up_receipt") %>"><i class="icon-print"></i> Abholschein</a></li>
+        </ul>
+      </div>
+    <% end %>
   <% end %>
-</header>
+</div>
+
 <% if @cargo_list.delivered == true %>
   <div id="flash_notice">Versand NR<%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
 <% end %>
 
 <% if @assigned_pallets.present? %>
   
-  <ul class="ul_summary">
-    <li class="summary clearfix"><p class="floatLeft bold title">Versand:</p><p class="floatLeft"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %> / <%= @cargo_list.country %></p></li>
-    <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @cargo_list.referee %></p></li>
-    <li class="summary clearfix"><p class="floatLeft bold title">Anz. Paletten:</p><p class="floatLeft"><%= @pallets_count.to_i %></p></li>
-    <li class="summary clearfix"><p class="floatLeft bold title">Mehrplatz:</p><p class="floatLeft"><%= @cargo_list.additional_space %></p></li>
-  </ul>
+  <blockquote>
+    <p>Empfänger: <%= @cargo_list.referee %></p>
+    <p><%= @pallets_count.to_i %> Paletten / <%= @cargo_list.additional_space %> Mehrplatz</p>
+  </blockquote>
   
   <section class="filter_box">
-    <header class="filter_box_header green_background"><h4>Angefügte Paletten / Coli</h4></header>
+    <h3>Angefügte Paletten / Coli</h3>
     <section class="filter_box_content clearfix">
       <%= form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table>
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
               <th>NR</th>
-              <th>Positionen</th>
+              <th>Pos</th>
               <th>Mehrplatz</th>
               <th>Tour</th>
               <th>PLZ Gebiet</th>
               <th>Empfänger</th>
-              <th>Auswahl</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -56,7 +92,7 @@
                 <td><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? ? pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name : nil %></td>
                 <td><%= pallet.purchase_positions.where("consignee_full IS NOT NULL").present? ? pallet.purchase_positions.where("consignee_full IS NOT NULL").first.consignee_full : nil %></td>
                 <% if permitted_to? :remove_pallets, :cargo_lists %>
-                  <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+                  <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
                 <% else %>
                   <td></td>
                 <% end %>
@@ -66,13 +102,10 @@
           <tfoot>
             <% if permitted_to? :remove_pallets, :cargo_lists %>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "greySubmit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <% 6.times do %>
+                  <td></td>
+                <% end %>
+                <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-small btn-danger", :disabled => false, :disable_with => "Entferne..." %></td>
               </tr>
             <% end %>
           </tfoot>
@@ -89,20 +122,20 @@
 
 <% if @pallets.present? %>
   <section class="filter_box">
-    <header class="filter_box_header orange_background"><h4>Verfügbare Paletten / Coli</h4></header>
+    <h3>Verfügbare Paletten / Coli</h3>
     <section class="filter_box_content clearfix">
       <%= form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table>
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
               <th>NR</th>
-              <th>Positionen</th>
+              <th>Pos</th>
               <th>Mehrplatz</th>
               <th>Tour</th>
               <th>PLZ Gebiet</th>
               <th>Empfänger</th>
-              <th>Auswahl</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -118,7 +151,7 @@
                   <td><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? ? pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name : nil %></td>
                   <td><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
                   <% if permitted_to? :assign_pallets, :cargo_lists %>
-                    <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+                    <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
                   <% else %>
                     <td></td>
                   <% end %>
@@ -129,13 +162,10 @@
           <tfoot>
             <% if permitted_to? :assign_pallets, :cargo_lists %>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "greySubmit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <% 6.times do %>
+                  <td></td>
+                <% end %>
+                <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-small btn-primary", :disabled => false, :disable_with => "Füge hinzu..." %></td>
               </tr>
             <% end %>
           </tfoot>

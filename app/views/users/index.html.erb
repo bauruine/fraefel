@@ -1,54 +1,53 @@
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Benutzer Liste</h1>
-  <%= link_to("Neuer Benutzer", new_user_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-</header>
+<ul class="breadcrumb">
+  <li>
+    <a href="#"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="#"><i class="icon-cog"></i> Verwaltung</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="#"><i class="icon-user"></i> Benutzer</a>
+  </li>
+</ul>
 
+<div class="page-header">
+  <h1>Benutzer Liste</h1>
+</div>
 
-<section class="filter_box">
-  <header class="filter_box_header">
-    <h4 class="floatLeft">Aktive Benutzer</h4>
-    <a data-show-tooltip="true" data-role="search" class="header_link" href="/users?data_role=search" oldtitle="Zeige Filter-Optionen" aria-describedby="ui-tooltip-2">
-      <span class="header_pack _10"></span>
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn" href="/users/new"><i class="icon-plus-sign"></i> Neuer Benutzer</a>
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+      <span class="caret"></span>
     </a>
-    <a data-show-tooltip="true" data-role="add" class="header_link" href="/users/new" oldtitle="Neuer Auftrag">
-      <span class="header_pack _74"></span>
-    </a>
-  </header>
-  <section class="filter_box_content clearfix">
-    
-    <table class="margin_bottom_big">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Benutzer</th>
-          <th>Email</th>
-          <th>Gruppe/n</th>
-          <th>Login anz.</th>
-          <th>Letzter login</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @users.each do |user| %>
-          <tr>
-            <td><%= link_to(user.id, edit_user_path(user)) %></td>
-            <td><%= user.username %></td>
-            <td><%= user.email %></td>
-            <td><%= user.roles.present? ? user.roles.map(&:name).join(", ") : nil %></td>
-            <td><%= user.login_count %></td>
-            <td><%= user.last_login_at.present? ? user.last_login_at.to_formatted_s(:swiss_date) : nil %></td>
-          </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tfoot>
-    </table>
-    
-  </section>
-</section>
+    <ul class="dropdown-menu">
+      <li><a href="#"><i class="icon-search"></i> Suche</a></li>
+      <!-- dropdown menu links -->
+    </ul>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Benutzer</th>
+      <th>Email</th>
+      <th>Gruppe/n</th>
+      <th>Login anz.</th>
+      <th>Letzter login</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to(user.id, edit_user_path(user)) %></td>
+        <td><%= user.username %></td>
+        <td><%= user.email %></td>
+        <td><%= user.roles.present? ? user.roles.map(&:name).join(", ") : nil %></td>
+        <td><%= user.login_count %></td>
+        <td><%= user.last_login_at.present? ? user.last_login_at.to_formatted_s(:swiss_date) : nil %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

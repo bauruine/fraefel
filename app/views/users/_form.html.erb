@@ -1,62 +1,74 @@
-<%= form_for(@user) do |f| %>
-  <div class="form-element">
-    <%= f.label :forename, @user.new_record? ? "Vornamen angeben" : "Vorname ändern" %>
-    <%= f.text_field :forename %>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :surname, @user.new_record? ? "Nachname angeben" : "Nachname ändern" %>
-    <%= f.text_field :surname %>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :username, @user.new_record? ? "Benutzername wählen" : "Benutzername ändern" %>
-    <%= f.text_field :username%>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :email, @user.new_record? ? "Email angeben" : "Email ändern" %>
-    <%= f.text_field :email %>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :password, @user.new_record? ? "Passwort wählen" : "Passwort ändern" %>
-    <%= f.password_field :password %>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :password_confirmation, "Passwort bestätigen" %>
-    <%= f.password_field :password_confirmation %>
-  </div>
-  
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :roles, "Rollen verwalten" %>
-    <% for role in Role.all %>
-      <div>
-        <%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
-        <span class="checkboxLabel"><%= role.name %></span>
+<%= form_for @user, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <legend><%= controller.action_name.capitalize %> User</legend>
+
+    <div class="control-group">
+      <%= f.label :username, "Benutzer", :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :username, :class => 'text_field' %>
+        <p class="help-block"><strong>Info:</strong> Mind. 4 Zeichen. Keine Umlaute oder Sonderzeichen.</p>
       </div>
-    <% end %>
-  </div>
-  
-  <div class="form-element clearfix">
-    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(@user.new_record? ? "Benutzer erstellen" : "Änderungen Sichern", :class => "blueSubmit floatLeft") %>
-  </div>
+    </div>
 
-  <% if @user.errors.any? %>
-    <script>
-      $("#user_username").attr("placeholder", "<%= @user.errors['username'].inspect %>");
-      $("#user_email").attr("placeholder", "<%= @user.errors['email'].inspect %>");
-      $("#user_password").attr("placeholder", "<%= @user.errors['password'].inspect %>");
-      $("#user_password_confirmation").attr("placeholder", "<%= @user.errors['password_confirmation'].inspect %>");
-    </script>
-  <% end %>
+    <div class="control-group">
+      <%= f.label :email, "E-mail", :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :email, :class => 'text_field' %>
+      </div>
+    </div>
 
+    <hr />
+
+    <div class="control-group">
+      <%= f.label :forename, "Vorname", :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :forename, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :surname, "Nachname", :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :surname, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="control-group">
+      <%= f.label :password, "Passwort", :class => 'control-label' %>
+      <div class="controls">
+        <%= f.password_field :password, :class => 'text_field' %>
+        <p class="help-block"><strong>Info:</strong> Mind 6 Zeichen. Sonderzeichen sind erlaubt.</p>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :password_confirmation, "Passwort bestätigen", :class => 'control-label' %>
+      <div class="controls">
+        <%= f.password_field :password_confirmation, :class => 'text_field' %>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="control-group">
+      <label for="optionsCheckboxList" class="control-label">Rollen</label>
+      <div class="controls">
+        <% for role in Role.all %>
+          <label class="checkbox">
+            <%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
+            <%= role.name %>
+          </label>
+        <% end %>
+        <p class="help-block"><strong>Info:</strong> Es können gleichzeitig mehrere Rollen vergeben werden.</p>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', users_path, :class => 'btn' %>
+    </div>
+    
+  </fieldset>
 <% end %>

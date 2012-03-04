@@ -1,4 +1,6 @@
 class PurchasePosition < ActiveRecord::Base
+  cattr_accessor :fire_callback
+  
   belongs_to :commodity_code, :class_name => "CommodityCode", :foreign_key => "commodity_code_id"
   belongs_to :purchase_order, :class_name => "PurchaseOrder", :foreign_key => "purchase_order_id"
   belongs_to :old_pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
@@ -9,7 +11,7 @@ class PurchasePosition < ActiveRecord::Base
   has_many :transport_issues
   has_many :delivery_rejections, :through => :transport_issues
   
-  after_save :update_purchase_order_date
+  after_save :update_purchase_order_date, :unless => :fire_callback
   
   scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")
   

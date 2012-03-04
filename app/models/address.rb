@@ -24,18 +24,18 @@ class Address < ActiveRecord::Base
     
     csv_file_path = @baan_import.baan_upload.path
     
-    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :row_sep => "\r\r\n", :headers => :first_row})
+    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row, :encoding => "iso-8859-1:utf-8"})
     ag = Time.now
     csv_todos = [41, 65]
 
     csv_file.each do |row|
       csv_todos.each do |t_row|
-        csv_address_code = row[t_row].force_encoding('iso-8859-1').encode('UTF-8').to_s.chomp.lstrip.rstrip
+        csv_address_code = row[t_row].to_s.chomp.lstrip.rstrip
         #unless Address.where(:code => csv_address_code).present?
-          csv_street = row[t_row + 2].force_encoding('iso-8859-1').encode('UTF-8').to_s.chomp.lstrip.rstrip
-          csv_street_number = row[t_row + 3].force_encoding('iso-8859-1').encode('UTF-8').to_s.chomp.lstrip.rstrip
-          csv_postal_code = row[t_row + 4].force_encoding('iso-8859-1').encode('UTF-8').to_s.chomp.lstrip.rstrip
-          csv_city = row[t_row + 5].force_encoding('iso-8859-1').encode('UTF-8').to_s.chomp.lstrip.rstrip
+          csv_street = row[t_row + 2].to_s.chomp.lstrip.rstrip
+          csv_street_number = row[t_row + 3].to_s.chomp.lstrip.rstrip
+          csv_postal_code = row[t_row + 4].to_s.chomp.lstrip.rstrip
+          csv_city = row[t_row + 5].to_s.chomp.lstrip.rstrip
 
           Address.find_or_create_by_code(:code => csv_address_code, :street => (csv_street + " " + csv_street_number), :postal_code => csv_postal_code, :city => csv_city)
         #end

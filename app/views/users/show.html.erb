@@ -1,30 +1,87 @@
-<p id="notice"><%= notice %></p>
+<h1>User</h1>
 
 <p>
-  <b>Username:</b>
+  <b>Username</b><br>
   <%= @user.username %>
 </p>
 
 <p>
-  <b>Email:</b>
+  <b>Email</b><br>
   <%= @user.email %>
 </p>
 
 <p>
-  <b>Crypted password:</b>
+  <b>Crypted password</b><br>
   <%= @user.crypted_password %>
 </p>
 
 <p>
-  <b>Password salt:</b>
+  <b>Password salt</b><br>
   <%= @user.password_salt %>
 </p>
 
 <p>
-  <b>Persistence token:</b>
+  <b>Persistence token</b><br>
   <%= @user.persistence_token %>
 </p>
 
+<p>
+  <b>Forename</b><br>
+  <%= @user.forename %>
+</p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<p>
+  <b>Surname</b><br>
+  <%= @user.surname %>
+</p>
+
+<p>
+  <b>Single access token</b><br>
+  <%= @user.single_access_token %>
+</p>
+
+<p>
+  <b>Perishable token</b><br>
+  <%= @user.perishable_token %>
+</p>
+
+<p>
+  <b>Login count</b><br>
+  <%= @user.login_count %>
+</p>
+
+<p>
+  <b>Failed login count</b><br>
+  <%= @user.failed_login_count %>
+</p>
+
+<p>
+  <b>Last request at</b><br>
+  <%= @user.last_request_at %>
+</p>
+
+<p>
+  <b>Current login at</b><br>
+  <%= @user.current_login_at %>
+</p>
+
+<p>
+  <b>Last login at</b><br>
+  <%= @user.last_login_at %>
+</p>
+
+<p>
+  <b>Current login ip</b><br>
+  <%= @user.current_login_ip %>
+</p>
+
+<p>
+  <b>Last login ip</b><br>
+  <%= @user.last_login_ip %>
+</p>
+
+<div class="form-actions">
+  <%= link_to 'Back', users_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_user_path(@user), :class => 'btn' %>
+  <%= link_to 'Delete', user_path(@user), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>

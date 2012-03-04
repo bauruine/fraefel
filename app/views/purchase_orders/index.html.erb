@@ -1,43 +1,49 @@
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Verkaufs Aufträge</h1>
-</header>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/purchase_orders"><i class="icon-folder-open"></i> VK-Aufträge</a>
+  </li>
+</ul>
 
-<section class="filter_box">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">VK-Aufträge</h4>
-    <% if permitted_to? :destroy_multiple, :purchase_orders %>
-      <a rel="nofollow" data-method="delete" data-show-tooltip="true" class="header_link" href="/purchase_orders/destroy_multiple" title="Lösche VK ohne Palettenzuweisung">
-        <span class="header_pack _9"></span>
-      </a>
-    <% end %>
-    <a data-show-tooltip="true" data-role="tab" data-warp="goto" class="header_link" href="/purchase_orders?data_role=search" title="Springe zu VK-Auftrag...">
-      <span class="header_pack _14"></span>
+<div class="page-header">
+  <h1>VK - Aufträge</h1>
+</div>
+
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn" href="#"><i class="icon-search"></i> Filter</a>
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+      <span class="caret"></span>
     </a>
-    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/purchase_orders?data_role=search" title="Zeige Filter-Optionen">
-      <span class="header_pack _283"></span>
-    </a>
-  </header>
-  <section class="filter_box_content clearfix">
-    <table>
-      <thead>
-        <tr>
-          <th>VK-Auftrag</th>
-          <th>Positionen</th>
-          <th>Gebuchte Paletten</th>
-          <th>Handelspartner</th>
-          <th>Tour</th>
-          <th>Gebiet</th>
-          <th>Versand</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= render @purchase_orders %>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
-  </section>
-</section>
+    <ul class="dropdown-menu">
+      <li><a href="#"><i class="icon-screenshot"></i> Gehe zu</a></li>
+      <li class="divider"></li>
+      <li><a href="#"><i class="icon-trash"></i> Lösche</a></li>
+      <!-- dropdown menu links -->
+    </ul>
+  </div>
+</div>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>VK-Auftrag</th>
+      <th>Positionen</th>
+      <th>Paletten</th>
+      <th>Handelspartner</th>
+      <th>Tour</th>
+      <th>Gebiet</th>
+      <th>Versand</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @purchase_orders %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>
 
 <div data-type="modal" style="display: none;">
   <div class="box-padder">

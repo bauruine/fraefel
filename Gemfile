@@ -18,6 +18,8 @@ gem 'resque', :require => "resque/server"
 gem "jquery-rails"
 gem "magic_user"
 gem "RedCloth", :require => 'redcloth'
+gem 'ruby_parser'
+gem "twitter-bootstrap-rails"
 
 # Use unicorn as the web server
 gem 'unicorn'

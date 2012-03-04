@@ -1,84 +1,101 @@
-<div data-type="modal" style="display:none;">
+<div class="modal fade" id="test_id">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>Modal header</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary">Änderungen Speichern</a>
+  </div>
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
-  <%= link_to("Print", print_pallets_purchase_order_path(@purchase_order, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <% if permitted_to? :edit, :purchase_orders %>
-    <%= link_to("Edit", edit_purchase_order_path(@purchase_order), {"data-role" => "edit_remote", :class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-  <% end %>
-</header>
-
-<ul class="ul_summary">
-  <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @purchase_order.purchase_positions.first.consignee_full.present? ? @purchase_order.purchase_positions.first.consignee_full : @purchase_order.customer.company %></p></li>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/purchase_orders"><i class="icon-folder-open"></i> VK-Aufträge</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/purchase_orders/<%= @purchase_order.id %>"><%= @purchase_order.baan_id %></a>
+  </li>
 </ul>
+
+<div class="page-header">
+  <h1>VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
+</div>
+
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn" href="/delivery_rejections/new"><i class="icon-edit"></i> Edit</a>
+  </div>
+  <div class="btn-group">
+    <a class="btn" href="/delivery_rejections/new"><i class="icon-print"></i> Drucke</a>
+  </div>
+</div>
+
+<blockquote>
+  <p>Empfänger:</p>
+  <p><%= @purchase_order.purchase_positions.first.consignee_full.present? ? @purchase_order.purchase_positions.first.consignee_full : @purchase_order.customer.company %></p>
+</blockquote>
 
 <% if @purchase_positions.present? %>
   <section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Offene Positionen</h4>
-    </header>
+    <h3>Offene Positionen</h3>
     <section class="filter_box_content clearfix">
       <%= form_tag(assign_positions_pallets_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
-        <table>
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
-              <th>Position</th>
+              <th>Pos</th>
               <th>Artikel NR</th>
               <th>Artikel</th>
               <th>Produktlinie</th>
-              <th>Menge Total</th>
+              <th>Menge</th>
               <th>Lager Ort</th>
               <th>PLZ Gebiet</th>
               <th>Versand</th>
               <th></th>
-              <th>Auswahl</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <% @purchase_positions.each do |purchase_position| %>
               <% if purchase_position.pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
-                <% if (purchase_position.weight_total.to_i == 0) or (purchase_position.amount.to_i == 0) %>
-                  <tr class="yellow_background">
-                <% else %>
-                  <tr>
-                <% end %>
-                    <% if permitted_to? :edit, :purchase_positions %>
-                      <td><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
-                    <% else %>
-                      <td><%= purchase_position.position %></td>
-                    <% end %>
-                    <td><%= purchase_position.article_number %></td>
-                    <td><%= purchase_position.article %></td>
-                    <td><%= purchase_position.product_line %></td>
-                    <td><%= purchase_position.quantity %></td>
-                    <td><%= purchase_position.storage_location %></td>
-                    <td><%= purchase_position.zip_location_name %></td>
-                    <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                    <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.available_quantity), :to_i, :to_s, purchase_position.available_quantity) %></td>
-                    <% if permitted_to? :assign_positions, :pallets %>
-                      <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
-                    <% else %>
-                      <td></td>
-                    <% end %>
-                  </tr>
+                <tr class="<%= (purchase_position.weight_total.to_i == 0) or (purchase_position.amount.to_i == 0) ? "set" : nil %>">
+                  <% if permitted_to? :edit, :purchase_positions %>
+                    <td><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
+                  <% else %>
+                    <td><%= purchase_position.position %></td>
+                  <% end %>
+                  <td><%= purchase_position.article_number %></td>
+                  <td><%= purchase_position.article %></td>
+                  <td><%= purchase_position.product_line %></td>
+                  <td><%= purchase_position.quantity %></td>
+                  <td><%= purchase_position.storage_location %></td>
+                  <td><%= purchase_position.zip_location_name %></td>
+                  <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+                  <td style="text-align:center;"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.available_quantity), :to_i, :to_s, purchase_position.available_quantity), :style => "margin-bottom: 0;", :class => "span1" %></td>
+                  <% if permitted_to? :assign_positions, :pallets %>
+                    <td style="text-align:center;"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
+                </tr>
               <% end %>
             <% end %>
           </tbody>
           <tfoot>
             <% if permitted_to? :assign_positions, :pallets %>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="align-center"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palett NR...") %></td>
-                <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "blueSubmit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <% 8.times do %>
+                  <td></td>
+                <% end %>
+                <td style="text-align:center;"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palette NR...", :style => "margin-bottom: 0;", :class => "span2") %></td>
+                <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-small btn-primary", :disabled => false, :disable_with => "Füge hinzu..." %></td>
               </tr>
             <% end %>
           </tfoot>
@@ -89,66 +106,38 @@
   
 <% else %>
   <div id="flash_notice">Für diesen Auftrag wurden bereits alle Positionen bearbeitet!</div>
-  
 <% end %>
-
+<hr />
 <% @pallets.each do |pallet| %>
   
-  <section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <% if pallet.cargo_list.present? %>
-        <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
-      <% end %>
-      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
-      <% if pallet.purchase_positions.present? %>
-        <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
-      <% end %>
-      
-      <% if permitted_to? :edit, :pallets %>
-        <a href="<%= edit_pallet_path(pallet) %>" class="header_link" data-role="edit_remote" data-show-tooltip="true" title="Zeige Palette-Optionen">
-          <span class="header_pack _1"></span>
-        </a>
-      <% end %>
-      <a href="<%= pallet_path(pallet, :format => :pdf) %>" class="header_link" data-show-tooltip="true" title="Drucke Palette">
-        <span class="header_pack _193"></span>
-      </a>
-    </header>
-    <section class="filter_box_content clearfix">
-      <% if pallet.mixed? %>
-        <ul class="ul_summary">
-          <li class="summary clearfix">
-            <p class="floatLeft bold title">Mischpalette:</p>
-            <p class="floatLeft">
-              <% pallet.purchase_orders.each do |p_o| %>
-                <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
-              <% end %>
-            </p>
-          </li>
-        </ul>
-      <% end %>
+      <blockquote>
+        <% if pallet.cargo_list.present? %>
+          <p><%= "Versand NR #{pallet.cargo_list.id}" %></p>
+        <% end %>
+        <p><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id}" : "Palette NR #{pallet.id}" %> <%= link_to("Edit", "#test_id", :class => "btn btn-mini btn-info", "data-toggle" => "modal") %></p>
+        <% if pallet.purchase_positions.present? %>
+          <p><%= pallet.purchase_positions.first.consignee_full %></p>
+        <% end %>
+      </blockquote>
       
       <%= form_tag(remove_positions_pallet_path(pallet), {:class => "form", "data-submit_handler" => "true", :method => :delete}) do %>
-        <table>
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
-              <th>Position</th>
+              <th>Pos</th>
               <th>Artikel NR</th>
               <th>Artikel</th>
               <th>Produktlinie</th>
-              <th>Menge angefügt</th>
+              <th>Menge</th>
               <th>Lager Ort</th>
               <th>PLZ Gebiet</th>
               <th>Versand</th>
-              <th>Auswahl</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
-              <% if (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
-                <tr class="yellow_background">
-              <% else %>
-                <tr>
-              <% end %>
+              <tr class="<%= (purchase_position.weight_total.to_i == 0) or (purchase_position.amount.to_i == 0) ? "set" : nil %>">
                 <% if permitted_to? :remove_positions, :pallets %>
                   <% if purchase_position.purchase_order != @purchase_order %>
                     <td class="red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
@@ -169,7 +158,7 @@
                 <td><%= purchase_position.storage_location %></td>
                 <td><%= purchase_position.zip_location_name %></td>
                 <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                <td class="align-center">
+                <td style="text-align:center;">
                   <% if permitted_to? :remove_positions, :pallets %>
                     <% if purchase_position.purchase_order == @purchase_order %>
                       <%= check_box_tag "purchase_position_ids[]", purchase_position.id %>
@@ -189,14 +178,12 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="align-center"></td>
-                <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "redSubmit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <td></td>
+                <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-small btn-danger", :disabled => false, :disable_with => "Entferne..." %></td>
               </tr>
             <% end %>
           </tfoot>
         </table>
       <% end %>
-    </section>
-  </section>
   
 <% end %>

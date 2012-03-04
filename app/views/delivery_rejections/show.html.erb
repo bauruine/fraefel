@@ -1,17 +1,37 @@
-<div data-type="modal" style="display:none;">
-  
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/delivery_rejections"><i class="icon-folder-open"></i> Konflikte</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/delivery_rejections/<%= @delivery_rejection.id %>"><%= @delivery_rejection.id %></a>
+  </li>
+</ul>
+
+<div class="page-header">
+  <h1>Konflikt #<%= @delivery_rejection.id %> / <%= @delivery_rejection.customer.try(:company) %></h1>
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Konflikt #<%= @delivery_rejection.id %> / <%= @delivery_rejection.customer.try(:company) %></h1>
-  <%= link_to("Edit", edit_delivery_rejection_path(@delivery_rejection), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <a class="btn" href="<%= edit_delivery_rejection_path(@delivery_rejection) %>"><i class="icon-edit"></i> Edit</a>
+  </div>
   <% if @delivery_rejection.pallets.present? %>
-    <%= link_to("Detail Ansicht", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-    <%= link_to("Zollpapiere", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-    <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+    <div class="btn-group">
+      <a class="btn" href="<% delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report") %>"><i class="icon-print"></i> Detail Ansicht</a>
+      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="<%= delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice") %>"><i class="icon-print"></i> Zollpapiere</a></li>
+        <li class="divider"></li>
+        <li><a href="<%= delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external") %>"><i class="icon-print"></i> Lieferschein</a></li>
+      </ul>
+    </div>
   <% end %>
-</header>
+</div>
 
 <% if @delivery_rejection.pallets.empty? %>
   <div id="flash_notice">Es wurden noch keine Positionen zugewiesen.</div>
@@ -19,16 +39,13 @@
 
 <% @delivery_rejection.pallets.each do |pallet| %>
   <section class="filter_box">
-    <header class="filter_box_header">
-      <h4 class="floatLeft">Palette Nr <%= pallet.id %></h4>
-        <a data-show-tooltip="true" data-role="edit_remote" class="header_link" href="<%= edit_pallet_path(pallet) %>" title="Zeige Palette-Optionen">
-          <span class="header_pack _1"></span>
-        </a>
-    </header>
+      <blockquote>
+        <p>Palette Nr <%= pallet.id %> <%= link_to("Edit", edit_pallet_path(pallet.id), :class => "btn btn-mini btn-info") %></p>
+      </blockquote>
     <section class="filter_box_content clearfix">
       <%= form_tag(remove_positions_delivery_rejection_path(@delivery_rejection), {:method => :delete}) do %>
         <%= hidden_field_tag(:pallet_id, pallet.id) %>
-        <table>
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
               <th>#</th>
@@ -37,7 +54,6 @@
               <th>Alter Preis</th>
               <th>Neuer Preis</th>
               <th>Gewicht</th>
-              <th></th>
               <th></th>
             </tr>
           </thead>
@@ -50,8 +66,7 @@
                 <td><%= purchase_position.amount %></td>
                 <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.reduced_price %></td>
                 <td><%= purchase_position.weight_single %></td>
-                <td></td>
-                <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                <td style="text-align:center;"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
               </tr>
             <% end %>
           </tbody>
@@ -60,11 +75,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:amount) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
-              <td></td>
-              <td class="align-center"><%= submit_tag "Entfernen", :class => "greySubmit" %></td>
+              <td style="font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:amount) %></td>
+              <td style="font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
+              <td style="font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
+              <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-small btn-danger", :disabled => false, :disable_with => "Entferne..." %></td>
             </tr>
           </tfoot>
         </table>
@@ -81,7 +95,7 @@
   <section class="filter_box_content clearfix">
     <%= form_tag(assign_positions_delivery_rejection_path, {:class => "form", :method => :post}) do %>
       <%= hidden_field_tag(:delivery_rejection_id, @delivery_rejection.id) %>
-      <table>
+      <table class="table table-striped table-bordered">
         <thead>
           <tr>
             <th>#</th>
@@ -102,8 +116,8 @@
                   <td><%= purchase_position.quantity %></td>
                   <td><%= purchase_position.amount %></td>
                   <td><%= purchase_position.weight_single * purchase_position.quantity %></td>
-                  <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.quantity), :to_i, :to_s, purchase_position.quantity) %></td>
-                  <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id, @delivery_rejection.purchase_positions.include?(purchase_position) %></td>
+                  <td style="text-align:center;"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.quantity), :to_i, :to_s, purchase_position.quantity), :style => "margin-bottom:0;", :class => "span1" %></td>
+                  <td style="text-align:center;"><%= check_box_tag "purchase_position_ids[]", purchase_position.id, @delivery_rejection.purchase_positions.include?(purchase_position) %></td>
                 </tr>
               <% end %>
             <% end %>
@@ -115,8 +129,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="align-center"><%= text_field_tag(:pallet_id, nil) %></td>
-            <td class="align-center"><%= submit_tag "Hinzufügen", :class => "greySubmit" %></td>
+            <td style="text-align:center;"><%= text_field_tag(:pallet_id, nil, :style => "margin-bottom:0", :class => "span2") %></td>
+            <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-small btn-primary", :disabled => false, :disable_with => "Füge hinzu..." %></td>
           </tr>
         </tfoot>
       </table>
