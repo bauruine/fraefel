@@ -1,11 +1,32 @@
-<h1>VK-Auftrag NR#<%= @purchase_order.baan_id %></h3>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/purchase_orders"><i class="icon-folder-open"></i> VK-Aufträge</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/purchase_orders/<%= @purchase_order.id %>"><%= @purchase_order.baan_id %></a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="<%= edit_purchase_order_path(@purchase_order) %>">Edit</a>
+  </li>
+</ul>
 
-<%= form_for @purchase_order do |f| %>
-  <div class="form-element">
-    <%= f.label :delivered, "Versendet?" %>
-    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+<div class="page-header">
+  <h1>VK-Auftrag NR#<%= @purchase_order.baan_id %> <small>Mutation</small></h1>
+</div>
+
+<%= form_for @purchase_order, :html => {:class => "form-horizontal"} do |f| %>
+  <div class="control-group">
+    <%= f.label :delivered, "Versendet?", :class => "control-label" %>
+    <div class="controls">
+      <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+      <p class="help-block"><strong>Info:</strong> Bitte zuerst Versand als versendet deklarieren.</p>
+    </div>
   </div>
-  <div class="form-element clearfix">
-    <%= f.submit("Speichern", :class => "blueSubmit floatLeft") %>
+  <div class="form-actions">
+    <%= link_to "Abbrechen", :back, :class => "btn" %>
+    <%= f.submit("Speichern", :class => "btn btn-primary") %>
   </div>
 <% end %>

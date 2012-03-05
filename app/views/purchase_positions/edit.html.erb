@@ -1,27 +1,20 @@
-<h1>VK-Position NR#<%= @purchase_position.position %></h3>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/purchase_orders"><i class="icon-folder-open"></i> VK-Aufträge</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="<%= purchase_order_path(@purchase_position.purchase_order) %>"><%= @purchase_position.purchase_order.baan_id %></a> <span class="divider">-</span>
+  </li>
+  <li class="active">
+    <a href="<%= edit_purchase_position_path(@purchase_position) %>"><%= @purchase_position.position %></a>
+  </li>
+  
+</ul>
 
-<%= form_for @purchase_position do |f| %>
-  <div class="form-element">
-    <%= f.label :weight_single, "Gewicht Einzeln" %>
-    <%= f.text_field :weight_single %>
-  </div>
-  <div class="form-element">
-    <%= f.label :quantity, "Anzahl" %>
-    <%= f.text_field :quantity %>
-  </div>
-  <div class="form-element">
-    <%= f.label :amount, "Preis" %>
-    <%= f.text_field :amount %>
-  </div>
-  <div class="form-element">
-    <%= f.label :commodity_code, "Zoll Position" %>
-    <%= f.collection_select(:commodity_code_id, CommodityCode.all, :id, :content) %>
-  </div>
-  <div class="form-element">
-    <%= f.label :delivered, "Versendet?" %>
-    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-  </div>
-  <div class="form-element clearfix">
-    <%= f.submit("Artikel ändern", :class => "blueSubmit floatLeft") %>
-  </div>
-<% end %>
+<div class="page-header">
+  <h1>VK-Position #<%= @purchase_position.baan_id %> <small>Mutation</small></h1>
+</div>
+<%= render 'form' %>

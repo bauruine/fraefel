@@ -105,35 +105,35 @@
         <td></td>
         <td></td>
         <td>Zwischentotal</td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.calculate_netto_amount(@cargo_list.id) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>MwSt 19.00%</td>
-        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.calculate_tax(@cargo_list.id) %></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>Total</td>
-        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.calculate_brutto_amount(@cargo_list.id) %></td>
       </tr>
       <tr>
         <td></td>
         <td>Total netto kg</td>
-        <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) %></td>
+        <td><%= PalletPurchasePositionAssignment.calculate_netto_weight(@cargo_list.id) %></td>
         <td>Sonderrabat 100%</td>
         <td class="align-right"><%= 0.to_f %></td>
       </tr>
       <tr>
         <td></td>
         <td class="bold">Total brutto kg</td>
-        <td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@assigned_pallets.sum("count_as", :include => [:pallet_type]) * 20) %></td>
+        <td class="bold"><%= PalletPurchasePositionAssignment.calculate_brutto_weight(@cargo_list.id) %></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
+        <td class="align-right bold"><%= PalletPurchasePositionAssignment.calculate_brutto_amount(@cargo_list.id) %></td>
       </tr>
     </tbody>
   </table>
@@ -190,8 +190,8 @@
   var pallet_total_value = $("tr")[2].children[1];
   var coli_count_value = $("tr")[3].children[1];
   
-  $(pallet_count).html(<%= @assigned_pallets.sum('count_as', :include => :pallet_type) %>);
-  $(pallet_total).html(<%= @assigned_pallets.sum('pallets.additional_space') + @assigned_pallets.sum('count_as', :include => :pallet_type) %>);
+  $(pallet_count).html(<%= @pallets_count %>);
+  $(pallet_total).html(<%= @assigned_pallets.sum('pallets.additional_space') + @pallets_count %>);
   $(coli_count).html(<%= @assigned_pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
   
   $(pallet_count_value).html("Paletten");

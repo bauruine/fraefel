@@ -4,9 +4,8 @@
     <h3>Optionen - Pallet #<%= pallet.id %></h3>
   </div>
   
-  <%= form_for pallet, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= form_for pallet, :html => { :class => 'form-horizontal', :style => "margin:0;" } do |f| %>
     <div class="modal-body">
-      <fieldset>
         
         <div class="control-group">
           <%= f.label :additional_space, "Zusätzlicher Platz", :class => 'control-label' %>
@@ -30,13 +29,11 @@
             <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }, {}, {}) %>
           </div>
         </div>
-        
-        <div class="modal-footer">
-          <%= f.submit "Änderungen Speichern", :class => 'btn btn-primary' %>
-        </div>
-        
-      </fieldset>
     </div>
+    <div class="modal-footer">
+      <%= f.submit "Änderungen Speichern", :class => 'btn btn-primary' %>
+    </div>
+    
   <% end %>
 
 </div>

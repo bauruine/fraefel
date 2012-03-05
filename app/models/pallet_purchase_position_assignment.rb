@@ -18,4 +18,29 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
     end
   end
   
+  def self.calculate_netto_weight(cargo_list_id, *args)
+    args = args.first || {}
+    self.includes(:pallet => :cargo_list).where("cargo_lists.id = ?", cargo_list_id).where(args).sum(:weight)
+  end
+  
+  def self.calculate_brutto_weight(cargo_list_id, *args)
+    args = args.first || {}
+    self.calculate_netto_weight(cargo_list_id, args) + PalletType.calculate_brutto_weight(cargo_list_id)
+  end
+  
+  def self.calculate_netto_amount(cargo_list_id, *args)
+    args = args.first || {}
+    self.includes(:pallet => :cargo_list).where("cargo_lists.id = ?", cargo_list_id).where(args).sum(:amount)
+  end
+  
+  def self.calculate_tax(cargo_list_id, *args)
+    args = args.first || {}
+    ((self.calculate_netto_amount(cargo_list_id, args) / 100) * 19).round(2)
+  end
+  
+  def self.calculate_brutto_amount(cargo_list_id, *args)
+    args = args.first || {}
+    self.calculate_netto_amount(cargo_list_id, args) + self.calculate_tax(cargo_list_id, args)
+  end
+  
 end

@@ -76,8 +76,8 @@
     <% end %>
     
     <div class="form-actions">
-      <%= f.submit @delivery_rejection.new_record? ? "Konflikt speichern" : "Änderungen Sichern", :class => 'btn btn-primary' %>
-      <%= link_to 'Cancel', :back, :class => 'btn' %>
+      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
     </div>
   </fieldset>
 <% end %>

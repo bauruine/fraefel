@@ -1,0 +1,46 @@
+<%= form_for @purchase_position, :html => {:class => "form-horizontal"} do |f| %>
+  <div class="control-group">
+    <%= f.label :weight_single, "Gewicht Einzeln", :class => "control-label" %>
+    <div class="controls">
+      <div class="input-append">
+        <%= f.text_field :weight_single, :class => "text_field" %>
+        <span class="add-on">kg</span>
+      </div>
+      <p class="help-block"><strong>Info:</strong> Gewicht pro Position in kg.</p>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :quantity, "Anzahl", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :quantity %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :amount, "Preis", :class => "control-label" %>
+    <div class="controls">
+      <div class="input-append">
+        <%= f.text_field :amount, :class => "text_field" %>
+        <span class="add-on">CHF</span>
+      </div>
+      <p class="help-block"><strong>Info:</strong> Anzahl * Einzelpreis - Preise in Versand / Konflikt werden automatisch berechnet.</p>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :commodity_code, "Zoll Position", :class => "control-label" %>
+    <div class="controls">
+      <%= f.collection_select(:commodity_code_id, CommodityCode.all, :id, :content) %>
+    </div>
+  </div>
+  <hr />
+  <div class="control-group">
+    <%= f.label :delivered, "Versendet?", :class => "control-label" %>
+    <div class="controls">
+      <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+      <p class="help-block"><strong>Info:</strong> Bitte zuerst Versand als versendet deklarieren.</p>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= f.submit("Speichern", :class => "btn btn-primary") %>
+    <%= link_to("Abbrechen", :back, :class => "btn" )%>
+  </div>
+<% end %>

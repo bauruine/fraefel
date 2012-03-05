@@ -3,9 +3,9 @@
   <head>
     <%= wicked_pdf_stylesheet_link_tag "reset" %>
     <% unless params[:pdf_type] == "invoice" or params[:pdf_type] == "delivery_receipt" or params[:pdf_type] == "pick_up_receipt"%>
-      <%= wicked_pdf_stylesheet_link_tag "report" %>
+      <%= wicked_pdf_stylesheet_link_tag "pdf/report" %>
     <% else %>
-      <%= wicked_pdf_stylesheet_link_tag "pdf" %>
+      <%= wicked_pdf_stylesheet_link_tag "pdf/pdf" %>
     <% end %>
     <%= wicked_pdf_javascript_include_tag "jquery.js" %>
   </head>
