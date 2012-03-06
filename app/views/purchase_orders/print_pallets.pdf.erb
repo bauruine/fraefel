@@ -24,7 +24,7 @@
           <% if purchase_position.purchase_order != @purchase_order %>
             <td class="align-center red bold"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
           <% else %>
-            <td class="align-center"><%= purchase_position.position %></td>
+            <td class="align-center"><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
           <% end %>
           <td class="align-center"><%= purchase_position.article_number %></td>
           <td class="align-center"><%= purchase_position.article %></td>
