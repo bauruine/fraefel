@@ -1,0 +1,21 @@
+<%= form_for @baan_import, :html => {:multipart => true, :class => "form-horizontal"} do |f| %>
+  <div class="control-group">
+    <%= f.label :baan_upload, "CSV Datei", :class => "control-label" %>
+    <div class="controls">
+      <%= f.file_field :baan_upload, :class => "text_field" %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :baan_import_group, "Import Gruppe", :class => "control-label" %>
+    <div class="controls">
+      <%= f.collection_select(:baan_import_group_id, BaanImportGroup.all, :id, :title) %>
+      <p class="help-block"><strong>Info:</strong> Daten Import funktioniert nur wenn die richtige Gruppe ausgewählt wurde.</p>
+    </div>
+  </div>
+  
+  <div class="form-actions">
+    <%= f.submit("Upload", :class => "btn btn-primary") %>
+    <%= link_to("Abbrechen", :back, :class => "btn") %>
+  </div>
+<% end %>

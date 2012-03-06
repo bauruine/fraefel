@@ -1,47 +1,55 @@
-<div data-type="modal" style="display:none;">
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/baan_imports"><i class="icon-folder-open"></i> Baan Import</a>
+  </li>
+</ul>
+
+<div class="page-header">
+  <h1>Baan Import</h1>
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Import Wizzard</h1>
-  <% if permitted_to? :import, :baan_imports %>
-    <%= link_to("Upload", new_baan_import_path(), :class => "floatRight no_text_decoration blue_link_button", "data-role" => "edit_remote") %>
-  <% end %>
-</header>
+<% if permitted_to? :import, :baan_imports %>
+  <div class="row">
+    <div class="span12">
+      
+      <div class="btn-toolbar fr">
+        <div class="btn-group">
+          <a class="btn" href="<%= new_baan_import_path() %>"><i class="icon-plus-sign"></i> Upload CSV</a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<% end %>
 
-<section class="filter_box">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Gespeicherte CSV Dateien</h4>
-  </header>
-  <section class="filter_box_content clearfix">
+<h2>Gespeicherte CSV Dateien</h2>
 
-    <table class="margin_bottom_big">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Datei Name</th>
-          <th>Import Gruppe</th>
-          <th>Datei Typ</th>
-          <th>Datei Grösse</th>
-          <th>Heraufgeladen am</th>
-          <th>Aktion</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @baan_imports.each do |baan_import| %>
-          <tr>
-            <td><%= baan_import.id %></td>
-            <td><%= baan_import.baan_upload_file_name %></td>
-            <td><%= baan_import.baan_import_group.present? ? baan_import.baan_import_group.title : nil %></td>
-            <td><%= baan_import.baan_upload_content_type %></td>
-            <td><%= baan_import.baan_upload_file_size %></td>
-            <td><%= baan_import.baan_upload_updated_at.to_formatted_s(:swiss_date) %></td>
-            <td><%= link_to("Re-Import", import_baan_import_path(baan_import)) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
-    
-  </section>
-</section>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Datei Name</th>
+      <th>Import Gruppe</th>
+      <th>Datei Typ</th>
+      <th>Datei Grösse</th>
+      <th>Heraufgeladen am</th>
+      <th>Aktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @baan_imports.each do |baan_import| %>
+      <tr>
+        <td><%= baan_import.id %></td>
+        <td><%= baan_import.baan_upload_file_name %></td>
+        <td><%= baan_import.baan_import_group.present? ? baan_import.baan_import_group.title : nil %></td>
+        <td><%= baan_import.baan_upload_content_type %></td>
+        <td><%= baan_import.baan_upload_file_size %></td>
+        <td><%= baan_import.baan_upload_updated_at.to_formatted_s(:swiss_date) %></td>
+        <td><%= link_to("Re-Import", import_baan_import_path(baan_import)) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

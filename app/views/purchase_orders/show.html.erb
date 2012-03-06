@@ -11,7 +11,7 @@
 </ul>
 
 <div class="page-header">
-  <h1>VK-Auftrag NR#<%= @purchase_order.baan_id %><small> <%= @purchase_order.purchase_positions.first.consignee_full.present? ? @purchase_order.purchase_positions.first.consignee_full : @purchase_order.customer.company %></small></h1>
+  <h1>VK-Auftrag #<%= @purchase_order.baan_id %><small> <%= @purchase_order.purchase_positions.first.consignee_full.present? ? @purchase_order.purchase_positions.first.consignee_full : @purchase_order.customer.company %></small></h1>
 </div>
 
 <div class="btn-toolbar">

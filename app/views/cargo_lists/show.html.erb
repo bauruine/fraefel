@@ -14,44 +14,53 @@
   <h1>Versand NR#<%= @cargo_list.id %> <small><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %> / <%= @cargo_list.country %></small></h1>
 </div>
 
-<div class="btn-toolbar">
-  <% if permitted_to? :edit, :cargo_lists %>
-    <div class="btn-group">
-      <a class="btn" href="<%= edit_cargo_list_path(@cargo_list) %>"><i class="icon-edit"></i> Edit</a>
+<div class="row">
+  <div class="span12">
+    <blockquote class="fl">
+      <p>Empfänger: <%= @cargo_list.referee %></p>
+      <p><%= @pallets_count.to_i %> Paletten / <%= @cargo_list.additional_space %> Mehrplatz</p>
+    </blockquote>
+
+    <div class="btn-toolbar fr">
+      <% if permitted_to? :edit, :cargo_lists %>
+        <div class="btn-group">
+          <a class="btn" href="<%= edit_cargo_list_path(@cargo_list) %>"><i class="icon-edit"></i> Edit</a>
+        </div>
+      <% end %>
+      <% if @assigned_pallets.present? %>
+        <div class="btn-group">
+          <a class="btn" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => 'report_lebert') %>"><i class="icon-print"></i> Transport Anmeldung</a>
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report") %>"><i class="icon-print"></i> Rüstschein</a></li>
+          </ul>
+        </div>
+        <% unless @cargo_list.country == 'CH' %>
+          <div class="btn-group">
+            <a class="btn" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice") %>"><i class="icon-print"></i> Zollpapiere</a>
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll") %>"><i class="icon-print"></i> Kontrolle</a></li>
+            </ul>
+          </div>
+        <% else %>
+          <div class="btn-group">
+            <a class="btn" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "delivery_receipt") %>"><i class="icon-print"></i> Lieferschein</a>
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "pick_up_receipt") %>"><i class="icon-print"></i> Abholschein</a></li>
+            </ul>
+          </div>
+        <% end %>
+      <% end %>
     </div>
-  <% end %>
-  <% if @assigned_pallets.present? %>
-    <div class="btn-group">
-      <a class="btn" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => 'report_lebert') %>"><i class="icon-print"></i> Transport Anmeldung</a>
-      <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report") %>"><i class="icon-print"></i> Rüstschein</a></li>
-      </ul>
-    </div>
-    <% unless @cargo_list.country == 'CH' %>
-      <div class="btn-group">
-        <a class="btn" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice") %>"><i class="icon-print"></i> Zollpapiere</a>
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll") %>"><i class="icon-print"></i> Kontrolle</a></li>
-        </ul>
-      </div>
-    <% else %>
-      <div class="btn-group">
-        <a class="btn" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "delivery_receipt") %>"><i class="icon-print"></i> Lieferschein</a>
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "pick_up_receipt") %>"><i class="icon-print"></i> Abholschein</a></li>
-        </ul>
-      </div>
-    <% end %>
-  <% end %>
+  </div>
 </div>
 
 <% if @cargo_list.delivered == true %>
@@ -60,10 +69,6 @@
 
 <% if @assigned_pallets.present? %>
   
-  <blockquote>
-    <p>Empfänger: <%= @cargo_list.referee %></p>
-    <p><%= @pallets_count.to_i %> Paletten / <%= @cargo_list.additional_space %> Mehrplatz</p>
-  </blockquote>
   
   <section class="filter_box">
     <h3>Angefügte Paletten / Coli</h3>

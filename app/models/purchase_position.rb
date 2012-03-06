@@ -19,6 +19,14 @@ class PurchasePosition < ActiveRecord::Base
     self.quantity.to_i - self.pallet_purchase_position_assignments.sum("quantity")
   end
   
+  def in_mixed_pallet?(*args)
+    self.purchase_order != Pallet.find(args.first).purchase_orders.first
+  end
+  
+  def nil_or_zero?
+    self.weight_total.to_f == 0.to_f || self.amount.to_f == 0
+  end
+  
   protected
   
   def update_purchase_order_date

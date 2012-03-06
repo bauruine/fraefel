@@ -5,3 +5,11 @@
  *= require_self
  *= require_tree .
 */
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}

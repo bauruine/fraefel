@@ -1,15 +1,17 @@
-<%= form_for @baan_import, :html => {:multipart => true} do |f| %>
-  <div class="form-element">
-    <%= f.label :baan_upload, "CSV Datei" %>
-    <%= f.file_field :baan_upload %>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :baan_import_group, "Import Gruppe" %>
-    <%= f.collection_select(:baan_import_group_id, BaanImportGroup.all, :id, :title) %>
-  </div>
-  
-  <div class="form-element clearfix">
-    <%= f.submit("Upload", :class => "blueSubmit floatLeft") %>
-  </div>
-<% end %>
+<ul class="breadcrumb">
+  <li>
+    <a href="/"><i class="icon-home"></i> Dashboard</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/baan_imports"><i class="icon-folder-open"></i> Baan Import</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="/baan_imports/new">Neu</a>
+  </li>
+</ul>
+
+<div class="page-header">
+  <h1>Baan Import <small>Neu</small></h1>
+</div>
+
+<%= render 'form' %>
