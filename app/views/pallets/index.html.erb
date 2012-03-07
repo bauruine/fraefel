@@ -77,17 +77,17 @@
               <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
                 <td class="red">
                   <% if permitted_to? :edit, :purchase_positions %>
-                    <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
+                    <%= link_to("#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
                   <% else %>
-                    <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
+                    <%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %>
                   <% end %>
                 </td>
               <% else %>
               <td>
                 <% if permitted_to? :edit, :purchase_positions %>
-                  <%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
+                  <%= link_to("#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
                 <% else %>
-                  <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
+                  <%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %>
                 <% end %>
               </td>
               <% end %>
