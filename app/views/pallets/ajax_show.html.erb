@@ -27,9 +27,9 @@
             <tr>
           <% end %>
             <% if purchase_position.purchase_order != @pallet.purchase_orders.first %>
-              <td class="red"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+              <td class="red"><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
             <% else %>
-            <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+            <td><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
             <% end %>
             <td><%= purchase_position.article_number %></td>
             <td><%= purchase_position.commodity_code.content %></td>
