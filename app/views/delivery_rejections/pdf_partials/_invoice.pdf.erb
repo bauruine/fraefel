@@ -1,4 +1,4 @@
-<header id="invoice_header" class="clearfix" style="width:185px;height:57px;">
+<header id="invoice_header" class="clearfix" style="height:57px;">
   <%#= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
   <ul class="floatLeft">
     <li class="bold">&nbsp;</li>
@@ -6,11 +6,11 @@
     <li>&nbsp;</li>
   </ul>
 
-  <ul class="floatLeft">
-    <li class="bold">&nbsp;</li>
-    <li>&nbsp;</li>
-    <li>&nbsp;</li>
-    <li>&nbsp;</li>
+  <ul class="floatRight">
+    <li class="bold"><%= @delivery_rejection.try(:customer).try(:company) %></li>
+    <li><%= @delivery_rejection.addresses.where(:category_id => 4).first.try(:street) %></li>
+    <li><%= @delivery_rejection.addresses.where(:category_id => 4).first.try(:postal_code) %> <%= @delivery_rejection.addresses.where(:category_id => 4).first.try(:city) %></li>
+    <li><%= @delivery_rejection.addresses.where(:category_id => 4).first.try(:country) %></li>
   </ul>
 </header>
 
@@ -23,19 +23,19 @@
 
 <section id="customer_attributes_1" class="clearfix">
   <ul id="column_1" class="floatLeft">
-    <li>&nbsp;</li>
-    <li>&nbsp;</li>
+    <li>Kunde</li>
+    <li>Transport/Lieferung</li>
   </ul>
   <ul id="column_2" class="floatLeft">
-    <li class="bold">&nbsp;</li>
-    <li class="bold">&nbsp;</li>
+    <li class="bold">Fraefel AG</li>
+    <li class="bold">Lebert</li>
   </ul>
   <ul id="column_3" class="floatLeft">
     <li>U/Z</li>
     <li>U/K</li>
   </ul>
   <ul id="column_4" class="floatLeft">
-    <li><%= current_user.username %></li>
+    <li><%= current_user.full_name %></li>
     <li><%= @delivery_rejection.id %></li>
   </ul>
   <ul id="column_5" class="floatLeft">
@@ -45,22 +45,7 @@
 </section>
 
 <section id="customer_attributes_2" class="clearfix">
-  <ul id="column_1" class="floatLeft">
-    <li>Kunde</li>
-    <li>Transport/Lieferung</li>
-  </ul>
-  <ul id="column_2" class="floatLeft">
-    <li class="bold"><%= @delivery_rejection.customer.try(:company) %></li>
-    <li class="bold">&nbsp;</li>
-  </ul>
-  <ul id="column_3" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="white_color">.</li>
-  </ul>
-  <ul id="column_4" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="bold">Lebert Fax: +41 71 677 22 66</li>
-  </ul>
+
 </section>
 
 <section id="price_table">
@@ -142,30 +127,22 @@
   <ul id="column_1" class="floatLeft">
     <li>Lieferbedingung</li>
     <li>Versandbedingung</li>
-    <li>Zahlungsbedingung</li>
+    <li>&nbsp;</li>
   </ul>
   <ul id="column_2" class="floatLeft">
-    <li>frei Haus, verzollt, versteuert (DDP)</li>
+    <li>ab Werk</li>
     <li>per LKW</li>
-    <li>30 Tage netto</li>
+    <li>&nbsp;</li>
   </ul>
 </section>
 
 <section id="declaration">
-  <p>
-    Der Ausführer ( Ermächtigter Ausführer; Bewilligungs-Nr.4218 ) der Waren, auf die sich dieses
-  </p>
-  <p>
-    Handelspapier bezieht, erklärt, dass diese Waren, soweit nicht anders angegeben, präferenzbegünstigte
-  </p>
-  <p>
-    schweizerische Ursprungswaren sind.
-  </p>
+  <p>&nbsp;</p>
 </section>
 
 <footer id="invoice_footer" class="clearfix">
   <ul id="column_1" class="floatLeft">
-    <li>Lütisburg-Station,</li>
+    <li>&nbsp;</li>
     <li>Unterschrift des Ausführers</li>
     <li class="margin_top_5px">___________________________</li>
   </ul>
