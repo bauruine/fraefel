@@ -27,7 +27,7 @@ class Address < ActiveRecord::Base
     
     csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
     ag = Time.now
-    csv_todos = [41, 65]
+    csv_todos = [71]#41, 65
 
     csv_file.each do |row|
       csv_todos.each do |t_row|

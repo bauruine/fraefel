@@ -34,7 +34,7 @@ class PurchaseOrder < ActiveRecord::Base
     ag = Time.now
     
     csv_file.each do |row|
-      csv_address = Address.find_by_code(row[65].to_s.undress)
+      csv_address = Address.find_by_code(row[71].to_s.undress)
       customer = Customer.find_by_baan_id(row[6].to_s.undress)
       baan_id = row[2].to_s.undress
       csv_customer = row[6].to_s.undress
