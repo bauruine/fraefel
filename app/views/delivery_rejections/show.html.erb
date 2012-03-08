@@ -8,7 +8,7 @@
   
   <% if @delivery_rejection.pallets.present? %>
     <%= link_to("Detail Ansicht", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-    <%= link_to("Zollpapiere", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+    <%= link_to("Proformarechnung", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
     <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
   <% end %>
 </header>

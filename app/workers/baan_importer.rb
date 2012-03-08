@@ -4,11 +4,12 @@ class BaanImporter
     baan_import = BaanImport.find(baan_import_id)
     case baan_import.baan_import_group.title
     when "Versand"
+      Address.import(baan_import_id)
       Customer.import(baan_import)
       ShippingAddress.import(baan_import)
       CommodityCode.import(baan_import)
       ShippingRoute.import(baan_import)
-      PurchaseOrder.import(baan_import)
+      PurchaseOrder.import(baan_import_id)
       PurchasePosition.import(baan_import)
     when "Inventar-Baan-Artikel"
       Article.import(baan_import)

@@ -8,6 +8,7 @@ class CargoListsController < ApplicationController
     @assigned_pallets = @cargo_list.pallets
     @pallets_count = @cargo_list.pallets.sum("count_as", :include => [:pallet_type])
     @pallets = Pallet.where("cargo_list_id IS NULL").where("delivery_rejection_id IS NULL").order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions]) - Pallet.where(:purchase_positions => {:id => nil}).includes(:purchase_positions)
+    @address = Address.where("cargo_lists.id = ?", CargoList.last.id).includes(:purchase_orders => [:pallets => :cargo_list])
     
     respond_to do |format|
       format.html
