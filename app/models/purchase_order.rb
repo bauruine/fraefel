@@ -48,7 +48,7 @@ class PurchaseOrder < ActiveRecord::Base
           puts "ERROR-- PurchaseOrder not saved..."
         end
       else
-        if (purchase_order.baan_id == baan_id && purchase_order.status == "open" && purchase_order.address.code != row[71].to_s.undress)
+        if (purchase_order.baan_id == baan_id && purchase_order.status == "open" && purchase_order.try(:address).try(:code) != row[71].to_s.undress)
           purchase_order.update_attributes(:address => csv_address)
         end
       end
