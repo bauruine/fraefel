@@ -216,7 +216,7 @@
         <tbody>
           <% pallet.purchase_positions.each do |purchase_position| %>
             <tr>
-              <td><%= purchase_position.baan_id %></td>
+              <td><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
               <td><%= purchase_position.article %></td>
               <td><%= purchase_position.quantity %></td>
             </tr>
