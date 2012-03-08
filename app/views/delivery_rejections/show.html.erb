@@ -97,7 +97,7 @@
             <% PurchasePosition.where(:"cargo_lists.id" => @delivery_rejection.cargo_list_ids).includes(:pallets => :cargo_list).each do |purchase_position| %>
               <% if purchase_position.pallet_purchase_position_assignments.where("pallets.cargo_list_id is NULL").includes(:pallet).sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
                 <tr>
-                  <td><%= purchase_position.baan_id %></td>
+                  <td><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
                   <td><%= purchase_position.article %></td>
                   <td><%= purchase_position.quantity %></td>
                   <td><%= purchase_position.amount %></td>
