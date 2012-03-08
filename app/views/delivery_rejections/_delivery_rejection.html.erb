@@ -2,7 +2,7 @@
   <td><%= link_to delivery_rejection.id, delivery_rejection %></td>
   <td><%= delivery_rejection.category.title %></td>
   <td><%= delivery_rejection.status.title %></td>
-  <td><%= delivery_rejection.purchase_positions.count %></td>
+  <td><%= PurchasePosition.includes(:pallets => :delivery_rejection).where("delivery_rejections.id = ?", delivery_rejection.id).count %></td>
   <td><%= delivery_rejection.customer.try(:company) %></td>
   <td><%= delivery_rejection.creator.present? ? delivery_rejection.creator.username : nil %></td>
   <td><%= delivery_rejection.created_at.to_formatted_s(:swiss_date) %></td>
