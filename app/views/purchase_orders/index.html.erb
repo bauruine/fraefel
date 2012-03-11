@@ -44,7 +44,7 @@
     <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
       <div class="form-element">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.all, :id, :name, {:include_blank => true, :placeholder => "Tour"}) %>
+        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}) %>
       </div>
       
       <div class="form-element">
