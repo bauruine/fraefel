@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  total_pallets: 1
+  total_purchase_positions: 1
+  calculable: 
+
+two:
+  total_pallets: 1
+  total_purchase_positions: 1
+  calculable: 

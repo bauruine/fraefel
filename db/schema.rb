@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120308131452) do
+ActiveRecord::Schema.define(:version => 20120311164447) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -105,6 +105,15 @@ ActiveRecord::Schema.define(:version => 20120308131452) do
     t.string   "baan_upload_content_type"
     t.integer  "baan_upload_file_size"
     t.datetime "baan_upload_updated_at"
+  end
+
+  create_table "calculations", :force => true do |t|
+    t.integer  "total_pallets"
+    t.integer  "total_purchase_positions"
+    t.integer  "calculable_id"
+    t.string   "calculable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "cargo_list_delivery_rejection_assignments", :force => true do |t|

@@ -1,4 +1,5 @@
 class PurchaseOrder < ActiveRecord::Base
+  has_one :calculation, :as => :calculable, :dependent => :destroy
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
   belongs_to :address, :class_name => "Address", :foreign_key => "address_id"
   belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
@@ -6,6 +7,8 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :purchase_order_pallet_assignments
   has_many :pallets, :class_name => "Pallet", :through => :purchase_order_pallet_assignments
   has_many :old_pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
+  
+  scope :ordered_for_delivery, order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
   def amount
     amount = 0
@@ -23,6 +26,11 @@ class PurchaseOrder < ActiveRecord::Base
     return weight_total
   end
   
+  def self.patch_calculation
+    self.where("calculations.id is null").includes(:calculation).each do |purchase_order|
+      purchase_order.create_calculation(:total_pallets => purchase_order.pallets.count, :total_purchase_positions => purchase_order.purchase_positions.count)
+    end
+  end
   
   def self.import(arg)
     @baan_import = BaanImport.find(arg)

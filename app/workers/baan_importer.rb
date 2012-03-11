@@ -11,6 +11,7 @@ class BaanImporter
       ShippingRoute.import(baan_import)
       PurchaseOrder.import(baan_import_id)
       PurchasePosition.import(baan_import)
+      PurchaseOrder.patch_calculation
     when "Inventar-Baan-Artikel"
       Article.import(baan_import)
     when "Inventar-Lager-Adresse"

@@ -59,7 +59,7 @@
       
       <div class="form-element">
         <%= f.label(:delivered_equals, "Versendet?") %>
-        <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
+        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}) %>
       </div>
       
       <div class="form-element clearfix">

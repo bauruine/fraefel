@@ -100,10 +100,12 @@ class PalletsController < ApplicationController
   def remove_positions
     @pallet = Pallet.find(params[:id])
     @purchase_positions = PurchasePosition.where(:id => params[:purchase_position_ids])
+    @purchase_order = @purchase_positions.first.purchase_order
     @pallet.purchase_positions -= @purchase_positions
     if !Pallet.find(@pallet).purchase_positions.where(:purchase_order_id => @purchase_positions.first.purchase_order_id).present?
       # remove purchase_order assignment from table
       @pallet.purchase_orders -= [@purchase_positions.first.purchase_order]
+      @purchase_order.calculation.update_attribute(:total_pallets, @purchase_order.pallets.count)
     end
     redirect_to(:back)
   end
@@ -120,16 +122,17 @@ class PalletsController < ApplicationController
   
   def assign_positions
     @purchase_order = PurchaseOrder.where(:id => params[:purchase_order_id]).first
+    @purchase_order.create_calculation unless @purchase_order.calculation.present?
     if params[:pallet_id].present?
       @pallet = Pallet.where(:id => params[:pallet_id]).first
-      @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
-      @purchase_order.pallets += [@pallet]
     else
-      @pallet = Pallet.new
-      @pallet.save
-      @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
-      @purchase_order.pallets += [@pallet]
+      @pallet = Pallet.create
     end
+    
+    @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
+    @purchase_order.pallets += [@pallet]
+    @purchase_order.calculation.update_attribute(:total_pallets, @purchase_order.pallets.count)
+    
     params[:quantity_with_ids].each do |k, v|
       purchase_position = PurchasePosition.find(k.to_i)
       pallet_purchase_position_assignment = PalletPurchasePositionAssignment.where(:pallet => @pallet, :purchase_position => purchase_position).first

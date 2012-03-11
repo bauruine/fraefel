@@ -1,5 +1,6 @@
 class PurchaseOrdersController < ApplicationController
   filter_access_to :all
+  before_filter :is_currently_importing, :only => :index
   
   def show
     @purchase_order = PurchaseOrder.find(params[:id])
@@ -16,13 +17,8 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @search = PurchaseOrder.search(params[:search])
-    
-    if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"
-      @purchase_orders = @search.relation.order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
-    else
-      @purchase_orders = @search.relation.where(:status => "open").where(:delivered => false).where("customer_id IS NOT NULL").order("shipping_route_id asc, customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
-    end
+    @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation).search(params[:search] || {:delivered_equals => "false"})
+    @purchase_orders = @search.relation.ordered_for_delivery
     
     respond_to do |format|
       format.html
@@ -95,4 +91,11 @@ class PurchaseOrdersController < ApplicationController
     redirect_to purchase_orders_path
   end
   
+  private
+  
+  def is_currently_importing
+    unless Resque::Worker.working.empty?
+      render "shared/disabled_while_importing"
+    end
+  end
 end
