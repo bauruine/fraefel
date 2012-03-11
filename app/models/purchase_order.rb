@@ -28,7 +28,8 @@ class PurchaseOrder < ActiveRecord::Base
   
   def self.patch_calculation
     self.where("calculations.id is null").includes(:calculation).each do |purchase_order|
-      purchase_order.create_calculation(:total_pallets => purchase_order.pallets.count, :total_purchase_positions => purchase_order.purchase_positions.count)
+      purchase_order.create_calculation unless purchase_order.calculation.present?
+      purchase_order.calculation.update_attributes(:total_pallets => purchase_order.pallets.count, :total_purchase_positions => purchase_order.purchase_positions.count)
     end
   end
   
