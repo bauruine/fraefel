@@ -4,7 +4,7 @@ class PasswordResetsController < ApplicationController
   before_filter :load_user_using_perishable_token, :only => [ :edit, :update ]
   
   def new
-    flash[:notice] = "Bitte Benutzername und Email eingeben um fortzufahren."
+    flash[:notice] = "Bitte Benutzername oder Email eingeben um fortzufahren."
   end
 
   def create
@@ -12,10 +12,10 @@ class PasswordResetsController < ApplicationController
     respond_to do |format|
       if @user.present?
         @user.first.deliver_password_reset_instructions!
-        format.html { redirect_to login_path, :notice => "Die Instruktionen wurden per Email versendet." }
+        format.html { redirect_to login_path, :notice => "Die Instruktionen wurden per Email versendet. Achtung! Link ist maximal 5 Stunden gültig." }
       else
         format.html do
-          flash[:error] = "Benutzer nicht gefunden."
+          flash[:error] = "Mit den eingegebenen Daten konnte kein Benutzer gefunden werden. Daten überprüfen und nochmals versuchen."
           render "new"
         end
       end
@@ -46,7 +46,7 @@ class PasswordResetsController < ApplicationController
   def load_user_using_perishable_token
     @user = User.find_using_perishable_token(params[:id])
     unless @user
-      flash[:error] = "Benutzer wurde nicht gefunden."
+      flash[:error] = "Der Passwort-Zurücksetzungsvorgang wurde wegen inaktivität deaktiviert. Um neuen Vorgang zu starten bitte auf Zurücksetzen klicken."
       redirect_to login_url
     end
   end
