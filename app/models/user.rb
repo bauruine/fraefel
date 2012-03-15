@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
-  acts_as_authentic
+  acts_as_authentic do |c|
+    c.perishable_token_valid_for = 300.minutes
+  end
+  
   has_and_belongs_to_many :roles
   
   def role_symbols
