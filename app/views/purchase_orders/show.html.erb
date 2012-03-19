@@ -144,24 +144,8 @@
           </thead>
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
-              <% if (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
-                <tr class="yellow_background">
-              <% else %>
-                <tr>
-              <% end %>
-                <% if permitted_to? :remove_positions, :pallets %>
-                  <% if purchase_position.purchase_order != @purchase_order %>
-                    <td class="red"><%= link_to("#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
-                  <% else %>
-                  <td><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
-                  <% end %>
-                <% else %>
-                  <% if purchase_position.purchase_order != @purchase_order %>
-                    <td class="red"><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
-                  <% else %>
-                  <td><%= purchase_position.position %></td>
-                  <% end %>
-                <% end %>
+              <tr class="<%= purchase_position.in_mixed_pallet?(@purchase_order) ? 'red' : 'not-mixed' %>">
+                <td><%= title_for_purchase_position(purchase_position, @purchase_order) %></td>
                 <td><%= purchase_position.article_number %></td>
                 <td><%= purchase_position.article %></td>
                 <td><%= purchase_position.product_line %></td>

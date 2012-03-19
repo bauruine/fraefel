@@ -51,17 +51,17 @@ $(document).ready(function(){
   
   $('div[data-type="modal"]').dialog({
     autoOpen: false,
-    width: 800,
+    width: 'auto',
     height: 'auto',
     modal: true
   });
   
   $('a[data-role="table_remote"]').click(function() {
     var remote_url = $(this).attr("href");
-    $('div[data-type=modal]').load(remote_url + ' table');
-    
-    $('div[data-type="modal"]').show();
-    $('div[data-type=modal]').dialog('open');
+    $('div[data-type=modal]').load(remote_url + ' table', function() {
+      $('div[data-type="modal"]').show();
+      $('div[data-type=modal]').dialog('open');
+    });
     return false;
   });
   
@@ -92,10 +92,10 @@ $(document).ready(function(){
   
   $('a[data-role="edit_remote"]').click(function() {
     var remote_url = $(this).attr("href");
-    $('div[data-type="modal"]').load(remote_url + ' form');
-    
-    $('div[data-type="modal"]').show();
-    $('div[data-type="modal"]').dialog('open');
+    $('div[data-type="modal"]').load(remote_url + ' form', function() {
+      $('div[data-type="modal"]').show();
+      $('div[data-type="modal"]').dialog('open');
+    });
     return false;
   });
   

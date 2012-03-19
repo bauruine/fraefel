@@ -17,17 +17,35 @@ class PurchasePosition < ActiveRecord::Base
     self.quantity.to_i - self.pallet_purchase_position_assignments.sum("quantity")
   end
   
+  def in_mixed_pallet?(*args)
+    self.purchase_order != args.first
+  end
+  
+  def nil_or_zero?
+    self.weight_total.to_f == 0.to_f || self.amount.to_f == 0
+  end
+  def self.patch_gross_net_value_discount
+    self.all.each do |purchase_position|
+      gross_price = purchase_position.gross_price.present? ? purchase_position.gross_price : purchase_position.amount
+      net_price = purchase_position.net_price.present? ? purchase_position.net_price : purchase_position.amount
+      value_discount = purchase_position.value_discount.present? ? purchase_position.value_discount : 0
+      purchase_position.update_attributes(:gross_price => gross_price, :net_price => net_price, :value_discount => value_discount)
+    end
+  end
+  
   protected
   
   def update_purchase_order_date
     @purchase_order = self.purchase_order
     @purchase_position = self
-    @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
-    @purchase_order.update_attributes(:delivery_date => @date_for_update)
+    if @purchase_order.present?
+      @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
+      @purchase_order.update_attributes(:delivery_date => @date_for_update)
+    end
     @purchase_position_assignment = PalletPurchasePositionAssignment.where(:purchase_position_id => self.id)
     if @purchase_position_assignment.present?
       @purchase_position_assignment.each do |p_p_p_a|
-        p_p_p_a.update_attributes(:amount => (@purchase_position.amount * p_p_p_a.quantity), :weight => (@purchase_position.weight_single * p_p_p_a.quantity))
+        p_p_p_a.update_attributes(:value_discount => ((@purchase_position.value_discount.present? ? @purchase_position.value_discount : 0) * p_p_p_a.quantity), :net_price => ((@purchase_position.net_price.present? ? @purchase_position.net_price : 0) * p_p_p_a.quantity), :gross_price => ((@purchase_position.gross_price.present? ? @purchase_position.gross_price : 0) * p_p_p_a.quantity), :amount => ((@purchase_position.amount.present? ? @purchase_position.amount : 0) * p_p_p_a.quantity), :weight => ((@purchase_position.weight_single.present? ? @purchase_position.weight_single : 0) * p_p_p_a.quantity))
       end
     end
   end
@@ -63,6 +81,10 @@ class PurchasePosition < ActiveRecord::Base
       consignee_full = Iconv.conv('UTF-8', 'iso-8859-1', row[33]).to_s.chomp.lstrip.rstrip
       zip_location_id = Iconv.conv('UTF-8', 'iso-8859-1', row[34]).to_s.chomp.lstrip.rstrip
       zip_location_name = Iconv.conv('UTF-8', 'iso-8859-1', row[35]).to_s.chomp.lstrip.rstrip
+      gross_price = row[38].to_s.undress
+      value_discount = row[39].to_s.undress
+      net_price = row[40].to_s.undress
+      
       if !consignee_full.present?
         puts "Warning -- No consignee in CSV"
       end
@@ -73,17 +95,17 @@ class PurchasePosition < ActiveRecord::Base
         purchase_position_array = [purchase_position.weight_single.to_s, purchase_position.weight_total.to_s, purchase_position.quantity.to_s, purchase_position.amount.to_s, purchase_position.position, purchase_position.delivery_date]
         if (csv_array != purchase_position_array && purchase_position.status == "open")
           if purchase_position.pallets.present?
-            purchase_position.update_attributes(:article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
+            purchase_position.update_attributes(:gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
             #puts purchase_position.consignee_full
           else
-            purchase_position.update_attributes(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
+            purchase_position.update_attributes(:gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
             #puts purchase_position.consignee_full
           end
         else
         end
         purchase_position.update_attributes(:consignee_full => consignee_full)
       else
-        purchase_position = purchase_order.purchase_positions.build(:commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
+        purchase_position = purchase_order.purchase_positions.build(:gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
         if purchase_position.save
           #puts purchase_position.consignee_full
           #puts "New Purchase Position has been created: #{purchase_position.attributes}"

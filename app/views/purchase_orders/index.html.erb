@@ -18,7 +18,7 @@
     </a>
   </header>
   <section class="filter_box_content clearfix">
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>VK-Auftrag</th>
@@ -42,9 +42,25 @@
 <div data-type="modal" style="display: none;">
   <div class="box-padder">
     <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+      
+      <div class="form-element">
+        <%= f.label(:level_1_equals, "Zahlungsleister") %>
+        <%= f.collection_select(:level_1_equals, Address.where(:category_id => 8, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "xtra-large"}) %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:level_2_equals, "Rechnungsempfänger") %>
+        <%= f.collection_select(:level_2_equals, Address.where(:category_id => 9, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "xtra-large"}) %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:level_3_equals, "Lieferadresse") %>
+        <%= f.collection_select(:level_3_equals, Address.where(:category_id => 10, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "xtra-large"}) %>
+      </div>
+      
       <div class="form-element">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}) %>
+        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "xtra-large"}) %>
       </div>
       
       <div class="form-element">

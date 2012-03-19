@@ -18,4 +18,13 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
     end
   end
   
+  def self.patch_gross_net_value_discount
+    self.all.each do |p_p_p_a|
+      gross_price = p_p_p_a.purchase_position.gross_price.present? ? p_p_p_a.purchase_position.gross_price : p_p_p_a.purchase_position.amount
+      net_price = p_p_p_a.purchase_position.net_price.present? ? p_p_p_a.purchase_position.net_price : p_p_p_a.purchase_position.amount
+      value_discount = p_p_p_a.purchase_position.value_discount.present? ? p_p_p_a.purchase_position.value_discount : 0
+      p_p_p_a.update_attributes(:gross_price => gross_price, :net_price => net_price, :value_discount => value_discount)
+    end
+  end
+  
 end

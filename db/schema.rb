@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120311164447) do
+ActiveRecord::Schema.define(:version => 20120318201623) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -237,6 +237,9 @@ ActiveRecord::Schema.define(:version => 20120311164447) do
     t.decimal  "amount",               :precision => 12, :scale => 2
     t.decimal  "weight",               :precision => 12, :scale => 2
     t.decimal  "reduced_price",        :precision => 12, :scale => 2
+    t.decimal  "gross_price",          :precision => 12, :scale => 2
+    t.decimal  "net_price",            :precision => 12, :scale => 2
+    t.decimal  "value_discount",       :precision => 12, :scale => 2
   end
 
   create_table "pallet_types", :force => true do |t|
@@ -260,6 +263,13 @@ ActiveRecord::Schema.define(:version => 20120311164447) do
     t.integer  "delivery_rejection_id"
   end
 
+  create_table "purchase_order_address_assignments", :force => true do |t|
+    t.integer  "purchase_order_id"
+    t.integer  "address_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "purchase_order_pallet_assignments", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "pallet_id"
@@ -277,6 +287,9 @@ ActiveRecord::Schema.define(:version => 20120311164447) do
     t.date     "delivery_date"
     t.boolean  "delivered",         :default => false
     t.integer  "address_id"
+    t.integer  "level_1"
+    t.integer  "level_2"
+    t.integer  "level_3"
   end
 
   create_table "purchase_positions", :force => true do |t|
@@ -302,6 +315,9 @@ ActiveRecord::Schema.define(:version => 20120311164447) do
     t.integer  "zip_location_id"
     t.string   "zip_location_name"
     t.string   "baan_id"
+    t.decimal  "gross_price",       :precision => 12, :scale => 2
+    t.decimal  "net_price",         :precision => 12, :scale => 2
+    t.decimal  "value_discount",    :precision => 12, :scale => 2
   end
 
   create_table "referees", :force => true do |t|

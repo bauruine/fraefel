@@ -136,7 +136,7 @@ class PalletsController < ApplicationController
     params[:quantity_with_ids].each do |k, v|
       purchase_position = PurchasePosition.find(k.to_i)
       pallet_purchase_position_assignment = PalletPurchasePositionAssignment.where(:pallet => @pallet, :purchase_position => purchase_position).first
-      pallet_purchase_position_assignment.update_attributes(:quantity => v.to_i, :amount => (pallet_purchase_position_assignment.purchase_position.amount * v.to_i), :weight => (pallet_purchase_position_assignment.purchase_position.weight_single * v.to_i)) if pallet_purchase_position_assignment.present?
+      pallet_purchase_position_assignment.update_attributes(:value_discount => (pallet_purchase_position_assignment.purchase_position.value_discount * v.to_i), :net_price => (pallet_purchase_position_assignment.purchase_position.net_price * v.to_i), :gross_price => (pallet_purchase_position_assignment.purchase_position.gross_price * v.to_i), :quantity => v.to_i, :amount => (pallet_purchase_position_assignment.purchase_position.amount * v.to_i), :weight => (pallet_purchase_position_assignment.purchase_position.weight_single * v.to_i)) if pallet_purchase_position_assignment.present?
     end
     redirect_to(:back)
   end

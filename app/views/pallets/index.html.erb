@@ -46,15 +46,7 @@
       </a>
     </header>
     <section class="filter_box_content clearfix">
-      <% if pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").present? %>
-        <ul class="ul_summary">
-          <li class="summary clearfix">
-            <p class="floatLeft bold title">PLZ Gebiet:</p>
-            <p class="floatLeft"><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").first.zip_location_name %></p>
-          </li>
-        </ul>
-      <% end %>
-      <table class="margin_bottom_big">
+      <table class="table">
         <thead>
           <tr>
             <th>VK-Position</th>
@@ -103,7 +95,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td></td>
+            <td>PLZ Gebiet: <strong><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").try(:first).try(:zip_location_name) %></strong></td>
             <td></td>
             <td></td>
             <td></td>

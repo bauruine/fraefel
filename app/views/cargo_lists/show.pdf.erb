@@ -14,6 +14,8 @@
     <%= render "cargo_lists/pdf_partials/delivery_receipt.pdf.erb" %>
   <% elsif params[:pdf_type] == "pick_up_receipt" %>
     <%= render "cargo_lists/pdf_partials/pick_up_receipt.pdf.erb"%>
+  <% elsif params[:pdf_type] == "invoice_beta" %>
+    <%= render "cargo_lists/pdf_partials/invoice_beta" %>
   <% end %>
 
 <% end %>

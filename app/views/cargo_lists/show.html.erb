@@ -9,6 +9,7 @@
   <%= link_to("Rüstschein", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
   <%= link_to("Transport Anmeldung", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
   <% unless @cargo_list.country == 'CH' %>
+    <%= link_to("Zollpapiere NEU", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice_beta"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
     <%= link_to("Zollpapiere", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
     <%= link_to("Kontrolle", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") if @assigned_pallets.present? %>
   <% else %>
