@@ -20,7 +20,7 @@
     <ul class="floatRight">
       <li class="bold" style="font-size: 15px;"><%= @purchase_positions.first.purchase_order.address.company_name %></li>
       <li class="bold" style="font-size: 15px;"><%= @purchase_positions.first.purchase_order.address.street %></li>
-      <li class="bold" style="font-size: 15px;"><%= "CH - #{@purchase_positions.first.purchase_order.address.postal_code} #{@purchase_positions.first.purchase_order.address.first.city}" %></li>
+      <li class="bold" style="font-size: 15px;"><%= "CH - #{@purchase_positions.first.purchase_order.address.postal_code} #{@purchase_positions.first.purchase_order.address.city}" %></li>
     </ul>
   </section>
 
