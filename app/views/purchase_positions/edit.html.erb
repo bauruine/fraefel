@@ -10,8 +10,16 @@
     <%= f.text_field :quantity %>
   </div>
   <div class="form-element">
-    <%= f.label :amount, "Preis" %>
-    <%= f.text_field :amount %>
+    <%= f.label :gross_price, "Brutto Preis pro Stück" %>
+    <%= f.text_field :gross_price %>
+  </div>
+  <div class="form-element">
+    <%= f.label :value_discount, "Rabatt pro Stück" %>
+    <%= f.text_field :value_discount %>
+  </div>
+  <div class="form-element">
+    <%= f.label :net_price, "Netto Preis pro Stück" %>
+    <%= f.text_field :net_price %>
   </div>
   <div class="form-element">
     <%= f.label :commodity_code, "Zoll Position" %>
