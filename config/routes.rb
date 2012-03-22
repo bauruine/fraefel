@@ -46,6 +46,7 @@ Fraefel::Application.routes.draw do
   resources :purchase_positions do
     collection do
       get 'search_for'
+      get 'index_beta'
     end
   end
   

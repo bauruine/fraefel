@@ -1,0 +1,62 @@
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft m-r_5px">Legende</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <div class="widgets-padder clearfix">
+      <ul class="notifications">
+        <li><div class="status10"><%= @purchase_positions.where(:production_status => 1, :stock_status => 0).count %><span>Produziert</span><span class="grey">&nbsp;</span></div></li>
+        <li><div class="status11"><%= @purchase_positions.where(:stock_status => 1, :production_status => 1).count %><span>Produziert + Eingelagert</span><span class="grey">&nbsp;</span></div></li>
+        <li><div class="status00"><%= @purchase_positions.where(:production_status => 0).count %><span>Weder noch</span><span class="grey">&nbsp;</span></div></li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+  </section>
+</section>
+  
+<div class="clearfix"></div>
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Dispoliste</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Zoll</th>
+          <th>Artikel NR</th>
+          <th>Artikel</th>
+          <th>Produktlinie</th>
+          <th>Menge Total</th>
+          <th>Lager Ort</th>
+          <th>Versand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_positions.each do |purchase_position| %>
+          <tr class="status<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
+            <% if permitted_to? :edit, :purchase_positions %>
+              <td><%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
+            <% end %>
+            <td><%= purchase_position.commodity_code.content %></td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.article %></td>
+            <td><%= purchase_position.product_line %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.storage_location %></td>
+            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <% 8.times do %>
+            <td></td>
+          <% end %>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+</section>

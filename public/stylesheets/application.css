@@ -2,7 +2,8 @@ body {
   background-color: #5F5F62;
   font-family: Verdana,Helvetica,Arial,sans-serif;
   font-size: 14px;
-  color: #211F1E;
+  /*color: #211F1E;*/
+  color: #474747;
   height: 100%;
 }
 
@@ -48,7 +49,15 @@ img#logo {
 .green_background {
   background-color: rgba(112, 171, 2, 1) !important;
 }
-
+.status11 {
+  background-color: #CCFFCC;
+}
+.status10 {
+  background-color: #B8DFFF;
+}
+.status00 {
+  background-color: #FFCCCC;
+}
 .red_background {
 	background-color: #990000;
 	color: #ffffff;
@@ -197,12 +206,10 @@ table tbody tr {
 }
 
 table tbody tr:nth-child(even) {
-  background: #f7f7f7;
   height: 40px;
 }
 
 table tbody tr:nth-child(odd) {
-  background: #FFFFFF;
   height: 40px;
 }
 
@@ -233,9 +240,15 @@ table tfoot td {
 table tfoot td .bulk-actions select {
   padding: 4px;
   border: 1px solid #ccc;
-} 
+}
 
+.table tbody tr:nth-child(2n+1) td, .table tbody tr:nth-child(2n+1) th {
+  background-color: #F9F9F9;
+}
 
+.table tbody tr:hover td, .table tbody tr:hover th {
+  background-color: #F5F5F5;
+}
 
 table a {
   font-weight: bold;
@@ -256,6 +269,14 @@ input {
 }
 
 /*** Form ELEMENTS ***/
+select.xtra-large {
+  width: 54.714em;
+}
+
+input[type="text"].xtra-large {
+  width: 54em;
+}
+
 span.checkboxLabel {
   display: inline-block;
   line-height: 17px;
@@ -535,7 +556,7 @@ section.filter_box header.filter_box_header {
 }
 
 section.filter_box header.filter_box_header h4 {
-	color: #666;
+	color: #595959;
 }
 
 section.filter_box section.filter_box_content {
@@ -589,4 +610,37 @@ div.formRow p.ajaxFormInput {
 .one_third {
   width: 20em;
   float: right;
+}
+
+dt, dd {
+    line-height: 18px;
+}
+dt {
+    font-weight: bold;
+    line-height: 17px;
+}
+dd {
+    margin-left: 9px;
+}
+.dl-horizontal dt {
+    clear: left;
+    float: left;
+    text-align: right;
+    width: 120px;
+}
+.dl-horizontal dd {
+    margin-left: 130px;
+}
+hr {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+    border-left: 0 none;
+    border-right: 0 none;
+    border-style: solid none;
+    border-width: 1px 0;
+    margin: 18px 0;
 }

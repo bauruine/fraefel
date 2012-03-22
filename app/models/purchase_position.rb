@@ -84,6 +84,8 @@ class PurchasePosition < ActiveRecord::Base
       gross_price = row[38].to_s.undress
       value_discount = row[39].to_s.undress
       net_price = row[40].to_s.undress
+      production_status = row[79].to_s.undress.to_i
+      stock_status = row[78].to_s.undress.to_i
       
       if !consignee_full.present?
         puts "Warning -- No consignee in CSV"
@@ -95,17 +97,17 @@ class PurchasePosition < ActiveRecord::Base
         purchase_position_array = [purchase_position.weight_single.to_s, purchase_position.weight_total.to_s, purchase_position.quantity.to_s, purchase_position.amount.to_s, purchase_position.position, purchase_position.delivery_date]
         if (csv_array != purchase_position_array && purchase_position.status == "open")
           if purchase_position.pallets.present?
-            purchase_position.update_attributes(:gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
+            purchase_position.update_attributes(:stock_status => stock_status,:production_status => production_status, :gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
             #puts purchase_position.consignee_full
           else
-            purchase_position.update_attributes(:gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
+            purchase_position.update_attributes(:stock_status => stock_status,:production_status => production_status, :gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
             #puts purchase_position.consignee_full
           end
         else
         end
         purchase_position.update_attributes(:consignee_full => consignee_full)
       else
-        purchase_position = purchase_order.purchase_positions.build(:gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
+        purchase_position = purchase_order.purchase_positions.build(:stock_status => stock_status,:production_status => production_status, :gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
         if purchase_position.save
           #puts purchase_position.consignee_full
           #puts "New Purchase Position has been created: #{purchase_position.attributes}"

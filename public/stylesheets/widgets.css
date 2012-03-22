@@ -16,7 +16,6 @@ ul.notifications li div {
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
-  background: -moz-linear-gradient(center top , #F4F4F4 0%, #EDEDED 100%) repeat scroll 0 0 transparent;
   border-color: #E7E7E7 #E7E7E7 #D7D7D7;
   border-radius: 3px 3px 3px 3px;
   border-style: solid;
@@ -36,8 +35,11 @@ ul.notifications li:first-child div {
   margin-left: 0;
 }
 
-ul.notifications li div:hover {
+ul.notifications li div.normal:hover {
   background: -moz-linear-gradient(center top , #FAFAFA 0%, #F2F2F2 100%) repeat scroll 0 0 transparent;
+  box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+ul.notifications li div:hover {
   box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
@@ -47,6 +49,10 @@ ul.notifications li div span {
   display: block;
   font-size: 13px;
   padding: 2px;
+}
+
+ul.notifications li div.normal {
+  background: -moz-linear-gradient(center top , #F4F4F4 0%, #EDEDED 100%) repeat scroll 0 0 transparent;
 }
 
 ul.notifications li div span.green {
@@ -61,4 +67,14 @@ ul.notifications li div span.red {
 
 ul.notifications li div span.grey {
     font-size: 14px;
+}
+
+ul.notifications li div.status11 {
+  background-color: #CCFFCC !important;
+}
+ul.notifications li div.status10 {
+  background-color: #B8DFFF;
+}
+ul.notifications li div.status00 {
+  background-color: #FFCCCC;
 }

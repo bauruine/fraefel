@@ -13,6 +13,10 @@ class PurchasePositionsController < ApplicationController
     end
   end
   
+  def index_beta
+    @purchase_positions = PurchasePosition.where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:commodity_code, :purchase_order)
+  end
+  
   def index
     respond_to do |format|
       
