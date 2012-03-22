@@ -87,7 +87,7 @@
         <td class="align-center"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:quantity) %></td>
         <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:gross_price) %></td>
         <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:value_discount) %></td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:amount) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:net_price) %></td>
       </tr>
       <% end %>
       <tr>
@@ -115,7 +115,7 @@
         <td></td>
         <td></td>
         <td>Zwischentotal</td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
+        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) %></td>
       </tr>
       <tr>
         <td></td>
@@ -124,7 +124,7 @@
         <td></td>
         <td></td>
         <td>MwSt 19.00%</td>
-        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) %></td>
+        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) / 100) * 19).round(2) %></td>
       </tr>
       <tr>
         <td></td>
@@ -142,7 +142,7 @@
         <td></td>
         <td></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:amount) %></td>
+        <td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) %></td>
       </tr>
     </tbody>
   </table>
