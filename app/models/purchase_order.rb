@@ -76,6 +76,9 @@ class PurchaseOrder < ActiveRecord::Base
     
       purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :shipping_route => delivery_route, :address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3)
       if purchase_order.present? && purchase_order.new_record?
+        purchase_order.stock_status = purchase_order.purchase_positions.sum(:stock_status)
+        purchase_order.production_status = purchase_order.purchase_positions.sum(:production_status)
+        purchase_order.workflow_status = "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}"
         if purchase_order.save
           #puts "New Purchase Order has been created: #{purchase_order.attributes}"
         else
@@ -83,7 +86,7 @@ class PurchaseOrder < ActiveRecord::Base
         end
       else
         if (purchase_order.baan_id == baan_id && purchase_order.status == "open")
-          purchase_order.update_attributes(:address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3)
+          purchase_order.update_attributes(:address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3, :stock_status => purchase_order.purchase_positions.sum(:stock_status), :production_status => purchase_order.purchase_positions.sum(:production_status), :workflow_status => "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}")
         end
       end
       purchase_order.addresses += Address.where(:id => [level_1, level_2, level_3])
