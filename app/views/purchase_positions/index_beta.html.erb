@@ -1,3 +1,43 @@
+<div data-type="modal" style="display: none;">
+  <div class="box-padder">
+    <%= form_for @search, :url => index_beta_purchase_positions_path, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+      <div class="form-element">
+        <%= f.label(:production_status_equals, "Produktion beendet?") %>
+        <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}) %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:stock_status_equals, "Position eingelagert?") %>
+        <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}) %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:purchase_order_shipping_route_id_equals, "Tour") %>
+        <%= f.collection_select(:purchase_order_shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "xtra-large"}) %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
+        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
+        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %>
+      </div>
+      
+      <div class="form-element">
+        <%= f.label(:delivered_equals, "Versendet?") %>
+        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}) %>
+      </div>
+      
+      <div class="form-element clearfix">
+        <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft m-r_5px">Legende</h4>
@@ -18,35 +58,40 @@
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Dispoliste</h4>
+    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/purchase_orders?data_role=search" title="Zeige Filter-Optionen">
+      <span class="header_pack _283"></span>
+    </a>
   </header>
   <section class="filter_box_content clearfix">
 
     <table class="margin_bottom_big">
       <thead>
         <tr>
-          <th>Position</th>
-          <th>Zoll</th>
-          <th>Artikel NR</th>
-          <th>Artikel</th>
-          <th>Produktlinie</th>
-          <th>Menge Total</th>
-          <th>Lager Ort</th>
           <th>Versand</th>
+          <th>Tour</th>
+          <th>Position</th>
+          <th>Artikel</th>
+          <th>stk.</th>
+          <th>Bezeichnung</th>
+          <th>Produktlinie</th>
+          <th>Artikelgruppe</th>
+          <th>Lager Ort</th>
         </tr>
       </thead>
       <tbody>
         <% @purchase_positions.each do |purchase_position| %>
           <tr class="status<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
+            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            <td><%= purchase_position.purchase_order.shipping_route.name %></td>
             <% if permitted_to? :edit, :purchase_positions %>
               <td><%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
             <% end %>
-            <td><%= purchase_position.commodity_code.content %></td>
             <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.quantity %></td>
             <td><%= purchase_position.article %></td>
             <td><%= purchase_position.product_line %></td>
-            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.commodity_code.content %></td>
             <td><%= purchase_position.storage_location %></td>
-            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
           </tr>
         <% end %>
       </tbody>

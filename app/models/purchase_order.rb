@@ -49,6 +49,12 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
+  def self.patch_workflow_statuses
+    self.all.each do |p_o|
+      p_o.update_attributes(:stock_status => p_o.purchase_positions.sum(:stock_status), :production_status => p_o.purchase_positions.sum(:production_status), :workflow_status => "#{p_o.purchase_positions.sum(:production_status)}#{p_o.purchase_positions.sum(:stock_status)}")
+    end
+  end
+  
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     PaperTrail.whodunnit = 'System'

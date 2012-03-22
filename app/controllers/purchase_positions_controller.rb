@@ -14,7 +14,8 @@ class PurchasePositionsController < ApplicationController
   end
   
   def index_beta
-    @purchase_positions = PurchasePosition.where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:commodity_code, :purchase_order)
+    @search = PurchasePosition.includes(:commodity_code, :purchase_order => :shipping_route).search(params[:search] || {:delivered_equals => "false"})
+    @purchase_positions = @search.relation.order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_positions.delivery_date asc, purchase_positions.stock_status desc, purchase_positions.production_status desc")
   end
   
   def index

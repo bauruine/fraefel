@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120321233645) do
+ActiveRecord::Schema.define(:version => 20120322231122) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -290,6 +290,9 @@ ActiveRecord::Schema.define(:version => 20120321233645) do
     t.integer  "level_1"
     t.integer  "level_2"
     t.integer  "level_3"
+    t.integer  "stock_status",      :default => 0
+    t.integer  "production_status", :default => 0
+    t.string   "workflow_status",   :default => "00"
   end
 
   create_table "purchase_positions", :force => true do |t|
@@ -311,7 +314,7 @@ ActiveRecord::Schema.define(:version => 20120321233645) do
     t.string   "article_number"
     t.decimal  "total_amount",      :precision => 12, :scale => 2
     t.string   "consignee_full"
-    t.boolean  "delivered"
+    t.boolean  "delivered",                                        :default => false
     t.integer  "zip_location_id"
     t.string   "zip_location_name"
     t.string   "baan_id"
