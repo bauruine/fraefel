@@ -22,11 +22,8 @@ class PurchasePositionsController < ApplicationController
     respond_to do |format|
       
       format.html do
-        if params[:to_be_checked] && params[:to_be_checked] == "true"
-          @purchase_orders = PurchaseOrder.where("purchase_positions.amount = 0 OR purchase_positions.quantity = 0 OR purchase_positions.weight_single = 0").where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:purchase_positions)
-        else
-          @purchase_orders = PurchaseOrder.where("purchase_positions.delivered = false or purchase_positions.delivered IS NULL").includes(:purchase_positions)
-        end
+        @search = PurchasePosition.includes(:commodity_code, :purchase_order => :shipping_route).search(params[:search] || {:delivered_equals => "false", :stock_status_equals => 1})
+        @purchase_positions = @search.relation.order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_positions.delivery_date asc, purchase_positions.stock_status desc, purchase_positions.production_status desc")
       end
       
       format.js do

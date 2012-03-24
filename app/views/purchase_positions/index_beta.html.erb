@@ -5,32 +5,26 @@
         <%= f.label(:production_status_equals, "Produktion beendet?") %>
         <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}) %>
       </div>
-      
       <div class="form-element">
         <%= f.label(:stock_status_equals, "Position eingelagert?") %>
         <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}) %>
       </div>
-      
       <div class="form-element">
         <%= f.label(:purchase_order_shipping_route_id_equals, "Tour") %>
         <%= f.collection_select(:purchase_order_shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "xtra-large"}) %>
       </div>
-      
       <div class="form-element">
         <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
         <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %>
       </div>
-      
       <div class="form-element">
         <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
         <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %>
       </div>
-      
       <div class="form-element">
         <%= f.label(:delivered_equals, "Versendet?") %>
         <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}) %>
       </div>
-      
       <div class="form-element clearfix">
         <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
       </div>
@@ -85,6 +79,8 @@
             <td><%= purchase_position.purchase_order.shipping_route.name %></td>
             <% if permitted_to? :edit, :purchase_positions %>
               <td><%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
+            <% else %>
+              <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
             <% end %>
             <td><%= purchase_position.article_number %></td>
             <td><%= purchase_position.quantity %></td>

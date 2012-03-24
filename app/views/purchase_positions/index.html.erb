@@ -1,86 +1,115 @@
 <div data-type="modal" style="display:none;">
+  <%= form_for @search, :url => index_beta_purchase_positions_path, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+    <div class="form-element">
+      <%= f.label(:production_status_equals, "Produktion beendet?") %>
+      <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}) %>
+    </div>
+    <div class="form-element">
+      <%= f.label(:stock_status_equals, "Position eingelagert?") %>
+      <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}) %>
+    </div>
+    <div class="form-element">
+      <%= f.label(:purchase_order_shipping_route_id_equals, "Tour") %>
+      <%= f.collection_select(:purchase_order_shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "xtra-large"}) %>
+    </div>
+    <div class="form-element">
+      <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
+      <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %>
+    </div>
+    <div class="form-element">
+      <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
+      <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %>
+    </div>
+    <div class="form-element">
+      <%= f.label(:delivered_equals, "Versendet?") %>
+      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}) %>
+    </div>
+    <div class="form-element clearfix">
+      <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
+    </div>
+  <% end %>
+  
+  <% form_tag(search_for_purchase_positions_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
+    <ul class="ul_summary">
+
+      <li class="summary clearfix">
+        <p class="floatLeft bold title">VK-Position NR</p>
+        <p class="floatLeft"><%= text_field_tag(:purchase_position_id) %></p>
+      </li>
+      <li class="summary clearfix">
+        <p class="floatLeft title">Aktion</p>
+        <p class="floatLeft"><%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil %></p>
+      </li>
+    </ul>
+  <% end %>
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">VK-Positions Liste</h1>
-  <%= link_to("Alle", purchase_positions_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <%= link_to("Fehlerhaft", purchase_positions_path(:to_be_checked => true), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-</header>
-
 <section class="filter_box">
-  <header class="filter_box_header"><h4>Suche nach VK-Position</h4></header>
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft m-r_5px">Legende</h4>
+  </header>
   <section class="filter_box_content clearfix">
-    <% form_tag(search_for_purchase_positions_path, {:class => "form", :method => :get}) do %>
-      <ul class="ul_summary">
-
-        <li class="summary clearfix">
-          <p class="floatLeft bold title">VK-Position NR</p>
-          <p class="floatLeft"><%= text_field_tag(:purchase_position_id) %></p>
-        </li>
-        <li class="summary clearfix">
-          <p class="floatLeft title">Aktion</p>
-          <p class="floatLeft"><%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil %></p>
-        </li>
+    <div class="widgets-padder clearfix">
+      <ul class="notifications">
+        <li><div class="status10"><%= @purchase_positions.where(:production_status => 1, :stock_status => 0).count %><span>Produziert</span><span class="grey">&nbsp;</span></div></li>
+        <li><div class="status11"><%= @purchase_positions.where(:stock_status => 1, :production_status => 1).count %><span>Produziert + Eingelagert</span><span class="grey">&nbsp;</span></div></li>
+        <li><div class="status00"><%= @purchase_positions.where(:production_status => 0).count %><span>Weder noch</span><span class="grey">&nbsp;</span></div></li>
       </ul>
-    <% end %>
+      <div class="clear"></div>
+    </div>
   </section>
 </section>
+  
+<div class="clearfix"></div>
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Dispoliste</h4>
+    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/purchase_orders?data_role=search" title="Zeige Filter-Optionen">
+      <span class="header_pack _283"></span>
+    </a>
+  </header>
+  <section class="filter_box_content clearfix">
 
-<% @purchase_orders.each do |purchase_order| %>
-  <section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">VK-Auftrag NR#<%= purchase_order.baan_id %></h4>
-    </header>
-    <section class="filter_box_content clearfix">
-
-      <table class="margin_bottom_big">
-        <thead>
-          <tr>
-            <th>Position</th>
-            <th>Zoll</th>
-            <th>Artikel NR</th>
-            <th>Artikel</th>
-            <th>Produktlinie</th>
-            <th>Menge Total</th>
-            <th>Lager Ort</th>
-            <th>Versand</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% purchase_order.purchase_positions.each do |purchase_position| %>
-            <% if (purchase_position.weight_single.to_i == 0) or (purchase_position.amount.to_i == 0) %>
-              <tr class="yellow_background">
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>Versand</th>
+          <th>Tour</th>
+          <th>Position</th>
+          <th>Artikel</th>
+          <th>stk.</th>
+          <th>Bezeichnung</th>
+          <th>Produktlinie</th>
+          <th>Artikelgruppe</th>
+          <th>Lager Ort</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_positions.each do |purchase_position| %>
+          <tr class="status<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
+            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            <td><%= purchase_position.purchase_order.shipping_route.name %></td>
+            <% if permitted_to? :edit, :purchase_positions %>
+              <td><%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
             <% else %>
-              <tr>
+              <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
             <% end %>
-              <% if permitted_to? :edit, :purchase_positions %>
-                <td><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
-              <% else %>
-                <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
-              <% end %>
-              <td><%= purchase_position.commodity_code.content %></td>
-              <td><%= purchase_position.article_number %></td>
-              <td><%= purchase_position.article %></td>
-              <td><%= purchase_position.product_line %></td>
-              <td><%= purchase_position.quantity %></td>
-              <td><%= purchase_position.storage_location %></td>
-              <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-            </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.article %></td>
+            <td><%= purchase_position.product_line %></td>
+            <td><%= purchase_position.commodity_code.content %></td>
+            <td><%= purchase_position.storage_location %></td>
           </tr>
-        </tfoot>
-      </table>
-    </section>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <% 8.times do %>
+            <td></td>
+          <% end %>
+        </tr>
+      </tfoot>
+    </table>
   </section>
-<% end %>
+</section>
