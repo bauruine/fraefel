@@ -58,6 +58,7 @@ Fraefel::Application.routes.draw do
       get 'import_orders'
       get 'search_for'
       delete 'destroy_multiple'
+      get 'index_beta'
     end
   end
   

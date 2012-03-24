@@ -1,0 +1,29 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Verkaufs Aufträge</h1>
+</header>
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">VK-Aufträge</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>VK-Auftrag</th>
+          <th>Positionen</th>
+          <th>Gebuchte Paletten</th>
+          <th>Handelspartner</th>
+          <th>Tour</th>
+          <th>Gebiet</th>
+          <th>Versand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @purchase_orders %>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+  </section>
+</section>

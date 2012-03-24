@@ -78,6 +78,14 @@
         <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}) %>
       </div>
       
+      <div class="form-element">
+        <%= f.label(:warehousing_completed_equals, "Einlagerung abgeschlossen?") %>
+        <%= f.select(:warehousing_completed_equals, { 'Ja' => true, 'Nein' => false }, {}) %>
+      </div>
+      <div class="form-element">
+        <%= f.label(:manufacturing_completed_equals, "Produktion abgeschlossen?") %>
+        <%= f.select(:manufacturing_completed_equals, { 'Ja' => true, 'Nein' => false }, {:include_blank => true}) %>
+      </div>
       <div class="form-element clearfix">
         <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
       </div>

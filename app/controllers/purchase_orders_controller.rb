@@ -17,13 +17,17 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false"})
+    @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :warehousing_completed_equals => "true"})
     @purchase_orders = @search.relation.ordered_for_delivery
-    
     respond_to do |format|
       format.html
       format.js
     end
+  end
+  
+  def index_beta
+    # @purchase_orders = PurchaseOrder.group("purchase_orders.id").having("count(purchase_positions.id) = purchase_orders.stock_status").where("purchase_orders.delivered = false").includes(:purchase_positions, :shipping_route, :calculation, :addresses)
+    @purchase_orders = PurchaseOrder.where("purchase_orders.warehousing_completed = true").where("purchase_orders.delivered = false").includes(:purchase_positions, :shipping_route, :calculation, :addresses)
   end
   
   def edit
