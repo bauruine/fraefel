@@ -293,8 +293,8 @@ ActiveRecord::Schema.define(:version => 20120324202258) do
     t.integer  "stock_status",            :default => 0
     t.integer  "production_status",       :default => 0
     t.string   "workflow_status",         :default => "00"
-    t.boolean  "manufacturing_completed", :default => false
-    t.boolean  "warehousing_completed",   :default => false
+    t.float    "manufacturing_completed", :default => 0.0
+    t.float    "warehousing_completed",   :default => 0.0
   end
 
   create_table "purchase_positions", :force => true do |t|

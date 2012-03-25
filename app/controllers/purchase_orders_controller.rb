@@ -17,7 +17,7 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :warehousing_completed_equals => "true"})
+    @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :warehousing_completed_gteq => 100})
     @purchase_orders = @search.relation.ordered_for_delivery
     respond_to do |format|
       format.html

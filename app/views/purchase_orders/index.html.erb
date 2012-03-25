@@ -80,11 +80,11 @@
       
       <div class="form-element">
         <%= f.label(:warehousing_completed_equals, "Einlagerung abgeschlossen?") %>
-        <%= f.select(:warehousing_completed_equals, { 'Ja' => true, 'Nein' => false }, {}) %>
+        <%= f.select(:warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {}) %>
       </div>
       <div class="form-element">
         <%= f.label(:manufacturing_completed_equals, "Produktion abgeschlossen?") %>
-        <%= f.select(:manufacturing_completed_equals, { 'Ja' => true, 'Nein' => false }, {:include_blank => true}) %>
+        <%= f.select(:manufacturing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {:include_blank => true}) %>
       </div>
       <div class="form-element clearfix">
         <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
