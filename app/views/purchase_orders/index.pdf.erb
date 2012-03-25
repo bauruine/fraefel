@@ -1,6 +1,6 @@
 <section class="filter_box">
   <header class="filter_box_header">
-    <h4 class="floatLeft">Aktive Filter</h4>
+    <h4 class="floatLeft">Spediliste Aktive Filter</h4>
   </header>
   <section class="filter_box_content clearfix">
     <table>
@@ -25,43 +25,93 @@
     </table>
   </section>
 </section>
-
-<section class="filter_box">
-  <header class="filter_box_header">
-    <h4 class="floatLeft">Spediliste</h4>
-  </header>
-  <section class="filter_box_content clearfix">
-    <table>
-      <thead>
-        <tr>
-          <th>Versand</th>
-          <th>Tour</th>
-          <th>Position</th>
-          <th>Artikel</th>
-          <th>stk.</th>
-          <th>Bezeichnung</th>
-          <th>Produktlinie</th>
-          <th>Artikelgruppe</th>
-          <th>Lager Ort</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @purchase_orders.each do |p_o| %>
+<% @purchase_orders.each do |p_o| %>
+  <section class="filter_box">
+    <header class="filter_box_header">
+      <h4 class="floatLeft" style="padding-right:5px;">VK #<%= p_o.baan_id %></h4>
+      <h4 class="floatLeft"><%= p_o.purchase_positions.try(:first).try(:consignee_full) %></h4>
+    </header>
+    <section class="filter_box_content clearfix">
+      <table>
+        <thead>
+          <tr>
+            <th>Versand</th>
+            <th>Tour</th>
+            <th>VK-Pos</th>
+            <th>Artikel</th>
+            <th>stk.</th>
+            <th>Bezeichnung</th>
+            <th>Produktlinie</th>
+            <th>Lager Ort</th>
+          </tr>
+        </thead>
+        <tbody>
           <% p_o.purchase_positions.each do |p_o_p| %>
             <tr>
-              <td><%= p_o_p.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-              <td><%= p_o_p.purchase_order.shipping_route.name %></td>
-              <td><%= "#{p_o.baan_id}-#{p_o_p.position}" %></td>
-              <td><%= p_o_p.article_number %></td>
-              <td><%= p_o_p.quantity %></td>
-              <td><%= p_o_p.article %></td>
-              <td><%= p_o_p.product_line %></td>
-              <td><%= p_o_p.commodity_code.content %></td>
-              <td><%= p_o_p.storage_location %></td>
+              <td id="column_1"><%= p_o_p.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+              <td id="column_2"><%= p_o_p.purchase_order.shipping_route.name %></td>
+              <td id="column_3"><%= "#{p_o.baan_id}-#{p_o_p.position}" %></td>
+              <td id="column_4"><%= p_o_p.article_number %></td>
+              <td id="column_5"><%= p_o_p.quantity %></td>
+              <td id="column_6"><%= p_o_p.article %></td>
+              <td id="column_7"><%= p_o_p.product_line %></td>
+              <td id="column_8"><%= p_o_p.storage_location %></td>
             </tr>
           <% end %>
-        <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </section>
   </section>
-</section>
+<% end %>
+<script type="text/javascript" charset="utf-8">
+  var column_1 = 0;
+  var column_2 = 0;
+  var column_3 = 0;
+  var column_4 = 0;
+  var column_5 = 0;
+  var column_6 = 0;
+  var column_7 = 0;
+  var column_8 = 0;
+  
+  $('td#column_1').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_1) {column_1 = this_width};
+  });
+  $('td#column_2').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_2) {column_2 = this_width};
+  });
+  $('td#column_3').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_3) {column_3 = this_width};
+  });
+  $('td#column_4').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_4) {column_4 = this_width};
+  });
+  $('td#column_5').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_5) {column_5 = this_width};
+  });
+  $('td#column_6').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_6) {column_6 = this_width};
+  });
+  $('td#column_7').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_7) {column_7 = this_width};
+  });
+  $('td#column_8').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_8) {column_8 = this_width};
+  });
+  
+  $('td#column_1').css('width', column_1 + 'px');
+  $('td#column_2').css('width', column_2 + 'px');
+  $('td#column_3').css('width', column_3 + 'px');
+  $('td#column_4').css('width', column_4 + 'px');
+  $('td#column_5').css('width', column_5 + 'px');
+  $('td#column_6').css('width', column_6 + 'px');
+  $('td#column_7').css('width', column_7 + 'px');
+  $('td#column_8').css('width', column_8 + 'px');
+</script>

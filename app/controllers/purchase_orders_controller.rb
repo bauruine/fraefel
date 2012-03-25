@@ -32,6 +32,7 @@ class PurchaseOrdersController < ApplicationController
           :encoding => 'UTF-8',
           :footer => {
             :right => params[:pdf_type] != "invoice" ? "Seite [page] / [topage]" : "",
+            :left => params[:pdf_type] != "invoice" ? "#{Time.now.to_formatted_s(:swiss_date)}" : "",
             :line => false
           }
         )
