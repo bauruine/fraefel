@@ -1,0 +1,67 @@
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">Aktive Filter</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>Von</th>
+          <th>Bis</th>
+          <th>Tour</th>
+          <th>Eingelagert in %</th>
+          <th>Produziert in %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= params[:search][:delivery_date_greater_than_or_equal_to] if params[:search].present? %></td>
+          <td><%= params[:search][:delivery_date_less_than_or_equal_to] if params[:search].present? %></td>
+          <td><%= params[:search].present? && params[:search][:shipping_route_id_equals].present? ? ShippingRoute.where(:id => params[:search][:shipping_route_id_equals]).first.name : nil %></td>
+          <td><%= params[:search].present? ? params[:search][:warehousing_completed_gteq] : "100" %></td>
+          <td><%= params[:search][:manufacturing_completed_gteq] if params[:search].present? %></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</section>
+
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">Spediliste</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>Versand</th>
+          <th>Tour</th>
+          <th>Position</th>
+          <th>Artikel</th>
+          <th>stk.</th>
+          <th>Bezeichnung</th>
+          <th>Produktlinie</th>
+          <th>Artikelgruppe</th>
+          <th>Lager Ort</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_orders.each do |p_o| %>
+          <% p_o.purchase_positions.each do |p_o_p| %>
+            <tr>
+              <td><%= p_o_p.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+              <td><%= p_o_p.purchase_order.shipping_route.name %></td>
+              <td><%= "#{p_o.baan_id}-#{p_o_p.position}" %></td>
+              <td><%= p_o_p.article_number %></td>
+              <td><%= p_o_p.quantity %></td>
+              <td><%= p_o_p.article %></td>
+              <td><%= p_o_p.product_line %></td>
+              <td><%= p_o_p.commodity_code.content %></td>
+              <td><%= p_o_p.storage_location %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</section>

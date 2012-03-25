@@ -22,6 +22,20 @@ class PurchaseOrdersController < ApplicationController
     respond_to do |format|
       format.html
       format.js
+      format.pdf do
+        render( 
+          :pdf => "print-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :footer => {
+            :right => params[:pdf_type] != "invoice" ? "Seite [page] / [topage]" : "",
+            :line => false
+          }
+        )
+      end
     end
   end
   
