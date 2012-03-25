@@ -29,7 +29,7 @@
       <tbody>
         <% @baan_imports.each do |baan_import| %>
           <tr>
-            <td><%= baan_import.id %></td>
+            <td><%= link_to(baan_import.id, baan_import.baan_upload) %></td>
             <td><%= baan_import.baan_upload_file_name %></td>
             <td><%= baan_import.baan_import_group.present? ? baan_import.baan_import_group.title : nil %></td>
             <td><%= baan_import.baan_upload_content_type %></td>
