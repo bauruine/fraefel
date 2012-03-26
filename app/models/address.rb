@@ -26,6 +26,34 @@ class Address < ActiveRecord::Base
     (self.postal_code.present? && self.city.present? && self.city.present?) ? true : false
   end
   
+  def self.patch_import(upload_id)
+    puts Address.count
+    #@baan_import = BaanImport.find(upload_id)
+    
+    csv_file_path = upload_id
+    
+    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
+    ag = Time.now
+    csv_todos = {"kat_b" => [21, 22, 23, 24, 25, 26], "kat_a" => [29, 30, 35, 36, 37, 38], "kat_c" => [45, 46, 47, 48, 50, 51]}
+
+    csv_file.each do |row|
+      csv_todos.each do |k, v|
+        csv_address_code = row[v[0]].to_s.undress
+        csv_company_name = row[v[1]].to_s.undress
+        csv_street = row[v[2]].to_s.undress
+        csv_street_number = row[v[3]].to_s.undress
+        csv_postal_code = row[v[4]].to_s.undress
+        csv_city = row[v[5]].to_s.undress
+        
+        csv_category = Category.where(:title => k).first
+        address = Address.find_or_create_by_code_and_category_id(:code => csv_address_code, :category_id => csv_category.id, :company_name => csv_company_name, :street => (csv_street + " " + csv_street_number), :postal_code => csv_postal_code, :city => csv_city)
+      end
+    end
+    ab = Time.now
+    puts (ab - ag).to_s
+    puts Address.count
+  end
+  
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     
