@@ -55,6 +55,29 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
+  def self.patch_import(upload_id)
+    csv_file_path = upload_id
+    
+    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
+    ag = Time.now
+    
+    csv_file.each do |row|
+      csv_purchase_order = row[0].to_s.undress
+      level_1 =  Address.where(:code => row[29].to_s.undress, :category_id => 8).try(:first).try(:id)
+      level_2 =  Address.where(:code => row[21].to_s.undress, :category_id => 9).try(:first).try(:id)
+      level_3 =  Address.where(:code => row[45].to_s.undress, :category_id => 10).try(:first).try(:id)
+      
+      purchase_order = PurchaseOrder.where(:baan_id => csv_purchase_order)
+      
+      if purchase_order.present?
+        purchase_order.first.update_attributes(:level_1 => level_1, :level_2 => level_2, :level_3 => level_3)
+        purchase_order.first.addresses += Address.where(:id => [level_1, level_2, level_3])
+      end
+    end
+    ab = Time.now
+    puts (ab - ag).to_s
+  end
+  
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     PaperTrail.whodunnit = 'System'
@@ -70,9 +93,9 @@ class PurchaseOrder < ActiveRecord::Base
       baan_id = row[2].to_s.undress
       csv_customer = row[6].to_s.undress
       delivery_route = ShippingRoute.find_by_name(row[21].to_s.undress)
-      level_1 =  Address.where(:code => row[55].to_s.undress).try(:first).try(:id)
-      level_2 =  Address.where(:code => row[47].to_s.undress).try(:first).try(:id)
-      level_3 =  Address.where(:code => row[71].to_s.undress).try(:first).try(:id)
+      level_1 =  Address.where(:code => row[55].to_s.undress, :category_id => 8).try(:first).try(:id)
+      level_2 =  Address.where(:code => row[47].to_s.undress, :category_id => 9).try(:first).try(:id)
+      level_3 =  Address.where(:code => row[71].to_s.undress, :category_id => 10).try(:first).try(:id)
     
       purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :shipping_route => delivery_route, :address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3)
       if purchase_order.present? && purchase_order.new_record?
