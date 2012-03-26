@@ -65,6 +65,10 @@
         <%= f.label(:shipping_route_id_equals, "Tour") %>
         <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "xtra-large"}) %>
       </div>
+      <div class="form-element">
+        <%= f.label(:warehouse_number_equals, "Versandlager") %>
+        <%= f.text_field(:warehouse_number_equals) %>
+      </div>
       
       <div class="form-element">
         <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>

@@ -93,6 +93,7 @@ class PurchaseOrder < ActiveRecord::Base
       baan_id = row[2].to_s.undress
       csv_customer = row[6].to_s.undress
       delivery_route = ShippingRoute.find_by_name(row[21].to_s.undress)
+      csv_warehouse_number = row[22].to_s.undress
       level_1 =  Address.where(:code => row[55].to_s.undress, :category_id => 8).try(:first).try(:id)
       level_2 =  Address.where(:code => row[47].to_s.undress, :category_id => 9).try(:first).try(:id)
       level_3 =  Address.where(:code => row[71].to_s.undress, :category_id => 10).try(:first).try(:id)
@@ -102,6 +103,7 @@ class PurchaseOrder < ActiveRecord::Base
         purchase_order.stock_status = purchase_order.purchase_positions.sum(:stock_status)
         purchase_order.production_status = purchase_order.purchase_positions.sum(:production_status)
         purchase_order.workflow_status = "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}"
+        purchase_order.warehouse_number = csv_warehouse_number
         if purchase_order.save
           #puts "New Purchase Order has been created: #{purchase_order.attributes}"
         else
@@ -109,7 +111,7 @@ class PurchaseOrder < ActiveRecord::Base
         end
       else
         if (purchase_order.baan_id == baan_id && purchase_order.status == "open")
-          purchase_order.update_attributes(:address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3, :stock_status => purchase_order.purchase_positions.sum(:stock_status), :production_status => purchase_order.purchase_positions.sum(:production_status), :workflow_status => "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}")
+          purchase_order.update_attributes(:warehouse_number => csv_warehouse_number, :address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3, :stock_status => purchase_order.purchase_positions.sum(:stock_status), :production_status => purchase_order.purchase_positions.sum(:production_status), :workflow_status => "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}")
         end
       end
       purchase_order.addresses += Address.where(:id => [level_1, level_2, level_3])
