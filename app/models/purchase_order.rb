@@ -116,6 +116,12 @@ class PurchaseOrder < ActiveRecord::Base
       end
       purchase_order.addresses += Address.where(:id => [level_1, level_2, level_3])
     end
+    # Updating manufacturing_warehousing -- temp here.. move somewhere else...
+    PurchaseOrder.all.each do |p_o|
+      m_c_status = p_o.purchase_positions.sum(:production_status) * (100 / p_o.purchase_positions.count)
+      w_c_status = p_o.purchase_positions.sum(:stock_status) * (100 / p_o.purchase_positions.count)
+      p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status)
+    end
     
     ab = Time.now
     puts (ab - ag).to_s
