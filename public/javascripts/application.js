@@ -49,7 +49,7 @@ $(document).ready(function(){
 
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
   
-  $('div[data-type="modal"]').dialog({
+  $('div[data-type="modal"], div[data-type="modal2"]').dialog({
     autoOpen: false,
     width: 'auto',
     height: 'auto',
@@ -98,6 +98,16 @@ $(document).ready(function(){
     });
     return false;
   });
+  
+  $('a[data-role="edit_remote2"]').click(function() {
+    var remote_url = $(this).attr("href");
+    $('div[data-type="modal2"]').load(remote_url + ' form', function() {
+      $('div[data-type="modal2"]').show();
+      $('div[data-type="modal2"]').dialog('open');
+    });
+    return false;
+  });
+
   
   /*
   if ($(".section.endless")) {

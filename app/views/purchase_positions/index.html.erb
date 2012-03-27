@@ -1,3 +1,4 @@
+<div data-type="modal2" style="display:none;"></div>
 <div data-type="modal" style="display:none;">
   <%= form_for @search, :url => purchase_positions_path, :html => {"data-tab" => "filter", :method => :get} do |f| %>
     <div class="form-element">
@@ -107,7 +108,7 @@
             <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
             <td><%= purchase_position.purchase_order.shipping_route.name %></td>
             <% if permitted_to? :edit, :purchase_positions %>
-              <td><%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
+              <td><%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote2") %></td>
             <% else %>
               <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
             <% end %>

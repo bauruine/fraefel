@@ -25,11 +25,10 @@
     </table>
   </section>
 </section>
-<% @purchase_orders.each do |p_o| %>
+<% Address.where(:category_id => 10, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("purchase_orders.delivery_date ASC").each do |ordered_address| %>
   <section class="filter_box">
     <header class="filter_box_header">
-      <h4 class="floatLeft" style="padding-right:5px;">VK #<%= p_o.baan_id %></h4>
-      <h4 class="floatLeft"><%= p_o.purchase_positions.try(:first).try(:consignee_full) %></h4>
+      <h4 class="floatLeft"><%= ordered_address.location_for_select %></h4>
     </header>
     <section class="filter_box_content clearfix">
       <table>
@@ -47,11 +46,11 @@
           </tr>
         </thead>
         <tbody>
-          <% p_o.purchase_positions.each do |p_o_p| %>
+          <% PurchasePosition.includes(:pallets, :purchase_order => [:shipping_route]).order("purchase_positions.delivery_date ASC, purchase_orders.id ASC, purchase_positions.position ASC").where("purchase_orders.level_3 = ?", ordered_address.id).where(:purchase_orders => [:id => @purchase_orders.collect(&:id)]).each do |p_o_p| %>
             <tr>
               <td id="column_1"><%= p_o_p.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
               <td id="column_2"><%= p_o_p.purchase_order.shipping_route.name %></td>
-              <td id="column_3"><%= "#{p_o.baan_id}-#{p_o_p.position}" %></td>
+              <td id="column_3"><%= "#{p_o_p.purchase_order.baan_id}-#{p_o_p.position}" %></td>
               <td id="column_4"><%= p_o_p.article_number %></td>
               <td id="column_5"><%= p_o_p.quantity %></td>
               <td id="column_6"><%= p_o_p.article %></td>

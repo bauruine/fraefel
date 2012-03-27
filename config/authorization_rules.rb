@@ -24,6 +24,10 @@ authorization do
     has_permission_on [:baan_imports], :to => [:index, :new, :create, :edit, :update, :import]
   end
   
+  role :verkauf_admin do
+    has_permission_on [:purchase_orders], :to => [:destroy_multiple]
+  end
+  
   role :verkauf_view do
     has_permission_on [:cargo_lists], :to => [:show, :index, :controll_invoice, :collective_invoice, :calculate_cargo_list, :print_lebert, :search_for]
     has_permission_on [:pallets], :to => [:show, :ajax_show, :index, :search_for]
