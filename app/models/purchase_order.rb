@@ -40,6 +40,15 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
+  def self.patch_aggregations
+    # Updating manufacturing_warehousing -- temp here.. move somewhere else...
+    PurchaseOrder.all.each do |p_o|
+      m_c_status = p_o.purchase_positions.sum(:production_status) * (100 / p_o.purchase_positions.count)
+      w_c_status = p_o.purchase_positions.sum(:stock_status) * (100 / p_o.purchase_positions.count)
+      p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status)
+    end
+  end
+  
   def self.patch_addresses_local
     self.all.each do |purchase_order|
       @level_1 = purchase_order.addresses.where(:category_id => 5).try(:first).try(:id)
@@ -116,13 +125,6 @@ class PurchaseOrder < ActiveRecord::Base
       end
       purchase_order.addresses += Address.where(:id => [level_1, level_2, level_3])
     end
-    # Updating manufacturing_warehousing -- temp here.. move somewhere else...
-    PurchaseOrder.all.each do |p_o|
-      m_c_status = p_o.purchase_positions.sum(:production_status) * (100 / p_o.purchase_positions.count)
-      w_c_status = p_o.purchase_positions.sum(:stock_status) * (100 / p_o.purchase_positions.count)
-      p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status)
-    end
-    
     ab = Time.now
     puts (ab - ag).to_s
   end
