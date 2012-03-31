@@ -43,8 +43,8 @@ class PurchaseOrder < ActiveRecord::Base
   def self.patch_aggregations
     # Updating manufacturing_warehousing -- temp here.. move somewhere else...
     PurchaseOrder.all.each do |p_o|
-      m_c_status = p_o.purchase_positions.sum(:production_status) * (100 / p_o.purchase_positions.count)
-      w_c_status = p_o.purchase_positions.sum(:stock_status) * (100 / p_o.purchase_positions.count)
+      m_c_status = p_o.purchase_positions.sum(:production_status) * (100.to_f / p_o.purchase_positions.count.to_f)
+      w_c_status = p_o.purchase_positions.sum(:stock_status) * (100.to_f / p_o.purchase_positions.count.to_f)
       workflow_status = "#{p_o.purchase_positions.sum(:production_status)}#{p_o.purchase_positions.sum(:stock_status)}"
       m_c_level = p_o.purchase_positions.sum(:production_status)
       w_c_level = p_o.purchase_positions.sum(:stock_status)
