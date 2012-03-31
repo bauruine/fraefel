@@ -1,6 +1,7 @@
 class ShippingRoute < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_presence_of :name
+  has_many :purchase_orders
   
   def self.import(arg)
     @baan_import = arg
