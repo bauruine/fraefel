@@ -1,45 +1,47 @@
 <div data-type="modal2" style="display:none;"></div>
 <div data-type="modal" style="display:none;">
   <%= form_for @search, :url => purchase_positions_path, :html => {"data-tab" => "filter", :method => :get} do |f| %>
-    <div class="form-element">
+    <div class="form-element floatLeft">
       <%= f.label(:delivered_equals, "Versendet?") %>
-      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "xtra-large"}) %>
+      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
     </div>
+    <div class="form-element floatLeft">
+      <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
+      <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span3" %>
+    </div>
+    <div class="form-element floatLeft">
+      <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
+      <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span3" %>
+    </div>
+    <div class="clear"></div>
     <hr />
-    <div class="form-element">
+    <div class="form-element floatLeft">
       <%= f.label(:purchase_order_warehousing_completed_gteq, "Einlagerung in %") %>
-      <%= f.select(:purchase_order_warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {:include_blank => true}, {:class => "xtra-large"}) %>
+      <%= f.select(:purchase_order_warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {:include_blank => true}, {:class => "span2"}) %>
       <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
     </div>
-    <div class="form-element">
+    <div class="form-element floatLeft">
       <%= f.label(:purchase_order_manufacturing_completed_gteq, "Produktion in %") %>
-      <%= f.select(:purchase_order_manufacturing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {:include_blank => true}, {:class => "xtra-large"}) %>
+      <%= f.select(:purchase_order_manufacturing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {:include_blank => true}, {:class => "span2"}) %>
       <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
     </div>
+    <div class="clear"></div>
     <hr />
-    <div class="form-element">
+    <div class="form-element floatLeft">
       <%= f.label(:production_status_equals, "Produktion beendet?") %>
-      <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "xtra-large"}) %>
+      <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "span2"}) %>
       <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Position</small>
     </div>
-    <div class="form-element">
+    <div class="form-element floatLeft">
       <%= f.label(:stock_status_equals, "Position eingelagert?") %>
-      <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "xtra-large"}) %>
+      <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "span2"}) %>
       <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Position</small>
     </div>
+    <div class="clear"></div>
     <hr />
     <div class="form-element">
       <%= f.label(:purchase_order_shipping_route_id_equals, "Tour") %>
-      <%= f.collection_select(:purchase_order_shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "xtra-large"}) %>
-    </div>
-    <hr />
-    <div class="form-element">
-      <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
-      <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %>
-    </div>
-    <div class="form-element">
-      <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
-      <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %>
+      <%= f.collection_select(:purchase_order_shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "span1"}) %>
     </div>
     <hr />
     <div class="form-element clearfix">

@@ -45,54 +45,62 @@
 <div data-type="modal" style="display: none;">
   <div class="box-padder">
     <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+      <div class="form-element floatLeft">
+        <%= f.label(:delivered_equals, "Versendet?") %>
+        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
+      </div>
+      <div class="form-element floatLeft">
+        <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
+        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span3" %>
+      </div>
+      <div class="form-element floatLeft">
+        <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
+        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span3" %>
+      </div>
+      <div class="clear"></div>
+      <hr />
       
       <div class="form-element">
         <%= f.label(:level_1_equals, "Zahlungsleister") %>
-        <%= f.collection_select(:level_1_equals, Address.where(:category_id => 8, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "xtra-large"}) %>
+        <%= f.collection_select(:level_1_equals, Address.where(:category_id => 8, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
       </div>
       
       <div class="form-element">
         <%= f.label(:level_2_equals, "Rechnungsempfänger") %>
-        <%= f.collection_select(:level_2_equals, Address.where(:category_id => 9, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "xtra-large"}) %>
+        <%= f.collection_select(:level_2_equals, Address.where(:category_id => 9, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
       </div>
       
       <div class="form-element">
         <%= f.label(:level_3_equals, "Lieferadresse") %>
-        <%= f.collection_select(:level_3_equals, Address.where(:category_id => 10, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "xtra-large"}) %>
+        <%= f.collection_select(:level_3_equals, Address.where(:category_id => 10, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
       </div>
-      
-      <div class="form-element">
+      <hr />
+      <div class="form-element floatLeft">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "xtra-large"}) %>
+        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.includes(:purchase_orders).order("name ASC").where(:purchase_orders => [:id => @purchase_orders.collect(&:id)]), :id, :name, {:include_blank => true}, {:class => "span2"}) %>
       </div>
-      <div class="form-element">
+      <div class="form-element floatLeft">
         <%= f.label(:warehouse_number_equals, "Versandlager") %>
-        <%= f.text_field(:warehouse_number_equals) %>
+        <%= f.text_field(:warehouse_number_equals, :class => "span2") %>
       </div>
-      
-      <div class="form-element">
-        <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
-        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %>
+      <div class="clear"></div>
+      <hr />
+      <div class="form-element floatLeft">
+        <%= f.label(:warehousing_completed_gteq, "Einlagerung fertig in %") %>
+        <%= f.select(:warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100%' => 100.0 }, {:include_blank => true}, {:class => "span2"}) %>
       </div>
-      
-      <div class="form-element">
-        <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
-        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %>
+      <div class="form-element floatLeft">
+        <%= f.label(:manufacturing_completed_gteq, "Produktion fertig in %") %>
+        <%= f.select(:manufacturing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100%' => 100.0 }, {:include_blank => true}, {:class => "span2"}) %>
       </div>
-      
-      <div class="form-element">
-        <%= f.label(:delivered_equals, "Versendet?") %>
-        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}) %>
+      <div class="clear"></div>
+      <hr />
+      <div class="form-element floatLeft">
+        <%= f.label(:manufacturing_completed_lteq, "Produktion offen in %") %>
+        <%= f.select(:manufacturing_completed_lteq, { '0%' => 100.0, '>= 20%' => 80.0, '>= 50%' => 50.0, '>= 80%' => 20.0, '100%' => 0.0 }, {:include_blank => true}, {:class => "span1"}) %>
       </div>
-      
-      <div class="form-element">
-        <%= f.label(:warehousing_completed_gteq, "Einlagerung abgeschlossen?") %>
-        <%= f.select(:warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {:include_blank => true}) %>
-      </div>
-      <div class="form-element">
-        <%= f.label(:manufacturing_completed_gteq, "Produktion abgeschlossen?") %>
-        <%= f.select(:manufacturing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100' => 100.0 }, {:include_blank => true}) %>
-      </div>
+      <div class="clear"></div>
+      <hr />
       <div class="form-element clearfix">
         <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
       </div>
