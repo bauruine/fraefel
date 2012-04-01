@@ -47,11 +47,11 @@
     <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
       <div class="form-element floatLeft">
         <%= f.label(:delivered_equals, "Versendet?") %>
-        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
+        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3 mr6"}) %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
-        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span3" %>
+        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span3 mr6" %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
@@ -77,7 +77,7 @@
       <hr />
       <div class="form-element floatLeft">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.includes(:purchase_orders).order("name ASC").where(:purchase_orders => [:id => @purchase_orders.collect(&:id)]), :id, :name, {:include_blank => true}, {:class => "span2"}) %>
+        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.includes(:purchase_orders).order("name ASC").where(:purchase_orders => [:id => @purchase_orders.collect(&:id)]), :id, :name, {:include_blank => true}, {:class => "span2 mr6"}) %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:warehouse_number_equals, "Versandlager") %>
@@ -87,7 +87,7 @@
       <hr />
       <div class="form-element floatLeft">
         <%= f.label(:warehousing_completed_gteq, "Einlagerung fertig in %") %>
-        <%= f.select(:warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100%' => 100.0 }, {:include_blank => true}, {:class => "span2"}) %>
+        <%= f.select(:warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100%' => 100.0 }, {:include_blank => true}, {:class => "span2 mr6"}) %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:manufacturing_completed_gteq, "Produktion fertig in %") %>
