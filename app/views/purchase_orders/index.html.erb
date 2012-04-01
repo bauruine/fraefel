@@ -43,7 +43,6 @@
 </section>
 
 <div data-type="modal" style="display: none;">
-  <div class="box-padder">
     <%= form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
       <div class="form-element floatLeft">
         <%= f.label(:delivered_equals, "Versendet?") %>
@@ -86,18 +85,22 @@
       <div class="clear"></div>
       <hr />
       <div class="form-element floatLeft">
-        <%= f.label(:warehousing_completed_gteq, "Einlagerung fertig in %") %>
-        <%= f.select(:warehousing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100%' => 100.0 }, {:include_blank => true}, {:class => "span2 mr6"}) %>
+        <%= f.label(:warehousing_completed_gteq, "Einlagerung >= ?%") %>
+        <%= f.select(:warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span2 mr6"}) %>
       </div>
       <div class="form-element floatLeft">
-        <%= f.label(:manufacturing_completed_gteq, "Produktion fertig in %") %>
-        <%= f.select(:manufacturing_completed_gteq, { '>= 20%' => 20.0, '>= 50%' => 50.0, '>= 80%' => 80.0, '100%' => 100.0 }, {:include_blank => true}, {:class => "span2"}) %>
+        <%= f.label(:warehousing_completed_lteq, "Einlagerung <= ?%") %>
+        <%= f.select(:warehousing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span2"}) %>
       </div>
       <div class="clear"></div>
       <hr />
       <div class="form-element floatLeft">
-        <%= f.label(:manufacturing_completed_lteq, "Produktion offen in %") %>
-        <%= f.select(:manufacturing_completed_lteq, { '0%' => 100.0, '>= 20%' => 80.0, '>= 50%' => 50.0, '>= 80%' => 20.0, '100%' => 0.0 }, {:include_blank => true}, {:class => "span1"}) %>
+        <%= f.label(:manufacturing_completed_gteq, "Produktion >= ?%") %>
+        <%= f.select(:manufacturing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span2 mr6"}) %>
+      </div>
+      <div class="form-element floatLeft">
+        <%= f.label(:manufacturing_completed_lteq, "Produktion <= ?%") %>
+        <%= f.select(:manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span2"}) %>
       </div>
       <div class="clear"></div>
       <hr />
@@ -109,12 +112,11 @@
     <%= form_tag(search_for_purchase_orders_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
       <div class="form-element">
         <%= label_tag(:purchase_order_id, "VK NR") %>
-        <%= text_field_tag(:purchase_order_id, nil, :size => 30) %>
+        <%= text_field_tag(:purchase_order_id, nil, :class => "span2") %>
       </div>
       
       <div class="form-element clearfix">
         <%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit floatLeft" %>
       </div>
     <% end %>
-  </div>
 </div>
