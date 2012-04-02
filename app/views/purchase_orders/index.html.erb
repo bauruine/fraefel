@@ -76,11 +76,15 @@
       <hr />
       <div class="form-element floatLeft">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.includes(:purchase_orders).order("name ASC").where(:purchase_orders => [:id => @purchase_orders.collect(&:id)]), :id, :name, {:include_blank => true}, {:class => "span2 mr6"}) %>
+        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.includes(:purchase_orders).order("name ASC").where(:purchase_orders => [:id => @purchase_orders.collect(&:id)]), :id, :name, {:include_blank => true}, {:class => "span3 mr6"}) %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:warehouse_number_equals, "Versandlager") %>
-        <%= f.text_field(:warehouse_number_equals, :class => "span2") %>
+        <%= f.text_field(:warehouse_number_equals, :class => "span3 mr6") %>
+      </div>
+      <div class="form-element floatLeft">
+        <%= f.label(:category_id_equals, "VK-Art") %>
+        <%= f.collection_select(:category_id_equals, Category.order("title ASC").where(:categorizable_type => "purchase_order"), :id, :title, {:include_blank => true}, {:class => "span3"}) %>
       </div>
       <div class="clear"></div>
       <hr />

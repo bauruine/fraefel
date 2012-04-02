@@ -1,5 +1,6 @@
 class PurchaseOrder < ActiveRecord::Base
   has_one :calculation, :as => :calculable, :dependent => :destroy
+  belongs_to :category, :class_name => "Category", :foreign_key => "category_id"
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
   belongs_to :address, :class_name => "Address", :foreign_key => "address_id"
   belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
@@ -109,13 +110,14 @@ class PurchaseOrder < ActiveRecord::Base
       level_1 =  Address.where(:code => row[55].to_s.undress, :category_id => 8).try(:first).try(:id)
       level_2 =  Address.where(:code => row[47].to_s.undress, :category_id => 9).try(:first).try(:id)
       level_3 =  Address.where(:code => row[71].to_s.undress, :category_id => 10).try(:first).try(:id)
-    
+      csv_category = Category.find_or_create_by_title_and_categorizable_type(:title => row[81].to_s.undress, :categorizable_type => "purchase_order")
       purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :shipping_route => delivery_route, :address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3)
       if purchase_order.present? && purchase_order.new_record?
         purchase_order.stock_status = purchase_order.purchase_positions.sum(:stock_status)
         purchase_order.production_status = purchase_order.purchase_positions.sum(:production_status)
         purchase_order.workflow_status = "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}"
         purchase_order.warehouse_number = csv_warehouse_number
+        purchase_order.category_id = csv_category.present? ? csv_category.id : nil
         if purchase_order.save
           #puts "New Purchase Order has been created: #{purchase_order.attributes}"
         else

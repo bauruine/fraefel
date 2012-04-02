@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120326214633) do
+ActiveRecord::Schema.define(:version => 20120401233035) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(:version => 20120326214633) do
     t.float    "manufacturing_completed", :default => 0.0
     t.float    "warehousing_completed",   :default => 0.0
     t.integer  "warehouse_number",        :default => 0
+    t.integer  "category_id"
   end
 
   create_table "purchase_positions", :force => true do |t|

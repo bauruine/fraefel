@@ -9,8 +9,12 @@
           <th>Von</th>
           <th>Bis</th>
           <th>Tour</th>
-          <th>Eingelagert in %</th>
-          <th>Produziert in %</th>
+          <th>Versandlager</th>
+          <th>VK-Art</th>
+          <th><%= "Eingelagert >= ?%" %></th>
+          <th><%= "Eingelagert <= ?%" %></th>
+          <th><%= "Produziert >= ?%" %></th>
+          <th><%= "Produziert <= ?%" %></th>
         </tr>
       </thead>
       <tbody>
@@ -18,8 +22,12 @@
           <td><%= params[:search][:delivery_date_greater_than_or_equal_to] if params[:search].present? %></td>
           <td><%= params[:search][:delivery_date_less_than_or_equal_to] if params[:search].present? %></td>
           <td><%= params[:search].present? && params[:search][:shipping_route_id_equals].present? ? ShippingRoute.where(:id => params[:search][:shipping_route_id_equals]).first.name : nil %></td>
-          <td><%= params[:search].present? ? params[:search][:warehousing_completed_gteq] : "100" %></td>
+          <td><%= params[:search][:warehouse_number_equals] if params[:search].present? %></td>
+          <td><%= params[:search].present? && params[:search][:category_id_equals].present? ? Category.where(:id => params[:search][:category_id_equals]).first.title : nil %></td>
+          <td><%= params[:search].present? ? params[:search][:warehousing_completed_gteq] : nil %></td>
+          <td><%= params[:search].present? ? params[:search][:warehousing_completed_lteq] : nil %></td>
           <td><%= params[:search][:manufacturing_completed_gteq] if params[:search].present? %></td>
+          <td><%= params[:search][:manufacturing_completed_lteq] if params[:search].present? %></td>
         </tr>
       </tbody>
     </table>
