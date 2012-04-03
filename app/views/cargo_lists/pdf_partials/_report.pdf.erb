@@ -2,7 +2,7 @@
   <h3 style="font-size: 15px;">Rüstschein - Versand Nummer <%= @cargo_list.id %></h3>
 </fieldset>
 <fieldset class="floatRight" style="font-size: 8px;">
-  gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
+  gedruckt von <%= current_user.full_name %> / <%= Time.now.to_formatted_s(:swiss_date) %>
 </fieldset>
 <%= content_tag(:div, nil, :class => "clear") %>
 <hr style="margin-bottom: 20px;" />

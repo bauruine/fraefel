@@ -21,6 +21,7 @@ class CargoListsController < ApplicationController
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
           :footer => {
+            :left => params[:pdf_type] != "invoice" ? "#{Time.now.to_formatted_s(:swiss_date)}" : "",
             :right => params[:pdf_type] != "invoice" ? "Seite [page] / [topage]" : "",
             :line => false
           }

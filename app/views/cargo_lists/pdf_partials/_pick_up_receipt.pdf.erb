@@ -36,8 +36,8 @@
 
   <section class="clearfix" style="margin-bottom: 30px;">
     <ul class="floatLeft">
-      <li>Bütschwil, <%= Date.today.to_formatted_s(:swiss_date) %></li>
-      <li><%= User.current.full_name %></li>
+      <li>Bütschwil, <%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></li>
+      <li><%= User.current.full_name %> / UV <%= @cargo_list.id %></li>
       <li>Versand per Camion</li>
     </ul>
     <p class="floatRight">

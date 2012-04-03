@@ -13,15 +13,9 @@ class PalletsController < ApplicationController
           :orientation => 'Landscape',
           :encoding => 'UTF-8',
           :header => {
-            :left => "Fraefel AG",
             :right => "#{Time.now}",
             :line => true,
             :spacing => 2
-          },
-          :footer => {
-            :left => "#{pallet_url(@pallet, :format => :pdf)}",
-            :right => "Seite [page]",
-            :line => true
           }
         )
       end
