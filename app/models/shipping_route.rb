@@ -4,19 +4,15 @@ class ShippingRoute < ActiveRecord::Base
   has_many :purchase_orders
   
   def self.import(arg)
-    @baan_import = arg
-    PaperTrail.whodunnit = 'System'
+    @baan_import = BaanImport.find(arg)
     
-    csv_file = @baan_import.baan_upload.path
+    shipping_route_attributes = {}
     
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
-      delivery_route = Iconv.conv('UTF-8', 'iso-8859-1', row[21]).to_s.chomp.lstrip.rstrip
-    
-      shipping_route = ShippingRoute.find_or_initialize_by_name(:name => delivery_route, :active => true)
-      if shipping_route.present? && shipping_route.new_record? && shipping_route.name.present?
-        shipping_route.save
-        puts "New ShippingRoute has been created: #{shipping_route.attributes}"
-      end
+    BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
+      shipping_route_attributes.merge!(:name => baan_raw_data.attributes["baan_21"])
+      shipping_route_attributes.merge!(:active => true)
+      
+      ShippingRoute.find_or_create_by_name(shipping_route_attributes)
     end
     
   end

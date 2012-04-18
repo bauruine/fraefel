@@ -59,64 +59,49 @@ class PurchasePosition < ActiveRecord::Base
   end
   
   def self.import(arg)
-    @baan_import = arg
-    PaperTrail.whodunnit = 'System'
+    @baan_import = BaanImport.find(arg)
     
-    csv_file = @baan_import.baan_upload.path
-    
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
-      baan_id = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
-      commodity_code = CommodityCode.find_by_code(Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip)
-      purchase_order = PurchaseOrder.find_by_baan_id(baan_id)
-      weight_single = Iconv.conv('UTF-8', 'iso-8859-1', row[15]).to_s.chomp.lstrip.rstrip.to_f
-      weight_total = Iconv.conv('UTF-8', 'iso-8859-1', row[16]).to_s.chomp.lstrip.rstrip.to_f
-      quantity = Iconv.conv('UTF-8', 'iso-8859-1', row[18]).to_s.chomp.lstrip.rstrip.to_f
-      amount = Iconv.conv('UTF-8', 'iso-8859-1', row[17]).to_s.chomp.lstrip.rstrip.to_f
-      position = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.chomp.lstrip.rstrip.to_i
-      delivery_date = Iconv.conv('UTF-8', 'iso-8859-1', row[13]).to_s.chomp.lstrip.rstrip
-      article = Iconv.conv('UTF-8', 'iso-8859-1', row[28]).to_s.chomp.lstrip.rstrip
-      article_number = Iconv.conv('UTF-8', 'iso-8859-1', row[27]).to_s.chomp.lstrip.rstrip
-      product_line = Iconv.conv('UTF-8', 'iso-8859-1', row[30]).to_s.chomp.lstrip.rstrip
-      storage_location = Iconv.conv('UTF-8', 'iso-8859-1', row[23]).to_s.chomp.lstrip.rstrip
-      consignee_full = Iconv.conv('UTF-8', 'iso-8859-1', row[33]).to_s.chomp.lstrip.rstrip
-      zip_location_id = Iconv.conv('UTF-8', 'iso-8859-1', row[34]).to_s.chomp.lstrip.rstrip
-      zip_location_name = Iconv.conv('UTF-8', 'iso-8859-1', row[35]).to_s.chomp.lstrip.rstrip
-      gross_price = row[38].to_s.undress
-      value_discount = row[39].to_s.undress
-      net_price = row[40].to_s.undress
-      production_status = row[79].to_s.undress.to_i
-      stock_status = row[78].to_s.undress.to_i
+    ag = Time.now
+    BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
+      purchase_position_attributes = {}
       
-      if !consignee_full.present?
-        puts "Warning -- No consignee in CSV"
-      end
-      calculated_amount = amount * quantity
-      if purchase_order.purchase_positions.where(:position => position).present?
-        purchase_position = purchase_order.purchase_positions.where(:position => position).first
-        csv_array = [weight_single.to_s, weight_total.to_s, quantity.to_s, amount.to_s, position, delivery_date]
-        purchase_position_array = [purchase_position.weight_single.to_s, purchase_position.weight_total.to_s, purchase_position.quantity.to_s, purchase_position.amount.to_s, purchase_position.position, purchase_position.delivery_date]
-        if (csv_array != purchase_position_array && purchase_position.status == "open")
-          if purchase_position.pallets.present?
-            purchase_position.update_attributes(:stock_status => stock_status,:production_status => production_status, :gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
-            #puts purchase_position.consignee_full
-          else
-            purchase_position.update_attributes(:stock_status => stock_status,:production_status => production_status, :gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :article => article, :delivery_date => delivery_date, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
-            #puts purchase_position.consignee_full
-          end
-        else
-        end
-        purchase_position.update_attributes(:consignee_full => consignee_full)
+      purchase_position_attributes.merge!(:status => "open")
+      purchase_position_attributes.merge!(:commodity_code_id => CommodityCode.where(:code => baan_raw_data.attributes["baan_0"]).first.try(:id))
+      purchase_position_attributes.merge!(:purchase_order_id => PurchaseOrder.where(:baan_id => baan_raw_data.attributes["baan_2"]).first.try(:id))
+      purchase_position_attributes.merge!(:baan_id => "#{PurchaseOrder.where(:baan_id => baan_raw_data.attributes["baan_2"]).first.try(:baan_id)}-#{baan_raw_data.attributes["baan_4"]}")
+      purchase_position_attributes.merge!(:position => baan_raw_data.attributes["baan_4"].to_i)
+      purchase_position_attributes.merge!(:delivery_date => baan_raw_data.attributes["baan_13"])
+      purchase_position_attributes.merge!(:weight_single => baan_raw_data.attributes["baan_15"].to_f)
+      purchase_position_attributes.merge!(:weight_total => baan_raw_data.attributes["baan_16"].to_f)
+      purchase_position_attributes.merge!(:amount => baan_raw_data.attributes["baan_17"].to_f)
+      purchase_position_attributes.merge!(:quantity => baan_raw_data.attributes["baan_18"].to_f)
+      purchase_position_attributes.merge!(:storage_location => baan_raw_data.attributes["baan_23"])
+      purchase_position_attributes.merge!(:article_number => baan_raw_data.attributes["baan_27"])
+      purchase_position_attributes.merge!(:article => baan_raw_data.attributes["baan_28"])
+      purchase_position_attributes.merge!(:product_line => baan_raw_data.attributes["baan_30"])
+      purchase_position_attributes.merge!(:consignee_full => baan_raw_data.attributes["baan_33"])
+      purchase_position_attributes.merge!(:zip_location_id => baan_raw_data.attributes["baan_34"])
+      purchase_position_attributes.merge!(:zip_location_name => baan_raw_data.attributes["baan_35"])
+      purchase_position_attributes.merge!(:gross_price => baan_raw_data.attributes["baan_38"])
+      purchase_position_attributes.merge!(:value_discount => baan_raw_data.attributes["baan_39"])
+      purchase_position_attributes.merge!(:net_price => baan_raw_data.attributes["baan_40"])
+      purchase_position_attributes.merge!(:stock_status => baan_raw_data.attributes["baan_78"].to_i)
+      purchase_position_attributes.merge!(:production_status => baan_raw_data.attributes["baan_79"].to_i)
+      
+      purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
+      if purchase_position.new_record?
+        purchase_position.save
       else
-        purchase_position = purchase_order.purchase_positions.build(:stock_status => stock_status,:production_status => production_status, :gross_price => gross_price, :value_discount => value_discount, :net_price => net_price, :commodity_code => commodity_code, :weight_single => weight_single, :weight_total => weight_total, :quantity => quantity, :amount => amount, :position => position, :status => "open", :delivery_date => delivery_date, :article => article, :product_line => product_line, :storage_location => storage_location, :article_number => article_number, :total_amount => calculated_amount, :consignee_full => consignee_full, :zip_location_id => zip_location_id, :zip_location_name => zip_location_name)
-        if purchase_position.save
-          #puts purchase_position.consignee_full
-          #puts "New Purchase Position has been created: #{purchase_position.attributes}"
+        if purchase_position.pallets.present?
+          # update logic comes here...
         else
-          puts "ERROR-- PurchasePosition not saved..."
+          # update logic comes here...
         end
       end
+      
     end
-    
+    ab = Time.now
+    puts (ab - ag).to_s
   end
   
 end

@@ -2,27 +2,19 @@ class CommodityCode < ActiveRecord::Base
   validates_uniqueness_of :code
   
   def self.import(arg)
-    @baan_import = arg
-    PaperTrail.whodunnit = 'System'
+    @baan_import = BaanImport.find(arg)
     
-    csv_file = @baan_import.baan_upload.path
+    commodity_code_attributes = {}
     
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
-      code = Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip
-      content = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
+    BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
+      commodity_code_attributes.merge!(:code => baan_raw_data.attributes["baan_0"])
+      commodity_code_attributes.merge!(:content => baan_raw_data.attributes["baan_1"])
       
-      if CommodityCode.find_by_code(code)
-        commodity_code = CommodityCode.find_by_code(code)
-        
-        csv_array = [code, content]
-        code_array = [commodity_code.code, commodity_code.content]
-      
-        if csv_array != code_array
-          commodity_code.update_attributes(:code => code, :content => content)
-        end
-      
+      commodity_code = CommodityCode.where(:code => baan_raw_data.baan_0)
+      if commodity_code.present? and commodity_code.select("code, content").first.attributes != commodity_code_attributes
+        commodity_code.first.update_attributes(commodity_code_attributes)
       else
-        CommodityCode.find_or_create_by_code(:code => code, :content => content)
+        CommodityCode.find_or_create_by_code(commodity_code_attributes)
       end
     end
     

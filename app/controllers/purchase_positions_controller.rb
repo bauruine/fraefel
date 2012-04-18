@@ -27,6 +27,25 @@ class PurchasePositionsController < ApplicationController
         @purchase_positions = @search.relation.order("purchase_positions.delivery_date asc, purchase_orders.level_3 asc, purchase_orders.shipping_route_id asc")
       end
       
+      format.pdf do
+        @search = PurchasePosition.includes(:pallets, :commodity_code, :purchase_order => :shipping_route).search(params[:search] || {:delivered_equals => "false"})
+        # @purchase_positions = @search.relation.order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_positions.delivery_date asc, purchase_positions.stock_status desc, purchase_positions.production_status desc")
+        @purchase_positions = @search.relation
+        render( 
+          :pdf => "print-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :footer => {
+            :right => params[:pdf_type] != "invoice" ? "Seite [page] / [topage]" : "",
+            :left => params[:pdf_type] != "invoice" ? "#{Time.now.to_formatted_s(:swiss_date)}" : "",
+            :line => false
+          }
+        )
+      end
+      
       format.js do
         @search = PurchasePosition.search(params[:search])
         @purchase_positions = @search.relation

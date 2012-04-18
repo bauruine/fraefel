@@ -12,11 +12,6 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :old_pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
   
   scope :ordered_for_delivery, order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
-  ##scope :level_1, lambda {|ad_id| includes(:addresses).group("purchase_orders.id").having("count(addresses.id)=1").where("addresses.id = ?", ad_id)}
-  ##scope :level_2, lambda {|ad_id| includes(:addresses).group("purchase_orders.id").having("count(addresses.id)=1").where("addresses.id = ?", ad_id)}
-  ##scope :level_3, lambda {|ad_id| includes(:addresses).group("purchase_orders.id").having("count(addresses.id)=1").where("addresses.id = ?", ad_id)}
-  ##scope :level_3, lambda {|ad_id| includes(:addresses).where("addresses.category_id = ?", 7).where("addresses.id = ?", ad_id)}
-  ##search_methods [:level_1, :level_2, :level_3]
   
   def amount
     amount = 0
@@ -93,42 +88,32 @@ class PurchaseOrder < ActiveRecord::Base
   
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
-    PaperTrail.whodunnit = 'System'
-    
-    csv_file_path = @baan_import.baan_upload.path
-    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
     
     ag = Time.now
-    
-    csv_file.each do |row|
-      csv_address = Address.find_by_code(row[71].to_s.undress)
-      customer = Customer.find_by_baan_id(row[6].to_s.undress)
-      baan_id = row[2].to_s.undress
-      csv_customer = row[6].to_s.undress
-      delivery_route = ShippingRoute.find_by_name(row[21].to_s.undress)
-      csv_warehouse_number = row[22].to_s.undress
-      level_1 =  Address.where(:code => row[55].to_s.undress, :category_id => 8).try(:first).try(:id)
-      level_2 =  Address.where(:code => row[47].to_s.undress, :category_id => 9).try(:first).try(:id)
-      level_3 =  Address.where(:code => row[71].to_s.undress, :category_id => 10).try(:first).try(:id)
-      csv_category = Category.find_or_create_by_title_and_categorizable_type(:title => row[81].to_s.undress, :categorizable_type => "purchase_order")
-      purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(:baan_id => baan_id, :customer => customer, :status => "open", :shipping_route => delivery_route, :address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3)
-      if purchase_order.present? && purchase_order.new_record?
-        purchase_order.stock_status = purchase_order.purchase_positions.sum(:stock_status)
-        purchase_order.production_status = purchase_order.purchase_positions.sum(:production_status)
-        purchase_order.workflow_status = "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}"
-        purchase_order.warehouse_number = csv_warehouse_number
-        purchase_order.category_id = csv_category.present? ? csv_category.id : nil
-        if purchase_order.save
-          #puts "New Purchase Order has been created: #{purchase_order.attributes}"
-        else
-          puts "ERROR-- PurchaseOrder not saved..."
-        end
+    BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
+      purchase_order_attributes = {}
+      
+      purchase_order_attributes.merge!(:status => "open")
+      purchase_order_attributes.merge!(:baan_id => baan_raw_data.attributes["baan_2"])
+      purchase_order_attributes.merge!(:customer_id => Customer.where(:baan_id => baan_raw_data.attributes["baan_6"]).first.try(:id))
+      purchase_order_attributes.merge!(:shipping_route_id => ShippingRoute.where(:name => baan_raw_data.attributes["baan_21"]).first.try(:id))
+      purchase_order_attributes.merge!(:warehouse_number => baan_raw_data.attributes["baan_22"])
+      purchase_order_attributes.merge!(:level_2 => Address.where(:code => baan_raw_data.attributes["baan_47"], :category_id => 9).first.try(:id))
+      purchase_order_attributes.merge!(:level_1 => Address.where(:code => baan_raw_data.attributes["baan_55"], :category_id => 8).first.try(:id))
+      purchase_order_attributes.merge!(:level_3 => Address.where(:code => baan_raw_data.attributes["baan_71"], :category_id => 10).first.try(:id))
+      purchase_order_attributes.merge!(:address_id => Address.where(:code => baan_raw_data.attributes["baan_71"]).first.try(:id))
+      purchase_order_attributes.merge!(:category_id => Category.find_or_create_by_title_and_categorizable_type(:title => baan_raw_data.attributes["baan_81"], :categorizable_type => "purchase_order").id)
+      
+      # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_order
+      purchase_order_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_order_attributes[:shipping_route_id].present?
+      
+      purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(purchase_order_attributes)
+      if purchase_order.new_record?
+        purchase_order.save
       else
-        if (purchase_order.baan_id == baan_id && purchase_order.status == "open")
-          purchase_order.update_attributes(:warehouse_number => csv_warehouse_number, :address => csv_address, :level_1 => level_1, :level_2 => level_2, :level_3 => level_3, :stock_status => purchase_order.purchase_positions.sum(:stock_status), :production_status => purchase_order.purchase_positions.sum(:production_status), :workflow_status => "#{purchase_order.purchase_positions.sum(:production_status)}#{purchase_order.purchase_positions.sum(:stock_status)}")
-        end
+        # update logic comes here...
       end
-      purchase_order.addresses += Address.where(:id => [level_1, level_2, level_3])
+      purchase_order.addresses += Address.where(:id => [purchase_order_attributes[:level_1], purchase_order_attributes[:level_2], purchase_order_attributes[:level_3]])
     end
     ab = Time.now
     puts (ab - ag).to_s

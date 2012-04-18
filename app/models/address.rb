@@ -57,26 +57,20 @@ class Address < ActiveRecord::Base
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     
-    csv_file_path = @baan_import.baan_upload.path
-    
-    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
     ag = Time.now
     csv_todos = {"kat_b" => [47, 48, 49, 50, 51, 52], "kat_a" => [55, 56, 61, 62, 63, 64], "kat_c" => [71, 72, 73, 74, 75, 76]}
+    address_attributes = {}
 
-    csv_file.each do |row|
+    BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
       csv_todos.each do |k, v|
-        csv_address_code = row[v[0]].to_s.undress
-        csv_company_name = row[v[1]].to_s.undress
-        csv_street = row[v[2]].to_s.undress
-        csv_street_number = row[v[3]].to_s.undress
-        csv_postal_code = row[v[4]].to_s.undress
-        csv_city = row[v[5]].to_s.undress
+        address_attributes.merge!(:address_code => baan_raw_data.attributes["baan_#{v[0]}"])
+        address_attributes.merge!(:company_name => baan_raw_data.attributes["baan_#{v[1]}"])
+        address_attributes.merge!(:street => baan_raw_data.attributes["baan_#{v[2]}"] + " " + baan_raw_data.attributes["baan_#{v[3]}"])
+        address_attributes.merge!(:postal_code => baan_raw_data.attributes["baan_#{v[4]}"])
+        address_attributes.merge!(:city => baan_raw_data.attributes["baan_#{v[5]}"])
+        address_attributes.merge!(:category_id => Category.where(:title => k).first.id)
         
-        csv_category = Category.where(:title => k).first
-        address = Address.find_or_create_by_code_and_category_id(:code => csv_address_code, :category_id => csv_category.id, :company_name => csv_company_name, :street => (csv_street + " " + csv_street_number), :postal_code => csv_postal_code, :city => csv_city)
-        unless address.new_record?
-          address.update_attributes(:company_name => csv_company_name, :street => (csv_street + " " + csv_street_number), :postal_code => csv_postal_code, :city => csv_city, :category_id => csv_category.id)
-        end
+        address = Address.find_or_create_by_code_and_category_id(address_attributes)
       end
     end
     ab = Time.now

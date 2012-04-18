@@ -61,22 +61,22 @@
       
       <div class="form-element">
         <%= f.label(:level_1_equals, "Zahlungsleister") %>
-        <%= f.collection_select(:level_1_equals, Address.where(:category_id => 8, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
+        <%= f.collection_select(:level_1_equals, Address.where(:category_id => 8, "purchase_orders.id" => @purchase_orders.collect(&:id)).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
       </div>
       
       <div class="form-element">
         <%= f.label(:level_2_equals, "Rechnungsempfänger") %>
-        <%= f.collection_select(:level_2_equals, Address.where(:category_id => 9, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
+        <%= f.collection_select(:level_2_equals, Address.where(:category_id => 9, "purchase_orders.id" => @purchase_orders.collect(&:id)).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
       </div>
       
       <div class="form-element">
         <%= f.label(:level_3_equals, "Lieferadresse") %>
-        <%= f.collection_select(:level_3_equals, Address.where(:category_id => 10, :purchase_orders => [:id => @purchase_orders.collect(&:id)]).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
+        <%= f.collection_select(:level_3_equals, Address.where(:category_id => 10, "purchase_orders.id" => @purchase_orders.collect(&:id)).includes(:purchase_orders).order("addresses.company_name ASC"), :id, :location_for_select, {:include_blank => true}, {:class => "span1"}) %>
       </div>
       <hr />
       <div class="form-element floatLeft">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.includes(:purchase_orders).order("name ASC").where(:purchase_orders => [:id => @purchase_orders.collect(&:id)]), :id, :name, {:include_blank => true}, {:class => "span3 mr6"}) %>
+        <%= f.collection_select(:shipping_route_id_equals, ShippingRoute.includes(:purchase_orders).order("name ASC"), :id, :name, {:include_blank => true}, {:class => "span3 mr6"}) %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:warehouse_number_equals, "Versandlager") %>

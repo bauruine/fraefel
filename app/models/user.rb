@@ -3,7 +3,10 @@ class User < ActiveRecord::Base
     c.perishable_token_valid_for = 300.minutes
   end
   
-  has_and_belongs_to_many :roles
+  has_many :user_role_assignments
+  has_many :roles, :through => :user_role_assignments
+  
+  validates_presence_of :roles, :forename, :surname, :email
   
   def role_symbols
     roles.map do |role|

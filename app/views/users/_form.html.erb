@@ -1,62 +1,28 @@
-<%= form_for(@user) do |f| %>
-  <div class="form-element">
-    <%= f.label :forename, @user.new_record? ? "Vornamen angeben" : "Vorname ändern" %>
-    <%= f.text_field :forename %>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :surname, @user.new_record? ? "Nachname angeben" : "Nachname ändern" %>
-    <%= f.text_field :surname %>
-  </div>
+<%= simple_form_for(@user) do |f| %>
+
+  <%= f.error_notification %>
+  <%= f.input :forename, :label => @user.new_record? ? "Vornamen angeben" : "Vorname ändern" %>
+  <%= f.input :surname, :label => @user.new_record? ? "Nachname angeben" : "Nachname ändern" %>
   
   <hr />
   
-  <div class="form-element">
-    <%= f.label :username, @user.new_record? ? "Benutzername wählen" : "Benutzername ändern" %>
-    <%= f.text_field :username%>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :email, @user.new_record? ? "Email angeben" : "Email ändern" %>
-    <%= f.text_field :email %>
-  </div>
+  <%= f.input :username, :label => @user.new_record? ? "Benutzername wählen" : "Benutzername ändern" %>
+  <%= f.input :email, :label => @user.new_record? ? "Email angeben" : "Email ändern" %>
   
   <hr />
   
-  <div class="form-element">
-    <%= f.label :password, @user.new_record? ? "Passwort wählen" : "Passwort ändern" %>
-    <%= f.password_field :password %>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :password_confirmation, "Passwort bestätigen" %>
-    <%= f.password_field :password_confirmation %>
-  </div>
-  
+  <%= f.input :password, :label => @user.new_record? ? "Passwort wählen" : "Passwort ändern" %>
+  <%= f.input :password_confirmation, :label => "Passwort bestätigen" %>
+
   <hr />
   
-  <div class="form-element">
-    <%= f.label :roles, "Rollen verwalten" %>
-    <% for role in Role.all %>
-      <div>
-        <%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
-        <span class="checkboxLabel"><%= role.name %></span>
-      </div>
-    <% end %>
-  </div>
+  <%= f.association :roles, :as => :check_boxes %>
+  
+  <hr />
   
   <div class="form-element clearfix">
     <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
     <%= f.submit(@user.new_record? ? "Benutzer erstellen" : "Änderungen Sichern", :class => "blueSubmit floatLeft") %>
   </div>
-
-  <% if @user.errors.any? %>
-    <script>
-      $("#user_username").attr("placeholder", "<%= @user.errors['username'].inspect %>");
-      $("#user_email").attr("placeholder", "<%= @user.errors['email'].inspect %>");
-      $("#user_password").attr("placeholder", "<%= @user.errors['password'].inspect %>");
-      $("#user_password_confirmation").attr("placeholder", "<%= @user.errors['password_confirmation'].inspect %>");
-    </script>
-  <% end %>
 
 <% end %>

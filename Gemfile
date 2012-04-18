@@ -10,7 +10,7 @@ gem "nifty-generators", :group => :development
 gem "fastercsv"
 gem "authlogic", "~> 3.1.0"
 gem "kaminari"
-gem "meta_where"
+#gem "meta_where"
 gem "sqlite3"
 gem "declarative_authorization"
 gem "dummy_data"
@@ -24,6 +24,7 @@ gem 'resque', :require => "resque/server"
 gem "jquery-rails"
 gem "magic_user"
 gem "RedCloth", :require => 'redcloth'
+gem 'simple_form'
 
 # Use unicorn as the web server
 # gem 'unicorn'

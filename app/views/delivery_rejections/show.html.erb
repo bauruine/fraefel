@@ -60,9 +60,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:amount) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:reduced_price) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:weight) %></td>
+              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:amount) %></td>
+              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
+              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
               <td></td>
               <td class="align-center"><%= submit_tag "Entfernen", :class => "form_submit" %></td>
             </tr>
