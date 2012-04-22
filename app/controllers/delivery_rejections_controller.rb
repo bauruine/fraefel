@@ -26,7 +26,7 @@ class DeliveryRejectionsController < ApplicationController
   end
   
   def index
-    @delivery_rejections = DeliveryRejection.all
+    @delivery_rejections = DeliveryRejection.where("status_id != ?", Status.find_or_create_by_title(:title => "Abgeschlossen").id)
   end
   
   def new
