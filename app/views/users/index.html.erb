@@ -21,6 +21,7 @@
         <tr>
           <th>#</th>
           <th>Benutzer</th>
+          <th>Name</th>
           <th>Email</th>
           <th>Gruppe/n</th>
           <th>Login anz.</th>
@@ -32,6 +33,7 @@
           <tr>
             <td><%= link_to(user.id, edit_user_path(user)) %></td>
             <td><%= user.username %></td>
+            <td><%= user.full_name %></td>
             <td><%= user.email %></td>
             <td><%= user.roles.present? ? user.roles.map(&:name).join(", ") : nil %></td>
             <td><%= user.login_count %></td>
