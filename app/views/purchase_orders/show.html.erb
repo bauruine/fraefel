@@ -39,11 +39,7 @@
           <tbody>
             <% @purchase_positions.each do |purchase_position| %>
               <% if purchase_position.pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
-                <% if (purchase_position.weight_total.to_i == 0) or (purchase_position.amount.to_i == 0) %>
-                  <tr class="yellow_background">
-                <% else %>
-                  <tr>
-                <% end %>
+                <tr class="status<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
                     <% if permitted_to? :edit, :purchase_positions %>
                       <td><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
                     <% else %>
@@ -144,7 +140,7 @@
           </thead>
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
-              <tr class="<%= purchase_position.in_mixed_pallet?(@purchase_order) ? 'red' : 'not-mixed' %>">
+              <tr class="status<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
                 <td><%= title_for_purchase_position(purchase_position, @purchase_order) %></td>
                 <td><%= purchase_position.article_number %></td>
                 <td><%= purchase_position.article %></td>
