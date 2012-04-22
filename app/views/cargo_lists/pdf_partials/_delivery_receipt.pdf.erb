@@ -1,6 +1,10 @@
 <div style="width: 85%; margin: 0 auto;">
-  <section class="clearfix" style="margin-bottom: 15px; margin-top: 95px;">
-    <ul class="floatLeft">
+  <section class="clearfix">
+    <%= wicked_pdf_image_tag 'logo.gif', :class => "floatRight" %>
+  </section>
+  
+  <section class="clearfix" style="margin-bottom: 15px; margin-top: 50px;">
+    <ul class="floatRight">
       <li>Fraefel AG</li>
       <li>Kundendienst</li>
       <li>Lerchenfeld</li>
@@ -9,7 +13,7 @@
   </section>
 
   <section class="clearfix">
-    <ul class="floatLeft">
+    <ul class="floatRight">
       <li>Telefon: +41 71 982 80 80</li>
       <li>Telefax: +41 71 982 80 70</li>
       <li>E-Mail: kd@fraefel.ag</li>
@@ -17,7 +21,7 @@
   </section>
 
   <section class="clearfix" style="margin-bottom: 140px;">
-    <ul class="floatRight">
+    <ul class="floatLeft">
       <li class="bold" style="font-size: 15px;"><%= @purchase_positions.first.purchase_order.address.company_name %></li>
       <li class="bold" style="font-size: 15px;"><%= @purchase_positions.first.purchase_order.address.street %></li>
       <li class="bold" style="font-size: 15px;"><%= "CH - #{@purchase_positions.first.purchase_order.address.postal_code} #{@purchase_positions.first.purchase_order.address.city}" %></li>
