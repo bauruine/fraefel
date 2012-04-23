@@ -10,6 +10,7 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :purchase_order_address_assignments
   has_many :addresses, :class_name => "Address", :through => :purchase_order_address_assignments
   has_many :old_pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
+  has_many :baan_raw_data, :class_name => "BaanRawData", :foreign_key => "baan_2"
   
   scope :ordered_for_delivery, order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
@@ -29,22 +30,27 @@ class PurchaseOrder < ActiveRecord::Base
     return weight_total
   end
   
-  def self.patch_calculation
-    self.where("calculations.id is null").includes(:calculation).each do |purchase_order|
-      purchase_order.create_calculation unless purchase_order.calculation.present?
-      purchase_order.calculation.update_attributes(:total_pallets => purchase_order.pallets.count, :total_purchase_positions => purchase_order.purchase_positions.count)
+  def self.patch_calculation(arg)
+    @purchase_order = PurchaseOrder.where(:baan_id => arg)
+    if @purchase_order.present?
+      @purchase_order.each do |p_o|
+        p_o.create_calculation unless p_o.calculation.present?
+        p_o.calculation.update_attributes(:total_pallets => p_o.pallets.count, :total_purchase_positions => p_o.purchase_positions.count)
+      end
     end
   end
   
-  def self.patch_aggregations
-    # Updating manufacturing_warehousing -- temp here.. move somewhere else...
-    PurchaseOrder.all.each do |p_o|
-      m_c_status = p_o.purchase_positions.sum(:production_status) * (100.to_f / p_o.purchase_positions.count.to_f)
-      w_c_status = p_o.purchase_positions.sum(:stock_status) * (100.to_f / p_o.purchase_positions.count.to_f)
-      workflow_status = "#{p_o.purchase_positions.sum(:production_status)}#{p_o.purchase_positions.sum(:stock_status)}"
-      m_c_level = p_o.purchase_positions.sum(:production_status)
-      w_c_level = p_o.purchase_positions.sum(:stock_status)
-      p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status, :production_status => m_c_level, :stock_status => w_c_level, :workflow_status => workflow_status)
+  def self.patch_aggregations(arg)
+    @purchase_order = PurchaseOrder.where(:baan_id => arg)
+    if @purchase_order.present?
+      @purchase_order.each do |p_o|
+        m_c_status = p_o.purchase_positions.sum(:production_status) * (100.to_f / p_o.purchase_positions.count.to_f)
+        w_c_status = p_o.purchase_positions.sum(:stock_status) * (100.to_f / p_o.purchase_positions.count.to_f)
+        workflow_status = "#{p_o.purchase_positions.sum(:production_status)}#{p_o.purchase_positions.sum(:stock_status)}"
+        m_c_level = p_o.purchase_positions.sum(:production_status)
+        w_c_level = p_o.purchase_positions.sum(:stock_status)
+        p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status, :production_status => m_c_level, :stock_status => w_c_level, :workflow_status => workflow_status)
+      end
     end
   end
   

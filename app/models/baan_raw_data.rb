@@ -1,5 +1,6 @@
 class BaanRawData < ActiveRecord::Base
   belongs_to :baan_import, :class_name => "BaanImport", :foreign_key => "baan_import_id"
+  belongs_to :purchase_order, :class_name => "PurchaseOrder", :foreign_key => "baan_2"
   
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
@@ -12,11 +13,23 @@ class BaanRawData < ActiveRecord::Base
       @baan_raw_attributes = {}
       for i in 0..81 do
         @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s.undress)
-        @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)
       end
-      BaanRawData.find_or_create_by_baan_2_and_baan_4(@baan_raw_attributes)
+      @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)
+      BaanRawData.find_or_create_by_baan_2_and_baan_4_and_baan_import_id(@baan_raw_attributes)
     end
+    
     ab = Time.now
     puts (ab - ag).to_s
+  end
+  
+  def self.patch_import(arg)
+    @baan_import = BaanImport.find(arg)
+    BaanRawData.where(:baan_import_id => @baan_import.id).group(:baan_2).count.each do |b_r_d|
+      @p_o = PurchaseOrder.where(:baan_id => b_r_d.first)
+      if @p_o.present?
+        PurchaseOrder.patch_calculation(@p_o.first.id)
+        PurchaseOrder.patch_aggregations(@p_o.first.id)
+      end
+    end
   end
 end
