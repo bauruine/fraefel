@@ -92,10 +92,11 @@ class PurchasePosition < ActiveRecord::Base
       if purchase_position.new_record?
         purchase_position.save
       else
-        if purchase_position.pallets.present?
+        purchase_position_attributes.merge!(:id => purchase_position.id)
+        unless PurchasePosition.select(purchase_position_attributes.keys).where(:id => purchase_position.id).first.attributes == purchase_position_attributes
           # update logic comes here...
-        else
-          # update logic comes here...
+          purchase_position_attributes.delete(:id)
+          purchase_position.update_attributes(purchase_position_attributes)
         end
       end
       

@@ -116,7 +116,12 @@ class PurchaseOrder < ActiveRecord::Base
       if purchase_order.new_record?
         purchase_order.save
       else
-        # update logic comes here...
+        purchase_order_attributes.merge!(:id => purchase_order.id)
+        unless PurchaseOrder.select(purchase_order_attributes.keys).where(:id => purchase_order.id).first.attributes == purchase_order_attributes
+          # update logic comes here...
+          purchase_order_attributes.delete(:id)
+          purchase_order.update_attributes(purchase_order_attributes)
+        end
       end
       purchase_order.addresses += Address.where(:id => [purchase_order_attributes[:level_1], purchase_order_attributes[:level_2], purchase_order_attributes[:level_3]])
     end
