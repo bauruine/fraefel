@@ -10,7 +10,6 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :purchase_order_address_assignments
   has_many :addresses, :class_name => "Address", :through => :purchase_order_address_assignments
   has_many :old_pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
-  has_many :baan_raw_data, :class_name => "BaanRawData", :foreign_key => "baan_2"
   
   scope :ordered_for_delivery, order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   

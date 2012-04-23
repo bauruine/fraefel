@@ -1,6 +1,5 @@
 class BaanRawData < ActiveRecord::Base
   belongs_to :baan_import, :class_name => "BaanImport", :foreign_key => "baan_import_id"
-  belongs_to :purchase_order, :class_name => "PurchaseOrder", :foreign_key => "baan_2"
   
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
