@@ -26,8 +26,8 @@ class BaanRawData < ActiveRecord::Base
     BaanRawData.where(:baan_import_id => @baan_import.id).group(:baan_2).count.each do |b_r_d|
       @p_o = PurchaseOrder.where(:baan_id => b_r_d.first)
       if @p_o.present?
-        PurchaseOrder.patch_calculation(@p_o.first.id)
-        PurchaseOrder.patch_aggregations(@p_o.first.id)
+        PurchaseOrder.patch_calculation(@p_o.first.baan_id)
+        PurchaseOrder.patch_aggregations(@p_o.first.baan_id)
       end
     end
   end
