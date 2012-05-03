@@ -25,6 +25,7 @@ gem "jquery-rails"
 gem "magic_user"
 gem "RedCloth", :require => 'redcloth'
 gem 'simple_form'
+gem 'newrelic_rpm'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -48,6 +49,6 @@ gem 'simple_form'
 # group :development, :test do
 #   gem 'webrat'
 # end
-gem "mocha", :group => :test
+#gem "mocha", :group => :test
 gem 'letter_opener', :group => :development
 gem 'ruby_parser', :group => :development
