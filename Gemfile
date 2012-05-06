@@ -26,6 +26,7 @@ gem "magic_user"
 gem "RedCloth", :require => 'redcloth'
 gem 'simple_form'
 gem 'newrelic_rpm'
+gem 'rabl'
 
 # Use unicorn as the web server
 # gem 'unicorn'

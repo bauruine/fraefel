@@ -84,6 +84,9 @@ GEM
       cocaine (>= 0.0.2)
       mime-types
     polyglot (0.3.3)
+    rabl (0.6.10)
+      activesupport (>= 2.3.14)
+      multi_json (~> 1.0)
     rack (1.2.5)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
@@ -155,6 +158,7 @@ DEPENDENCIES
   nifty-generators
   paper_trail (~> 2)
   paperclip
+  rabl
   rails (= 3.0.9)
   resque
   ruby_parser
