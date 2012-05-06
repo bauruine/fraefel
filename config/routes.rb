@@ -16,6 +16,10 @@ Fraefel::Application.routes.draw do
   end
   
   resources :users
+  
+  resources :addresses
+  
+  resources :shipping_routes
 
   resource :dashboard, :only => [:show]
   

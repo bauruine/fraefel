@@ -1,0 +1,2 @@
+module ShippingRoutesHelper
+end
