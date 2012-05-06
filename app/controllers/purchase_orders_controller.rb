@@ -19,10 +19,10 @@ class PurchaseOrdersController < ApplicationController
   def index
     @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false"})
     @purchase_orders = @search.relation.ordered_for_delivery
-    @level_1 = Address.includes(:purchase_orders).where("addresses.category_id" => 8, "purchase_orders.id" => @purchase_orders.collect(&:id)).order("addresses.company_name ASC")
-    @level_2 = Address.includes(:purchase_orders).where("addresses.category_id" => 9, "purchase_orders.id" => @purchase_orders.collect(&:id)).order("addresses.company_name ASC")
-    @level_3 = Address.includes(:purchase_orders).where("addresses.category_id" => 10, "purchase_orders.id" => @purchase_orders.collect(&:id)).order("addresses.company_name ASC")
-    @shipping_routes = ShippingRoute.includes(:purchase_orders).order("name ASC")
+    @level_1 = Address.where("addresses.category_id" => 8, "addresses.id" => @purchase_orders.collect(&:level_1)).order("addresses.company_name ASC")
+    @level_2 = Address.where("addresses.category_id" => 9, "addresses.id" => @purchase_orders.collect(&:level_2)).order("addresses.company_name ASC")
+    @level_3 = Address.where("addresses.category_id" => 10, "addresses.id" => @purchase_orders.collect(&:level_3)).order("addresses.company_name ASC")
+    @shipping_routes = ShippingRoute.order("name ASC")
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
     respond_to do |format|
