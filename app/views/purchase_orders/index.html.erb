@@ -34,9 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr data-id="loader">
-          <td colspan="7"><%= image_tag("ajax-loader.gif", :style => "width: 15px; height: 15px;") %> Lade Daten...</td>
-        </tr>
+        <%= render @purchase_orders %>
       </tbody>
       <tfoot>
       </tfoot>
@@ -62,23 +60,29 @@
       <hr />
       
       <div class="form-element">
+        <%= f.label(:baan_id_equals, "VK-Auftrag") %>
+        <%= f.text_field(:baan_id_equals, :class => "span1") %>
+      </div>
+      <hr />
+      
+      <div class="form-element">
         <%= f.label(:level_1_equals, "Zahlungsleister") %>
-        <%= f.select(:level_1_equals, {}, {:include_blank => true}, {:class => "span1", "data-foo" => "level_1"}) %>
+        <%= f.collection_select(:level_1_equals, @level_1, :id, :location_for_select, {:include_blank => true}, {:class => "span1", "data-foo" => "level_1"}) %>
       </div>
       
       <div class="form-element">
         <%= f.label(:level_2_equals, "Rechnungsempfänger") %>
-        <%= f.select(:level_2_equals, {}, {:include_blank => true}, {:class => "span1", "data-foo" => "level_2"}) %>
+        <%= f.collection_select(:level_2_equals, @level_2, :id, :location_for_select, {:include_blank => true}, {:class => "span1", "data-foo" => "level_2"}) %>
       </div>
       
       <div class="form-element">
         <%= f.label(:level_3_equals, "Lieferadresse") %>
-        <%= f.select(:level_3_equals, {}, {:include_blank => true}, {:class => "span1", "data-foo" => "level_3"}) %>
+        <%= f.collection_select(:level_3_equals, @level_3, :id, :location_for_select, {:include_blank => true}, {:class => "span1", "data-foo" => "level_3"}) %>
       </div>
       <hr />
       <div class="form-element floatLeft">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.select(:shipping_route_id_equals, {}, {:include_blank => true}, {:class => "span3 mr6", "data-foo" => "shipping_routes"}) %>
+        <%= f.collection_select(:shipping_route_id_equals, @shipping_routes, :id, :name, {:include_blank => true}, {:class => "span3 mr6", "data-foo" => "shipping_routes"}) %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:warehouse_number_equals, "Versandlager") %>
@@ -126,71 +130,3 @@
       </div>
     <% end %>
 </div>
-<script type="text/javascript">
-  $(document).ready(function(){
-    $.ajax({
-      type: "GET",
-      url: "<%= url_for(params.merge(:format => :json)) %>",
-      success: function(purchase_orders) {
-        for (var purchase_order in purchase_orders){
-          $("tbody").append("<tr data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + ">" + "</tr>");
-          $("tr[data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + "]").append("<td>" + purchase_orders[purchase_order]["c_0"] + "</td>");
-          $("tr[data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + "]").append("<td>" + purchase_orders[purchase_order]["c_1"] + "</td>");
-          $("tr[data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + "]").append("<td>" + purchase_orders[purchase_order]["c_2"] + "</td>");
-          $("tr[data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + "]").append("<td>" + purchase_orders[purchase_order]["c_3"] + "</td>");
-          $("tr[data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + "]").append("<td>" + purchase_orders[purchase_order]["c_4"] + "</td>");
-          $("tr[data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + "]").append("<td>" + purchase_orders[purchase_order]["c_5"] + "</td>");
-          $("tr[data-id=" + "'" + purchase_orders[purchase_order]["id"] + "'" + "]").append("<td>" + purchase_orders[purchase_order]["c_6"] + "</td>");
-        };
-        $("tr[data-id='loader']").fadeOut();
-      }
-    });
-    
-    /*$("#search_level_1_equals").click(function() {*/
-      $.ajax({
-        type: "GET",
-        url: "<%= url_for(addresses_path(:format => :json, :search => params[:search], :category_id => 8)) %>",
-        success: function(addresses) {
-          for (var address in addresses) {
-            $("#search_level_1_equals").append("<option value=" + "'" + addresses[address]["id"] + "'" + ">" + addresses[address]["name"] + "</option>");
-          };
-        }
-      });
-    /*});*/
-    
-    /*$("#search_level_2_equals").click(function() {*/
-      $.ajax({
-        type: "GET",
-        url: "<%= url_for(addresses_path(:format => :json, :search => params[:search], :category_id => 9)) %>",
-        success: function(addresses) {
-          for (var address in addresses) {
-            $("#search_level_2_equals").append("<option value=" + "'" + addresses[address]["id"] + "'" + ">" + addresses[address]["name"] + "</option>");
-          };
-        }
-      });
-    /*});*/
-    
-    /*$("#search_level_3_equals").click(function() {*/
-      $.ajax({
-        type: "GET",
-        url: "<%= url_for(addresses_path(:format => :json, :search => params[:search], :category_id => 10)) %>",
-        success: function(addresses) {
-          for (var address in addresses) {
-            $("#search_level_3_equals").append("<option value=" + "'" + addresses[address]["id"] + "'" + ">" + addresses[address]["name"] + "</option>");
-          };
-        }
-      });
-    /*});*/
-    
-    $.ajax({
-      type: "GET",
-      url: "/shipping_routes.json",
-      success: function(shipping_routes) {
-        for (var shipping_route in shipping_routes) {
-          $("#search_shipping_route_id_equals").append("<option value=" + "'" + shipping_routes[shipping_route]["id"] + "'" + ">" + shipping_routes[shipping_route]["name"] + "</option>");
-        };
-      }
-    });
-    
-  });
-</script>
