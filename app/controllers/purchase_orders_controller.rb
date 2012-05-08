@@ -111,9 +111,7 @@ class PurchaseOrdersController < ApplicationController
   end
   
   def destroy_multiple
-    PurchaseOrder.where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
-      purchase_order.destroy
-    end
+    Resque.enqueue(FraefelJaintor)
     redirect_to purchase_orders_path
   end
   

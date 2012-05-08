@@ -13,6 +13,12 @@ class PurchaseOrder < ActiveRecord::Base
   
   scope :ordered_for_delivery, order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
+  def self.clean
+    where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
+      purchase_order.destroy
+    end
+  end
+  
   def amount
     amount = 0
     purchase_positions.each do |purchase_position|
