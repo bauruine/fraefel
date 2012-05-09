@@ -9,6 +9,9 @@ class PurchasePosition < ActiveRecord::Base
   has_many :transport_issues
   has_many :delivery_rejections, :through => :transport_issues
   
+  has_many :purchase_position_time_shifting_assignments
+  has_many :time_shiftings, :class_name => "TimeShifting", :through => :purchase_position_time_shifting_assignments
+  
   after_save :update_purchase_order_date
   
   scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")

@@ -1,0 +1,50 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Termin Verschiebungen</h1>
+  <%= link_to("Neue Terminverschiebung", new_time_shifting_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
+
+
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">Index</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>VK-Auftrag</th>
+          <th>Komplett / Teil-Verschiebung</th>
+          <th>anz. VK-Pos</th>
+          <th>Grund</th>
+          <th>Abteilung</th>
+          <th>Editiert am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @time_shiftings.each do |time_shifting| %>
+          <tr>
+            <td><%= link_to(time_shifting.id, time_shifting) %></td>
+            <td><%= time_shifting.purchase_order_id %></td>
+            <td><%= time_shifting.simple %></td>
+            <td><%= time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).count %></td>
+            <td></td>
+            <td></td>
+            <td><%= time_shifting.updated_at.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    
+  </section>
+</section>

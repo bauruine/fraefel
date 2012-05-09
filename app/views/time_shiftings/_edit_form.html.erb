@@ -1,0 +1,85 @@
+<%= simple_form_for(@time_shifting.first) do |f| %>
+
+  <%= f.error_notification %>
+  
+  <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
+  
+  <hr />
+  
+    <div data-step="1">
+      <%= f.input :simple, :as => :select, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false %>
+      
+      <hr />
+      
+      <table class="margin_bottom_big">
+        <thead>
+          <tr>
+            <th>Versand</th>
+            <th>Tour</th>
+            <th>Position</th>
+            <th>Artikel</th>
+            <th>stk.</th>
+            <th>Bezeichnung</th>
+            <th>Produktlinie</th>
+            <th>Artikelgruppe</th>
+            <th>Lager Ort</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |p_p_t_s_a_form| %>
+            <tr>
+              <td><%= p_p_t_s_a_form.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+              <td><%= @purchase_order.first.shipping_route.name %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.baan_id %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.article_number %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.quantity %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.article %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.product_line %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.commodity_code.content %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.storage_location %></td>
+              <td>
+                <%= p_p_t_s_a_form.input(:purchase_position_id, :as => :hidden, :label => false) %>
+                <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <% 8.times do %>
+              <td></td>
+            <% end %>
+          </tr>
+        </tfoot>
+      </table>
+      <hr />
+    </div>
+    <div data-step="2">
+      <%= f.input :reasons, :collection => Category.order("title ASC"), :label => "Verzugsgründe", :hint => "Wähle den Grund der Verschiebung" %>
+      <%= link_to("Weiterer Grund", new_time_shifting_path) %>
+      <hr />
+    </div>
+    <div data-step="3">
+      <%= f.input :articles, :label => "Artikel Positionen", :as => :string, :hint => "Füge eine Artikel Position hinzu. Wert wird nicht auf gültigkeit überprüft." %>
+      <%= link_to("Weiterer Artikel", new_time_shifting_path) %>
+      
+      <hr />
+      <%= f.input :next_department, :collection => Category.order("title DESC"), :hint => "Wähle die nächste betroffene Abteilung" %>
+      
+      <hr />
+    </div>
+    <div data-step="4">
+      <%= f.simple_fields_for :comments do |comment_form| %>
+        <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+      <% end %>
+    </div>
+  
+  <hr />
+  
+  <div class="form-element clearfix">
+    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+  </div>
+
+<% end %>

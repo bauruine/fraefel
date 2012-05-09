@@ -50,6 +50,7 @@
                     <% if permitted_to? :index, :delivery_rejections %>
                       <li><%= link_to("Konflikte", delivery_rejections_path) %></li>
                     <% end %>
+                    <li><%= link_to("Terminverschiebungen", time_shiftings_path) %></li>
                   </ul>
                 </li>
               <% end %>

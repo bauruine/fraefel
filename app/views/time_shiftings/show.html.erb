@@ -1,0 +1,82 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Termin Verschiebung NR#<%= @time_shifting.first.id %></h1>
+  <%= link_to("Edit", edit_time_shifting_path(@time_shifting.first), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+</header>
+
+<ul class="ul_summary">
+  <li class="summary clearfix"><p class="floatLeft bold title">VK-Auftrag:</p><p class="floatLeft"><%= @purchase_order.first.baan_id %></p></li>
+  <li class="summary clearfix"><p class="floatLeft bold title">Abteilung:</p><p class="floatLeft"><%= "Technik" %></p></li>
+  
+</ul>
+
+<h1>Hinzugefügte Artikel Positionen....</h1>
+<p>tbd...</p>
+<p>tbd...</p>
+<p>tbd...</p>
+<p>tbd...</p>
+<p>tbd...</p>
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">VK-Positionen <%= @purchase_positions.count %> von <%= @time_shifting.first.purchase_positions.count %></h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Artikel NR</th>
+          <th>Artikel</th>
+          <th>Produktlinie</th>
+          <th>Menge Total</th>
+          <th>Lager Ort</th>
+          <th>PLZ Gebiet</th>
+          <th>ursprünglicher Versand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_positions.each do |purchase_position| %>
+          <tr>
+            <td><%= purchase_position.baan_id %></td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.article %></td>
+            <td><%= purchase_position.product_line %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.storage_location %></td>
+            <td><%= purchase_position.zip_location_name %></td>
+            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+      </tfoot>
+    </table>
+  </section>
+</section>
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Nachrichten...</h4>
+  </header>
+  <section class="filter_box_content clearfix" style="padding: 10px;">
+
+    <% @comments.each do |comment| %>
+      <div style="width: 50%; margin-bottom: 30px;">
+        <h3>Nachricht erstellt von <%= comment.user.full_name %> um <%= comment.created_at.to_formatted_s(:swiss_date) %></h3>
+        <hr />
+        <%= comment.content %>
+      </div>
+    <% end %>
+    
+  </section>
+</section>

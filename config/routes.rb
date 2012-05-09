@@ -20,6 +20,8 @@ Fraefel::Application.routes.draw do
   resources :addresses
   
   resources :shipping_routes
+  
+  resources :time_shiftings
 
   resource :dashboard, :only => [:show]
   

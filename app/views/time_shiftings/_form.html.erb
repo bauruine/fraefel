@@ -1,0 +1,120 @@
+<%= simple_form_for(@time_shifting, :url => @purchase_order.present? ? time_shiftings_path : new_time_shifting_path, :html => {:method => @purchase_order.present? ? :post : :get}) do |f| %>
+
+  <%= f.error_notification %>
+  
+  <% if @purchase_order.blank? %>
+    <%= f.input :purchase_order_id, :label => "VK-Auftrag", :hint => "Info: Gültige VK-Nummer eingeben." %>
+  <% else %>
+    <%= f.input :purchase_order_id, :as => :hidden, :label => false %>
+    <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
+    <%= link_to("VK-Auftrag entfernen", new_time_shifting_path, :confirm => "Achtung! Alle bisherigen Eingaben werden gelöscht!") %>
+  <% end %>
+  
+  <hr />
+  
+  <% unless @purchase_order.blank? %>
+    <div data-step="1">
+      <%= f.input :simple, :as => :check_boxes, :hint => "Wird der komplette Auftrag verschoben?" %>
+      
+      <hr />
+      
+      <table class="margin_bottom_big" style="display: none;">
+        <thead>
+          <tr>
+            <th>Versand</th>
+            <th>Tour</th>
+            <th>Position</th>
+            <th>Artikel</th>
+            <th>stk.</th>
+            <th>Bezeichnung</th>
+            <th>Produktlinie</th>
+            <th>Artikelgruppe</th>
+            <th>Lager Ort</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |p_p_t_s_a_form| %>
+            <tr>
+              <td><%= p_p_t_s_a_form.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+              <td><%= @purchase_order.first.shipping_route.name %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.baan_id %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.article_number %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.quantity %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.article %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.product_line %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.commodity_code.content %></td>
+              <td><%= p_p_t_s_a_form.object.purchase_position.storage_location %></td>
+              <td>
+                <%= p_p_t_s_a_form.input(:purchase_position_id, :as => :hidden, :label => false) %>
+                <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <% 8.times do %>
+              <td></td>
+            <% end %>
+          </tr>
+        </tfoot>
+      </table>
+      <hr />
+    </div>
+    <div data-step="2" style="display: none;">
+      <%= f.input :reasons, :collection => Category.order("title ASC"), :label => "Verzugsgründe", :hint => "Wähle den Grund der Verschiebung" %>
+      <%= link_to("Weiterer Grund", new_time_shifting_path) %>
+      <hr />
+    </div>
+    <div data-step="3" style="display: none;">
+      <%= f.input :articles, :label => "Artikel Positionen", :as => :string, :hint => "Füge eine Artikel Position hinzu. Wert wird nicht auf gültigkeit überprüft." %>
+      <%= link_to("Weiterer Artikel", new_time_shifting_path) %>
+      
+      <hr />
+      <%= f.input :next_department, :collection => Category.order("title DESC"), :hint => "Wähle die nächste betroffene Abteilung" %>
+      
+      <hr />
+    </div>
+    <div data-step="4" style="display: none;">
+      <%= f.input :comment, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+    </div>
+  <% end %>
+  
+  <hr />
+  
+  <div class="form-element clearfix">
+    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+  </div>
+
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+  $("input[type='checkbox']").click(function() {
+    if ($(this).is(":checked")) {
+      $("div[data-step='2']").fadeIn();
+      $("table").fadeIn();
+    } else {
+      $("div[data-step='2'], div[data-step='3'], div[data-step='4']").fadeOut();
+      $("table").fadeOut();
+    };
+  });
+  
+  $("#time_shifting_reasons option").bind("click", function() {
+    if (this.value == '') {
+      $("div[data-step='3'], div[data-step='4']").fadeOut();
+    } else {
+      $("div[data-step='3']").fadeIn();
+    };
+  });
+  
+  $("#time_shifting_next_department option").bind("click", function() {
+    if (this.value == '') {
+      $("div[data-step='4']").fadeOut();
+    } else {
+      $("div[data-step='4']").fadeIn();
+    };
+  });
+  
+</script>
