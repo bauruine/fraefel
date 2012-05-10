@@ -1,0 +1,46 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Abteilungen</h1>
+  <%= link_to("Neue Abteilung", new_department_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
+
+
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">Index</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Abteilung</th>
+          <th>anz. MA.</th>
+          <th>Erstellt durch</th>
+          <th>Erstellt am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @departments.each do |department| %>
+          <tr>
+            <td><%= link_to(department.id, edit_department_path(department)) %></td>
+            <td><%= department.title %></td>
+            <td><%= department.users.count %></td>
+            <td><%= department.created_by %></td>
+            <td><%= department.created_at.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    
+  </section>
+</section>

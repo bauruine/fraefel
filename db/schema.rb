@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120509124659) do
+ActiveRecord::Schema.define(:version => 20120510145856) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -282,6 +282,32 @@ ActiveRecord::Schema.define(:version => 20120509124659) do
     t.float    "discount"
   end
 
+  create_table "department_shifting_reason_assignments", :force => true do |t|
+    t.integer  "department_id"
+    t.integer  "shifting_reason_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "department_user_assignments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "department_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "departments", :force => true do |t|
+    t.string   "title"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "depot_types", :force => true do |t|
     t.string   "title"
     t.datetime "created_at"
@@ -447,6 +473,23 @@ ActiveRecord::Schema.define(:version => 20120509124659) do
     t.datetime "updated_at"
   end
 
+  create_table "shifting_reason_time_shifting_assignments", :force => true do |t|
+    t.integer  "time_shifting_id"
+    t.integer  "shifting_reason_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "shifting_reasons", :force => true do |t|
+    t.string   "title"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "shipper_locations", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -496,6 +539,7 @@ ActiveRecord::Schema.define(:version => 20120509124659) do
     t.integer  "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "department_id"
   end
 
   create_table "transport_issues", :force => true do |t|

@@ -1,0 +1,46 @@
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Verschiebungsgründe</h1>
+  <%= link_to("Neuer Verschiebungsgrund", new_shifting_reason_path(), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
+</header>
+
+
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">Index</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Verschiebungsgrund</th>
+          <th>anw. durch</th>
+          <th>Erstellt durch</th>
+          <th>Erstellt am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @shifting_reasons.each do |shifting_reason| %>
+          <tr>
+            <td><%= link_to(shifting_reason.id, edit_shifting_reason_path(shifting_reason)) %></td>
+            <td><%= shifting_reason.title %></td>
+            <td><%= shifting_reason.departments.collect(&:title) %></td>
+            <td><%= shifting_reason.created_by %></td>
+            <td><%= shifting_reason.created_at.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    
+  </section>
+</section>

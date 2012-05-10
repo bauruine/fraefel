@@ -29,8 +29,8 @@
             <td><%= time_shifting.purchase_order_id %></td>
             <td><%= time_shifting.simple %></td>
             <td><%= time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).count %></td>
-            <td></td>
-            <td></td>
+            <td><%= time_shifting.shifting_reasons.collect(&:title) %></td>
+            <td><%= time_shifting.department.try(:title) %></td>
             <td><%= time_shifting.updated_at.to_formatted_s(:swiss_date) %></td>
           </tr>
         <% end %>

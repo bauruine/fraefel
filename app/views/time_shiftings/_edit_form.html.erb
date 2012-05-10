@@ -56,7 +56,10 @@
       <hr />
     </div>
     <div data-step="2">
-      <%= f.input :reasons, :collection => Category.order("title ASC"), :label => "Verzugsgründe", :hint => "Wähle den Grund der Verschiebung" %>
+      <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |s_r_t_s_a_form| %>
+        <%= s_r_t_s_a_form.input :shifting_reason_id, :as => :select, :collection => @shifting_reasons, :label => "Verzugsgründe", :hint => "Wähle den Grund der Verschiebung" %>
+      <% end %>
+      
       <%= link_to("Weiterer Grund", new_time_shifting_path) %>
       <hr />
     </div>
@@ -65,7 +68,7 @@
       <%= link_to("Weiterer Artikel", new_time_shifting_path) %>
       
       <hr />
-      <%= f.input :next_department, :collection => Category.order("title DESC"), :hint => "Wähle die nächste betroffene Abteilung" %>
+      <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
       
       <hr />
     </div>

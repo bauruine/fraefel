@@ -19,6 +19,10 @@ Fraefel::Application.routes.draw do
   
   resources :addresses
   
+  resources :departments
+  
+  resources :shifting_reasons
+  
   resources :shipping_routes
   
   resources :time_shiftings

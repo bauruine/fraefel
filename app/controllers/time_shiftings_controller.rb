@@ -13,10 +13,15 @@ class TimeShiftingsController < ApplicationController
   
   def new
     @time_shifting = TimeShifting.new(params[:time_shifting])
+    @departments = Department.order("departments.title ASC")
     
     if params[:time_shifting].present?
        @purchase_order = PurchaseOrder.where(:baan_id => params[:time_shifting][:purchase_order_id])
        @purchase_positions = @purchase_order.first.purchase_positions
+       @shifting_reasons = ShiftingReason.order("shifting_reasons.title ASC")
+       
+       @time_shifting.comments.build
+       @time_shifting.shifting_reason_time_shifting_assignments.build
        
        @purchase_positions.each do |purchase_position|
          @time_shifting.purchase_position_time_shifting_assignments.build(:purchase_position_id => purchase_position.id)
@@ -35,8 +40,11 @@ class TimeShiftingsController < ApplicationController
   def edit
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_positions = @time_shifting.first.purchase_position_time_shifting_assignments.includes(:purchase_position)
+    @shifting_reasons = ShiftingReason.order("shifting_reasons.title ASC")
+    @departments = Department.order("departments.title ASC")
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     @time_shifting.first.comments.build
+    @time_shifting.first.shifting_reason_time_shifting_assignments.build
   end
   
   def update

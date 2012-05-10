@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  department_id: 1
+  shifting_reason_id: 1
+  created_by: 1
+  updated_by: 1
+
+two:
+  department_id: 1
+  shifting_reason_id: 1
+  created_by: 1
+  updated_by: 1

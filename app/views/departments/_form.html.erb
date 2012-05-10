@@ -1,0 +1,17 @@
+<%= simple_form_for(@department) do |f| %>
+
+  <%= f.error_notification %>
+  <%= f.input :title, :label => "Name der Abteilung" %>
+  
+  <hr />
+  
+  <%= f.association :shifting_reasons, :as => :check_boxes, :label => "Verwendbare Verschiebungsgründe" %>
+  
+  <hr />
+  
+  <div class="form-element clearfix">
+    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
+    <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+  </div>
+
+<% end %>

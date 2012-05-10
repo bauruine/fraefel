@@ -6,6 +6,10 @@ class User < ActiveRecord::Base
   has_many :user_role_assignments
   has_many :roles, :through => :user_role_assignments
   
+  has_many :department_user_assignments
+  has_many :departments, :class_name => "Department", :through => :department_user_assignments
+  
+  
   validates_presence_of :roles, :forename, :surname, :email
   
   def role_symbols

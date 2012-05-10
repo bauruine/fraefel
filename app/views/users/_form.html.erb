@@ -20,6 +20,10 @@
   
   <hr />
   
+  <%= f.association :departments, :as => :check_boxes %>
+  
+  <hr />
+  
   <div class="form-element clearfix">
     <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
     <%= f.submit(@user.new_record? ? "Benutzer erstellen" : "Änderungen Sichern", :class => "blueSubmit floatLeft") %>
