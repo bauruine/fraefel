@@ -63,6 +63,7 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
       railties (>= 3.0.0)
+    kgio (2.7.4)
     launchy (2.0.5)
       addressable (~> 2.2.6)
     letter_opener (0.0.2)
@@ -121,6 +122,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (~> 0.14.4)
+    raindrops (0.8.0)
     rake (0.9.2.2)
     rdoc (3.12)
       json (~> 1.4)
@@ -149,6 +151,10 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.31)
+    unicorn (4.3.1)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
     vegas (0.1.8)
       rack (>= 1.0.0)
     wicked_pdf (0.7.2)
@@ -182,4 +188,5 @@ DEPENDENCIES
   rest-client
   ruby_parser
   simple_form
+  unicorn
   wicked_pdf
