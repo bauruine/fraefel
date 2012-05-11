@@ -10,12 +10,41 @@
   
 </ul>
 
-<h1>Hinzugefügte Artikel Positionen....</h1>
-<p>tbd...</p>
-<p>tbd...</p>
-<p>tbd...</p>
-<p>tbd...</p>
-<p>tbd...</p>
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">Hinzugefügte Artikel Positionen....</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>Artikel Pos</th>
+          <th>Bemerkung</th>
+          <th>Erfasser</th>
+          <th>Erfast am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @article_positions.each do |article_position| %>
+          <tr>
+            <td><%= article_position.baan_id %></td>
+            <td></td>
+            <td><%= article_position.creator.full_name %></td>
+            <td><%= article_position.created_at.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+      </tfoot>
+    </table>
+  </section>
+</section>
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">

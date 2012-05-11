@@ -2,6 +2,7 @@ class TimeShiftingsController < ApplicationController
   def show
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_positions = @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments)
+    @article_positions = @time_shifting.first.article_positions.order("created_at DESC")
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     @comments = @time_shifting.first.comments.order("created_at DESC")
     
@@ -18,7 +19,7 @@ class TimeShiftingsController < ApplicationController
     if params[:time_shifting].present?
        @purchase_order = PurchaseOrder.where(:baan_id => params[:time_shifting][:purchase_order_id])
        @purchase_positions = @purchase_order.first.purchase_positions
-       @shifting_reasons = ShiftingReason.order("shifting_reasons.title ASC")
+       @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
        
        @time_shifting.comments.build
        @time_shifting.shifting_reason_time_shifting_assignments.build
@@ -40,11 +41,11 @@ class TimeShiftingsController < ApplicationController
   def edit
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_positions = @time_shifting.first.purchase_position_time_shifting_assignments.includes(:purchase_position)
-    @shifting_reasons = ShiftingReason.order("shifting_reasons.title ASC")
+    @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
     @departments = Department.order("departments.title ASC")
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     @time_shifting.first.comments.build
-    @time_shifting.first.shifting_reason_time_shifting_assignments.build
+    #@time_shifting.first.shifting_reason_time_shifting_assignments.build
   end
   
   def update

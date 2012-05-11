@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  article_position_id: 1
+  time_shifting_id: 1
+  created_by: 1
+  updated_by: 1
+
+two:
+  article_position_id: 1
+  time_shifting_id: 1
+  created_by: 1
+  updated_by: 1

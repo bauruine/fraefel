@@ -1,0 +1,15 @@
+<tr>
+  <td><%= f.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+  <td><%= @purchase_order.first.shipping_route.name %></td>
+  <td><%= f.object.purchase_position.baan_id %></td>
+  <td><%= f.object.purchase_position.article_number %></td>
+  <td><%= f.object.purchase_position.quantity %></td>
+  <td><%= f.object.purchase_position.article %></td>
+  <td><%= f.object.purchase_position.product_line %></td>
+  <td><%= f.object.purchase_position.commodity_code.content %></td>
+  <td><%= f.object.purchase_position.storage_location %></td>
+  <td>
+    <%= f.input(:purchase_position_id, :as => :hidden, :label => false) %>
+    <%= f.input :considered, :as => :select, :label => false, :include_blank => false %>
+  </td>
+</tr>

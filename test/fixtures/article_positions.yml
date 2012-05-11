@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  baan_id: MyString
+  created_by: 1
+  updated_by: 1
+
+two:
+  baan_id: MyString
+  created_by: 1
+  updated_by: 1
