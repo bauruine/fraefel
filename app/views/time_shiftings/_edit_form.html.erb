@@ -113,4 +113,23 @@
     $(this).before($(this).data('fields').replace(regexp, time));
     event.preventDefault();
   });
+  $("select#time_shifting_simple option").click(function() {
+    if (this.value == 'true') {
+      $("table option").removeAttr('selected');
+      $('table option[value="true"]').prop('selected', true)
+    };
+  });
+  
+  $('table option[value="false"]').click(function() {
+    $("select#time_shifting_simple").removeAttr('selected');
+    $('select#time_shifting_simple option[value="false"]').prop('selected', true)
+  });
+  
+  $('table option[value="true"]').click(function() {
+    if ($('table option[value="true"]').not(":selected").size() == 0) {
+      $("select#time_shifting_simple").removeAttr('selected');
+      $('select#time_shifting_simple option[value="true"]').prop('selected', true)
+    };
+  });
+  
 </script>

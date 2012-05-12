@@ -14,11 +14,11 @@
   
   <% unless @purchase_order.blank? %>
     <div data-step="1">
-      <%= f.input :simple, :as => :check_boxes, :hint => "Wird der komplette Auftrag verschoben?" %>
+      <%= f.input :simple, :as => :select, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false, :selected => false %>
       
       <hr />
       
-      <table class="margin_bottom_big" style="display: none;">
+      <table class="margin_bottom_big" style="">
         <thead>
           <tr>
             <th>Versand</th>
@@ -47,7 +47,7 @@
               <td><%= p_p_t_s_a_form.object.purchase_position.storage_location %></td>
               <td>
                 <%= p_p_t_s_a_form.input(:purchase_position_id, :as => :hidden, :label => false) %>
-                <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false %>
+                <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false, :selected => false %>
               </td>
             </tr>
           <% end %>
@@ -62,16 +62,22 @@
       </table>
       <hr />
     </div>
-    <div data-step="2" style="display: none;">
-      <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |s_r_t_s_a_form| %>
-        <%= s_r_t_s_a_form.input :shifting_reason_id, :as => :select, :collection => @shifting_reasons, :label => "Verzugsgründe", :hint => "Wähle den Grund der Verschiebung" %>
+    <div data-step="2" style="">
+      <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |builder| %>
+        <%= render 'shifting_reason_time_shifting_assignment_fields', :f => builder %>
       <% end %>
-      <%= link_to("Weiterer Grund", new_time_shifting_path) %>
+      
+      <%= link_to_add_fields "Weiterer Grund", f, :shifting_reason_time_shifting_assignments %>
+      
       <hr />
     </div>
+
     <div data-step="3" style="display: none;">
-      <%= f.input :articles, :label => "Artikel Positionen", :as => :string, :hint => "Füge eine Artikel Position hinzu. Wert wird nicht auf gültigkeit überprüft." %>
-      <%= link_to("Weiterer Artikel", new_time_shifting_path) %>
+      <%= f.simple_fields_for :article_positions do |builder| %>
+        <%= render 'article_position_fields', :f => builder %>
+      <% end %>
+      
+      <%= link_to_add_fields "Weitere Artikel Position", f, :article_positions %>
       
       <hr />
       <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
@@ -95,13 +101,29 @@
 <% end %>
 
 <script type="text/javascript" charset="utf-8">
-  $("input[type='checkbox']").click(function() {
-    if ($(this).is(":checked")) {
-      $("div[data-step='2']").fadeIn();
-      $("table").fadeIn();
-    } else {
-      $("div[data-step='2'], div[data-step='3'], div[data-step='4']").fadeOut();
-      $("table").fadeOut();
+  $("form").on("click", ".add_fields", function(event){
+    var time = new Date().getTime();
+    var regexp = new RegExp($(this).data('id'), 'g');
+    $(this).before($(this).data('fields').replace(regexp, time));
+    event.preventDefault();
+  });
+  
+  $("select#time_shifting_simple option").click(function() {
+    if (this.value == 'true') {
+      $("table option").removeAttr('selected');
+      $('table option[value="true"]').prop('selected', true)
+    };
+  });
+  
+  $('table option[value="false"]').click(function() {
+    $("select#time_shifting_simple").removeAttr('selected');
+    $('select#time_shifting_simple option[value="false"]').prop('selected', true)
+  });
+  
+  $('table option[value="true"]').click(function() {
+    if ($('table option[value="true"]').not(":selected").size() == 0) {
+      $("select#time_shifting_simple").removeAttr('selected');
+      $('select#time_shifting_simple option[value="true"]').prop('selected', true)
     };
   });
   
