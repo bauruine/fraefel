@@ -16,6 +16,12 @@
       </div>
       
       <%= f.input :simple, :as => :select, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false %>
+      <%= f.input :customer_was_informed, :as => :select %>
+      <%= f.input :baan_was_updated, :as => :select %>
+      <%= f.input :change_we_date, :as => :select %>
+      <%= f.input :we_date, :as => :string %>
+      <%= f.input :change_lt_date, :as => :select %>
+      <%= f.input :lt_date, :as => :string %>
       
       <hr />
       

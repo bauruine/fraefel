@@ -4,4 +4,7 @@ class ArticlePositionTimeShiftingAssignment < ActiveRecord::Base
   
   has_many :comments, :as => :commentable
   
+  accepts_nested_attributes_for :article_position
+  accepts_nested_attributes_for :comments
+  
 end

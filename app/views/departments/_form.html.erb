@@ -2,7 +2,7 @@
 
   <%= f.error_notification %>
   <%= f.input :title, :label => "Name der Abteilung" %>
-  
+  <%= f.input :abbreviation %>
   <hr />
   
   <%= f.association :shifting_reasons, :as => :check_boxes, :label => "Verwendbare Verschiebungsgründe" %>

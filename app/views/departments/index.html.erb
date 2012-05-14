@@ -15,6 +15,7 @@
         <tr>
           <th>#</th>
           <th>Abteilung</th>
+          <th></th>
           <th>anz. MA.</th>
           <th>Erstellt durch</th>
           <th>Erstellt am</th>
@@ -25,6 +26,7 @@
           <tr>
             <td><%= link_to(department.id, edit_department_path(department)) %></td>
             <td><%= department.title %></td>
+            <td><%= department.abbreviation %></td>
             <td><%= department.users.count %></td>
             <td><%= department.created_by %></td>
             <td><%= department.created_at.to_formatted_s(:swiss_date) %></td>

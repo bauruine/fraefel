@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120511135615) do
+ActiveRecord::Schema.define(:version => 20120513151824) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -45,6 +45,9 @@ ActiveRecord::Schema.define(:version => 20120511135615) do
     t.integer  "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "order_number"
+    t.date     "confirmed_date"
+    t.string   "purchase_positions_collection"
   end
 
   create_table "article_positions", :force => true do |t|
@@ -323,6 +326,7 @@ ActiveRecord::Schema.define(:version => 20120511135615) do
     t.integer  "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "abbreviation"
   end
 
   create_table "depot_types", :force => true do |t|
@@ -557,6 +561,13 @@ ActiveRecord::Schema.define(:version => 20120511135615) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "department_id"
+    t.boolean  "customer_was_informed"
+    t.boolean  "baan_was_updated"
+    t.date     "we_date"
+    t.date     "lt_date"
+    t.boolean  "change_we_date"
+    t.boolean  "change_lt_date"
+    t.boolean  "closed"
   end
 
   create_table "transport_issues", :force => true do |t|

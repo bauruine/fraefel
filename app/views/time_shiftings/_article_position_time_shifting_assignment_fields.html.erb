@@ -1,1 +1,20 @@
-<%= f.input :baan_id, :label => "Artikel Position", :hint => "Füge eine Artikel Position hinzu. Wert wird nicht auf gültigkeit überprüft." %>
+<% f.object.article_position.present? ? nil : f.object.build_article_position %>
+<% f.object.comments.present? ? nil : f.object.comments.build %>
+
+<fieldset>
+  <legend>Artikel Code <small><a href="#">entfernen</a></small></legend>
+<%= f.simple_fields_for :article_position do |builder| %>
+  <%= render 'article_position_fields', :f => builder %>
+<% end %>
+
+<%= f.input :purchase_positions_collection, :as => :string, :label => "Betroffene VK-Pos", :hint => "Lorem..." %>
+<%#= f.input :order_number, :hint => "Bestellnummer" %>
+<%#= f.input :confirmed_date, :as => :string %>
+
+  <fieldset>
+    <legend>Artikel Code Kommentar</legend>
+    <%= f.simple_fields_for :comments do |builder| %>
+      <%= builder.input :content, :as => :string %>
+    <% end %>
+  </fieldset>
+</fieldset>

@@ -1,103 +1,166 @@
 <%= simple_form_for(@time_shifting, :url => @purchase_order.present? ? time_shiftings_path : new_time_shifting_path, :html => {:method => @purchase_order.present? ? :post : :get}) do |f| %>
 
   <%= f.error_notification %>
-  
-  <% if @purchase_order.blank? %>
-    <%= f.input :purchase_order_id, :label => "VK-Auftrag", :hint => "Info: Gültige VK-Nummer eingeben." %>
-  <% else %>
-    <%= f.input :purchase_order_id, :as => :hidden, :label => false %>
-    <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
-    <%= link_to("VK-Auftrag entfernen", new_time_shifting_path, :confirm => "Achtung! Alle bisherigen Eingaben werden gelöscht!") %>
-  <% end %>
-  
-  <hr />
+  <div data-step="1">
+    <fieldset>
+      <legend>Schritt 1 <small>VK-Auftrag</small></legend>
+      <% if @purchase_order.blank? %>
+        <%= f.input :purchase_order_id, :label => "VK-Auftrag", :hint => "Info: Gültige VK-Nummer eingeben." %>
+      <% else %>
+        <%= f.input :purchase_order_id, :as => :hidden, :label => false %>
+        <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
+        <%= link_to("VK-Auftrag entfernen", new_time_shifting_path, :confirm => "Achtung! Alle bisherigen Eingaben werden gelöscht!") %>
+      <% end %>
+      <hr />
+      <div class="form-element clearfix">
+        <%= link_to("Abbrechen", time_shiftings_path, :class => "linkSubmit greySubmit floatLeft") %>
+        <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" =>"div[data-step='2']") %>
+      </div>
+    </fieldset>
+  </div>
   
   <% unless @purchase_order.blank? %>
-    <div data-step="1">
-      <%= f.input :simple, :as => :select, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false, :selected => false %>
-      
-      <hr />
-      
-      <table class="margin_bottom_big" style="">
-        <thead>
-          <tr>
-            <th>Versand</th>
-            <th>Tour</th>
-            <th>Position</th>
-            <th>Artikel</th>
-            <th>stk.</th>
-            <th>Bezeichnung</th>
-            <th>Produktlinie</th>
-            <th>Artikelgruppe</th>
-            <th>Lager Ort</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |p_p_t_s_a_form| %>
+    <div data-step="2" style="display: none;">
+      <fieldset>
+        <legend>Schritt 2 <small>Betroffene VK-Positionen</small></legend>
+        <table class="margin_bottom_big" style="">
+          <thead>
             <tr>
-              <td><%= p_p_t_s_a_form.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-              <td><%= @purchase_order.first.shipping_route.name %></td>
-              <td><%= p_p_t_s_a_form.object.purchase_position.baan_id %></td>
-              <td><%= p_p_t_s_a_form.object.purchase_position.article_number %></td>
-              <td><%= p_p_t_s_a_form.object.purchase_position.quantity %></td>
-              <td><%= p_p_t_s_a_form.object.purchase_position.article %></td>
-              <td><%= p_p_t_s_a_form.object.purchase_position.product_line %></td>
-              <td><%= p_p_t_s_a_form.object.purchase_position.commodity_code.content %></td>
-              <td><%= p_p_t_s_a_form.object.purchase_position.storage_location %></td>
-              <td>
-                <%= p_p_t_s_a_form.input(:purchase_position_id, :as => :hidden, :label => false) %>
-                <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false, :selected => false %>
-              </td>
+              <th>Versand</th>
+              <th>Tour</th>
+              <th>Position</th>
+              <th>Artikel</th>
+              <th>stk.</th>
+              <th>Bezeichnung</th>
+              <th>Produktlinie</th>
+              <th>Artikelgruppe</th>
+              <th>Lager Ort</th>
+              <th></th>
             </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <% 8.times do %>
-              <td></td>
+          </thead>
+          <tbody>
+            <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |p_p_t_s_a_form| %>
+              <tr>
+                <td><%= p_p_t_s_a_form.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+                <td><%= @purchase_order.first.shipping_route.name %></td>
+                <td><%= p_p_t_s_a_form.object.purchase_position.baan_id %></td>
+                <td><%= p_p_t_s_a_form.object.purchase_position.article_number %></td>
+                <td><%= p_p_t_s_a_form.object.purchase_position.quantity %></td>
+                <td><%= p_p_t_s_a_form.object.purchase_position.article %></td>
+                <td><%= p_p_t_s_a_form.object.purchase_position.product_line %></td>
+                <td><%= p_p_t_s_a_form.object.purchase_position.commodity_code.content %></td>
+                <td><%= p_p_t_s_a_form.object.purchase_position.storage_location %></td>
+                <td>
+                  <%= p_p_t_s_a_form.input(:purchase_position_id, :as => :hidden, :label => false) %>
+                  <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false, :selected => false %>
+                </td>
+              </tr>
             <% end %>
-          </tr>
-        </tfoot>
-      </table>
-      <hr />
+          </tbody>
+          <tfoot>
+            <tr>
+              <% 10.times do %>
+                <td></td>
+              <% end %>
+            </tr>
+          </tfoot>
+        </table>
+        <hr />
+        <div class="form-element clearfix">
+          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='1']") %>
+          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
+        </div>
+      </fieldset>
     </div>
-    <div data-step="2" style="">
-      <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |builder| %>
-        <%= render 'shifting_reason_time_shifting_assignment_fields', :f => builder %>
-      <% end %>
+    
+    <div data-step="3" style="display: none;">
+      <fieldset>
+        <legend>Schritt 3 <small>Grund erfassen</small></legend>
+        <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |builder| %>
+          <%= render 'shifting_reason_time_shifting_assignment_fields', :f => builder %>
+        <% end %>
       
-      <%= link_to_add_fields "Weiterer Grund", f, :shifting_reason_time_shifting_assignments %>
-      
-      <hr />
+        <%= link_to_add_fields "Weiterer Grund", f, :shifting_reason_time_shifting_assignments %>
+        <hr />
+        <div class="form-element clearfix">
+          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='2']") %>
+          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
+        </div>
+      </fieldset>
     </div>
 
-    <div data-step="3" style="display: none;">
-      <%= f.simple_fields_for :article_positions do |builder| %>
-        <%= render 'article_position_fields', :f => builder %>
-      <% end %>
-      
-      <%= link_to_add_fields "Weitere Artikel Position", f, :article_positions %>
-      
-      <hr />
-      <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
-      
-      <hr />
-    </div>
     <div data-step="4" style="display: none;">
-      <%= f.simple_fields_for :comments do |comment_form| %>
-        <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
-      <% end %>
+      <fieldset>
+        <legend>Schritt 4 <small>Artikel Codes hinzufügen</small></legend>
+        <table class="margin_bottom_big" style="">
+          <thead>
+            <tr>
+              <th>Versand</th>
+              <th>Tour</th>
+              <th>Position</th>
+              <th>Artikel</th>
+              <th>stk.</th>
+              <th>Bezeichnung</th>
+              <th>Produktlinie</th>
+              <th>Artikelgruppe</th>
+              <th>Lager Ort</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @purchase_positions.each do |purchase_position| %>
+              <tr>
+                <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+                <td><%= @purchase_order.first.shipping_route.name %></td>
+                <td><%= purchase_position.baan_id %></td>
+                <td><%= purchase_position.article_number %></td>
+                <td><%= purchase_position.quantity %></td>
+                <td><%= purchase_position.article %></td>
+                <td><%= purchase_position.product_line %></td>
+                <td><%= purchase_position.commodity_code.content %></td>
+                <td><%= purchase_position.storage_location %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <% 9.times do %>
+                <td></td>
+              <% end %>
+            </tr>
+          </tfoot>
+        </table>
+        
+        <%= f.simple_fields_for :article_position_time_shifting_assignments do |builder| %>
+          <%= render 'article_position_time_shifting_assignment_fields', :f => builder %>
+        <% end %>
+      
+        <%= link_to_add_fields "Artikel Code hinzufügen", f, :article_position_time_shifting_assignments %>
+        <hr />
+        <div class="form-element clearfix">
+          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
+          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='5']") %>
+        </div>
+        
+      </fieldset>
+    </div>
+    
+    <div data-step="5" style="display: none;">
+      <fieldset>
+        <legend>Schritt 5 <small>Abteilung wählen</small></legend>
+        <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
+        <%= f.simple_fields_for :comments do |comment_form| %>
+          <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+        <% end %>
+        <hr />
+        <div class="form-element clearfix">
+          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
+          <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+        </div>
+        
+      </fieldset>
     </div>
   <% end %>
   
-  <hr />
-  
-  <div class="form-element clearfix">
-    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
-  </div>
-
 <% end %>
 
 <script type="text/javascript" charset="utf-8">
@@ -107,7 +170,7 @@
     $(this).before($(this).data('fields').replace(regexp, time));
     event.preventDefault();
   });
-  
+/*  
   $("select#time_shifting_simple option").click(function() {
     if (this.value == 'true') {
       $("table option").removeAttr('selected');
@@ -142,5 +205,5 @@
       $("div[data-step='4']").fadeIn();
     };
   });
-  
+*/  
 </script>

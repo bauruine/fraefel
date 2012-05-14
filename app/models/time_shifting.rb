@@ -17,6 +17,10 @@ class TimeShifting < ActiveRecord::Base
   accepts_nested_attributes_for :shifting_reason_time_shifting_assignments
   accepts_nested_attributes_for :comments, :reject_if => proc { |obj| obj['content'].blank? }
   accepts_nested_attributes_for :article_positions
+  accepts_nested_attributes_for :article_position_time_shifting_assignments
+  
+  
+  #validates_presence_of :purchase_positions
   
   
   

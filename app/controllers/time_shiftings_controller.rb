@@ -35,6 +35,8 @@ class TimeShiftingsController < ApplicationController
     @time_shifting = TimeShifting.new(params[:time_shifting])
     if @time_shifting.save
       redirect_to(time_shiftings_path)
+    else
+      render 'new'
     end
   end
   

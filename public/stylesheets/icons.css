@@ -35,6 +35,15 @@ ICONS PACK
   position: relative;
   cursor: pointer;
 }
+.as_text {
+  width: auto;
+  padding: 0 7px 0 7px;
+  color: #005D91;
+  text-decoration: none;
+}
+a.active_tab {
+  color: #6699FF;
+}
 
 .pack_white {
   width: 17px;
