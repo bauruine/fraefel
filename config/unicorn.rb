@@ -5,4 +5,4 @@ stdout_path "/home/tzhbami7/code/rails/fraefel/log/unicorn.log"
 
 listen "/tmp/unicorn.fraefel.sock"
 worker_processes 3
-timeout 30
+timeout 120

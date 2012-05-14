@@ -2,6 +2,7 @@
   <h1 class="floatLeft">Termin Verschiebung NR#<%= @time_shifting.first.id %></h1>
   <%= link_to("Edit", edit_time_shifting_path(@time_shifting.first), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
 </header>
+<hr />
 
 <ul class="ul_summary">
   <li class="summary clearfix"><p class="floatLeft bold title">VK-Auftrag:</p><p class="floatLeft"><%= @purchase_order.first.baan_id %></p></li>
@@ -18,7 +19,7 @@
     <table>
       <thead>
         <tr>
-          <th>Artikel Pos</th>
+          <th>Artikel Code</th>
           <th>benötigt von</th>
           <th>Bemerkung</th>
           <th>Artikel Bestell Nr.</th>
