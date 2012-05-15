@@ -241,9 +241,9 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:weight) %></td>
-            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:amount) %></td>
-            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet => pallet).sum(:reduced_price) %></td>
+            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
+            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:amount) %></td>
+            <td class="bold"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
           </tr>
         </tfoot>
       </table>
