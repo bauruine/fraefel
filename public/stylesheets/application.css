@@ -888,3 +888,12 @@ legend small {
   font-size: 13.5px;
   color: #999;
 }
+
+div.input {
+  margin-bottom: 18px;
+}
+
+span.hint {
+  margin-bottom: 0;
+  margin-top: 9px;
+}

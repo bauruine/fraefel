@@ -1,0 +1,4 @@
+<div id="flash_notice" data-id="<%= pdf_report.id %>" style="display: none;">
+  <p>Dein PDF wurde generiert. Klicke <a href="<%= pdf_report_path(pdf_report) %>">hier</a> um es zu speichern.</p>
+  <p><%= link_to("Lösche Nachricht", pdf_report_path(pdf_report), :method => :delete, :remote => true) %></p>
+</div>

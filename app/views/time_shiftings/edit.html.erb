@@ -1,6 +1,27 @@
 <section class="filter_box">
     <header class="filter_box_header clearfix">
       <h4 class="floatLeft">Bearbeite Terminverschiebung</h4>
+      <a href="#" class="header_link as_text" data-show="div[data-step='7']">
+        Nachrichten
+      </a>
+      <a href="#" class="header_link as_text" data-show="div[data-step='6']">
+        Abteilung
+      </a>
+      <a href="#" class="header_link as_text" data-show="div[data-step='5']">
+        Artikel Codes
+      </a>
+      <a href="#" class="header_link as_text" data-show="div[data-step='4']">
+        Grund
+      </a>
+      <a href="#" class="header_link as_text" data-show="div[data-step='3']">
+        VK-Pos
+      </a>
+      <a href="#" class="header_link as_text" data-show="div[data-step='2']">
+        Verschiebung
+      </a>
+      <a href="#" class="header_link as_text active_tab" data-show="div[data-step='1']">
+        VK-Auftrag
+      </a>
     </header>
     <section class="filter_box_content clearfix">
       <div class="box-padder">
@@ -8,3 +29,14 @@
       </div>
     </section>
 </section>
+
+<script type="text/javascript" charset="utf-8">
+  $('a[data-show^=]').click(function(event) {
+    var divToggle = $(this).attr("data-show");
+    $('a[data-show^=]').removeClass("active_tab");
+    $("header a[data-show=" + "'" + divToggle + "'" + "]").addClass("active_tab");
+    $('div[data-step^=]').hide();
+    $(divToggle).show();
+    event.preventDefault();
+  });
+</script>

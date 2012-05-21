@@ -14,7 +14,11 @@
       <hr />
       <div class="form-element clearfix">
         <%= link_to("Abbrechen", time_shiftings_path, :class => "linkSubmit greySubmit floatLeft") %>
-        <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" =>"div[data-step='2']") %>
+        <% if @time_shifting.purchase_order_id.blank? %>
+          <%= f.submit("VK-Anheften", :class => "blueSubmit floatLeft") %>
+        <% else %>
+          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" =>"div[data-step='2']") %>
+        <% end %>
       </div>
     </fieldset>
   </div>
@@ -35,7 +39,7 @@
               <th>Produktlinie</th>
               <th>Artikelgruppe</th>
               <th>Lager Ort</th>
-              <th></th>
+              <th>Pos. Anhängen?</th>
             </tr>
           </thead>
           <tbody>
@@ -148,9 +152,12 @@
       <fieldset>
         <legend>Schritt 5 <small>Abteilung wählen</small></legend>
         <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
-        <%= f.simple_fields_for :comments do |comment_form| %>
-          <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
-        <% end %>
+        <fieldset>
+          <legend>Bemerkung</legend>
+          <%= f.simple_fields_for :comments do |comment_form| %>
+            <%= comment_form.input :content, :as => :text, :label => false, :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+          <% end %>
+        </fieldset>
         <hr />
         <div class="form-element clearfix">
           <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>

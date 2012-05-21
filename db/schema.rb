@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120513151824) do
+ActiveRecord::Schema.define(:version => 20120515143323) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -396,6 +396,17 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.integer  "pallet_type_id"
     t.boolean  "delivered",                                            :default => false
     t.integer  "delivery_rejection_id"
+  end
+
+  create_table "pdf_reports", :force => true do |t|
+    t.string   "type"
+    t.integer  "user_id"
+    t.string   "searched_for"
+    t.string   "report_file_name"
+    t.string   "report_file_path"
+    t.boolean  "saved_local"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "purchase_order_address_assignments", :force => true do |t|

@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :department_user_assignments
   has_many :departments, :class_name => "Department", :through => :department_user_assignments
   
+  has_many :pdf_reports, :class_name => "PdfReport"
   
   validates_presence_of :roles, :forename, :surname, :email
   

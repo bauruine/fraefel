@@ -1,115 +1,152 @@
 <%= simple_form_for(@time_shifting.first) do |f| %>
 
   <%= f.error_notification %>
+
+  <div data-step="1" style="">
+    <div id="flash_notice">
+      <p>Der VK Auftrag wurde bereits fixiert und kann nicht mehr geändert werden.</p>
+    </div>
   
-  <div id="flash_notice">
-    <p>Der VK Auftrag wurde bereits fixiert und kann nicht mehr geändert werden.</p>
+    <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
+    <hr />
+    <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
+      <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='2']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+    </div>
   </div>
   
-  <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
   
-  <hr />
+  <div data-step="2" style="display: none;">
+    
+    <fieldset>
+      <legend>Auftrag</fieldset>
+      <%= f.input :simple, :as => :select, :label => false, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false, :selected => false %>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Kunde</legend>
+    <%= f.input :customer_was_informed, :as => :select, :label => false, :hint => "Wurde der Kunde informiert?", :include_blank => false, :selected => false %>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Baan</legend>
+      <%= f.input :baan_was_updated, :as => :select, :label => false, :hint => "Wurden die Termine in Baan eingetragen?", :include_blank => false, :selected => false %>
+    </fieldset>
+    
+    <fieldset>
+      <legend>Termine</legend>
+      <%= f.input :change_we_date, :as => :select, :label => false, :hint => "Muss das WE Datum geändert werden?", :include_blank => false, :selected => false %>
+      <%= f.input :we_date, :as => :string, :label => "Neues WE Datum", :input_html => { :class => 'date_picker' } %>
+      <%= f.input :change_lt_date, :as => :select, :label => false, :hint => "Muss das LT Datum geändert werden?", :include_blank => false, :selected => false %>
+      <%= f.input :lt_date, :as => :string, :label => "Neues LT Datum", :input_html => { :class => 'date_picker' } %>
+    </fieldset>
+    
+    <hr />
+    <div class="form-element clearfix">
+      <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='1']") %>
+      <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+    </div>
+  </div>
   
-    <div data-step="1">
-      <div id="flash_notice">
-        <p>Hilfestellung zu Simple...</p>
-      </div>
+  <div data-step="3" style="display: none;">
       
-      <%= f.input :simple, :as => :select, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false %>
-      <%= f.input :customer_was_informed, :as => :select %>
-      <%= f.input :baan_was_updated, :as => :select %>
-      <%= f.input :change_we_date, :as => :select %>
-      <%= f.input :we_date, :as => :string %>
-      <%= f.input :change_lt_date, :as => :select %>
-      <%= f.input :lt_date, :as => :string %>
-      
-      <hr />
-      
-      <div id="flash_notice">
-        <p>Hilfestellung zu VK-Positionen</p>
-      </div>
-      
-      <table class="margin_bottom_big">
-        <thead>
-          <tr>
-            <th>Versand</th>
-            <th>Tour</th>
-            <th>Position</th>
-            <th>Artikel</th>
-            <th>stk.</th>
-            <th>Bezeichnung</th>
-            <th>Produktlinie</th>
-            <th>Artikelgruppe</th>
-            <th>Lager Ort</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |builder| %>
-            <%= render 'purchase_position_time_shifting_assignment_fields', :f => builder %>
+    <table class="margin_bottom_big">
+      <thead>
+        <tr>
+          <th>Versand</th>
+          <th>Tour</th>
+          <th>Position</th>
+          <th>Artikel</th>
+          <th>stk.</th>
+          <th>Bezeichnung</th>
+          <th>Produktlinie</th>
+          <th>Artikelgruppe</th>
+          <th>Lager Ort</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |builder| %>
+          <%= render 'purchase_position_time_shifting_assignment_fields', :f => builder %>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <% 8.times do %>
+            <td></td>
           <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <% 8.times do %>
-              <td></td>
-            <% end %>
-          </tr>
-        </tfoot>
-      </table>
-      <hr />
+        </tr>
+      </tfoot>
+    </table>
+    <hr />
+    <div class="form-element clearfix">
+      <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='2']") %>
+      <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+    </div>
+          
+  </div>
+  
+  <div data-step="4" style="display: none;">
+    
+    <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |builder| %>
+      <%= render 'shifting_reason_time_shifting_assignment_fields', :f => builder %>
+    <% end %>
+    
+    <%= link_to_add_fields "Weiterer Grund", f, :shifting_reason_time_shifting_assignments %>
+    <hr />
+    <div class="form-element clearfix">
+      <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
+      <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='5']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+    </div>
+  </div>
+  
+  <div data-step="5" style="display: none;">
+    
+    <%= f.simple_fields_for :article_position_time_shifting_assignments do |builder| %>
+      <%= render 'article_position_time_shifting_assignment_fields', :f => builder %>
+    <% end %>
+    
+    <%= link_to_add_fields "Weitere Artikel Position", f, :article_position_time_shifting_assignments %>
+    <hr />
+    <div class="form-element clearfix">
+      <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
+      <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='6']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
     </div>
     
-    <div data-step="2">
-      
-      <div id="flash_notice">
-        <p>Hilfestellung zu Verschiebungsgrund...</p>
-      </div>
-      
-      <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |builder| %>
-        <%= render 'shifting_reason_time_shifting_assignment_fields', :f => builder %>
-      <% end %>
-      
-      <%= link_to_add_fields "Weiterer Grund", f, :shifting_reason_time_shifting_assignments %>
-      <hr />
-    </div>
-    <div data-step="3">
-      <div id="flash_notice">
-        <p>Hilfestellung zu Artikel Positionen...</p>
-      </div>
-      
-      <%= f.simple_fields_for :article_positions do |builder| %>
-        <%= render 'article_position_fields', :f => builder %>
-      <% end %>
-      
-      <%= link_to_add_fields "Weitere Artikel Position", f, :article_positions %>
-      <hr />
-      
-      <div id="flash_notice">
-        <p>Hilfestellung zu Abteilung...</p>
-      </div>
-      
-      <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
-      
-      <hr />
-    </div>
-    <div data-step="4">
-      <div id="flash_notice">
-        <p>Hilfestellung zu Kommentar...</p>
-      </div>
-      
-      <%= f.simple_fields_for :comments do |comment_form| %>
-        <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
-      <% end %>
-    </div>
-  
-  <hr />
-  
-  <div class="form-element clearfix">
-    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
   </div>
+  
+  <div data-step="6" style="display: none;">
+    
+    <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
+    
+    <hr />
+    <div class="form-element clearfix">
+      <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='5']") %>
+      <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='7']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+    </div>
+    
+  </div>
+  
+  <div data-step="7" style="display: none;">
+    
+    <%= f.simple_fields_for :comments do |comment_form| %>
+      <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+    <% end %>
+    <hr />
 
+    <div class="form-element clearfix">
+      <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='6']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+    </div>
+    
+  </div>
+  
 <% end %>
 
 <script type="text/javascript" charset="utf-8">
@@ -119,23 +156,5 @@
     $(this).before($(this).data('fields').replace(regexp, time));
     event.preventDefault();
   });
-  $("select#time_shifting_simple option").click(function() {
-    if (this.value == 'true') {
-      $("table option").removeAttr('selected');
-      $('table option[value="true"]').prop('selected', true)
-    };
-  });
-  
-  $('table option[value="false"]').click(function() {
-    $("select#time_shifting_simple").removeAttr('selected');
-    $('select#time_shifting_simple option[value="false"]').prop('selected', true)
-  });
-  
-  $('table option[value="true"]').click(function() {
-    if ($('table option[value="true"]').not(":selected").size() == 0) {
-      $("select#time_shifting_simple").removeAttr('selected');
-      $('select#time_shifting_simple option[value="true"]').prop('selected', true)
-    };
-  });
-  
+    
 </script>

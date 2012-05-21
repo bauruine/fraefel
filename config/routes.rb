@@ -19,6 +19,8 @@ Fraefel::Application.routes.draw do
   
   resources :addresses
   
+  resources :pdf_reports
+  
   resources :departments
   
   resources :shifting_reasons

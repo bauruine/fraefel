@@ -113,7 +113,7 @@
     </a>
   </header>
   <section class="filter_box_content clearfix">
-
+    <%= link_to("Generiere PDF", pdf_reports_path(), :method => :post, :remote => true) %>
     <table class="margin_bottom_big">
       <thead>
         <tr>
@@ -157,3 +157,5 @@
     </table>
   </section>
 </section>
+
+<%= subscribe_to "/pdf_reports/#{User.current.username}" %>

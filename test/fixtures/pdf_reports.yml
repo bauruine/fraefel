@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  type: MyString
+  user_id: 1
+  searched_for: MyString
+  report_file_name: MyString
+  report_file_path: MyString
+
+two:
+  type: MyString
+  user_id: 1
+  searched_for: MyString
+  report_file_name: MyString
+  report_file_path: MyString

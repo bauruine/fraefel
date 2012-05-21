@@ -1,5 +1,6 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Termin Verschiebung NR#<%= @time_shifting.first.id %></h1>
+  <%= link_to("PDF", time_shifting_path(@time_shifting.first, :format => :pdf), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
   <%= link_to("Edit", edit_time_shifting_path(@time_shifting.first), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
 </header>
 <hr />

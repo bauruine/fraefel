@@ -6,10 +6,49 @@ class TimeShiftingsController < ApplicationController
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     @comments = @time_shifting.first.comments.order("created_at DESC")
     
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render( 
+          :pdf => "Kein Titel-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Portrait',
+          :encoding => 'UTF-8',
+          :footer => {
+            :left => "#{Time.now.to_formatted_s(:swiss_date)}",
+            :right => "Seite [page] / [topage]",
+            :line => false
+          }
+        )
+      end
+    end
+    
   end
   
   def index
     @time_shiftings = TimeShifting.order("updated_at DESC")
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render( 
+          :pdf => "Kein Titel-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :footer => {
+            :left => "#{Time.now.to_formatted_s(:swiss_date)}",
+            :right => "Seite [page] / [topage]",
+            :line => false
+          }
+        )
+      end
+    end
+    
   end
   
   def new

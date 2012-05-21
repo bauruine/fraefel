@@ -1,14 +1,18 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Termin Verschiebungen</h1>
+  <%= link_to("PDF", time_shiftings_path(:format => :pdf), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
   <a href="<%= new_time_shifting_path() %>" class="floatRight no_text_decoration blue_link_button m-r_5px">
     <i class="icon-plus-sign icon-white"></i> Neue Terminverschiebung
   </a>
 </header>
-
+<hr />
 
 <section class="filter_box">
-  <header class="filter_box_header">
+  <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Index</h4>
+    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/time_shiftings?data_role=search" title="Zeige Filter-Optionen">
+      <span class="header_pack _283"></span>
+    </a>
   </header>
   <section class="filter_box_content clearfix">
     
@@ -32,7 +36,7 @@
             <td><%= time_shifting.simple %></td>
             <td><%= time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).count %></td>
             <td><%= time_shifting.shifting_reasons.collect(&:title) %></td>
-            <td><%= time_shifting.department.try(:title) %></td>
+            <td><%= "#{time_shifting.department.try(:title)} ...seit 3 Stunden" %></td>
             <td><%= time_shifting.updated_at.to_formatted_s(:swiss_date) %></td>
           </tr>
         <% end %>
@@ -50,3 +54,6 @@
     
   </section>
 </section>
+
+<div data-type="modal" style="display: none;">
+</div>
