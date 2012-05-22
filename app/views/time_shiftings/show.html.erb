@@ -7,14 +7,58 @@
 
 <ul class="ul_summary">
   <li class="summary clearfix"><p class="floatLeft bold title">VK-Auftrag:</p><p class="floatLeft"><%= @purchase_order.first.baan_id %></p></li>
-  <li class="summary clearfix"><p class="floatLeft bold title">Abteilung:</p><p class="floatLeft"><%= @time_shifting.first.department.try(:title) %></p></li>
+  <li class="summary clearfix"><p class="floatLeft bold title">Abteilung:</p><p class="floatLeft"><%= @time_shifting.first.department_time_shifting_assignments.last.department.title %></p></li>
   <li class="summary clearfix"><p class="floatLeft bold title">Grund:</p><p class="floatLeft"><%= @time_shifting.first.shifting_reasons.collect(&:title) %></p></li>
   
 </ul>
 
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Abteilungen - Ablauf</h1>
+  <%= link_to("Wechseln", edit_time_shifting_path(@time_shifting.first, :tab => "departments"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+</header>
+<hr />
+
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft"><%= "Abteilungen - Ablauf" %></h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>Abteilung</th>
+          <th>Erfasst von</th>
+          <th>Erfasst am</th>
+          <th>Zeit beansprucht</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @departments.each do |d_t_s_a| %>
+        <tr>
+          <td>
+            <%= d_t_s_a.completed_at.present? ? "#{d_t_s_a.department.title}" : "* #{d_t_s_a.department.title}" %>
+          </td>
+          <td><%= d_t_s_a.creator.full_name %></td>
+          <td><%= d_t_s_a.created_at.to_formatted_s(:swiss_date) %></td>
+          <td><%= distance_of_time_in_words(d_t_s_a.created_at, (d_t_s_a.completed_at.present? ? d_t_s_a.completed_at : Time.now)) %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</section>
+
+<div class="clear"></div>
+
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Artikel Codes</h1>
+  <%= link_to("Hinzufügen", edit_time_shifting_path(@time_shifting.first, :tab => "article_positions"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+</header>
+<hr />
+
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Hinzugefügte Artikel Positionen....</h4>
+    <h4 class="floatLeft">Artikel Codes</h4>
   </header>
   <section class="filter_box_content clearfix">
     <table>
@@ -42,17 +86,15 @@
           </tr>
         <% end %>
       </tbody>
-      <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-      </tfoot>
     </table>
   </section>
 </section>
+
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">VK-Positionen</h1>
+  <%= link_to("Mutieren", edit_time_shifting_path(@time_shifting.first, :tab => "purchase_positions"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+</header>
+<hr />
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
@@ -86,25 +128,19 @@
           </tr>
         <% end %>
       </tbody>
-      <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-      </tfoot>
     </table>
   </section>
 </section>
 
+<header class="resource_header margin_bottom_big clearfix">
+  <h1 class="floatLeft">Nachrichten</h1>
+  <%= link_to("Hinzufügen", edit_time_shifting_path(@time_shifting.first, :tab => "comments"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+</header>
+<hr />
+
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Nachrichten...</h4>
+    <h4 class="floatLeft">Nachrichten</h4>
   </header>
   <section class="filter_box_content clearfix" style="padding: 10px;">
 

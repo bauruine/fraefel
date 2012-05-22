@@ -2,7 +2,7 @@
 
   <%= f.error_notification %>
 
-  <div data-step="1" style="">
+  <div data-step="1" style="<%= params[:tab].present? ? 'display: none;' : nil %>">
     <div id="flash_notice">
       <p>Der VK Auftrag wurde bereits fixiert und kann nicht mehr geändert werden.</p>
     </div>
@@ -44,13 +44,14 @@
     
     <hr />
     <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
       <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='1']") %>
       <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
       <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
     </div>
   </div>
   
-  <div data-step="3" style="display: none;">
+  <div data-step="3" style="<%= params[:tab] == "purchase_positions" ? nil : 'display: none;' %>">
       
     <table class="margin_bottom_big">
       <thead>
@@ -82,6 +83,7 @@
     </table>
     <hr />
     <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
       <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='2']") %>
       <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
       <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
@@ -98,21 +100,61 @@
     <%= link_to_add_fields "Weiterer Grund", f, :shifting_reason_time_shifting_assignments %>
     <hr />
     <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
       <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
       <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='5']") %>
       <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
     </div>
   </div>
   
-  <div data-step="5" style="display: none;">
+  <div data-step="5" style="<%= params[:tab] == "article_positions" ? nil : 'display: none;' %>">
+    
+    <table class="margin_bottom_big" style="">
+      <thead>
+        <tr>
+          <th>Versand</th>
+          <th>Tour</th>
+          <th>Position</th>
+          <th>Artikel</th>
+          <th>stk.</th>
+          <th>Bezeichnung</th>
+          <th>Produktlinie</th>
+          <th>Artikelgruppe</th>
+          <th>Lager Ort</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_positions.each do |t_s_p_a| %>
+          <tr>
+            <td><%= t_s_p_a.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            <td><%= @purchase_order.first.shipping_route.name %></td>
+            <td><%= t_s_p_a.purchase_position.baan_id %></td>
+            <td><%= t_s_p_a.purchase_position.article_number %></td>
+            <td><%= t_s_p_a.purchase_position.quantity %></td>
+            <td><%= t_s_p_a.purchase_position.article %></td>
+            <td><%= t_s_p_a.purchase_position.product_line %></td>
+            <td><%= t_s_p_a.purchase_position.commodity_code.content %></td>
+            <td><%= t_s_p_a.purchase_position.storage_location %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <% 9.times do %>
+            <td></td>
+          <% end %>
+        </tr>
+      </tfoot>
+    </table>
     
     <%= f.simple_fields_for :article_position_time_shifting_assignments do |builder| %>
       <%= render 'article_position_time_shifting_assignment_fields', :f => builder %>
     <% end %>
     
-    <%= link_to_add_fields "Weitere Artikel Position", f, :article_position_time_shifting_assignments %>
+    <%= link_to_add_fields "Artikel Code hinzufügen", f, :article_position_time_shifting_assignments %>
     <hr />
     <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
       <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
       <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='6']") %>
       <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
@@ -120,12 +162,20 @@
     
   </div>
   
-  <div data-step="6" style="display: none;">
+  <div data-step="6" style="<%= params[:tab] == "departments" ? nil : 'display: none;' %>">
+    <blockquote>
+      <p>
+        Zur Zeit wird diese Verschiebung von der Abteilung <%= @time_shifting.first.departments.last.try(:title) %> bearbeitet.
+      </p>
+    </blockquote>
     
-    <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
+    <%= f.simple_fields_for :department_time_shifting_assignments do |builder| %>
+      <%= render 'department_time_shifting_assignment_fields' , :f => builder %>
+    <% end %>
     
     <hr />
     <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
       <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='5']") %>
       <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='7']") %>
       <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
@@ -133,7 +183,7 @@
     
   </div>
   
-  <div data-step="7" style="display: none;">
+  <div data-step="7" style="<%= params[:tab] == "comments" ? nil : 'display: none;' %>">
     
     <%= f.simple_fields_for :comments do |comment_form| %>
       <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
@@ -141,6 +191,7 @@
     <hr />
 
     <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
       <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='6']") %>
       <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
     </div>

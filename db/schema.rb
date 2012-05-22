@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120515143323) do
+ActiveRecord::Schema.define(:version => 20120522132545) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -311,6 +311,16 @@ ActiveRecord::Schema.define(:version => 20120515143323) do
     t.datetime "updated_at"
   end
 
+  create_table "department_time_shifting_assignments", :force => true do |t|
+    t.integer  "time_shifting_id"
+    t.integer  "department_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "completed_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "department_user_assignments", :force => true do |t|
     t.integer  "user_id"
     t.integer  "department_id"
@@ -443,6 +453,7 @@ ActiveRecord::Schema.define(:version => 20120515143323) do
     t.float    "warehousing_completed",   :default => 0.0
     t.integer  "warehouse_number",        :default => 0
     t.integer  "category_id"
+    t.integer  "priority_level",          :default => 0
   end
 
   create_table "purchase_position_time_shifting_assignments", :force => true do |t|

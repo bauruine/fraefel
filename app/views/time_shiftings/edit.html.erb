@@ -1,25 +1,25 @@
 <section class="filter_box">
     <header class="filter_box_header clearfix">
       <h4 class="floatLeft">Bearbeite Terminverschiebung</h4>
-      <a href="#" class="header_link as_text" data-show="div[data-step='7']">
+      <a href="#" class="<%= params[:tab] == "comments" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='7']">
         Nachrichten
       </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='6']">
+      <a href="#" class="<%= params[:tab] == "departments" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='6']">
         Abteilung
       </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='5']">
+      <a href="#" class="<%= params[:tab] == "article_positions" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='5']">
         Artikel Codes
       </a>
       <a href="#" class="header_link as_text" data-show="div[data-step='4']">
         Grund
       </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='3']">
+      <a href="#" class="<%= params[:tab] == "purchase_positions" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='3']">
         VK-Pos
       </a>
       <a href="#" class="header_link as_text" data-show="div[data-step='2']">
         Verschiebung
       </a>
-      <a href="#" class="header_link as_text active_tab" data-show="div[data-step='1']">
+      <a href="#" class="<%= params[:tab].present? ? 'header_link as_text' : 'header_link as_text active_tab' %>" data-show="div[data-step='1']">
         VK-Auftrag
       </a>
     </header>

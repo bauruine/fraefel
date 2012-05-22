@@ -11,6 +11,9 @@ class TimeShifting < ActiveRecord::Base
   has_many :article_position_time_shifting_assignments, :dependent => :destroy
   has_many :article_positions, :class_name => "ArticlePosition", :through => :article_position_time_shifting_assignments
   
+  has_many :department_time_shifting_assignments, :dependent => :destroy
+  has_many :departments, :class_name => "Department", :through => :department_time_shifting_assignments
+  
   belongs_to :department, :class_name => "Department", :foreign_key => "department_id"
   
   accepts_nested_attributes_for :purchase_position_time_shifting_assignments
@@ -18,6 +21,7 @@ class TimeShifting < ActiveRecord::Base
   accepts_nested_attributes_for :comments, :reject_if => proc { |obj| obj['content'].blank? }
   accepts_nested_attributes_for :article_positions
   accepts_nested_attributes_for :article_position_time_shifting_assignments
+  accepts_nested_attributes_for :department_time_shifting_assignments
   
   
   #validates_presence_of :purchase_positions

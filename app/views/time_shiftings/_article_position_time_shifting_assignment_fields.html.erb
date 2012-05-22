@@ -9,7 +9,7 @@
 
 <%= f.input :purchase_positions_collection, :as => :string, :label => "Betroffene VK-Pos", :hint => "Trage die Betroffenen VK-Positionen ein. Alle möglichen VK-Pos sind in der Tabelle oben ersichtlich." %>
 <%= f.input :order_number, :hint => "Bestellnummer" %>
-<%= f.input :confirmed_date, :as => :string %>
+<%= f.input :confirmed_date, :as => :string, :input_html => { :class => 'date_picker' } %>
 
   <fieldset>
     <legend>Artikel Code Kommentar</legend>

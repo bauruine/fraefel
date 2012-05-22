@@ -1,6 +1,13 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Verkaufs Aufträge</h1>
 </header>
+<hr />
+
+<blockquote>
+  <p>
+    <i class="icon-asterisk"></i> VK-Auftrag mit aktiver Terminverschiebung
+  </p>
+</blockquote>
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
@@ -46,15 +53,22 @@
     <%= form_for @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
       <div class="form-element floatLeft">
         <%= f.label(:delivered_equals, "Versendet?") %>
-        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3 mr6"}) %>
+        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span2 mr6"}) %>
       </div>
       <div class="form-element floatLeft">
+        <%= f.label(:priority_level_equals, "Prio Stufe") %>
+        <%= f.text_field(:priority_level_equals, {:class => "span2"}) %>
+      </div>
+      <div class="clear"></div>
+      
+      <hr />
+      <div class="form-element floatLeft">
         <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
-        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span3 mr6" %>
+        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span2 mr6" %>
       </div>
       <div class="form-element floatLeft">
         <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
-        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span3" %>
+        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span2" %>
       </div>
       <div class="clear"></div>
       <hr />

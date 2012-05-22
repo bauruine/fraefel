@@ -151,7 +151,10 @@
     <div data-step="5" style="display: none;">
       <fieldset>
         <legend>Schritt 5 <small>Abteilung wählen</small></legend>
-        <%= f.input :department_id, :collection => @departments, :hint => "Wähle die nächste betroffene Abteilung" %>
+        <%= f.simple_fields_for :department_time_shifting_assignments do |builder| %>
+          <%= render 'department_time_shifting_assignment_fields' , :f => builder %>
+        <% end %>
+        
         <fieldset>
           <legend>Bemerkung</legend>
           <%= f.simple_fields_for :comments do |comment_form| %>
