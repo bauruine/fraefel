@@ -26,7 +26,7 @@
     
     <fieldset>
       <legend>Kunde</legend>
-    <%= f.input :customer_was_informed, :as => :select, :label => false, :hint => "Wurde der Kunde informiert?", :include_blank => false, :selected => false %>
+      <%= f.input :customer_was_informed, :as => :select, :label => false, :hint => "Wurde der Kunde informiert?", :include_blank => false, :selected => false %>
     </fieldset>
     
     <fieldset>
@@ -193,6 +193,28 @@
     <div class="form-element clearfix">
       <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
       <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='6']") %>
+      <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='8']") %>
+      <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+    </div>
+    
+  </div>
+  
+  <div data-step="8" style="<%= params[:tab] == "close_time_shifting" ? nil : 'display: none;' %>">
+    <fieldset>
+      <legend>VK-Auftrag</legend>
+      <%= f.simple_fields_for :purchase_order do |purchase_order_form| %>
+        <%= purchase_order_form.input :priority_level, :label => "VK-Priorität", :hint => "Wähle die Priorität des Auftrages" %>
+      <% end %>
+    </fieldset>
+    <fieldset>
+      <legend>Verschiebung Abschliessen?</legend>
+      <%= f.input :closed, :as => :select, :label => false, :hint => "Terminverschiebung abschliessen?", :include_blank => false, :selected => false %>
+    </fieldset>
+    <hr />
+
+    <div class="form-element clearfix">
+      <%= link_to("Abbrechen", time_shifting_path(@time_shifting.first), :class => "linkSubmit greySubmit floatLeft") %>
+      <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='7']") %>
       <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
     </div>
     

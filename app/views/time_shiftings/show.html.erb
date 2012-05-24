@@ -1,6 +1,7 @@
 <header class="resource_header margin_bottom_big clearfix">
   <h1 class="floatLeft">Termin Verschiebung NR#<%= @time_shifting.first.id %></h1>
   <%= link_to("PDF", time_shifting_path(@time_shifting.first, :format => :pdf), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
+  <%= link_to("Abschliessen", edit_time_shifting_path(@time_shifting.first, :tab => "close_time_shifting"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
   <%= link_to("Edit", edit_time_shifting_path(@time_shifting.first), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
 </header>
 <hr />
@@ -20,7 +21,7 @@
 
 <section class="filter_box">
   <header class="filter_box_header">
-    <h4 class="floatLeft"><%= "Abteilungen - Ablauf" %></h4>
+    <h4 class="floatLeft">&nbsp;</h4>
   </header>
   <section class="filter_box_content clearfix">
     <table>
@@ -58,7 +59,7 @@
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Artikel Codes</h4>
+    <h4 class="floatLeft">&nbsp;</h4>
   </header>
   <section class="filter_box_content clearfix">
     <table>
@@ -74,16 +75,20 @@
         </tr>
       </thead>
       <tbody>
-        <% @article_positions.each do |article_position| %>
-          <tr>
-            <td><%= article_position.baan_id %></td>
-            <td><%= ArticlePositionTimeShiftingAssignment.where(:article_position_id => article_position.id, :time_shifting_id => @time_shifting.first.id).first.purchase_positions_collection %></td>
-            <td><%= ArticlePositionTimeShiftingAssignment.where(:article_position_id => article_position.id, :time_shifting_id => @time_shifting.first.id).first.comments.first.try(:content) %></td>
-            <td></td>
-            <td></td>
-            <td><%= article_position.creator.full_name %></td>
-            <td><%= article_position.created_at.to_formatted_s(:swiss_date) %></td>
-          </tr>
+        <% if @article_positions.empty? %>
+          <tr><td colspan="7">Es wurden keine Artikel Codes angefügt.</td></tr>
+        <% else %>
+          <% @article_positions.each do |article_position| %>
+            <tr>
+              <td><%= article_position.baan_id %></td>
+              <td><%= ArticlePositionTimeShiftingAssignment.where(:article_position_id => article_position.id, :time_shifting_id => @time_shifting.first.id).first.purchase_positions_collection %></td>
+              <td><%= ArticlePositionTimeShiftingAssignment.where(:article_position_id => article_position.id, :time_shifting_id => @time_shifting.first.id).first.comments.first.try(:content) %></td>
+              <td></td>
+              <td></td>
+              <td><%= article_position.creator.full_name %></td>
+              <td><%= article_position.created_at.to_formatted_s(:swiss_date) %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
@@ -98,7 +103,7 @@
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">VK-Positionen <%= @purchase_positions.count %> von <%= @time_shifting.first.purchase_positions.count %></h4>
+    <h4 class="floatLeft">&nbsp;</h4>
   </header>
   <section class="filter_box_content clearfix">
     <table>
@@ -115,17 +120,21 @@
         </tr>
       </thead>
       <tbody>
-        <% @purchase_positions.each do |purchase_position| %>
-          <tr>
-            <td><%= purchase_position.baan_id %></td>
-            <td><%= purchase_position.article_number %></td>
-            <td><%= purchase_position.article %></td>
-            <td><%= purchase_position.product_line %></td>
-            <td><%= purchase_position.quantity %></td>
-            <td><%= purchase_position.storage_location %></td>
-            <td><%= purchase_position.zip_location_name %></td>
-            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-          </tr>
+        <% if @purchase_positions.empty? %>
+          <tr><td colspan="8">Ups... Es wurden keine VK-Pos angefügt.</td></tr>
+        <% else %>
+          <% @purchase_positions.each do |purchase_position| %>
+            <tr>
+              <td><%= purchase_position.baan_id %></td>
+              <td><%= purchase_position.article_number %></td>
+              <td><%= purchase_position.article %></td>
+              <td><%= purchase_position.product_line %></td>
+              <td><%= purchase_position.quantity %></td>
+              <td><%= purchase_position.storage_location %></td>
+              <td><%= purchase_position.zip_location_name %></td>
+              <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
@@ -140,7 +149,7 @@
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Nachrichten</h4>
+    <h4 class="floatLeft">&nbsp;</h4>
   </header>
   <section class="filter_box_content clearfix" style="padding: 10px;">
 

@@ -1,6 +1,9 @@
 <section class="filter_box">
     <header class="filter_box_header clearfix">
       <h4 class="floatLeft">Bearbeite Terminverschiebung</h4>
+      <a href="#" class="<%= params[:tab] == "close_time_shifting" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='8']">
+        Abschliessen
+      </a>
       <a href="#" class="<%= params[:tab] == "comments" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='7']">
         Nachrichten
       </a>

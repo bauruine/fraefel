@@ -4,7 +4,7 @@ class ArticlePositionTimeShiftingAssignment < ActiveRecord::Base
   
   has_many :comments, :as => :commentable
   
-  accepts_nested_attributes_for :article_position
-  accepts_nested_attributes_for :comments
+  accepts_nested_attributes_for :article_position, :reject_if => proc { |obj| obj['baan_id'].blank? }
+  accepts_nested_attributes_for :comments, :reject_if => proc { |obj| obj['content'].blank? }
   
 end

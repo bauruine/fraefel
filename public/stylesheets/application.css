@@ -128,13 +128,9 @@ p.formInput {
 }
 
 section#pageContainer {
-  width: 99%;
   min-width: 91.429em;
   min-height: 500px;
-  margin: 0 auto;
   background-color: #FFF;
-  border: solid 1px black;
-  margin-top: 20px;
 }
 header#containerHeader {
   border-top: 8px solid #005D91;
