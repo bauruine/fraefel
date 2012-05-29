@@ -56,4 +56,42 @@
 </section>
 
 <div data-type="modal" style="display: none;">
+  <%= form_for @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+    <div class="form-element floatLeft">
+      <%= f.label(:closed_equals, "Archiv?") %>
+      <%= f.select(:closed_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span2 mr6"}) %>
+    </div>
+    <div class="form-element floatLeft">
+      <%= f.label(:id_equals, "#ID") %>
+      <%= f.text_field(:id_equals, :class => "span2") %>
+    </div>
+    
+    <div class="clear"></div>
+    
+    <hr />
+    
+    <div class="form-element floatLeft">
+      <%= f.label(:purchase_order_id_equals, "VK-Auftrag") %>
+      <%= f.text_field(:purchase_order_id_equals, :class => "span2 mr6") %>
+    </div>
+    <div class="form-element floatLeft">
+      <%= f.label(:purchase_positions_baan_id_equals, "VK-Pos") %>
+      <%= f.text_field(:purchase_positions_baan_id_equals, :class => "span2") %>
+    </div>
+    <div class="clear"></div>
+    
+    <hr />
+    
+    <div class="form-element">
+      <%= f.label(:department_id_equals, "Abteilung") %>
+      <%= f.collection_select(:department_id_equals, Department.order("title ASC"), :id, :title, {:include_blank => true}, {:class => "span1"}) %>
+    </div>
+    
+    <hr />
+    
+    <div class="form-element clearfix">
+      <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
+    </div>
+    
+  <% end %>
 </div>

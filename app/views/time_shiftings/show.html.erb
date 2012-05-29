@@ -10,7 +10,6 @@
   <li class="summary clearfix"><p class="floatLeft bold title">VK-Auftrag:</p><p class="floatLeft"><%= @purchase_order.first.baan_id %></p></li>
   <li class="summary clearfix"><p class="floatLeft bold title">Abteilung:</p><p class="floatLeft"><%= @time_shifting.first.department_time_shifting_assignments.last.department.title %></p></li>
   <li class="summary clearfix"><p class="floatLeft bold title">Grund:</p><p class="floatLeft"><%= @time_shifting.first.shifting_reasons.collect(&:title) %></p></li>
-  
 </ul>
 
 <header class="resource_header margin_bottom_big clearfix">

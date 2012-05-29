@@ -15,6 +15,12 @@
     </div>
     <div class="clear"></div>
     <hr />
+    
+    <div class="form-element floatLeft">
+      <%= f.label(:priority_level_equals, "Prio Stufe") %>
+      <%= f.text_field(:priority_level_equals, {:class => "span1"}) %>
+    </div>
+    <hr />
     <div class="form-element floatLeft">
       <%= f.label(:purchase_order_warehousing_completed_gteq, "Einlagerung >= ?%") %>
       <%= f.select(:purchase_order_warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span2 mr6"}) %>
@@ -102,6 +108,14 @@
 </section>
   
 <div class="clearfix"></div>
+
+<blockquote>
+  <p>
+    <i class="icon-asterisk"></i> VK-Pos mit aktiver Terminverschiebung
+  </p>
+</blockquote>
+
+
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Dispoliste</h4>
@@ -134,9 +148,19 @@
             <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
             <td><%= purchase_position.purchase_order.shipping_route.name %></td>
             <% if permitted_to? :edit, :purchase_positions %>
-              <td><%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote2") %></td>
+              <td>
+                <% if purchase_position.priority_level == 0 %>
+                  <i class="icon-asterisk"></i>
+                <% end %>
+                <%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote2") %>
+              </td>
             <% else %>
-              <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+              <td>
+                <% if purchase_position.purchase_order.priority_level == 0 %>
+                  <i class="icon-asterisk"></i>
+                <% end %>
+                <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
+              </td>
             <% end %>
             <td><%= purchase_position.article_number %></td>
             <td><%= purchase_position.quantity %></td>

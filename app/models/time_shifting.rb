@@ -29,6 +29,4 @@ class TimeShifting < ActiveRecord::Base
   
   #validates_presence_of :purchase_positions
   
-  
-  
 end

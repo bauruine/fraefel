@@ -85,18 +85,16 @@
         </tr>
       </thead>
       <tbody>
+        <% @departments.each do |d_t_s_a| %>
         <tr>
-          <td>* <%= @time_shifting.first.department.try(:title) %></td>
-          <td><%= User.current.full_name %></td>
-          <td><%= (Time.now - 3.hours).to_formatted_s(:swiss_date) %></td>
-          <td>40 Stunden</td>
+          <td>
+            <%= d_t_s_a.completed_at.present? ? "#{d_t_s_a.department.title}" : "* #{d_t_s_a.department.title}" %>
+          </td>
+          <td><%= d_t_s_a.creator.full_name %></td>
+          <td><%= d_t_s_a.created_at.to_formatted_s(:swiss_date) %></td>
+          <td><%= distance_of_time_in_words(d_t_s_a.created_at, (d_t_s_a.completed_at.present? ? d_t_s_a.completed_at : Time.now)) %></td>
         </tr>
-        <tr>
-          <td><%= Department.first.try(:title) %></td>
-          <td><%= User.last.full_name %></td>
-          <td><%= (Time.now - 44.hours).to_formatted_s(:swiss_date) %></td>
-          <td>5 Stunden</td>
-        </tr>
+        <% end %>
       </tbody>
     </table>
   </section>

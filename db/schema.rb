@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120522132545) do
+ActiveRecord::Schema.define(:version => 20120529135947) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -453,7 +453,7 @@ ActiveRecord::Schema.define(:version => 20120522132545) do
     t.float    "warehousing_completed",   :default => 0.0
     t.integer  "warehouse_number",        :default => 0
     t.integer  "category_id"
-    t.integer  "priority_level",          :default => 0
+    t.integer  "priority_level",          :default => 1
   end
 
   create_table "purchase_position_time_shifting_assignments", :force => true do |t|
@@ -494,6 +494,7 @@ ActiveRecord::Schema.define(:version => 20120522132545) do
     t.decimal  "value_discount",    :precision => 12, :scale => 2
     t.integer  "production_status",                                :default => 0
     t.integer  "stock_status",                                     :default => 0
+    t.integer  "priority_level",                                   :default => 1
   end
 
   create_table "referees", :force => true do |t|
@@ -589,7 +590,7 @@ ActiveRecord::Schema.define(:version => 20120522132545) do
     t.date     "lt_date"
     t.boolean  "change_we_date"
     t.boolean  "change_lt_date"
-    t.boolean  "closed"
+    t.boolean  "closed",                :default => false
   end
 
   create_table "transport_issues", :force => true do |t|

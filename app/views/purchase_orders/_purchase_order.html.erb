@@ -1,6 +1,6 @@
 <tr class="purchase_order">
   <td>
-    <% if purchase_order.priority_level > 0 %>
+    <% if purchase_order.priority_level == 0 %>
       <i class="icon-asterisk"></i>
     <% end %>
     <%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %>

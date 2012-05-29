@@ -29,7 +29,8 @@ class TimeShiftingsController < ApplicationController
   end
   
   def index
-    @time_shiftings = TimeShifting.order("updated_at DESC")
+    @search = TimeShifting.includes(:purchase_order).order("time_shiftings.updated_at DESC").search(params[:search] || {:closed_equals => "false"})
+    @time_shiftings = @search.relation
     
     respond_to do |format|
       format.html
@@ -75,7 +76,10 @@ class TimeShiftingsController < ApplicationController
   def create
     @time_shifting = TimeShifting.new(params[:time_shifting])
     if @time_shifting.save
-      PurchaseOrder.where(:baan_id => @time_shifting.purchase_order_id).first.update_attribute("priority_level", 1)
+      PurchaseOrder.where(:baan_id => @time_shifting.purchase_order_id).first.update_attribute("priority_level", 0)
+      ### Move this away from here....
+      @time_shifting.update_attribute(:department_id, @time_shifting.departments.last.id)
+      @time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => 0)
       redirect_to(time_shiftings_path)
     else
       render 'new'
@@ -100,6 +104,8 @@ class TimeShiftingsController < ApplicationController
       if @time_shifting.first.department_time_shifting_assignments.where("completed_at IS NULL").count > 1
         @time_shifting.first.department_time_shifting_assignments.where("completed_at IS NULL").first.update_attribute("completed_at", Time.now)
       end
+      ### Move this away from here....
+      @time_shifting.first.update_attribute(:department_id, @time_shifting.departments.last.id)
       redirect_to(@time_shifting.first)
     end
   end
