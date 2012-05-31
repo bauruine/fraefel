@@ -12,7 +12,7 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :old_pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
   has_many :time_shiftings, :class_name => "TimeShifting", :foreign_key => "purchase_order_id", :primary_key => "baan_id"
   
-  scope :ordered_for_delivery, order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
+  scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
   def self.clean
     where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|

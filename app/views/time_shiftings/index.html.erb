@@ -1,12 +1,16 @@
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Termin Verschiebungen</h1>
-  <%= link_to("PDF", time_shiftings_path(:format => :pdf), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-  <a href="<%= new_time_shifting_path() %>" class="floatRight no_text_decoration blue_link_button m-r_5px">
-    <i class="icon-plus-sign icon-white"></i> Neue Terminverschiebung
-  </a>
-</header>
-<hr />
-
+<div class="page-header">
+    <h1 class="pull-left">Termin Verschiebungen</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= new_time_shifting_path() %>"><i class="icon-plus-sign icon-white"></i> Neue Terminverschiebung</a>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= time_shiftings_path(:format => :pdf) %>"><i class="icon-print icon-white"></i> PDF</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
+  
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Index</h4>

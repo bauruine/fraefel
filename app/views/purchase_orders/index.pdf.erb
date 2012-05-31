@@ -36,7 +36,10 @@
 
 <blockquote>
   <p>
-    &#x2605; VK-Auftrag mit aktiver Terminverschiebung
+    &#x2605; VK-Pos mit aktiver Terminverschiebung
+  </p>
+  <p>
+    &#x26a0; Verschobener VK-Pos
   </p>
 </blockquote>
 
@@ -69,6 +72,8 @@
                 <td id="column_3">
                   <% if p_o_p.priority_level == 0 %>
                     &#x2605;
+                  <% elsif p_o_p.priority_level > 1 %>
+                    &#x26a0;
                   <% end %>
                   <%= "#{purchase_order.baan_id}-#{p_o_p.position}" %>
                 </td>

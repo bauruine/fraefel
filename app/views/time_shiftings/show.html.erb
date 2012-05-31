@@ -1,22 +1,39 @@
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Termin Verschiebung NR#<%= @time_shifting.first.id %></h1>
-  <%= link_to("PDF", time_shifting_path(@time_shifting.first, :format => :pdf), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-  <%= link_to("Abschliessen", edit_time_shifting_path(@time_shifting.first, :tab => "close_time_shifting"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-  <%= link_to("Edit", edit_time_shifting_path(@time_shifting.first), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-</header>
-<hr />
+<div class="page-header">
+    <h1 class="pull-left">Termin Verschiebung NR#<%= @time_shifting.first.id %></h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= time_shifting_path(@time_shifting.first, :format => :pdf) %>"><i class="icon-print icon-white"></i> PDF</a>
+      </div>
+      
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= edit_time_shifting_path(@time_shifting.first) %>"><i class="icon-pencil icon-white"></i> Edit</a>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-warning" href="<%= edit_time_shifting_path(@time_shifting.first, :tab => "close_time_shifting") %>"><i class="icon-off icon-white"></i> Abschliessen</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
 
-<ul class="ul_summary">
-  <li class="summary clearfix"><p class="floatLeft bold title">VK-Auftrag:</p><p class="floatLeft"><%= @purchase_order.first.baan_id %></p></li>
-  <li class="summary clearfix"><p class="floatLeft bold title">Abteilung:</p><p class="floatLeft"><%= @time_shifting.first.department_time_shifting_assignments.last.department.title %></p></li>
-  <li class="summary clearfix"><p class="floatLeft bold title">Grund:</p><p class="floatLeft"><%= @time_shifting.first.shifting_reasons.collect(&:title) %></p></li>
-</ul>
+<dl class="dl-horizontal">
+  <dt>VK-Auftrag</dt>
+  <dd><%= @purchase_order.first.baan_id %></dd>
+  <dt>Abteilung:</dt>
+  <dd><%= @time_shifting.first.department_time_shifting_assignments.last.department.title %></dd>
+  <dt>Grund</dt>
+  <dd><%= @time_shifting.first.shifting_reasons.collect(&:title) %></dd>
+</dl>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Abteilungen - Ablauf</h1>
-  <%= link_to("Wechseln", edit_time_shifting_path(@time_shifting.first, :tab => "departments"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-</header>
-<hr />
+
+<div class="page-header">
+    <h1 class="pull-left">Abteilungen - Ablauf</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= edit_time_shifting_path(@time_shifting.first, :tab => "departments") %>"><i class="icon-random icon-white"></i> Abteilung wechseln</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
 
 <section class="filter_box">
   <header class="filter_box_header">
@@ -44,17 +61,22 @@
         </tr>
         <% end %>
       </tbody>
+      <tfoot>
+        <tr><td colspan="4"><small>* Aktive Abteilung</small></td></tr>
+      </tfoot>
     </table>
   </section>
 </section>
 
-<div class="clear"></div>
-
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Artikel Codes</h1>
-  <%= link_to("Hinzufügen", edit_time_shifting_path(@time_shifting.first, :tab => "article_positions"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-</header>
-<hr />
+<div class="page-header">
+    <h1 class="pull-left">Artikel Codes</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= edit_time_shifting_path(@time_shifting.first, :tab => "article_positions") %>"><i class="icon-plus-sign icon-white"></i> Artikel hinzufügen</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
@@ -94,11 +116,15 @@
   </section>
 </section>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">VK-Positionen</h1>
-  <%= link_to("Mutieren", edit_time_shifting_path(@time_shifting.first, :tab => "purchase_positions"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-</header>
-<hr />
+<div class="page-header">
+    <h1 class="pull-left">VK-Positionen</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= edit_time_shifting_path(@time_shifting.first, :tab => "purchase_positions") %>"><i class="icon-check icon-white"></i> VK-Pos mutieren</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
@@ -140,11 +166,15 @@
   </section>
 </section>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Nachrichten</h1>
-  <%= link_to("Hinzufügen", edit_time_shifting_path(@time_shifting.first, :tab => "comments"), {:class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-</header>
-<hr />
+<div class="page-header">
+    <h1 class="pull-left">Nachrichten</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= edit_time_shifting_path(@time_shifting.first, :tab => "comments") %>"><i class="icon-comment icon-white"></i> Nachricht hinzufügen</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">

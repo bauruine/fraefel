@@ -1,24 +1,38 @@
 <section class="filter_box">
     <header class="filter_box_header clearfix">
       <h4 class="floatLeft">Erfasse neue Terminverschiebung</h4>
-      <a href="#" class="header_link as_text" data-show="div[data-step='5']">
-        Abteilung
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='4']">
-        Artikel Codes
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='3']">
-        Grund
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='2']">
-        VK-Pos
-      </a>
+      <% if @purchase_order.present? %>
+        <a href="#" class="header_link as_text" data-show="div[data-step='5']">
+          Abteilung
+        </a>
+        <a href="#" class="header_link as_text" data-show="div[data-step='4']">
+          Artikel Codes
+        </a>
+        <a href="#" class="header_link as_text" data-show="div[data-step='3']">
+          Grund
+        </a>
+        <a href="#" class="header_link as_text" data-show="div[data-step='2']">
+          VK-Pos
+        </a>
+      <% end %>
       <a href="#" class="header_link as_text active_tab" data-show="div[data-step='1']">
         VK-Auftrag
       </a>
     </header>
     <section class="filter_box_content clearfix">
       <div class="box-padder">
+        <% if @time_shifting.errors.present? %>
+          <div class="alert alert-block alert-error">
+            <h4 class="alert-heading">Error!</h4>
+            <p>
+              Damit eine Verschiebung erfasst werden kann müssen folgende Schritte durchgeführt worden sein. Vor der Erfassung bitte überprüfen.
+            </p>
+            <ol>
+              <li>Wurde der Grund der Verschiebung gewählt?</li>
+              <li>Wurde die Abteilung gewählt?</li>
+            </ol>
+          </div>
+        <% end %>
         <%= render 'form' %>
       </div>
     </section>

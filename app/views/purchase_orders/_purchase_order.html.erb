@@ -2,6 +2,8 @@
   <td>
     <% if purchase_order.priority_level == 0 %>
       <i class="icon-asterisk"></i>
+    <% elsif purchase_order.priority_level > 1 %>
+      <i class="icon-fire"></i>
     <% end %>
     <%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %>
   </td>

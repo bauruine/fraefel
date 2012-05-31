@@ -1,7 +1,13 @@
-<%= simple_form_for(@time_shifting, :url => @purchase_order.present? ? time_shiftings_path : new_time_shifting_path, :html => {:method => @purchase_order.present? ? :post : :get}) do |f| %>
+<%= simple_form_for(@purchase_order.present? ? [@purchase_order.first, @time_shifting] : @time_shifting, :url => @purchase_order.present? ? time_shiftings_path : new_time_shifting_path, :html => {:method => @purchase_order.present? ? :post : :get}) do |f| %>
 
-  <%= f.error_notification %>
+  
   <div data-step="1">
+    <% if params[:time_shifting].present? && params[:time_shifting][:purchase_order_id].present? && @purchase_order.blank? %>
+      <div class="alert alert-error">
+        Zu der Eingabe wurde kein passender VK gefunden! Bitte überprüfen und nochmals versuchen.
+      </div>
+    <% end %>
+    
     <fieldset>
       <legend>Schritt 1 <small>VK-Auftrag</small></legend>
       <% if @purchase_order.blank? %>
@@ -12,12 +18,18 @@
         <%= link_to("VK-Auftrag entfernen", new_time_shifting_path, :confirm => "Achtung! Alle bisherigen Eingaben werden gelöscht!") %>
       <% end %>
       <hr />
-      <div class="form-element clearfix">
-        <%= link_to("Abbrechen", time_shiftings_path, :class => "linkSubmit greySubmit floatLeft") %>
-        <% if @time_shifting.purchase_order_id.blank? %>
-          <%= f.submit("VK-Anheften", :class => "blueSubmit floatLeft") %>
+      <div class="form-actions">
+        <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+          <i class="icon-remove-circle icon-white"></i> Abbrechen
+        </a>
+        <% if @purchase_order.blank? %>
+          <button class="btn btn-primary" type="submit">
+            <i class="icon-magnet icon-white"></i> VK anheften
+          </button>
         <% else %>
-          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" =>"div[data-step='2']") %>
+          <a href="#" data-show="div[data-step='2']" class="btn">
+            Weiter <i class="icon-arrow-right"></i>
+          </a>
         <% end %>
       </div>
     </fieldset>
@@ -70,9 +82,16 @@
           </tfoot>
         </table>
         <hr />
-        <div class="form-element clearfix">
-          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='1']") %>
-          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
+        <div class="form-actions">
+          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+            <i class="icon-remove-circle icon-white"></i> Abbrechen
+          </a>
+          <a href="#" data-show="div[data-step='1']" class="btn">
+            <i class="icon-arrow-left"></i> Zurück
+          </a>
+          <a href="#" data-show="div[data-step='3']" class="btn">
+            Weiter <i class="icon-arrow-right"></i>
+          </a>
         </div>
       </fieldset>
     </div>
@@ -80,15 +99,18 @@
     <div data-step="3" style="display: none;">
       <fieldset>
         <legend>Schritt 3 <small>Grund erfassen</small></legend>
-        <%= f.simple_fields_for :shifting_reason_time_shifting_assignments do |builder| %>
-          <%= render 'shifting_reason_time_shifting_assignment_fields', :f => builder %>
-        <% end %>
-      
-        <%= link_to_add_fields "Weiterer Grund", f, :shifting_reason_time_shifting_assignments %>
+        <%= f.association :shifting_reasons, :label => "Grund wählen", :as => :check_boxes %>
         <hr />
-        <div class="form-element clearfix">
-          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='2']") %>
-          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
+        <div class="form-actions">
+          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+            <i class="icon-remove-circle icon-white"></i> Abbrechen
+          </a>
+          <a href="#" data-show="div[data-step='2']" class="btn">
+            <i class="icon-arrow-left"></i> Zurück
+          </a>
+          <a href="#" data-show="div[data-step='4']" class="btn">
+            Weiter <i class="icon-arrow-right"></i>
+          </a>
         </div>
       </fieldset>
     </div>
@@ -140,20 +162,37 @@
       
         <%= link_to_add_fields "Artikel Code hinzufügen", f, :article_position_time_shifting_assignments %>
         <hr />
-        <div class="form-element clearfix">
-          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='3']") %>
-          <%= link_to("Weiter", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='5']") %>
+        <div class="form-actions">
+          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+            <i class="icon-remove-circle icon-white"></i> Abbrechen
+          </a>
+          <a href="#" data-show="div[data-step='3']" class="btn">
+            <i class="icon-arrow-left"></i> Zurück
+          </a>
+          <a href="#" data-show="div[data-step='5']" class="btn">
+            Weiter <i class="icon-arrow-right"></i>
+          </a>
         </div>
         
       </fieldset>
     </div>
     
     <div data-step="5" style="display: none;">
+      <div class="alert alert-block alert-info">
+        <h4 class="alert-heading">Achtung!</h4>
+        <p>
+          Damit eine Verschiebung erfasst werden kann müssen folgende Schritte durchgeführt worden sein. Vor der Erfassung bitte überprüfen.
+        </p>
+        <ol>
+          <li>Wurden alle benötigten VK-Pos hinzugefügt?</li>
+          <li>Wurde der Grund der Verschiebung gewählt?</li>
+          <li>Wurde die Abteilung gewählt?</li>
+        </ol>
+      </div>
+      
       <fieldset>
         <legend>Schritt 5 <small>Abteilung wählen</small></legend>
-        <%= f.simple_fields_for :department_time_shifting_assignments do |builder| %>
-          <%= render 'department_time_shifting_assignment_fields' , :f => builder %>
-        <% end %>
+        <%= f.input :department_id, :collection => @departments, :label => "Abteilung", :hint => "Wähle die nächste betroffene Abteilung" %>
         
         <fieldset>
           <legend>Bemerkung</legend>
@@ -162,9 +201,16 @@
           <% end %>
         </fieldset>
         <hr />
-        <div class="form-element clearfix">
-          <%= link_to("Zurück", "#", :class => "linkSubmit greySubmit floatLeft", "data-show" => "div[data-step='4']") %>
-          <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
+        <div class="form-actions">
+          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+            <i class="icon-remove-circle icon-white"></i> Abbrechen
+          </a>
+          <a href="#" data-show="div[data-step='4']" class="btn">
+            <i class="icon-arrow-left"></i> Zurück
+          </a>
+          <button class="btn btn-primary" type="submit">
+            <i class="icon-ok-circle icon-white"></i> Verschiebung erfassen
+          </button>
         </div>
         
       </fieldset>

@@ -2,8 +2,8 @@
 <html>
   <head>
     <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
-    <%= stylesheet_link_tag "reset" %>
     <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag "bootstrap" %>
     <%= stylesheet_link_tag "jquery_ui" %>
     <%= stylesheet_link_tag "icons" %>
     <%= stylesheet_link_tag "widgets" %>
@@ -104,5 +104,19 @@
         <%= yield %>
       </section>
     </section>
+    <div class="navbar navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav">
+            <li>
+              <%= link_to "http://rubyonrails.org/" do %>
+                Fraefel App - A ruby on Rails application
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
   </body>
 </html>

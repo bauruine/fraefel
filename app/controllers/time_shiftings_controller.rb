@@ -56,15 +56,14 @@ class TimeShiftingsController < ApplicationController
   def new
     @time_shifting = TimeShifting.new(params[:time_shifting])
     @departments = Department.order("departments.title ASC")
+    @purchase_order = (params[:time_shifting].present? && params[:time_shifting][:purchase_order_id].present?) ? PurchaseOrder.where(:baan_id => params[:time_shifting][:purchase_order_id]) : nil
     
-    if params[:time_shifting].present?
-       @purchase_order = PurchaseOrder.where(:baan_id => params[:time_shifting][:purchase_order_id])
+    if @purchase_order.present?
        @purchase_positions = @purchase_order.first.purchase_positions
        @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
        
        @time_shifting.comments.build
-       @time_shifting.department_time_shifting_assignments.build
-       @time_shifting.shifting_reason_time_shifting_assignments.build
+       #@time_shifting.shifting_reason_time_shifting_assignments.build
        
        @purchase_positions.each do |purchase_position|
          @time_shifting.purchase_position_time_shifting_assignments.build(:purchase_position_id => purchase_position.id)
@@ -75,10 +74,18 @@ class TimeShiftingsController < ApplicationController
   
   def create
     @time_shifting = TimeShifting.new(params[:time_shifting])
+    @departments = Department.order("departments.title ASC")
+    @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.purchase_order_id)
+    @purchase_positions = @purchase_order.first.purchase_positions
+    @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
+    
+    
+    @time_shifting.comments.build if @time_shifting.comments.empty?
+    
     if @time_shifting.save
+      @time_shifting.departments << @time_shifting.department
       PurchaseOrder.where(:baan_id => @time_shifting.purchase_order_id).first.update_attribute("priority_level", 0)
       ### Move this away from here....
-      @time_shifting.update_attribute(:department_id, @time_shifting.departments.last.id)
       @time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => 0)
       redirect_to(time_shiftings_path)
     else
@@ -88,6 +95,7 @@ class TimeShiftingsController < ApplicationController
   
   def edit
     @time_shifting = TimeShifting.where(:id => params[:id])
+    @time_shifting.first.department = nil
     @purchase_positions = @time_shifting.first.purchase_position_time_shifting_assignments.includes(:purchase_position)
     @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
     @departments = Department.order("departments.title ASC")
@@ -99,13 +107,17 @@ class TimeShiftingsController < ApplicationController
   
   def update
     @time_shifting = TimeShifting.where(:id => params[:id])
+    @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     if @time_shifting.first.update_attributes(params[:time_shifting])
+      if @time_shifting.first.department_id.present?
+        @time_shifting.first.departments << @time_shifting.first.department
+      end
       ### Move this logic to a filter!!
       if @time_shifting.first.department_time_shifting_assignments.where("completed_at IS NULL").count > 1
         @time_shifting.first.department_time_shifting_assignments.where("completed_at IS NULL").first.update_attribute("completed_at", Time.now)
       end
-      ### Move this away from here....
-      @time_shifting.first.update_attribute(:department_id, @time_shifting.departments.last.id)
+      @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => @purchase_order.first.priority_level)
+      
       redirect_to(@time_shifting.first)
     end
   end

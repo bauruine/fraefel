@@ -63,6 +63,7 @@ Fraefel::Application.routes.draw do
   end
   
   resources :purchase_orders do
+    resources :time_shiftings
     member do
       get 'print_pallets'
     end

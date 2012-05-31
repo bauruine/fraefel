@@ -1,3 +1,4 @@
+# encoding: utf-8
 class TimeShifting < ActiveRecord::Base
   attr_accessor :articles
   
@@ -26,7 +27,8 @@ class TimeShifting < ActiveRecord::Base
   accepts_nested_attributes_for :department_time_shifting_assignments, :reject_if => proc { |obj| obj['department_id'].blank? }
   accepts_nested_attributes_for :purchase_order
   
-  
+  validates_presence_of :department_id, :on => :create, :message => "muss ausgewählt werden"
+  validates_presence_of :shifting_reasons, :on => :create, :message => "muss ausgewählt werden"
   #validates_presence_of :purchase_positions
   
 end

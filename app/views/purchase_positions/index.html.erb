@@ -113,6 +113,10 @@
   <p>
     <i class="icon-asterisk"></i> VK-Pos mit aktiver Terminverschiebung
   </p>
+  <p>
+    <i class="icon-fire"></i> Verschobene VK-Pos
+  </p>
+  
 </blockquote>
 
 
@@ -151,6 +155,8 @@
               <td>
                 <% if purchase_position.priority_level == 0 %>
                   <i class="icon-asterisk"></i>
+                <% elsif purchase_position.priority_level > 1 %>
+                  <i class="icon-fire"></i>
                 <% end %>
                 <%= link_to("#{purchase_position.purchase_order.try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote2") %>
               </td>
@@ -158,6 +164,8 @@
               <td>
                 <% if purchase_position.purchase_order.priority_level == 0 %>
                   <i class="icon-asterisk"></i>
+                <% elsif purchase_position.priority_level > 1 %>
+                  <i class="icon-fire"></i>
                 <% end %>
                 <%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %>
               </td>
