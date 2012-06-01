@@ -133,7 +133,7 @@ section#pageContainer {
   background-color: #FFF;
 }
 header#containerHeader {
-  border-top: 8px solid #005D91;
+  /*border-top: 8px solid #005D91;*/
 }
 nav#applicationNavigation {
   padding-top: 30px;

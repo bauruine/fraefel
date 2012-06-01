@@ -1,6 +1,13 @@
+<ul class="breadcrumb">
+  <li><a href="<%= time_shiftings_path %>">Terminverschiebungen</a> <span class="divider">/</span></li>
+  <li class="active">Neue Terminverschiebung</li>
+</ul>
+
+<div class="page-header">
+  <h1>Erfasse neue Terminverschiebung</h1>
+</div>
 <section class="filter_box">
     <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Erfasse neue Terminverschiebung</h4>
       <% if @purchase_order.present? %>
         <a href="#" class="header_link as_text" data-show="div[data-step='5']">
           Abteilung

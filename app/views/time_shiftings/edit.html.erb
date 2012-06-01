@@ -1,6 +1,15 @@
+<ul class="breadcrumb">
+  <li><a href="<%= time_shiftings_path %>">Terminverschiebungen</a> <span class="divider">/</span></li>
+  <li><a href="<%= time_shifting_path(@time_shifting.first.id) %>"><%= @time_shifting.first.id %></a> <span class="divider">/</span></li>
+  <li class="active">Edit</li>
+</ul>
+
+<div class="page-header">
+  <h1>Bearbeite Terminverschiebung</h1>
+</div>
+
 <section class="filter_box">
     <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Bearbeite Terminverschiebung</h4>
       <a href="#" class="<%= params[:tab] == "close_time_shifting" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='8']">
         Abschliessen
       </a>

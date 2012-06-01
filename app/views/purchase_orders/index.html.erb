@@ -53,85 +53,85 @@
 
 <div data-type="modal" style="display: none;">
     <%= form_for @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:delivered_equals, "Versendet?") %>
-        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span2 mr6"}) %>
+        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
       </div>
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:priority_level_equals, "Prio Stufe") %>
-        <%= f.text_field(:priority_level_equals, {:class => "span2"}) %>
+        <%= f.text_field(:priority_level_equals, {:class => "span3"}) %>
       </div>
       <div class="clear"></div>
       
       <hr />
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
-        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span2 mr6" %>
+        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span3" %>
       </div>
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
-        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span2" %>
+        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span3" %>
       </div>
       <div class="clear"></div>
       <hr />
       
-      <div class="form-element">
+      <div class="">
         <%= f.label(:baan_id_equals, "VK-Auftrag") %>
-        <%= f.text_field(:baan_id_equals, :class => "span1") %>
+        <%= f.text_field(:baan_id_equals, :class => "span6") %>
       </div>
       <hr />
       
-      <div class="form-element">
+      <div class="">
         <%= f.label(:level_1_equals, "Zahlungsleister") %>
-        <%= f.collection_select(:level_1_equals, @level_1, :id, :location_for_select, {:include_blank => true}, {:class => "span1", "data-foo" => "level_1"}) %>
+        <%= f.collection_select(:level_1_equals, @level_1, :id, :location_for_select, {:include_blank => true}, {:class => "span6", "data-foo" => "level_1"}) %>
       </div>
       
-      <div class="form-element">
+      <div class="">
         <%= f.label(:level_2_equals, "Rechnungsempfänger") %>
-        <%= f.collection_select(:level_2_equals, @level_2, :id, :location_for_select, {:include_blank => true}, {:class => "span1", "data-foo" => "level_2"}) %>
+        <%= f.collection_select(:level_2_equals, @level_2, :id, :location_for_select, {:include_blank => true}, {:class => "span6", "data-foo" => "level_2"}) %>
       </div>
       
-      <div class="form-element">
+      <div class="">
         <%= f.label(:level_3_equals, "Lieferadresse") %>
-        <%= f.collection_select(:level_3_equals, @level_3, :id, :location_for_select, {:include_blank => true}, {:class => "span1", "data-foo" => "level_3"}) %>
+        <%= f.collection_select(:level_3_equals, @level_3, :id, :location_for_select, {:include_blank => true}, {:class => "span6", "data-foo" => "level_3"}) %>
       </div>
       <hr />
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:shipping_route_id_equals, "Tour") %>
-        <%= f.collection_select(:shipping_route_id_equals, @shipping_routes, :id, :name, {:include_blank => true}, {:class => "span3 mr6", "data-foo" => "shipping_routes"}) %>
+        <%= f.collection_select(:shipping_route_id_equals, @shipping_routes, :id, :name, {:include_blank => true}, {:class => "span2", "data-foo" => "shipping_routes"}) %>
       </div>
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:warehouse_number_equals, "Versandlager") %>
-        <%= f.text_field(:warehouse_number_equals, :class => "span3 mr6") %>
+        <%= f.text_field(:warehouse_number_equals, :class => "span2") %>
       </div>
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:category_id_equals, "VK-Art") %>
-        <%= f.collection_select(:category_id_equals, @purchase_order_categories, :id, :title, {:include_blank => true}, {:class => "span3", "data-foo" => "categories"}) %>
+        <%= f.collection_select(:category_id_equals, @purchase_order_categories, :id, :title, {:include_blank => true}, {:class => "span2", "data-foo" => "categories"}) %>
       </div>
       <div class="clear"></div>
       <hr />
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:warehousing_completed_gteq, "Einlagerung >= ?%") %>
-        <%= f.select(:warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span2 mr6"}) %>
+        <%= f.select(:warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span3"}) %>
       </div>
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:warehousing_completed_lteq, "Einlagerung <= ?%") %>
-        <%= f.select(:warehousing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span2"}) %>
+        <%= f.select(:warehousing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span3"}) %>
       </div>
       <div class="clear"></div>
       <hr />
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:manufacturing_completed_gteq, "Produktion >= ?%") %>
-        <%= f.select(:manufacturing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span2 mr6"}) %>
+        <%= f.select(:manufacturing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span3"}) %>
       </div>
-      <div class="form-element floatLeft">
+      <div class="floatLeft">
         <%= f.label(:manufacturing_completed_lteq, "Produktion <= ?%") %>
-        <%= f.select(:manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span2"}) %>
+        <%= f.select(:manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span3"}) %>
       </div>
       <div class="clear"></div>
       <hr />
-      <div class="form-element clearfix">
-        <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Filter anwenden</button>
       </div>
     <% end %>
     
