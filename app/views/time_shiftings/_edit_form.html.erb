@@ -27,24 +27,21 @@
     
     <fieldset>
       <legend>Auftrag</fieldset>
-      <%= f.input :simple, :as => :select, :label => false, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false, :selected => false %>
+      <%= f.input :simple, :as => :select, :label => false, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false, :selected => @time_shifting.first.simple.blank? ? false : @time_shifting.first.simple %>
     </fieldset>
     
     <fieldset>
       <legend>Kunde</legend>
-      <%= f.input :customer_was_informed, :as => :select, :label => false, :hint => "Wurde der Kunde informiert?", :include_blank => false, :selected => false %>
+      <%= f.input :customer_was_informed, :as => :select, :label => false, :hint => "Wurde der Kunde informiert?", :include_blank => false, :selected => @time_shifting.first.customer_was_informed.blank? ? false : @time_shifting.first.customer_was_informed %>
     </fieldset>
     
     <fieldset>
       <legend>Baan</legend>
-      <%= f.input :baan_was_updated, :as => :select, :label => false, :hint => "Wurden die Termine in Baan eingetragen?", :include_blank => false, :selected => false %>
+      <%= f.input :baan_was_updated, :as => :select, :label => false, :hint => "Wurden die Termine in Baan eingetragen?", :include_blank => false, :selected => @time_shifting.first.baan_was_updated.blank? ? false : @time_shifting.first.baan_was_updated %>
     </fieldset>
     
     <fieldset>
       <legend>Termine</legend>
-      <%= f.input :change_we_date, :as => :select, :label => false, :hint => "Muss das WE Datum geändert werden?", :include_blank => false, :selected => false %>
-      <%= f.input :we_date, :as => :string, :label => "Neues WE Datum", :input_html => { :class => 'date_picker' } %>
-      <%= f.input :change_lt_date, :as => :select, :label => false, :hint => "Muss das LT Datum geändert werden?", :include_blank => false, :selected => false %>
       <%= f.input :lt_date, :as => :string, :label => "Neues LT Datum", :input_html => { :class => 'date_picker' } %>
     </fieldset>
     
