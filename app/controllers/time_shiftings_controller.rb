@@ -116,6 +116,14 @@ class TimeShiftingsController < ApplicationController
       if @time_shifting.first.department_time_shifting_assignments.where("completed_at IS NULL").count > 1
         @time_shifting.first.department_time_shifting_assignments.where("completed_at IS NULL").first.update_attribute("completed_at", Time.now)
       end
+      if @time_shifting.first.closed && @time_shifting.first.lt_date.present?
+        @purchase_order.first.delivery_date = @time_shifting.first.lt_date
+        if @purchase_order.first.priority_level == 0
+          @purchase_order.first.priority_level = 2
+        end
+        @purchase_order.first.save
+        # @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:delivery_date => @time_shifting.first.lt_date)
+      end
       @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => @purchase_order.first.priority_level)
       
       redirect_to(@time_shifting.first)

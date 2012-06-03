@@ -16,6 +16,8 @@ class PurchasePosition < ActiveRecord::Base
   
   scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")
   
+  # has_paper_trail
+  
   def available_quantity
     self.quantity.to_i - self.pallet_purchase_position_assignments.sum("quantity")
   end

@@ -14,6 +14,8 @@ class PurchaseOrder < ActiveRecord::Base
   
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
+  # has_paper_trail
+  
   def self.clean
     where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
       purchase_order.destroy
