@@ -107,6 +107,11 @@
         <%= image_tag("logo.gif", :class => "floatRight", :id => "logo") %>
       </header>
       <section id="yieldContent">
+        <% if Resque::Worker.all.size == 0 %>
+          <div class="alert alert-error">
+            :::ACHTUNG::: ZUR ZEIT KÖNNEN KEINE NEUE IMPORTS DURCHGEFÜHRT ODER VK GELÖSCHT WERDEN
+          </div>
+        <% end %>
         <% flash.each do |name, msg| %>
           <%= content_tag :div, msg, :id => "flash_#{name}" %>
         <% end %>
