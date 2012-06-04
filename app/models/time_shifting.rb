@@ -29,6 +29,7 @@ class TimeShifting < ActiveRecord::Base
   
   validates_presence_of :department_id, :on => :create, :message => "muss ausgewählt werden"
   validates_presence_of :shifting_reasons, :on => :create, :message => "muss ausgewählt werden"
+  validates_presence_of :lt_date, :on => :update, :message => "muss gesetzt werden", :if => "closed"
   #validates_presence_of :purchase_positions
   
 end

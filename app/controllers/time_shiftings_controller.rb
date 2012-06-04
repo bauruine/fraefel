@@ -108,6 +108,8 @@ class TimeShiftingsController < ApplicationController
   def update
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
+    @purchase_positions = @time_shifting.first.purchase_position_time_shifting_assignments.includes(:purchase_position)
+    
     if @time_shifting.first.update_attributes(params[:time_shifting])
       if @time_shifting.first.department_id.present?
         @time_shifting.first.departments << @time_shifting.first.department
@@ -130,6 +132,8 @@ class TimeShiftingsController < ApplicationController
       @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => @purchase_order.first.priority_level)
       
       redirect_to(@time_shifting.first)
+    else
+      render 'edit'
     end
   end
   
