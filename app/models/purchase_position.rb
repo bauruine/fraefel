@@ -98,12 +98,16 @@ class PurchasePosition < ActiveRecord::Base
       purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
       if purchase_position.new_record?
         purchase_position.save
+        purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
       else
         purchase_position_attributes.merge!(:id => purchase_position.id)
         unless PurchasePosition.select(purchase_position_attributes.keys).where(:id => purchase_position.id).first.attributes == purchase_position_attributes
           # update logic comes here...
           purchase_position_attributes.delete(:id)
           purchase_position.update_attributes(purchase_position_attributes)
+          if purchase_position.delivery_date != purchase_position.delivery_dates.last.try(:date_of_delivery)
+            purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
+          end
         end
       end
       
