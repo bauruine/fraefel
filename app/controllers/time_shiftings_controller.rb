@@ -122,7 +122,10 @@ class TimeShiftingsController < ApplicationController
           @purchase_order.first.priority_level = 2
         end
         @purchase_order.first.save
-        # @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:delivery_date => @time_shifting.first.lt_date)
+        @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).each do |purchase_position|
+          purchase_position.delivery_dates.last.try(:date_of_delivery) != purchase_position.delivery_date.to_date ? purchase_position.delivery_dates.create(:date_of_delivery => @time_shifting.first.lt_date) : nil
+          purchase_position.update_attribute(:delivery_date, @time_shifting.first.lt_date)
+        end
       end
       @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => @purchase_order.first.priority_level)
       
