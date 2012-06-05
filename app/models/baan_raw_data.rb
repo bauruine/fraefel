@@ -10,7 +10,8 @@ class BaanRawData < ActiveRecord::Base
 
     csv_file.each do |row|
       @baan_raw_attributes = {}
-      for i in 0..81 do
+      # added new lines 82 83 84
+      for i in 0..84 do
         @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s.undress)
       end
       @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)

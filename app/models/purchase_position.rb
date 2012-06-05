@@ -94,6 +94,7 @@ class PurchasePosition < ActiveRecord::Base
       purchase_position_attributes.merge!(:net_price => baan_raw_data.attributes["baan_40"])
       purchase_position_attributes.merge!(:stock_status => baan_raw_data.attributes["baan_78"].to_i)
       purchase_position_attributes.merge!(:production_status => baan_raw_data.attributes["baan_79"].to_i)
+      purchase_position_attributes.merge!(:picked_up => baan_raw_data.attributes["baan_84"])
       
       purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
       if purchase_position.new_record?
@@ -110,7 +111,12 @@ class PurchasePosition < ActiveRecord::Base
           end
         end
       end
-      
+      # Set picked_up true on purchase_order if children are picked_up
+      if purchase_position.purchase_order.present?
+        if purchase_position.purchase_order.purchase_positions.collect(&:picked_up).count {|x| x == true} == purchase_position.purchase_order.purchase_positions.collect(&:picked_up).size
+          purchase_position.purchase_order.update_attribute("picked_up", true)
+        end
+      end
     end
     ab = Time.now
     puts (ab - ag).to_s

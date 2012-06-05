@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120605113735) do
+ActiveRecord::Schema.define(:version => 20120605225511) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -213,6 +213,9 @@ ActiveRecord::Schema.define(:version => 20120605113735) do
     t.string   "baan_81"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "baan_82"
+    t.string   "baan_83"
+    t.string   "baan_84"
   end
 
   create_table "calculations", :force => true do |t|
@@ -464,6 +467,7 @@ ActiveRecord::Schema.define(:version => 20120605113735) do
     t.integer  "warehouse_number",        :default => 0
     t.integer  "category_id"
     t.integer  "priority_level",          :default => 1
+    t.boolean  "picked_up",               :default => false
   end
 
   create_table "purchase_position_time_shifting_assignments", :force => true do |t|
@@ -505,6 +509,7 @@ ActiveRecord::Schema.define(:version => 20120605113735) do
     t.integer  "production_status",                                :default => 0
     t.integer  "stock_status",                                     :default => 0
     t.integer  "priority_level",                                   :default => 1
+    t.boolean  "picked_up",                                        :default => false
   end
 
   create_table "referees", :force => true do |t|
