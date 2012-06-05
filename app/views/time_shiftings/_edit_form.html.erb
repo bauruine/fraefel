@@ -3,9 +3,6 @@
   <%= f.error_notification %>
 
   <div data-step="1" style="<%= params[:tab].present? ? 'display: none;' : nil %>">
-    <div id="flash_notice">
-      <p>Der VK Auftrag wurde bereits fixiert und kann nicht mehr geändert werden.</p>
-    </div>
   
     <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
     <hr />

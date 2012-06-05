@@ -1,0 +1,42 @@
+<div class="page-header">
+    <h1 class="pull-left">Abteilungen - Ablauf</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= edit_time_shifting_path(@time_shifting.first, :tab => "departments") %>"><i class="icon-random icon-white"></i> Abteilung wechseln</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<section class="filter_box">
+  <header class="filter_box_header">
+    <h4 class="floatLeft">&nbsp;</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table>
+      <thead>
+        <tr>
+          <th>Abteilung</th>
+          <th>Erfasst von</th>
+          <th>Erfasst am</th>
+          <th>Zeit beansprucht</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @departments.each do |d_t_s_a| %>
+        <tr>
+          <td>
+            <%= d_t_s_a.completed_at.present? ? "#{d_t_s_a.department.title}" : "* #{d_t_s_a.department.title}" %>
+          </td>
+          <td><%= d_t_s_a.creator.full_name %></td>
+          <td><%= d_t_s_a.created_at.to_formatted_s(:swiss_date) %></td>
+          <td><%= distance_of_time_in_words(d_t_s_a.created_at, (d_t_s_a.completed_at.present? ? d_t_s_a.completed_at : Time.now)) %></td>
+        </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="4"><small>* Aktive Abteilung</small></td></tr>
+      </tfoot>
+    </table>
+  </section>
+</section>

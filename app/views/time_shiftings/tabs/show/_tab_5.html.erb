@@ -1,0 +1,26 @@
+<div class="page-header">
+    <h1 class="pull-left">Nachrichten</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= edit_time_shifting_path(@time_shifting.first, :tab => "comments") %>"><i class="icon-comment icon-white"></i> Nachricht hinzufügen</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">&nbsp;</h4>
+  </header>
+  <section class="filter_box_content clearfix" style="padding: 10px;">
+
+    <% @comments.each do |comment| %>
+      <div style="width: 50%; margin-bottom: 30px;">
+        <h3>Nachricht erstellt von <%= comment.user.full_name %> um <%= comment.created_at.to_formatted_s(:swiss_date) %></h3>
+        <hr />
+        <%= comment.content %>
+      </div>
+    <% end %>
+
+  </section>
+</section>

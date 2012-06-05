@@ -109,6 +109,7 @@ class TimeShiftingsController < ApplicationController
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     @purchase_positions = @time_shifting.first.purchase_position_time_shifting_assignments.includes(:purchase_position)
+    @departments = Department.order("departments.title ASC")
     
     if @time_shifting.first.update_attributes(params[:time_shifting])
       if @time_shifting.first.department_id.present?
