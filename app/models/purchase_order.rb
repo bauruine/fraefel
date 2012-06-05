@@ -17,7 +17,7 @@ class PurchaseOrder < ActiveRecord::Base
   # has_paper_trail
   
   def self.clean
-    where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
+    where("purchase_orders.baan_id NOT IN(?)", TimeShifting.all.collect(&:purchase_order_id)).where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
       purchase_order.destroy
     end
   end
