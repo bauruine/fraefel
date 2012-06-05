@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120604121437) do
+ActiveRecord::Schema.define(:version => 20120605113735) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -587,7 +587,7 @@ ActiveRecord::Schema.define(:version => 20120604121437) do
 
   create_table "time_shiftings", :force => true do |t|
     t.boolean  "simple"
-    t.integer  "purchase_order_id"
+    t.string   "purchase_order_id"
     t.date     "delivery_date"
     t.integer  "created_by"
     t.integer  "updated_by"
