@@ -30,13 +30,13 @@
         <a href="#tab2" data-toggle="tab">Abteilungen</a>
       </li>
       <li>
-        <a href="#tab3" data-toggle="tab">Beschaffung</a>
+        <a href="#tab3" data-toggle="tab">Beschaffung <span class="badge badge-info"><%= @article_positions.count %></span></a>
       </li>
       <li>
-        <a href="#tab4" data-toggle="tab">VK-Positionen</a>
+        <a href="#tab4" data-toggle="tab">VK-Positionen <span class="badge badge-info"><%= @purchase_positions.count %></span></a>
       </li>
       <li>
-        <a href="#tab5" data-toggle="tab">Nachrichten</a>
+        <a href="#tab5" data-toggle="tab">Nachrichten <span class="badge badge-info"><%= @comments.count %></span></a>
       </li>
     </ul>
     <div class="tab-content">
