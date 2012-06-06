@@ -95,7 +95,7 @@ class TimeShiftingsController < ApplicationController
   
   def edit
     @time_shifting = TimeShifting.where(:id => params[:id])
-    @time_shifting.first.department = nil
+    # @time_shifting.first.department = nil
     @purchase_positions = @time_shifting.first.purchase_position_time_shifting_assignments.includes(:purchase_position)
     @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
     @departments = Department.order("departments.title ASC")
@@ -112,7 +112,7 @@ class TimeShiftingsController < ApplicationController
     @departments = Department.order("departments.title ASC")
     
     if @time_shifting.first.update_attributes(params[:time_shifting])
-      if @time_shifting.first.department_id.present?
+      if @time_shifting.first.department_id != @time_shifting.first.departments.last.id
         @time_shifting.first.departments << @time_shifting.first.department
       end
       ### Move this logic to a filter!!
@@ -121,9 +121,7 @@ class TimeShiftingsController < ApplicationController
       end
       if @time_shifting.first.closed && @time_shifting.first.lt_date.present?
         @purchase_order.first.delivery_date = @time_shifting.first.lt_date
-        if @purchase_order.first.priority_level == 0
-          @purchase_order.first.priority_level = 2
-        end
+        @purchase_order.first.priority_level = 2
         @purchase_order.first.save
         @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).each do |purchase_position|
           purchase_position.delivery_dates.last.try(:date_of_delivery) != purchase_position.delivery_date.to_date ? purchase_position.delivery_dates.create(:date_of_delivery => @time_shifting.first.lt_date) : nil

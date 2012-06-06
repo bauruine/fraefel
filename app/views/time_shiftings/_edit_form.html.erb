@@ -242,12 +242,6 @@
   
   <div data-step="8" style="<%= params[:tab] == "close_time_shifting" ? nil : 'display: none;' %>">
     <fieldset>
-      <legend>VK-Auftrag</legend>
-      <%= f.simple_fields_for :purchase_order do |purchase_order_form| %>
-        <%= purchase_order_form.input :priority_level, :label => "VK-Priorität", :hint => "Wähle die Priorität des Auftrages" %>
-      <% end %>
-    </fieldset>
-    <fieldset>
       <legend>Verschiebung Abschliessen?</legend>
       <%= f.input :closed, :as => :select, :label => false, :hint => "Terminverschiebung abschliessen?", :include_blank => false %>
     </fieldset>
