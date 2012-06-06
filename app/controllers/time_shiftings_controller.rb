@@ -29,8 +29,9 @@ class TimeShiftingsController < ApplicationController
   end
   
   def index
-    @search = TimeShifting.includes(:purchase_order).order("time_shiftings.updated_at DESC").search(params[:search] || {:closed_equals => "false"})
+    @search = TimeShifting.includes(:purchase_order).order("time_shiftings.lt_date ASC, time_shiftings.purchase_order_id ASC").search(params[:search] || {:closed_equals => "false"})
     @time_shiftings = @search.relation
+    @departments = Department.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").order("departments.title ASC")
     
     respond_to do |format|
       format.html
@@ -120,15 +121,17 @@ class TimeShiftingsController < ApplicationController
         @time_shifting.first.department_time_shifting_assignments.where("completed_at IS NULL").first.update_attribute("completed_at", Time.now)
       end
       if @time_shifting.first.closed && @time_shifting.first.lt_date.present?
-        @purchase_order.first.delivery_date = @time_shifting.first.lt_date
         @purchase_order.first.priority_level = 2
         @purchase_order.first.save
+        @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => 2)
+      end
+      if @time_shifting.first.lt_date.present?
         @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).each do |purchase_position|
           purchase_position.delivery_dates.last.try(:date_of_delivery) != purchase_position.delivery_date.to_date ? purchase_position.delivery_dates.create(:date_of_delivery => @time_shifting.first.lt_date) : nil
           purchase_position.update_attribute(:delivery_date, @time_shifting.first.lt_date)
         end
+        @purchase_order.first.update_attribute("delivery_date", @time_shifting.first.lt_date)
       end
-      @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => @purchase_order.first.priority_level)
       
       redirect_to(@time_shifting.first)
     else

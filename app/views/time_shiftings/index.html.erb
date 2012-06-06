@@ -29,7 +29,8 @@
         <tr>
           <th>#</th>
           <th>VK-Auftrag</th>
-          <th>Komplett / Teil-Verschiebung</th>
+          <th>Teillieferung?</th>
+          <th>LT Neu</th>
           <th>anz. VK-Pos</th>
           <th>Grund</th>
           <th>Abteilung</th>
@@ -42,6 +43,7 @@
             <td><%= link_to(time_shifting.id, time_shifting) %></td>
             <td><%= time_shifting.purchase_order_id %></td>
             <td><%= time_shifting.simple %></td>
+            <td><%= time_shifting.lt_date.to_formatted_s(:swiss_date) if time_shifting.lt_date.present? %></td>
             <td><%= time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).count %></td>
             <td><%= time_shifting.shifting_reasons.collect(&:title) %></td>
             <td><%= "#{time_shifting.departments.last.try(:title)} ...seit #{distance_of_time_in_words(time_shifting.department_time_shifting_assignments.last.created_at, Time.now)}" %></td>
@@ -92,7 +94,7 @@
     
     <div class="form-element">
       <%= f.label(:department_id_equals, "Abteilung") %>
-      <%= f.collection_select(:department_id_equals, Department.order("title ASC"), :id, :title, {:include_blank => true}, {:class => "span6"}) %>
+      <%= f.collection_select(:department_id_equals, @departments, :id, :title, {:include_blank => true}, {:class => "span6"}) %>
     </div>
     
     <hr />
