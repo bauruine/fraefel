@@ -1,0 +1,16 @@
+<fieldset>
+  <legend>Schritt 3 <small>Grund erfassen</small></legend>
+  <%= f.association :shifting_reasons, :label => "Grund wählen", :as => :check_boxes %>
+  <hr />
+  <div class="form-actions">
+    <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+      <i class="icon-remove-circle icon-white"></i> Abbrechen
+    </a>
+    <a href="#tab2" data-toggle="tab-changer" class="btn">
+      <i class="icon-arrow-left"></i> Zurück
+    </a>
+    <a href="#tab4" data-toggle="tab-changer" class="btn">
+      Weiter <i class="icon-arrow-right"></i>
+    </a>
+  </div>
+</fieldset>

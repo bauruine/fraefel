@@ -1,0 +1,31 @@
+<% if params[:time_shifting].present? && params[:time_shifting][:purchase_order_id].present? && @purchase_order.blank? %>
+  <div class="alert alert-error">
+    Zu der Eingabe wurde kein passender VK gefunden! Bitte überprüfen und nochmals versuchen.
+  </div>
+<% end %>
+
+<fieldset>
+  <legend>Schritt 1 <small>VK-Auftrag</small></legend>
+  <% if @purchase_order.blank? %>
+    <%= f.input :purchase_order_id, :label => "VK-Auftrag", :hint => "Info: Gültige VK-Nummer eingeben." %>
+  <% else %>
+    <%= f.input :purchase_order_id, :as => :hidden, :label => false %>
+    <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
+    <%= link_to("VK-Auftrag entfernen", new_time_shifting_path, :confirm => "Achtung! Alle bisherigen Eingaben werden gelöscht!") %>
+  <% end %>
+  <hr />
+  <div class="form-actions">
+    <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+      <i class="icon-remove-circle icon-white"></i> Abbrechen
+    </a>
+    <% if @purchase_order.blank? %>
+      <button class="btn btn-primary" type="submit">
+        <i class="icon-magnet icon-white"></i> VK anheften
+      </button>
+    <% else %>
+      <a href="#tab2" data-toggle="tab-changer" class="btn">
+        Weiter <i class="icon-arrow-right"></i>
+      </a>
+    <% end %>
+  </div>
+</fieldset>

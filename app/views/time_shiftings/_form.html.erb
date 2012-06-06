@@ -1,224 +1,28 @@
+
 <%= simple_form_for(@purchase_order.present? ? [@purchase_order.first, @time_shifting] : @time_shifting, :url => @purchase_order.present? ? time_shiftings_path : new_time_shifting_path, :html => {:method => @purchase_order.present? ? :post : :get}) do |f| %>
 
+  <div style="padding-bottom: 9px; border-bottom: 1px solid #ddd;" class="tab-content">
+    <div id="tab1" class="tab-pane active">
+      <%= render 'time_shiftings/tabs/new/tab_1', :f => f %>
+    </div>
   
-  <div data-step="1">
-    <% if params[:time_shifting].present? && params[:time_shifting][:purchase_order_id].present? && @purchase_order.blank? %>
-      <div class="alert alert-error">
-        Zu der Eingabe wurde kein passender VK gefunden! Bitte überprüfen und nochmals versuchen.
+    <% unless @purchase_order.blank? %>
+      <div id="tab2" class="tab-pane">
+        <%= render 'time_shiftings/tabs/new/tab_2', :f => f %>
+      </div>
+      <div id="tab3" class="tab-pane">
+        <%= render 'time_shiftings/tabs/new/tab_3', :f => f %>
+      </div>
+      <div id="tab4" class="tab-pane">
+        <%= render 'time_shiftings/tabs/new/tab_4', :f => f %>
+      </div>
+      <div id="tab5" class="tab-pane">
+        <%= render 'time_shiftings/tabs/new/tab_5', :f => f %>
       </div>
     <% end %>
-    
-    <fieldset>
-      <legend>Schritt 1 <small>VK-Auftrag</small></legend>
-      <% if @purchase_order.blank? %>
-        <%= f.input :purchase_order_id, :label => "VK-Auftrag", :hint => "Info: Gültige VK-Nummer eingeben." %>
-      <% else %>
-        <%= f.input :purchase_order_id, :as => :hidden, :label => false %>
-        <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
-        <%= link_to("VK-Auftrag entfernen", new_time_shifting_path, :confirm => "Achtung! Alle bisherigen Eingaben werden gelöscht!") %>
-      <% end %>
-      <hr />
-      <div class="form-actions">
-        <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
-          <i class="icon-remove-circle icon-white"></i> Abbrechen
-        </a>
-        <% if @purchase_order.blank? %>
-          <button class="btn btn-primary" type="submit">
-            <i class="icon-magnet icon-white"></i> VK anheften
-          </button>
-        <% else %>
-          <a href="#" data-show="div[data-step='2']" class="btn">
-            Weiter <i class="icon-arrow-right"></i>
-          </a>
-        <% end %>
-      </div>
-    </fieldset>
   </div>
   
-  <% unless @purchase_order.blank? %>
-    <div data-step="2" style="display: none;">
-      <fieldset>
-        <legend>Schritt 2 <small>Betroffene VK-Positionen</small></legend>
-        <table class="margin_bottom_big" style="">
-          <thead>
-            <tr>
-              <th>Versand</th>
-              <th>Tour</th>
-              <th>Position</th>
-              <th>Artikel</th>
-              <th>stk.</th>
-              <th>Bezeichnung</th>
-              <th>Produktlinie</th>
-              <th>Artikelgruppe</th>
-              <th>Lager Ort</th>
-              <th>Pos. Anhängen?</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |p_p_t_s_a_form| %>
-              <tr>
-                <td><%= p_p_t_s_a_form.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                <td><%= @purchase_order.first.shipping_route.name %></td>
-                <td><%= p_p_t_s_a_form.object.purchase_position.baan_id %></td>
-                <td><%= p_p_t_s_a_form.object.purchase_position.article_number %></td>
-                <td><%= p_p_t_s_a_form.object.purchase_position.quantity %></td>
-                <td><%= p_p_t_s_a_form.object.purchase_position.article %></td>
-                <td><%= p_p_t_s_a_form.object.purchase_position.product_line %></td>
-                <td><%= p_p_t_s_a_form.object.purchase_position.commodity_code.content %></td>
-                <td><%= p_p_t_s_a_form.object.purchase_position.storage_location %></td>
-                <td>
-                  <%= p_p_t_s_a_form.input(:purchase_position_id, :as => :hidden, :label => false) %>
-                  <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false, :selected => false %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-          <tfoot>
-            <tr>
-              <% 10.times do %>
-                <td></td>
-              <% end %>
-            </tr>
-          </tfoot>
-        </table>
-        <hr />
-        <div class="form-actions">
-          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
-            <i class="icon-remove-circle icon-white"></i> Abbrechen
-          </a>
-          <a href="#" data-show="div[data-step='1']" class="btn">
-            <i class="icon-arrow-left"></i> Zurück
-          </a>
-          <a href="#" data-show="div[data-step='3']" class="btn">
-            Weiter <i class="icon-arrow-right"></i>
-          </a>
-        </div>
-      </fieldset>
-    </div>
-    
-    <div data-step="3" style="display: none;">
-      <fieldset>
-        <legend>Schritt 3 <small>Grund erfassen</small></legend>
-        <%= f.association :shifting_reasons, :label => "Grund wählen", :as => :check_boxes %>
-        <hr />
-        <div class="form-actions">
-          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
-            <i class="icon-remove-circle icon-white"></i> Abbrechen
-          </a>
-          <a href="#" data-show="div[data-step='2']" class="btn">
-            <i class="icon-arrow-left"></i> Zurück
-          </a>
-          <a href="#" data-show="div[data-step='4']" class="btn">
-            Weiter <i class="icon-arrow-right"></i>
-          </a>
-        </div>
-      </fieldset>
-    </div>
-
-    <div data-step="4" style="display: none;">
-      <fieldset>
-        <legend>Schritt 4 <small>Artikel Codes hinzufügen</small></legend>
-        <table class="margin_bottom_big" style="">
-          <thead>
-            <tr>
-              <th>Versand</th>
-              <th>Tour</th>
-              <th>Position</th>
-              <th>Artikel</th>
-              <th>stk.</th>
-              <th>Bezeichnung</th>
-              <th>Produktlinie</th>
-              <th>Artikelgruppe</th>
-              <th>Lager Ort</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @purchase_positions.each do |purchase_position| %>
-              <tr>
-                <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                <td><%= @purchase_order.first.shipping_route.name %></td>
-                <td><%= purchase_position.baan_id %></td>
-                <td><%= purchase_position.article_number %></td>
-                <td><%= purchase_position.quantity %></td>
-                <td><%= purchase_position.article %></td>
-                <td><%= purchase_position.product_line %></td>
-                <td><%= purchase_position.commodity_code.content %></td>
-                <td><%= purchase_position.storage_location %></td>
-              </tr>
-            <% end %>
-          </tbody>
-          <tfoot>
-            <tr>
-              <% 9.times do %>
-                <td></td>
-              <% end %>
-            </tr>
-          </tfoot>
-        </table>
-        
-        <%= f.simple_fields_for :article_position_time_shifting_assignments do |builder| %>
-          <%= render 'article_position_time_shifting_assignment_fields', :f => builder %>
-        <% end %>
-      
-        <%= link_to_add_fields "Artikel Code hinzufügen", f, :article_position_time_shifting_assignments %>
-        <hr />
-        <div class="form-actions">
-          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
-            <i class="icon-remove-circle icon-white"></i> Abbrechen
-          </a>
-          <a href="#" data-show="div[data-step='3']" class="btn">
-            <i class="icon-arrow-left"></i> Zurück
-          </a>
-          <a href="#" data-show="div[data-step='5']" class="btn">
-            Weiter <i class="icon-arrow-right"></i>
-          </a>
-        </div>
-        
-      </fieldset>
-    </div>
-    
-    <div data-step="5" style="display: none;">
-      <div class="alert alert-block alert-info">
-        <h4 class="alert-heading">Achtung!</h4>
-        <p>
-          Damit eine Verschiebung erfasst werden kann müssen folgende Schritte durchgeführt worden sein. Vor der Erfassung bitte überprüfen.
-        </p>
-        <ol>
-          <li>Wurden alle benötigten VK-Pos hinzugefügt?</li>
-          <li>Wurde der Grund der Verschiebung gewählt?</li>
-          <li>Wurde die Abteilung gewählt?</li>
-        </ol>
-      </div>
-      
-      <fieldset>
-        <legend>Schritt 5 <small>Abteilung wählen</small></legend>
-        <%= f.input :department_id, :collection => @departments, :label => "Abteilung", :hint => "Wähle die nächste betroffene Abteilung" %>
-        
-        <fieldset>
-          <legend>Bemerkung</legend>
-          <%= f.simple_fields_for :comments do |comment_form| %>
-            <%= comment_form.input :content, :as => :text, :label => false, :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
-          <% end %>
-        </fieldset>
-        <hr />
-        <div class="form-actions">
-          <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
-            <i class="icon-remove-circle icon-white"></i> Abbrechen
-          </a>
-          <a href="#" data-show="div[data-step='4']" class="btn">
-            <i class="icon-arrow-left"></i> Zurück
-          </a>
-          <button class="btn btn-primary" type="submit">
-            <i class="icon-ok-circle icon-white"></i> Verschiebung erfassen
-          </button>
-        </div>
-        
-      </fieldset>
-    </div>
-  <% end %>
-  
 <% end %>
-
 <script type="text/javascript" charset="utf-8">
   $("form").on("click", ".add_fields", function(event){
     var time = new Date().getTime();
@@ -226,40 +30,4 @@
     $(this).before($(this).data('fields').replace(regexp, time));
     event.preventDefault();
   });
-/*  
-  $("select#time_shifting_simple option").click(function() {
-    if (this.value == 'true') {
-      $("table option").removeAttr('selected');
-      $('table option[value="true"]').prop('selected', true)
-    };
-  });
-  
-  $('table option[value="false"]').click(function() {
-    $("select#time_shifting_simple").removeAttr('selected');
-    $('select#time_shifting_simple option[value="false"]').prop('selected', true)
-  });
-  
-  $('table option[value="true"]').click(function() {
-    if ($('table option[value="true"]').not(":selected").size() == 0) {
-      $("select#time_shifting_simple").removeAttr('selected');
-      $('select#time_shifting_simple option[value="true"]').prop('selected', true)
-    };
-  });
-  
-  $("div[data-step='2'] select option").bind("click", function() {
-    if (this.value == '') {
-      $("div[data-step='3'], div[data-step='4']").fadeOut();
-    } else {
-      $("div[data-step='3']").fadeIn();
-    };
-  });
-  
-  $("#time_shifting_department_id option").bind("click", function() {
-    if (this.value == '') {
-      $("div[data-step='4']").fadeOut();
-    } else {
-      $("div[data-step='4']").fadeIn();
-    };
-  });
-*/  
 </script>
