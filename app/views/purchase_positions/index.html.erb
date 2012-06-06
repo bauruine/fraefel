@@ -16,9 +16,13 @@
     <div class="clear"></div>
     <hr />
     
-    <div class="">
+    <div class="floatLeft">
       <%= f.label(:priority_level_equals, "Prio Stufe") %>
-      <%= f.text_field(:priority_level_equals, {:class => "span6"}) %>
+      <%= f.text_field(:priority_level_equals, {:class => "span3"}) %>
+    </div>
+    <div class="floatLeft">
+      <%= f.label(:picked_up_equals, "Warenentnahme abg?") %>
+      <%= f.select(:picked_up_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
     </div>
     <hr />
     <div class="floatLeft">

@@ -22,13 +22,13 @@ class PurchasePositionsController < ApplicationController
     respond_to do |format|
       
       format.html do
-        @search = PurchasePosition.includes(:commodity_code, :purchase_order => :shipping_route).search(params[:search] || {:delivered_equals => "false"})
+        @search = PurchasePosition.includes(:commodity_code, :purchase_order => :shipping_route).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false"})
         # @purchase_positions = @search.relation.order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_positions.delivery_date asc, purchase_positions.stock_status desc, purchase_positions.production_status desc")
         @purchase_positions = @search.relation.order("purchase_positions.delivery_date asc, purchase_orders.level_3 asc, purchase_orders.shipping_route_id asc")
       end
       
       format.pdf do
-        @search = PurchasePosition.includes(:pallets, :commodity_code, :purchase_order => :shipping_route).search(params[:search] || {:delivered_equals => "false"})
+        @search = PurchasePosition.includes(:pallets, :commodity_code, :purchase_order => :shipping_route).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false"})
         # @purchase_positions = @search.relation.order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_positions.delivery_date asc, purchase_positions.stock_status desc, purchase_positions.production_status desc")
         @purchase_positions = @search.relation
         render( 
