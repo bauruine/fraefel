@@ -20,8 +20,8 @@ set :default_environment, {
 }
 
 
-set :application, "IVO::DEMO"
-set :repository,  "git@github.com:innovative-office/ivo-corp.git"
+set :application, "FRAEFEL"
+set :repository,  "git@github.com:innovative-office/fraefel.git"
 set :branch,  "master"
 set :scm, :git
 
@@ -55,13 +55,20 @@ set :use_sudo, false # NOTE: should be true by default
 # cache the app (don't do a full clone on every update)
 set :deploy_via, :remote_cache
 
+# migration of the database
+after "deploy", "deploy:migrate"
+
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 if ENV['deploy'] == 'production' # production only if explicitly asked to do
-server "5.9.2.105", :app, :web, :db, :primary => true
+server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
 #server "srvcluster2.i-v-o.ch", :app, :web, :db
 else 
 server "192.168.56.20", :app, :web, :db, :primary => true
 end
+
+
+
+
 # If you are using Passenger mod_rails uncomment this:
 # if you're still using the script/reapear helper you will need
 # these http://github.com/rails/irs_process_scripts
@@ -89,8 +96,14 @@ namespace :deploy do
           run "#{try_sudo} kill -s QUIT `cat #{unicorn_pid}`"
         end
 =end
+# ugly hack
         task :restart, :roles => :app, :except => { :no_release => true } do
-                run "#{try_sudo} #{unicorn_init_script} upgrade"
+                run "#{try_sudo} #{unicorn_init_script} stop"
+                run "#{try_sudo} #{unicorn_init_script} stop"
+                run "#{try_sudo} #{unicorn_init_script} stop"
+                run "#{try_sudo} #{unicorn_init_script} stop"
+                run "#{try_sudo} #{unicorn_init_script} stop"
+                run "#{try_sudo} #{unicorn_init_script} start"
         end
 end
 
