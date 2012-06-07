@@ -9,4 +9,20 @@ module ApplicationHelper
     link_to(name, '#', :class => "add_fields", "data-id" => id, "data-fields" => fields.gsub("\n", ""))
   end
   
+  def filter_url(params, *filter_args)
+    params = params
+    filter_args = filter_args.first
+    
+    if params[:search].present?
+      params[:search].merge!(filter_args)
+    else
+      params.merge!(:search => filter_args)
+    end
+    
+    url_for(params)
+  end
+  
+  def boolean_buttler(params, *filter_args)
+  end
+  
 end
