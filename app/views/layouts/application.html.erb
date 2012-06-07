@@ -2,14 +2,16 @@
 <html>
   <head>
     <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
-    <%= stylesheet_link_tag "reset" %>
     <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag "bootstrap" %>
     <%= stylesheet_link_tag "jquery_ui" %>
     <%= stylesheet_link_tag "icons" %>
     <%= stylesheet_link_tag "widgets" %>
     <%= stylesheet_link_tag "utopian-menus" %>
     <%= stylesheet_link_tag "qtip" %>
     <%= javascript_include_tag :defaults %>
+    <%= javascript_include_tag "private_pub.js" %>
+    <%= javascript_include_tag "bootstrap.js"%>
     <%= javascript_include_tag "jquery.ui.datepicker-de.js" %>
     <%= javascript_include_tag "qtip" %>
     
@@ -17,24 +19,31 @@
     <%= yield(:head) %>
   </head>
   <body>
-    <section id="pageContainer" class="clearfix">
-      <header id="containerHeader" class="clearfix">
-        <nav id="applicationNavigation" class="floatLeft">
-          <ul id="utopian-navigation" class="horizontal white">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          
+          <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+          <!-- Be sure to leave the brand out there if you want it shown -->
+          <a class="brand" href="<%= root_path %>">Fraefel App</a>
+          
+          <!-- Everything you want hidden at 940px or less, place within here -->
+          <div class="nav-collapse">
             <% if current_user %>
-              
-              <li><%= link_to("Logout: #{current_user.username}", logout_path) %></li>
-              
-              <% if permitted_to? :index, :microsoft_databases %>
-                <li><%= link_to("Datenbanken", microsoft_databases_path) %></li>
-              <% end %>
-              
-              <li><%= link_to("Dashboard", dashboard_path()) %></li>
-              
-              <% if permitted_to? :index, :purchase_orders %>
+              <ul class="nav">
+                <li class="">
+                  <a href="<%= dashboard_path() %>"><i class="icon-home icon-white"></i> Dashboard</a>
+                </li>
+                <li class="divider-vertical"></li>
                 <li class="dropdown">
-                  <%= link_to("Versand", purchase_orders_path) %>
-                  <ul>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-road icon-white"></i> Versand <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
                     <% if permitted_to? :index, :purchase_orders %>
                       <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
                     <% end %>
@@ -53,44 +62,90 @@
                     <li><%= link_to("Terminverschiebungen", time_shiftings_path) %></li>
                   </ul>
                 </li>
-              <% end %>
-              
-              <% if permitted_to? :index, :articles %>
-                <li><%= link_to("Inventar", articles_path) %></li>
-              <% end %>
-              
-              <% if permitted_to? :import, :baan_imports %>
-                <li><%= link_to("Import-Wizzard", baan_imports_path) %></li>
-              <% end %>
-              
-              <% if permitted_to? :index, :users %>
-                <li class="dropdown">
-                  <%= link_to("Verwaltung", users_path) %>
-                  <ul>
-                    <li><%= link_to("Abteilungen", departments_path) %></li>
-                    <li><%= link_to("Verschiebungsgründe", shifting_reasons_path) %></li>
-                    <li><%= link_to("Benutzer", users_path) %></li>
-                    <li><%= link_to("Kategorie", categories_path) %></li>
-                    <li><%= link_to("Status", statuses_path) %></li>
-                  </ul>
+                <li class="divider-vertical"></li>
+                <% if permitted_to? :index, :articles %>
+                  <li class="">
+                    <a href="<%= articles_path %>"><i class="icon-th icon-white"></i> Inventar</a>
+                  </li>
+                  <li class="divider-vertical"></li>
+                <% end %>
+                <% if permitted_to? :import, :baan_imports %>
+                  <li class="">
+                    <a href="<%= baan_imports_path %>"><i class="icon-upload icon-white"></i> Import Wizzard</a>
+                  </li>
+                  <li class="divider-vertical"></li>
+                <% end %>
+                <% if permitted_to? :index, :users %>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench icon-white"></i> Verwaltung <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to("Abteilungen", departments_path) %></li>
+                      <li><%= link_to("Verschiebungsgründe", shifting_reasons_path) %></li>
+                      <li><%= link_to("Benutzer", users_path) %></li>
+                      <li><%= link_to("Kategorie", categories_path) %></li>
+                      <li><%= link_to("Status", statuses_path) %></li>
+                    </ul>
+                  </li>
+                <% end %>
+              </ul>
+              <ul class="nav pull-right">
+                <li class="divider-vertical"></li>
+                <li class="">
+                  <a href="<%= logout_path() %>"><i class="icon-off icon-white"></i> Abmelden</a>
                 </li>
-              <% end %>
-              
-              
-            <% else %>
-              <li><%= link_to("Login", login_path) %></li>
+              </ul>
             <% end %>
-          </ul>
-        </nav>
+            <!-- .nav, .navbar-search, .navbar-form, etc -->
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+    <section id="pageContainer" class="clearfix">
+      <header id="containerHeader" class="clearfix">
         <%= image_tag("logo.gif", :class => "floatRight", :id => "logo") %>
       </header>
       <section id="yieldContent">
+        <% if Resque::Worker.all.size == 0 %>
+          <div class="alert alert-error">
+            :::ACHTUNG::: ZUR ZEIT KÖNNEN KEINE NEUE IMPORTS DURCHGEFÜHRT ODER VK GELÖSCHT WERDEN
+          </div>
+        <% end %>
         <% flash.each do |name, msg| %>
           <%= content_tag :div, msg, :id => "flash_#{name}" %>
         <% end %>
+        
+        <% if current_user && current_user.pdf_reports.present? %>
+        
+          <% current_user.pdf_reports.order("created_at DESC").limit(1).each do |pdf_report| %>
+            <div id="flash_notice" data-id="<%= pdf_report.id %>">
+              <p>Dein PDF wurde generiert. Klicke <a href="<%= pdf_report_path(pdf_report) %>">hier</a> um es zu speichern.</p>
+              <p><%= link_to("Lösche Nachricht", pdf_report_path(pdf_report), :method => :delete, :remote => true) %></p>
+            </div>
+          <% end %>
+        <% end %>
+        
         <%= content_tag :h1, yield(:title) if show_title? %>
         <%= yield %>
       </section>
     </section>
+    <div class="navbar navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav">
+            <li>
+              <%= link_to "http://rubyonrails.org/" do %>
+                Fraefel App - A ruby on Rails application
+              <% end %>
+            </li>
+            <li>
+              <a href="#" data-toggle="scroll-top">Scroll Top</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
   </body>
 </html>

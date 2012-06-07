@@ -12,9 +12,13 @@ class PurchasePosition < ActiveRecord::Base
   has_many :purchase_position_time_shifting_assignments
   has_many :time_shiftings, :class_name => "TimeShifting", :through => :purchase_position_time_shifting_assignments
   
+  has_many :delivery_dates, :as => :dateable
+  
   after_save :update_purchase_order_date
   
   scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")
+  
+  # has_paper_trail
   
   def available_quantity
     self.quantity.to_i - self.pallet_purchase_position_assignments.sum("quantity")
@@ -90,19 +94,29 @@ class PurchasePosition < ActiveRecord::Base
       purchase_position_attributes.merge!(:net_price => baan_raw_data.attributes["baan_40"])
       purchase_position_attributes.merge!(:stock_status => baan_raw_data.attributes["baan_78"].to_i)
       purchase_position_attributes.merge!(:production_status => baan_raw_data.attributes["baan_79"].to_i)
+      purchase_position_attributes.merge!(:picked_up => baan_raw_data.attributes["baan_84"])
       
       purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
       if purchase_position.new_record?
         purchase_position.save
+        purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
       else
         purchase_position_attributes.merge!(:id => purchase_position.id)
         unless PurchasePosition.select(purchase_position_attributes.keys).where(:id => purchase_position.id).first.attributes == purchase_position_attributes
           # update logic comes here...
           purchase_position_attributes.delete(:id)
           purchase_position.update_attributes(purchase_position_attributes)
+          if purchase_position.delivery_date != purchase_position.delivery_dates.last.try(:date_of_delivery)
+            purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
+          end
         end
       end
-      
+      # Set picked_up true on purchase_order if children are picked_up
+      if purchase_position.purchase_order.present?
+        if purchase_position.purchase_order.purchase_positions.collect(&:picked_up).count {|x| x == true} == purchase_position.purchase_order.purchase_positions.collect(&:picked_up).size
+          purchase_position.purchase_order.update_attribute("picked_up", true)
+        end
+      end
     end
     ab = Time.now
     puts (ab - ag).to_s

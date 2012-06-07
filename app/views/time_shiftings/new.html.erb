@@ -1,36 +1,41 @@
-<section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Erfasse neue Terminverschiebung</h4>
-      <a href="#" class="header_link as_text" data-show="div[data-step='5']">
-        Abteilung
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='4']">
-        Artikel Codes
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='3']">
-        Grund
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='2']">
-        VK-Pos
-      </a>
-      <a href="#" class="header_link as_text active_tab" data-show="div[data-step='1']">
-        VK-Auftrag
-      </a>
-    </header>
-    <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <%= render 'form' %>
-      </div>
-    </section>
-</section>
+<ul class="breadcrumb">
+  <li><a href="<%= time_shiftings_path %>">Terminverschiebungen</a> <span class="divider">/</span></li>
+  <li class="active">Neue Terminverschiebung</li>
+</ul>
+
+<div class="page-header">
+  <h1>Erfasse neue Terminverschiebung</h1>
+</div>
+
+<% if @time_shifting.errors.present? %>
+  <div class="alert alert-block alert-error">
+    <h4 class="alert-heading">Error!</h4>
+    <p>
+      Damit eine Verschiebung erfasst werden kann müssen folgende Schritte durchgeführt worden sein. Vor der Erfassung bitte überprüfen.
+    </p>
+    <ol>
+      <li>Wurde der Grund der Verschiebung gewählt?</li>
+      <li>Wurde die Abteilung gewählt?</li>
+    </ol>
+  </div>
+<% end %>
+
+<div style="margin-bottom: 18px;" class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#tab1">VK-Auftrag</a></li>
+    <% if @purchase_order.present? %>
+      <li class=""><a data-toggle="tab" href="#tab2">VK-Pos</a></li>
+      <li class=""><a data-toggle="tab" href="#tab3">Grund</a></li>
+      <li class=""><a data-toggle="tab" href="#tab4">Beschaffung</a></li>
+      <li class=""><a data-toggle="tab" href="#tab5">Abteilung</a></li>
+    <% end %>
+  </ul>
+    <%= render 'form' %>
+</div>
 
 <script type="text/javascript" charset="utf-8">
-  $('a[data-show^=]').click(function(event) {
-    var divToggle = $(this).attr("data-show");
-    $('a[data-show^=]').removeClass("active_tab");
-    $("header a[data-show=" + "'" + divToggle + "'" + "]").addClass("active_tab");
-    $('div[data-step^=]').hide();
-    $(divToggle).show();
+  $('a[data-toggle="tab-changer"]').click(function(event) {
     event.preventDefault();
+    $('.nav-tabs a[href="' + $(this).attr("href") + '"]').tab("show")
   });
 </script>

@@ -107,7 +107,11 @@ $(document).ready(function(){
     });
     return false;
   });
-
+  
+  $('body').on('click', 'a[data-toggle="scroll-top"]', function (e) {
+    e.preventDefault();
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+  });
   
   /*
   if ($(".section.endless")) {

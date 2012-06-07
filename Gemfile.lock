@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    Ascii85 (1.0.1)
     RedCloth (4.2.9)
     abstract (1.0.0)
     actionmailer (3.0.9)
@@ -42,18 +43,39 @@ GEM
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
     cocaine (0.2.1)
+    cookiejar (0.3.0)
+    daemons (1.1.8)
     declarative_authorization (0.5.5)
     dummy (0.9.6)
     dummy_data (0.9.6)
       dummy (>= 0.9.1)
       rails (>= 3.0.0)
+    em-http-request (1.0.2)
+      addressable (>= 2.2.3)
+      cookiejar
+      em-socksify
+      eventmachine (>= 1.0.0.beta.4)
+      http_parser.rb (>= 0.5.3)
+    em-socksify (0.2.0)
+      eventmachine (>= 1.0.0.beta.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    eventmachine (1.0.0.beta.4)
     exception_notification (2.6.1)
       actionmailer (>= 3.0.4)
     fastercsv (1.5.4)
+    faye (0.8.2)
+      cookiejar (>= 0.3.0)
+      em-http-request (>= 0.3.0)
+      eventmachine (>= 0.12.0)
+      faye-websocket (>= 0.4.0)
+      rack (>= 1.0.0)
+      yajl-ruby (>= 1.0.0)
+    faye-websocket (0.4.5)
+      eventmachine (>= 0.12.0)
     highline (1.6.12)
     hirb (0.6.2)
+    http_parser.rb (0.5.3)
     i18n (0.5.0)
     jquery-rails (1.0.19)
       railties (~> 3.0)
@@ -101,7 +123,15 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (>= 0.0.2)
       mime-types
+    pdf-reader (1.1.1)
+      Ascii85 (~> 1.0.0)
+      ruby-rc4
     polyglot (0.3.3)
+    prawn (0.12.0)
+      pdf-reader (>= 0.9.0)
+      ttfunk (~> 1.0.2)
+    private_pub (1.0.1)
+      faye
     rabl (0.6.11)
       activesupport (>= 2.3.14)
       multi_json (~> 1.0)
@@ -138,6 +168,7 @@ GEM
       vegas (~> 0.1.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    ruby-rc4 (0.1.5)
     ruby_parser (2.3.1)
       sexp_processor (~> 3.0)
     sexp_processor (3.2.0)
@@ -147,11 +178,16 @@ GEM
     sinatra (1.2.8)
       rack (~> 1.1)
       tilt (>= 1.2.2, < 2.0)
+    thin (1.3.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.14.6)
     tilt (1.3.3)
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
+    ttfunk (1.0.3)
     tzinfo (0.3.33)
     unicorn (4.3.1)
       kgio (~> 2.6)
@@ -160,6 +196,7 @@ GEM
     vegas (0.1.11)
       rack (>= 1.0.0)
     wicked_pdf (0.7.9)
+    yajl-ruby (1.1.0)
 
 PLATFORMS
   ruby
@@ -184,11 +221,14 @@ DEPENDENCIES
   nokogiri
   paper_trail (~> 2)
   paperclip
+  prawn
+  private_pub
   rabl
   rails (= 3.0.9)
   resque
   rest-client
   ruby_parser
   simple_form
+  thin
   unicorn
   wicked_pdf

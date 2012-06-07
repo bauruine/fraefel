@@ -1,5 +1,12 @@
 <tr class="purchase_order">
-  <td><%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %></td>
+  <td>
+    <% if purchase_order.priority_level == 0 %>
+      <i class="icon-asterisk"></i>
+    <% elsif purchase_order.priority_level > 1 %>
+      <i class="icon-fire"></i>
+    <% end %>
+    <%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %>
+  </td>
   <td><%= purchase_order.stock_status %> / <%= purchase_order.calculation.try(:total_purchase_positions) %></td>
   <td><%= purchase_order.calculation.try(:total_pallets) %></td>
   <td><%= purchase_order.purchase_positions.try(:first).try(:consignee_full) %></td>

@@ -11,3 +11,5 @@ public/csv/
 public/images/.DS_Store
 public/javascripts/.DS_Store
 .DS_Store
+*.pdf
+public/pdfs/

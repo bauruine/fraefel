@@ -1,17 +1,25 @@
 <div data-type="modal" style="display:none;">
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
-  <%= link_to("Print", print_pallets_purchase_order_path(@purchase_order, :format => :pdf), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <% if permitted_to? :edit, :purchase_orders %>
-    <%= link_to("Edit", edit_purchase_order_path(@purchase_order), {"data-role" => "edit_remote", :class => "floatRight no_text_decoration blue_link_button m-r_5px"}) %>
-  <% end %>
-</header>
+<div class="page-header">
+    <h1 class="pull-left">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
+    <div class="btn-toolbar pull-right">
+      <% if permitted_to? :edit, :purchase_orders %>
+        <div class="btn-group">
+          <a class="btn btn-primary" href="<%= edit_purchase_order_path(@purchase_order) %>" data-role="edit_remote"><i class="icon-plus-sign icon-white"></i> Edit</a>
+        </div>
+      <% end %>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= print_pallets_purchase_order_path(@purchase_order, :format => :pdf) %>"><i class="icon-print icon-white"></i> PDF</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+</div>
 
-<ul class="ul_summary">
-  <li class="summary clearfix"><p class="floatLeft bold title">Empfänger:</p><p class="floatLeft"><%= @purchase_order.purchase_positions.first.consignee_full.present? ? @purchase_order.purchase_positions.first.consignee_full : @purchase_order.customer.company %></p></li>
-</ul>
+<dl class="dl-horizontal">
+  <dt>Empfänger:</dt>
+  <dd><%= @purchase_order.purchase_positions.first.consignee_full.present? ? @purchase_order.purchase_positions.first.consignee_full : @purchase_order.customer.company %></dd>
+</dl>
 
 <% if @purchase_positions.present? %>
   <section class="filter_box">
@@ -74,7 +82,11 @@
                 <td></td>
                 <td></td>
                 <td class="align-center"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palett NR...") %></td>
-                <td class="align-center"><%= submit_tag "Hinzufügen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <td class="align-center">
+                  <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">
+                    Hinzufügen
+                  </button>
+                </td>
               </tr>
             <% end %>
           </tfoot>
@@ -170,7 +182,11 @@
                 <td></td>
                 <td></td>
                 <td class="align-center"></td>
-                <td class="align-center"><%= submit_tag "Entfernen", :id => "submit", :name => "submit", :class => "form_submit", :disabled => false, :disable_with => "Please wait..." %></td>
+                <td class="align-center">
+                  <button class="btn btn-warning" type="submit" data-disable-with="Please wait...">
+                    Entfernen
+                  </button>
+                </td>
               </tr>
             <% end %>
           </tfoot>

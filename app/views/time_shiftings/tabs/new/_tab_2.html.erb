@@ -1,0 +1,57 @@
+<fieldset>
+  <legend>Schritt 2 <small>Betroffene VK-Positionen</small></legend>
+  <table class="margin_bottom_big" style="">
+    <thead>
+      <tr>
+        <th>Versand</th>
+        <th>Tour</th>
+        <th>Position</th>
+        <th>Artikel</th>
+        <th>stk.</th>
+        <th>Bezeichnung</th>
+        <th>Produktlinie</th>
+        <th>Artikelgruppe</th>
+        <th>Lager Ort</th>
+        <th>Pos. Anhängen?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |p_p_t_s_a_form| %>
+        <tr>
+          <td><%= p_p_t_s_a_form.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          <td><%= @purchase_order.first.shipping_route.name %></td>
+          <td><%= p_p_t_s_a_form.object.purchase_position.baan_id %></td>
+          <td><%= p_p_t_s_a_form.object.purchase_position.article_number %></td>
+          <td><%= p_p_t_s_a_form.object.purchase_position.quantity %></td>
+          <td><%= p_p_t_s_a_form.object.purchase_position.article %></td>
+          <td><%= p_p_t_s_a_form.object.purchase_position.product_line %></td>
+          <td><%= p_p_t_s_a_form.object.purchase_position.commodity_code.content %></td>
+          <td><%= p_p_t_s_a_form.object.purchase_position.storage_location %></td>
+          <td>
+            <%= p_p_t_s_a_form.input(:purchase_position_id, :as => :hidden, :label => false) %>
+            <%= p_p_t_s_a_form.input :considered, :as => :select, :label => false, :include_blank => false, :selected => false %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <% 10.times do %>
+          <td></td>
+        <% end %>
+      </tr>
+    </tfoot>
+  </table>
+  <hr />
+  <div class="form-actions">
+    <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+      <i class="icon-remove-circle icon-white"></i> Abbrechen
+    </a>
+    <a href="#tab1" data-toggle="tab-changer" class="btn">
+      <i class="icon-arrow-left"></i> Zurück
+    </a>
+    <a href="#tab3" data-toggle="tab-changer" class="btn">
+      Weiter <i class="icon-arrow-right"></i>
+    </a>
+  </div>
+</fieldset>

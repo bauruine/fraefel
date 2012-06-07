@@ -7,14 +7,14 @@
   <%= render 'article_position_fields', :f => builder %>
 <% end %>
 
-<%= f.input :purchase_positions_collection, :as => :string, :label => "Betroffene VK-Pos", :hint => "Lorem..." %>
-<%#= f.input :order_number, :hint => "Bestellnummer" %>
-<%#= f.input :confirmed_date, :as => :string %>
+<%= f.input :purchase_positions_collection, :as => :string, :label => "Betroffene VK-Pos", :hint => "Trage die Betroffenen VK-Positionen ein. Alle möglichen VK-Pos sind in der Tabelle oben ersichtlich." %>
+<%= f.input :order_number, :hint => "Bestellnummer" %>
+<%= f.input :confirmed_date, :as => :string, :input_html => { :class => 'date_picker' } %>
 
   <fieldset>
     <legend>Artikel Code Kommentar</legend>
     <%= f.simple_fields_for :comments do |builder| %>
-      <%= builder.input :content, :as => :string %>
+      <%= builder.input :content, :as => :string, :label => false, :hint => "Hast du Informationen zu diesem Artikel? Trage diese hier ein." %>
     <% end %>
   </fieldset>
 </fieldset>

@@ -34,6 +34,16 @@
   </section>
 </section>
 
+<blockquote>
+  <p>
+    &#x2605; VK-Pos mit aktiver Terminverschiebung
+  </p>
+  <p>
+    &#x26a0; Verschobene VK-Pos
+  </p>
+</blockquote>
+
+
 <% Address.where(:category_id => 10).where("purchase_positions.id" => @purchase_positions.collect(&:id)).includes(:purchase_orders => :purchase_positions).order("purchase_orders.delivery_date ASC").each do |ordered_address| %>
   <section class="filter_box">
     <header class="filter_box_header">
@@ -60,7 +70,14 @@
               <tr>
                 <td id="column_1"><%= p_o_p.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                 <td id="column_2"><%= purchase_order.shipping_route.name %></td>
-                <td id="column_3"><%= "#{purchase_order.baan_id}-#{p_o_p.position}" %></td>
+                <td id="column_3">
+                  <% if p_o_p.priority_level == 0 %>
+                    &#x2605;
+                  <% elsif p_o_p.priority_level > 1 %>
+                    &#x26a0;
+                  <% end %>
+                  <%= "#{purchase_order.baan_id}-#{p_o_p.position}" %>
+                </td>
                 <td id="column_4"><%= p_o_p.article_number %></td>
                 <td id="column_5"><%= p_o_p.quantity %></td>
                 <td id="column_6"><%= p_o_p.article %></td>

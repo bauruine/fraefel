@@ -1,0 +1,13 @@
+<div class="page-header">
+    <h1 class="pull-left">Allgemein</h1>
+    <div class="clear"></div>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>VK-Auftrag</dt>
+  <dd><%= @purchase_order.first.baan_id %></dd>
+  <dt>Abteilung:</dt>
+  <dd><%= @time_shifting.first.department_time_shifting_assignments.last.department.title %></dd>
+  <dt>Grund</dt>
+  <dd><%= @time_shifting.first.shifting_reasons.collect(&:title) %></dd>
+</dl>

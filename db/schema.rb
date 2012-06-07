@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120513151824) do
+ActiveRecord::Schema.define(:version => 20120605225511) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -213,6 +213,9 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.string   "baan_81"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "baan_82"
+    t.string   "baan_83"
+    t.string   "baan_84"
   end
 
   create_table "calculations", :force => true do |t|
@@ -288,6 +291,16 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.string   "baan_id"
   end
 
+  create_table "delivery_dates", :force => true do |t|
+    t.date     "date_of_delivery"
+    t.integer  "dateable_id"
+    t.string   "dateable_type"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "delivery_rejections", :force => true do |t|
     t.integer  "customer_id"
     t.integer  "referee_id"
@@ -307,6 +320,16 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.integer  "shifting_reason_id"
     t.integer  "created_by"
     t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "department_time_shifting_assignments", :force => true do |t|
+    t.integer  "time_shifting_id"
+    t.integer  "department_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "completed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -398,6 +421,17 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.integer  "delivery_rejection_id"
   end
 
+  create_table "pdf_reports", :force => true do |t|
+    t.string   "type"
+    t.integer  "user_id"
+    t.string   "searched_for"
+    t.string   "report_file_name"
+    t.string   "report_file_path"
+    t.boolean  "saved_local"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "purchase_order_address_assignments", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "address_id"
@@ -432,6 +466,8 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.float    "warehousing_completed",   :default => 0.0
     t.integer  "warehouse_number",        :default => 0
     t.integer  "category_id"
+    t.integer  "priority_level",          :default => 1
+    t.boolean  "picked_up",               :default => false
   end
 
   create_table "purchase_position_time_shifting_assignments", :force => true do |t|
@@ -472,6 +508,8 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.decimal  "value_discount",    :precision => 12, :scale => 2
     t.integer  "production_status",                                :default => 0
     t.integer  "stock_status",                                     :default => 0
+    t.integer  "priority_level",                                   :default => 1
+    t.boolean  "picked_up",                                        :default => false
   end
 
   create_table "referees", :force => true do |t|
@@ -554,7 +592,7 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
 
   create_table "time_shiftings", :force => true do |t|
     t.boolean  "simple"
-    t.integer  "purchase_order_id"
+    t.string   "purchase_order_id"
     t.date     "delivery_date"
     t.integer  "created_by"
     t.integer  "updated_by"
@@ -567,7 +605,7 @@ ActiveRecord::Schema.define(:version => 20120513151824) do
     t.date     "lt_date"
     t.boolean  "change_we_date"
     t.boolean  "change_lt_date"
-    t.boolean  "closed"
+    t.boolean  "closed",                :default => false
   end
 
   create_table "transport_issues", :force => true do |t|

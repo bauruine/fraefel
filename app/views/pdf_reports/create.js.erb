@@ -1,0 +1,2 @@
+$("section#yieldContent").prepend("<%= escape_javascript(render('/shared/generating_pdf', :pdf_report => @pdf_report)) %>");
+$("section#yieldContent").prepend("<%= escape_javascript(render('/shared/pdf_generation_complete', :pdf_report => @pdf_report)) %>");

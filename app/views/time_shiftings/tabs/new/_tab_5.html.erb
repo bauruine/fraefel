@@ -1,0 +1,38 @@
+<% if @time_shifting.errors.empty? %>
+  <div class="alert alert-block alert-info">
+    <h4 class="alert-heading">Achtung!</h4>
+    <p>
+      Damit eine Verschiebung erfasst werden kann müssen folgende Schritte durchgeführt worden sein. Vor der Erfassung bitte überprüfen.
+    </p>
+    <ol>
+      <li>Wurden alle benötigten VK-Pos hinzugefügt?</li>
+      <li>Wurde der Grund der Verschiebung gewählt?</li>
+      <li>Wurde die Abteilung gewählt?</li>
+    </ol>
+  </div>
+<% end %>
+
+<fieldset>
+  <legend>Schritt 5 <small>Abteilung wählen</small></legend>
+  <%= f.input :department_id, :collection => @departments, :label => "Abteilung", :hint => "Wähle die nächste betroffene Abteilung" %>
+  
+  <fieldset>
+    <legend>Bemerkung</legend>
+    <%= f.simple_fields_for :comments do |comment_form| %>
+      <%= comment_form.input :content, :as => :text, :label => false, :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+    <% end %>
+  </fieldset>
+  <hr />
+  <div class="form-actions">
+    <a href="<%= time_shiftings_path() %>" class="btn btn-warning">
+      <i class="icon-remove-circle icon-white"></i> Abbrechen
+    </a>
+    <a href="#tab4" data-toggle="tab-changer" class="btn">
+      <i class="icon-arrow-left"></i> Zurück
+    </a>
+    <button class="btn btn-primary" type="submit">
+      <i class="icon-ok-circle icon-white"></i> Verschiebung erfassen
+    </button>
+  </div>
+  
+</fieldset>

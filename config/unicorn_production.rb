@@ -10,7 +10,7 @@ worker_processes (rails_env == 'production' ? 16 : 4)
 preload_app true
 
 # Restart any workers that haven't responded in 30 seconds
-timeout 30
+timeout 900
 
 # change this for other apps
 approot = '/var/www/fraefel/app/current/'
