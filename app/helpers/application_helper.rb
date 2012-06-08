@@ -24,5 +24,14 @@ module ApplicationHelper
   
   def boolean_buttler(params, *filter_args)
   end
-  
+
+	# returns "active" if in @search
+	def active_department?(requested_department, department_id)
+		# puts requested_department + "   #{department_id}"
+		if requested_department.to_i == department_id.to_i then 
+			return "active"
+		end
+	rescue
+		return ""
+	end
 end
