@@ -17,7 +17,6 @@
         <thead>
           <tr>
             <th>Versand</th>
-            <th>Tour</th>
             <th>VK-Pos</th>
             <th>Artikel</th>
             <th>stk.</th>
@@ -30,7 +29,6 @@
           <% time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).each do |purchase_position| %>
             <tr>
               <td id="column_1"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-              <td id="column_2"><%= purchase_position.purchase_order.shipping_route.name %></td>
               <td id="column_3"><%= purchase_position.baan_id %></td>
               <td id="column_4"><%= purchase_position.article_number %></td>
               <td id="column_5"><%= purchase_position.quantity %></td>
@@ -41,6 +39,38 @@
           <% end %>
         </tbody>
       </table>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Artikel Code</th>
+            <th>benötigt von</th>
+            <th>Bemerkung</th>
+            <th>Artikel Bestell Nr.</th>
+            <th>Artikel WE</th>
+            <th>Erfasser</th>
+            <th>Erfast am</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if time_shifting.article_positions.empty? %>
+            <tr><td colspan="7">Es wurden keine Artikel Codes angefügt.</td></tr>
+          <% else %>
+            <% time_shifting.article_positions.order("created_at DESC").each do |article_position| %>
+              <tr>
+                <td><%= article_position.baan_id %></td>
+                <td><%= ArticlePositionTimeShiftingAssignment.where(:article_position_id => article_position.id, :time_shifting_id => time_shifting.id).first.purchase_positions_collection %></td>
+                <td><%= ArticlePositionTimeShiftingAssignment.where(:article_position_id => article_position.id, :time_shifting_id => time_shifting.id).first.comments.first.try(:content) %></td>
+                <td></td>
+                <td></td>
+                <td><%= article_position.creator.full_name %></td>
+                <td><%= article_position.created_at.to_formatted_s(:swiss_date) %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      
     </section>
   </section>
 <% end %>
