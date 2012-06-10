@@ -32,6 +32,8 @@ class TimeShiftingsController < ApplicationController
     @search = TimeShifting.includes(:purchase_order).order("time_shiftings.lt_date ASC, time_shiftings.purchase_order_id ASC").search(params[:search] || {:closed_equals => "false"})
     @time_shiftings = @search.relation
     @departments = Department.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").where("time_shiftings.id IN(?)", @time_shiftings.collect(&:id)).order("departments.title ASC")
+		@requested_department_id = params["search"]["department_id_equals"] if params[:search]
+
     
     respond_to do |format|
       format.html
