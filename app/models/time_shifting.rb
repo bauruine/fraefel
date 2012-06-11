@@ -36,10 +36,14 @@ class TimeShifting < ActiveRecord::Base
     where(:closed => false).each do |ts|
       @considered = ts.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments)
       @production_completed = ts.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).where("purchase_positions.production_status = 1").includes(:purchase_position_time_shifting_assignments)
+      
       if @considered.count == @production_completed.count
         ts.update_attribute("closed", true)
         ts.comments.create(:content => "Closed by system", :created_by => User.first.id)
         @considered.update_all(:priority_level => 2)
+        if ts.purchase_order.present?
+          ts.purchase_order.update_attribute("priority_level", 2)
+        end
         if ts.lt_date.present?
           @considered.each do |pu_po|
             pu_po.delivery_dates.last.try(:date_of_delivery) != pu_po.delivery_date.to_date ? pu_po.delivery_dates.create(:date_of_delivery => ts.lt_date) : nil
@@ -49,7 +53,9 @@ class TimeShifting < ActiveRecord::Base
             ts.purchase_order.update_attribute("delivery_date", ts.lt_date)
           end
         end
+        
       end
+      
     end
   end
   
