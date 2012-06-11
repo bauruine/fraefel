@@ -10,3 +10,7 @@
 .label-11, .badge-11 {
     background-color: #468847;
 }
+
+.label a, .badge a {
+  color: #ffffff;
+}

@@ -1,6 +1,11 @@
 <div data-type="modal" style="display:none;">
 </div>
 
+<ul class="breadcrumb">
+  <li><a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span></li>
+  <li class="active"><%= @purchase_order.id %></li>
+</ul>
+
 <div class="page-header">
     <h1 class="pull-left">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
     <div class="btn-toolbar pull-right">
@@ -47,11 +52,11 @@
           <tbody>
             <% @purchase_positions.each do |purchase_position| %>
               <% if purchase_position.pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
-                <tr class="status<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
+                <tr>
                     <% if permitted_to? :edit, :purchase_positions %>
-                      <td><%= link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></td>
+                      <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></span></td>
                     <% else %>
-                      <td><%= purchase_position.position %></td>
+                      <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= purchase_position.position %></span></td>
                     <% end %>
                     <td><%= purchase_position.article_number %></td>
                     <td><%= purchase_position.article %></td>
@@ -123,16 +128,14 @@
     </header>
     <section class="filter_box_content clearfix">
       <% if pallet.mixed? %>
-        <ul class="ul_summary">
-          <li class="summary clearfix">
-            <p class="floatLeft bold title">Mischpalette:</p>
-            <p class="floatLeft">
-              <% pallet.purchase_orders.each do |p_o| %>
-                <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
-              <% end %>
-            </p>
-          </li>
-        </ul>
+        <dl class="dl-horizontal">
+          <dt>Mischpalette:</dt>
+          <dd>
+            <% pallet.purchase_orders.each do |p_o| %>
+              <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
+            <% end %>
+          </dd>
+        </dl>
       <% end %>
       
       <% form_tag(remove_positions_pallet_path(pallet), {:class => "form", "data-submit_handler" => "true", :method => :delete}) do %>
@@ -152,8 +155,8 @@
           </thead>
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
-              <tr class="status<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
-                <td><%= title_for_purchase_position(purchase_position, @purchase_order) %></td>
+              <tr>
+                <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= title_for_purchase_position(purchase_position, @purchase_order) %></span></td>
                 <td><%= purchase_position.article_number %></td>
                 <td><%= purchase_position.article %></td>
                 <td><%= purchase_position.product_line %></td>

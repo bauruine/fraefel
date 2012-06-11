@@ -6,13 +6,13 @@ module PurchaseOrdersHelper
     
     if permitted_to? :remove_positions, :pallets
       if purchase_position.in_mixed_pallet?(purchase_order)
-        link_to("M-#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote")
+        link_to("Mixed-#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote")
       else
-        link_to(purchase_position.position, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote")
+        link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote")
       end
     else
       if purchase_position.in_mixed_pallet?(purchase_order)
-        "M-#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}"
+        "Mixed-#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}"
       else
         purchase_position.position
       end
