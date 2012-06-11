@@ -100,6 +100,9 @@ class PurchasePosition < ActiveRecord::Base
       if purchase_position.new_record?
         purchase_position.save
         purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
+        if purchase_position.purchase_order.delivered
+          purchase_position.purchase_order.update_attribute("delivered", false)
+        end
       else
         purchase_position_attributes.merge!(:id => purchase_position.id)
         unless PurchasePosition.select(purchase_position_attributes.keys).where(:id => purchase_position.id).first.attributes == purchase_position_attributes
