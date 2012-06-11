@@ -1,4 +1,6 @@
 class TimeShiftingsController < ApplicationController
+  before_filter :collect_departments, :only => :index
+  
   def show
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_positions = @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments)
@@ -31,7 +33,7 @@ class TimeShiftingsController < ApplicationController
   def index
     @search = TimeShifting.includes(:purchase_order).order("time_shiftings.lt_date ASC, time_shiftings.purchase_order_id ASC").search(params[:search] || {:closed_equals => "false"})
     @time_shiftings = @search.relation
-    @departments = Department.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").where("time_shiftings.id IN(?)", @time_shiftings.collect(&:id)).order("departments.title ASC")
+    
 		@requested_department_id = params["search"]["department_id_equals"] if params[:search]
 
     
@@ -139,6 +141,18 @@ class TimeShiftingsController < ApplicationController
     else
       render 'edit'
     end
+  end
+  
+  private
+  
+  def collect_departments
+    closed_condition = false
+    if params[:search].present?
+      if params[:search][:closed_equals] == "true"
+        closed_condition = true
+      end
+    end
+    @departments = Department.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").where("time_shiftings.closed = ?", closed_condition).order("departments.title ASC")
   end
   
 end
