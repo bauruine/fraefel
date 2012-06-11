@@ -32,7 +32,7 @@
         <% else %>
           <% @purchase_positions.each do |purchase_position| %>
             <tr>
-              <td><%= purchase_position.baan_id %></td>
+              <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= purchase_position.baan_id %></span></td>
               <td><%= purchase_position.article_number %></td>
               <td><%= purchase_position.article %></td>
               <td><%= purchase_position.product_line %></td>

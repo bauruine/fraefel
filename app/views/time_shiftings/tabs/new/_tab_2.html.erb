@@ -20,7 +20,7 @@
         <tr>
           <td><%= p_p_t_s_a_form.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
           <td><%= @purchase_order.first.shipping_route.name %></td>
-          <td><%= p_p_t_s_a_form.object.purchase_position.baan_id %></td>
+          <td><span class="label label-<%= p_p_t_s_a_form.object.purchase_position.production_status %><%= p_p_t_s_a_form.object.purchase_position.stock_status %>"><%= p_p_t_s_a_form.object.purchase_position.baan_id %></span></td>
           <td><%= p_p_t_s_a_form.object.purchase_position.article_number %></td>
           <td><%= p_p_t_s_a_form.object.purchase_position.quantity %></td>
           <td><%= p_p_t_s_a_form.object.purchase_position.article %></td>
