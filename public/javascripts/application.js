@@ -70,11 +70,11 @@ $(document).ready(function(){
     $('div[data-type="modal"]').dialog('open');
     return false;
   });
-  
+  /*
   if ($("form[data-tab]").size() != 0) {
     $("form:not([data-tab=filter])").hide()
   };
-  
+  */
   $('a[data-role="tab"]').click(function() {
     var warpToTab = $(this).attr("data-warp");
     var currentForm = $("form[data-tab]")

@@ -1,57 +1,12 @@
-<ul class="breadcrumb">
-  <li class="active">VK-Aufträge</li>
-</ul>
-
-<div class="page-header">
-  <h1>VK-Aufträge</h1>
-</div>
-
-<blockquote>
-  <p>
-    <i class="icon-asterisk"></i> VK-Auftrag mit aktiver Terminverschiebung
-  </p>
-  <p>
-    <i class="icon-fire"></i> Verschobener VK-Auftrag
-  </p>
-</blockquote>
-
-<section class="filter_box">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">VK-Aufträge</h4>
-    <a data-show-tooltip="true" data-role="tab" data-warp="goto" class="header_link" href="/purchase_orders?data_role=search" title="Springe zu VK-Auftrag...">
-      <span class="header_pack _14"></span>
-    </a>
-    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/purchase_orders?data_role=search" title="Zeige Filter-Optionen">
-      <span class="header_pack _283"></span>
-    </a>
-    <a href="<%= url_for(params.merge(:format => :pdf)) %>" class="header_link" data-show-tooltip="true" title="Drucke Spediliste">
-      <span class="header_pack _193"></span>
-    </a>
-  </header>
-  <section class="filter_box_content clearfix">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>VK-Auftrag</th>
-          <th>Positionen</th>
-          <th>Gebuchte Paletten</th>
-          <th>Handelspartner</th>
-          <th>Tour</th>
-          <th>Gebiet</th>
-          <th>Versand</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= render @purchase_orders %>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
-  </section>
-</section>
-
-<div data-type="modal" style="display: none;">
-    <%= form_for @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
+<div class="modal hide fade" id="filter">
+  <%= form_for @search, :html => {:class => "", :method => :get, :style => "margin: 0;"} do |f| %>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Filter Optionen</h3>
+    </div>
+    
+    <div class="modal-body">
+      
       <div class="floatLeft">
         <%= f.label(:delivered_equals, "Versendet?") %>
         <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span2"}) %>
@@ -132,20 +87,99 @@
         <%= f.select(:manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span3"}) %>
       </div>
       <div class="clear"></div>
-      <hr />
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Filter anwenden</button>
-      </div>
-    <% end %>
+      
+      
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Filtern</button>
+    </div>
+  
+  <% end %>
+</div>
+
+<div class="modal hide fade" id="goto">
+  <%= form_tag(search_for_purchase_orders_path, {:class => "form-horizontal", :method => :get, :style => "margin: 0;"}) do %>
+  
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Gehe zu VK-Auftrag</h3>
+    </div>
     
-    <%= form_tag(search_for_purchase_orders_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
-      <div class="form-element">
-        <%= label_tag(:purchase_order_id, "VK NR") %>
-        <%= text_field_tag(:purchase_order_id, nil, :class => "span2") %>
+    <div class="modal-body">
+      <div class="control-group">
+        <%= label_tag(:purchase_order_id, "VK NR", :class => "control-label") %>
+        <div class="controls">
+          <%= text_field_tag(:purchase_order_id) %>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Gehe zu</button>
+    </div>
+  
+  <% end %>
+</div>
+
+<ul class="breadcrumb">
+  <li class="active">VK-Aufträge</li>
+</ul>
+
+<div class="page-header">
+    <h1 class="pull-left">VK-Aufträge</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= url_for(params.merge(:format => :pdf)) %>"><i class="icon-print icon-white"></i> Drucke PDF</a>
       </div>
       
-      <div class="form-element clearfix">
-        <%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit floatLeft" %>
+      <div class="btn-group">
+        <button data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a data-toggle="modal" href="#goto"><i class="icon-screenshot"></i> Gehe zu</a>
+          </li>
+        </ul>
       </div>
-    <% end %>
+      
+    </div>
+    <div class="clear"></div>
 </div>
+
+<blockquote>
+  <p>
+    <i class="icon-asterisk"></i> VK-Auftrag mit aktiver Terminverschiebung
+  </p>
+  <p>
+    <i class="icon-fire"></i> Verschobener VK-Auftrag
+  </p>
+</blockquote>
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">VK-Aufträge</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>VK-Auftrag</th>
+          <th>Positionen</th>
+          <th>Gebuchte Paletten</th>
+          <th>Handelspartner</th>
+          <th>Tour</th>
+          <th>Gebiet</th>
+          <th>Versand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render @purchase_orders %>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+  </section>
+</section>

@@ -1,26 +1,89 @@
+<div class="modal hide fade" id="filter">
+  <%= form_for :search, @search, :html => {:class => "form-horizontal", :method => :get, :style => "margin: 0;"} do |f| %>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Filter Optionen</h3>
+    </div>
+    
+    <div class="modal-body">
+      
+      <div class="control-group">
+        <%= f.label :delivered_equals, "Versendet", :class => "control-label" %>
+        <div class="controls">
+          <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :country_equals, "Land", :class => "control-label" %>
+        <div class="controls">
+          <%= f.select(:country_equals, { 'Deutschland' => 'DE', 'Schweiz' => 'CH' }, :include_blank => true) %>
+        </div>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Filtern</button>
+    </div>
+  
+  <% end %>
+</div>
+
+<div class="modal hide fade" id="goto">
+  <%= form_tag(search_for_cargo_lists_path, {:class => "form-horizontal", :method => :get, :style => "margin: 0;"}) do %>
+  
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Gehe zu Versand</h3>
+    </div>
+    
+    <div class="modal-body">
+      <div class="control-group">
+        <%= label_tag(:cargo_list_id, "Versand NR", :class => "control-label") %>
+        <div class="controls">
+          <%= text_field_tag(:cargo_list_id) %>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Gehe zu</button>
+    </div>
+  
+  <% end %>
+</div>
+
 <ul class="breadcrumb">
   <li class="active">Versand Listen</li>
 </ul>
 
 <div class="page-header">
-  <h1>Versand Listen</h1>
+    <h1 class="pull-left">Versand Listen</h1>
+    <div class="btn-toolbar pull-right">
+      <% if permitted_to? :new, :cargo_lists %>
+        <div class="btn-group">
+          <a class="btn btn-primary" href="<%= new_cargo_list_path() %>"><i class="icon-plus-sign icon-white"></i> Neuer Versand</a>
+        </div>
+      <% end %>
+      <div class="btn-group">
+        <button data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a data-toggle="modal" href="#goto"><i class="icon-screenshot"></i> Gehe zu</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="clear"></div>
 </div>
 
 <% if @cargo_lists.present? %>
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft">&nbsp;</h4>
-      <a data-show-tooltip="true" data-role="tab" data-warp="goto" class="header_link" href="/cargo_lists?data_role=tab" title="Gehe zum Versand...">
-        <span class="header_pack _14"></span>
-      </a>
-      <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/cargo_lists?data_role=tab" title="Zeige Filter-Optionen">
-        <span class="header_pack _283"></span>
-      </a>
-      <% if permitted_to? :new, :cargo_lists %>
-        <a data-show-tooltip="true" class="header_link" href="<%= new_cargo_list_path() %>" title="Erfasse neuen Versand">
-          <span class="header_pack _74"></span>
-        </a>
-      <% end %>
     </header>
     <section class="filter_box_content clearfix">
       <table>
@@ -59,36 +122,6 @@
       </table>
     </section>
   </section>
-  
-  <div data-type="modal" style="display: none;">
-    <div class="box-padder">
-      <% form_for :search, @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
-        <div class="form-element">
-          <%= f.label :delivered_equals, "Versendet" %>
-          <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
-        </div>
-        
-        <div class="form-element">
-          <%= f.label :country_equals, "Land" %>
-          <%= f.select(:country_equals, { 'Deutschland' => 'DE', 'Schweiz' => 'CH' }, :include_blank => true) %>
-        </div>
-
-        <div class="form-element">
-          <%= f.submit "Filtern", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit" %>
-        </div>
-      <% end %>
-  
-      <% form_tag(search_for_cargo_lists_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
-        <div class="form-element">
-          <%= label_tag(:cargo_list_id, "Versand NR") %>
-          <%= text_field_tag(:cargo_list_id) %>
-        </div>
-        <div class="form-element">
-          <%= submit_tag "Gehe zu Versand", :disable_with => 'Filterning...', :name => nil, :class => "blueSubmit" %>
-        </div>
-      <% end %>
-    </div>
-  </div>
   
 <% else %>
   <div id="flash_notice">Keine Liefer Papiere gefunden...</div>

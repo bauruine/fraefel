@@ -1,85 +1,104 @@
 <div data-type="modal2" style="display:none;"></div>
-<div data-type="modal" style="display:none;">
-  <%= form_for @search, :url => purchase_positions_path, :html => {"data-tab" => "filter", :method => :get} do |f| %>
-    <div class="floatLeft">
-      <%= f.label(:delivered_equals, "Versendet?") %>
-      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span2"}) %>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
-      <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span2" %>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
-      <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span2" %>
-    </div>
-    <div class="clear"></div>
-    <hr />
-    
-    <div class="floatLeft">
-      <%= f.label(:priority_level_equals, "Prio Stufe") %>
-      <%= f.select(:priority_level_equals, { 'TS Aktiv' => 0, 'Normal' => 1, 'Termin Verschoben' => 2 }, {:include_blank => true}, {:class => "span3"}) %>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:picked_up_equals, "Warenentnahme abg?") %>
-      <%= f.select(:picked_up_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
-    </div>
-    <hr />
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_warehousing_completed_gteq, "Einlagerung >= ?%") %>
-      <%= f.select(:purchase_order_warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span3"}) %>
-      <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_warehousing_completed_lteq, "Einlagerung <= ?%") %>
-      <%= f.select(:purchase_order_warehousing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span3"}) %>
-      <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
-    </div>
-    <div class="clear"></div>
-    <hr />
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_manufacturing_completed_gteq, "Produktion >= ?%") %>
-      <%= f.select(:purchase_order_manufacturing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span3"}) %>
-      <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_manufacturing_completed_lteq, "Produktion <= ?%") %>
-      <%= f.select(:purchase_order_manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span3"}) %>
-      <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
-    </div>
-    <div class="clear"></div>
-    <hr />
-    <div class="floatLeft">
-      <%= f.label(:stock_status_equals, "Einlagerung beendet?") %>
-      <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "span3"}) %>
-      <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Position</small>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:production_status_equals, "Produktion beendet?") %>
-      <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "span3"}) %>
-      <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Position</small>
-    </div>
-    <div class="clear"></div>
-    <hr />
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_shipping_route_id_equals, "Tour") %>
-      <%= f.collection_select(:purchase_order_shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "span2"}) %>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_warehouse_number_equals, "Versandlager") %>
-      <%= f.text_field(:purchase_order_warehouse_number_equals, :class => "span2") %>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_category_id_equals, "VK-Art") %>
-      <%= f.collection_select(:purchase_order_category_id_equals, Category.order("title ASC").where(:categorizable_type => "purchase_order"), :id, :title, {:include_blank => true}, {:class => "span2"}) %>
-    </div>
-    <div class="clear"></div>
-    <hr />
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Filter anwenden</button>
-    </div>
-  <% end %>
+
+<div class="modal hide fade" id="filter">
+  <%= form_for @search, :url => purchase_positions_path, :html => {:class => "", :method => :get, :style => "margin: 0;"} do |f| %>
   
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Filter Optionen</h3>
+    </div>
+    
+    <div class="modal-body">
+      
+      <div class="floatLeft">
+        <%= f.label(:delivered_equals, "Versendet?") %>
+        <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span2"}) %>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:delivery_date_greater_than_or_equal_to, "Von") %>
+        <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker span2" %>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:delivery_date_less_than_or_equal_to, "Bis") %>
+        <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker span2" %>
+      </div>
+      <div class="clear"></div>
+      <hr />
+
+      <div class="floatLeft">
+        <%= f.label(:priority_level_equals, "Prio Stufe") %>
+        <%= f.select(:priority_level_equals, { 'TS Aktiv' => 0, 'Normal' => 1, 'Termin Verschoben' => 2 }, {:include_blank => true}, {:class => "span3"}) %>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:picked_up_equals, "Warenentnahme abg?") %>
+        <%= f.select(:picked_up_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
+      </div>
+      <div class="clear"></div>
+      
+      <hr />
+      <div class="floatLeft">
+        <%= f.label(:purchase_order_warehousing_completed_gteq, "Einlagerung >= ?%") %>
+        <%= f.select(:purchase_order_warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span3"}) %>
+        <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:purchase_order_warehousing_completed_lteq, "Einlagerung <= ?%") %>
+        <%= f.select(:purchase_order_warehousing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span3"}) %>
+        <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
+      </div>
+      <div class="clear"></div>
+      <hr />
+      <div class="floatLeft">
+        <%= f.label(:purchase_order_manufacturing_completed_gteq, "Produktion >= ?%") %>
+        <%= f.select(:purchase_order_manufacturing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}, {:class => "span3"}) %>
+        <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:purchase_order_manufacturing_completed_lteq, "Produktion <= ?%") %>
+        <%= f.select(:purchase_order_manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}, {:class => "span3"}) %>
+        <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Auftrag</small>
+      </div>
+      <div class="clear"></div>
+      <hr />
+      <div class="floatLeft">
+        <%= f.label(:stock_status_equals, "Einlagerung beendet?") %>
+        <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "span3"}) %>
+        <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Position</small>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:production_status_equals, "Produktion beendet?") %>
+        <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {:class => "span3"}) %>
+        <small style="display: block; font-size: 10px; margin-top: 5px;">Info - Filter bezieht sich auf VK-Position</small>
+      </div>
+      <div class="clear"></div>
+      <hr />
+      <div class="floatLeft">
+        <%= f.label(:purchase_order_shipping_route_id_equals, "Tour") %>
+        <%= f.collection_select(:purchase_order_shipping_route_id_equals, ShippingRoute.order("name ASC"), :id, :name, {:include_blank => true}, {:class => "span2"}) %>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:purchase_order_warehouse_number_equals, "Versandlager") %>
+        <%= f.text_field(:purchase_order_warehouse_number_equals, :class => "span2") %>
+      </div>
+      <div class="floatLeft">
+        <%= f.label(:purchase_order_category_id_equals, "VK-Art") %>
+        <%= f.collection_select(:purchase_order_category_id_equals, Category.order("title ASC").where(:categorizable_type => "purchase_order"), :id, :title, {:include_blank => true}, {:class => "span2"}) %>
+      </div>
+      <div class="clear"></div>
+      
+    </div>
+    
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Filtern</button>
+    </div>
+  
+  <% end %>
+</div>
+
+
+
+<div data-type="modal" style="display:none;">
   <% form_tag(search_for_purchase_positions_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
     <ul class="ul_summary">
 
@@ -93,6 +112,21 @@
       </li>
     </ul>
   <% end %>
+</div>
+
+<div class="page-header">
+    <h1 class="pull-left">VK-Pos Liste</h1>
+    <div class="btn-toolbar pull-right">
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= url_for(params.merge(:format => :pdf)) %>"><i class="icon-print icon-white"></i> Drucke PDF</a>
+      </div>
+      
+      <div class="btn-group">
+        <a data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</a>
+      </div>
+      
+    </div>
+    <div class="clear"></div>
 </div>
 
 <section class="filter_box">
@@ -127,12 +161,6 @@
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">Dispoliste</h4>
-    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/purchase_orders?data_role=search" title="Zeige Filter-Optionen">
-      <span class="header_pack _283"></span>
-    </a>
-    <a href="<%= url_for(params.merge(:format => :pdf)) %>" class="header_link" data-show-tooltip="true" title="Drucke Spediliste">
-      <span class="header_pack _193"></span>
-    </a>
   </header>
   <section class="filter_box_content clearfix">
     <%#= link_to("Generiere PDF", pdf_reports_path(), :method => :post, :remote => true) %>

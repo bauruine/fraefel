@@ -14,6 +14,7 @@
     </div>
     <div class="clear"></div>
 </div>
+
 <ul class="nav nav-pills pull-right">
   <li class="<%= active_department?(@requested_department_id, nil) %>"><a href="<%= filter_url(params, :department_id_equals => "") %>">Alle Abteilungen</a></li>
   <% @departments.each do |department| %>
