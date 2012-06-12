@@ -38,7 +38,10 @@ class CargoList < ActiveRecord::Base
       self.pallets.each do |pallet|
         pallet.update_attribute(:delivered, true)
         pallet.purchase_positions.each do |p_p|
-          p_p.update_attribute(:delivered, true)
+          @delivered_p_p_quantity = PalletPurchasePositionAssignment.where(:purchase_position_id => p_p.id).where("pallets.delivered" => true).includes(:pallet).sum(:quantity)
+          if p_p.quantity == @delivered_p_p_quantity
+            p_p.update_attribute(:delivered, true)
+          end
         end
         if !pallet.purchase_positions.where("delivered = false or delivered IS NULL").present?
           
