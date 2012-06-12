@@ -1,5 +1,6 @@
 class TimeShiftingsController < ApplicationController
   before_filter :collect_departments, :only => :index
+  before_filter :collect_shifting_reasons, :only => :index
   
   def show
     @time_shifting = TimeShifting.where(:id => params[:id])
@@ -153,6 +154,16 @@ class TimeShiftingsController < ApplicationController
       end
     end
     @departments = Department.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").where("time_shiftings.closed = ?", closed_condition).order("departments.title ASC")
+  end
+  
+  def collect_shifting_reasons
+    closed_condition = false
+    if params[:search].present?
+      if params[:search][:closed_equals] == "true"
+        closed_condition = true
+      end
+    end
+    @shifting_reasons = ShiftingReason.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").where("time_shiftings.closed = ?", closed_condition).order("shifting_reasons.title ASC")
   end
   
 end

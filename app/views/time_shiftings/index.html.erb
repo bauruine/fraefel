@@ -107,6 +107,13 @@
     
     <hr />
     
+    <div class="form-element">
+      <%= f.label(:shifting_reasons_id_equals, "Abteilung") %>
+      <%= f.collection_select(:shifting_reasons_id_equals, @shifting_reasons, :id, :title, {:include_blank => true}, {:class => "span6"}) %>
+    </div>
+    
+    <hr />
+    
     <div class="form-element clearfix">
       <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
     </div>
