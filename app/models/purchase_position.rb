@@ -46,7 +46,11 @@ class PurchasePosition < ActiveRecord::Base
     @purchase_order = self.purchase_order
     @purchase_position = self
     if @purchase_order.present?
-      @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
+      if @purchase_order.time_shiftings.where(:closed => false).present? && @purchase_order.time_shiftings.where(:closed => false).where("lt_date IS NOT NULL").collect(&:lt_date).compact.present?
+        @date_for_update = @purchase_order.time_shiftings.where(:closed => false).where("lt_date IS NOT NULL").collect(&:lt_date).last
+      else
+        @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
+      end
       @purchase_order.update_attributes(:delivery_date => @date_for_update)
     end
     @purchase_position_assignment = PalletPurchasePositionAssignment.where(:purchase_position_id => self.id)
@@ -119,6 +123,28 @@ class PurchasePosition < ActiveRecord::Base
         if purchase_position.purchase_order.purchase_positions.collect(&:picked_up).count {|x| x == true} == purchase_position.purchase_order.purchase_positions.collect(&:picked_up).size
           purchase_position.purchase_order.update_attribute("picked_up", true)
         end
+      end
+    end
+    ab = Time.now
+    puts (ab - ag).to_s
+  end
+  
+  def self.clean_up_delivered(arg)
+    @baan_import = BaanImport.find(arg)
+    
+    ag = Time.now
+    BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
+      purchase_position_attributes = {}
+      
+      purchase_position_attributes.merge!(:quantity => baan_raw_data.attributes["baan_18"].to_f)
+      purchase_position_attributes.merge!(:production_status => baan_raw_data.attributes["baan_79"].to_i)
+      purchase_position_attributes.merge!(:picked_up => baan_raw_data.attributes["baan_84"])
+      
+      @purchase_position = PurchasePosition.where(:baan_id => "#{baan_raw_data.attributes["baan_2"]}-#{baan_raw_data.attributes["baan_4"]}")
+      
+      if @purchase_position.present?
+        # update purchase_position
+        @purchase_position.first.update_attributes(purchase_position_attributes)
       end
     end
     ab = Time.now

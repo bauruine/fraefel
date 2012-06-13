@@ -27,6 +27,10 @@ class BaanImporter
       Article.import_extras_1(baan_import)
     when "Inventar-BaanCSV"
       Article.import_baan_file(baan_import)
+    when "Versand-Verrechnet"
+      BaanRawData.import(baan_import_id)
+      PurchasePosition.clean_up_delivered(baan_import_id)
+      BaanRawData.patch_import(baan_import_id)
     else
       #do something expceted
     end
