@@ -137,6 +137,7 @@ class PurchasePosition < ActiveRecord::Base
       purchase_position_attributes = {}
       
       purchase_position_attributes.merge!(:quantity => baan_raw_data.attributes["baan_18"].to_f)
+      purchase_position_attributes.merge!(:stock_status => baan_raw_data.attributes["baan_79"].to_i)
       purchase_position_attributes.merge!(:production_status => baan_raw_data.attributes["baan_79"].to_i)
       purchase_position_attributes.merge!(:picked_up => baan_raw_data.attributes["baan_84"])
       
