@@ -47,11 +47,11 @@ Fraefel::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
   
-  config.action_mailer.default_url_options = { :host => "176.9.47.150" }
+  config.action_mailer.default_url_options = { :host => "fraefel.i-v-o.ch" }
   
   config.middleware.use ExceptionNotifier,
     sender_address: 'api.fraefel@gmail.com',
-    exception_recipients: 'api.fraefel@gmail.com',
+    exception_recipients: %w{api.fraefel@gmail.com, stefan@tuxli.ch},
     ignore_exceptions: ExceptionNotifier.default_ignore_exceptions - [ActiveRecord::RecordNotFound, AbstractController::ActionNotFound, ActionController::RoutingError]
   
     config.action_mailer.delivery_method = :smtp

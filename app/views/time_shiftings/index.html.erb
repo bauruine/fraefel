@@ -108,8 +108,15 @@
     <hr />
     
     <div class="form-element">
-      <%= f.label(:shifting_reasons_id_equals, "Abteilung") %>
+      <%= f.label(:shifting_reasons_id_equals, "Grund") %>
       <%= f.collection_select(:shifting_reasons_id_equals, @shifting_reasons, :id, :title, {:include_blank => true}, {:class => "span6"}) %>
+    </div>
+    
+    <hr />
+    
+    <div class="form-element">
+      <%= f.label(:shifting_reasons_id_does_not_equal, "Grund ausklammern") %>
+      <%= f.collection_select(:shifting_reasons_id_does_not_equal, @shifting_reasons, :id, :title, {:include_blank => true}, {:class => "span6"}) %>
     </div>
     
     <hr />
