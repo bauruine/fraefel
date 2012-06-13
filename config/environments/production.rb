@@ -51,7 +51,7 @@ Fraefel::Application.configure do
   
   config.middleware.use ExceptionNotifier,
     sender_address: 'api.fraefel@gmail.com',
-    exception_recipients: %w{api.fraefel@gmail.com, stefan@tuxli.ch},
+    exception_recipients: %w{api.fraefel@gmail.com, stefan@tuxli.ch, kunzbe@gmail.com},
     ignore_exceptions: ExceptionNotifier.default_ignore_exceptions - [ActiveRecord::RecordNotFound, AbstractController::ActionNotFound, ActionController::RoutingError]
   
     config.action_mailer.delivery_method = :smtp
