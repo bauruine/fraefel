@@ -1,0 +1,52 @@
+<div class="modal hide fade" id="filter">
+  <%= form_for(@search, :html => {:class => "form-horizontal", :style => "margin: 0;"}) do |f| %>
+  
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Filter Optionen</h3>
+    </div>
+    
+    <div class="modal-body">
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#tab_1">Allgemein</a></li>
+          <li><a data-toggle="tab" href="#tab_2">VK / VK-Pos</a></li>
+          <li><a data-toggle="tab" href="#tab_3">Abteilung</a></li>
+          <li><a data-toggle="tab" href="#tab_4">Grund</a></li>
+          <li><a data-toggle="tab" href="#tab_5">Gehe zu</a></li>
+        </ul>
+        
+        <div class="tab-content">
+          
+          <div id="tab_1" class="tab-pane active">
+            <%= render("time_shiftings/tabs/index/filter/tab_1", :f => f) %>
+          </div>
+          
+          <div id="tab_2" class="tab-pane">
+            <%= render("time_shiftings/tabs/index/filter/tab_2", :f => f) %>
+          </div>
+          
+          <div id="tab_3" class="tab-pane">
+            <%= render("time_shiftings/tabs/index/filter/tab_3", :f => f) %>
+          </div>
+          
+          <div id="tab_4" class="tab-pane">
+            <%= render("time_shiftings/tabs/index/filter/tab_4", :f => f) %>
+          </div>
+          
+          <div id="tab_5" class="tab-pane">
+            <%= render("time_shiftings/tabs/index/filter/tab_5", :f => f) %>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Filtern</button>
+    </div>
+  
+  <% end %>
+</div>

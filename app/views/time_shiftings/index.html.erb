@@ -1,3 +1,5 @@
+<%= render("time_shiftings/partials/index/modal/filter") %>
+
 <ul class="breadcrumb">
   <li class="active">Terminverschiebungen</li>
 </ul>
@@ -8,9 +10,15 @@
       <div class="btn-group">
         <a class="btn btn-primary" href="<%= new_time_shifting_path() %>"><i class="icon-plus-sign icon-white"></i> Neue Terminverschiebung</a>
       </div>
+      
       <div class="btn-group">
         <a class="btn btn-primary" href="<%= time_shiftings_path(:format => :pdf) %>"><i class="icon-print icon-white"></i> PDF</a>
       </div>
+      
+      <div class="btn-group">
+        <a data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</a>
+      </div>
+      
     </div>
     <div class="clear"></div>
 </div>
@@ -25,10 +33,7 @@
   
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Index</h4>
-    <a data-show-tooltip="true" data-role="tab" data-warp="filter" class="header_link" href="/time_shiftings?data_role=search" title="Zeige Filter-Optionen">
-      <span class="header_pack _283"></span>
-    </a>
+    <h4 class="floatLeft">&nbsp;</h4>
   </header>
   <section class="filter_box_content clearfix">
     
@@ -72,58 +77,3 @@
     
   </section>
 </section>
-
-<div data-type="modal" style="display: none;">
-  <%= form_for @search, :html => {"data-tab" => "filter", :method => :get} do |f| %>
-    <div class="floatLeft">
-      <%= f.label(:closed_equals, "Archiv?") %>
-      <%= f.select(:closed_equals, { 'Nein' => false, 'Ja' => true }, {}, {:class => "span3"}) %>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:id_equals, "#ID") %>
-      <%= f.text_field(:id_equals, :class => "span3") %>
-    </div>
-    
-    <div class="clear"></div>
-    
-    <hr />
-    
-    <div class="floatLeft">
-      <%= f.label(:purchase_order_id_equals, "VK-Auftrag") %>
-      <%= f.text_field(:purchase_order_id_equals, :class => "span3") %>
-    </div>
-    <div class="floatLeft">
-      <%= f.label(:purchase_positions_baan_id_equals, "VK-Pos") %>
-      <%= f.text_field(:purchase_positions_baan_id_equals, :class => "span3") %>
-    </div>
-    <div class="clear"></div>
-    
-    <hr />
-    
-    <div class="form-element">
-      <%= f.label(:department_id_equals, "Abteilung") %>
-      <%= f.collection_select(:department_id_equals, @departments, :id, :title, {:include_blank => true}, {:class => "span6"}) %>
-    </div>
-    
-    <hr />
-    
-    <div class="form-element">
-      <%= f.label(:shifting_reasons_id_equals, "Grund") %>
-      <%= f.collection_select(:shifting_reasons_id_equals, @shifting_reasons, :id, :title, {:include_blank => true}, {:class => "span6"}) %>
-    </div>
-    
-    <hr />
-    
-    <div class="form-element">
-      <%= f.label(:shifting_reasons_id_does_not_equal, "Grund ausklammern") %>
-      <%= f.collection_select(:shifting_reasons_id_does_not_equal, @shifting_reasons, :id, :title, {:include_blank => true}, {:class => "span6"}) %>
-    </div>
-    
-    <hr />
-    
-    <div class="form-element clearfix">
-      <%= f.submit("Filtern", :class => "blueSubmit floatLeft") %>
-    </div>
-    
-  <% end %>
-</div>

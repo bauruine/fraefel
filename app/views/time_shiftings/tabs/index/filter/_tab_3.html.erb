@@ -1,0 +1,15 @@
+<fieldset>
+  <legend>Abteilung</legend>
+  <div class="control-group">
+    <%= f.label(:department_id_equals, "Abteilung", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:department_id_equals, @departments, :id, :title, {:include_blank => true}, {}) %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label(:department_id_does_not_equal, "Abteilung ausklammern", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:department_id_does_not_equal, @departments, :id, :title, {:include_blank => true}, {}) %>
+    </div>
+  </div>
+</fieldset>
