@@ -1,0 +1,30 @@
+<fieldset>
+  <legend>Produktion</legend>
+  <div class="control-group">
+    <%= f.label(:warehousing_completed_gteq, "Einlagerung >= ?%", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:warehousing_completed_lteq, "Einlagerung <= ?%", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:warehousing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:manufacturing_completed_gteq, "Produktion >= ?%", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:manufacturing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, {:include_blank => true}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:manufacturing_completed_lteq, "Produktion <= ?%", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, {:include_blank => true}) %>
+    </div>
+  </div>
+</fieldset>

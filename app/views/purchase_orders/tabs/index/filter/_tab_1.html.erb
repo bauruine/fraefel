@@ -1,0 +1,30 @@
+<fieldset>
+  <legend>Allgemein</fieldset>
+  <div class="control-group">
+    <%= f.label(:delivered_equals, "Versendet?", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:picked_up_equals, "Warenentnahme abg?", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:picked_up_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:category_id_equals, "VK-Art", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:category_id_equals, @purchase_order_categories, :id, :title, {:include_blank => true}, {"data-foo" => "categories"}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:baan_id_equals, "VK-Auftrag", :class => "control-label") %>
+    <div class="controls">
+      <%= f.text_field(:baan_id_equals) %>
+    </div>
+  </div>
+</fieldset>
