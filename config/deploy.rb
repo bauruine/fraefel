@@ -99,10 +99,7 @@ namespace :deploy do
 # ugly hack
         task :restart, :roles => :app, :except => { :no_release => true } do
                 run "#{try_sudo} #{unicorn_init_script} stop"
-                run "#{try_sudo} #{unicorn_init_script} stop"
-                run "#{try_sudo} #{unicorn_init_script} stop"
-                run "#{try_sudo} #{unicorn_init_script} stop"
-                run "#{try_sudo} #{unicorn_init_script} stop"
+		sleep 3
                 run "#{try_sudo} #{unicorn_init_script} start"
         end
 end
