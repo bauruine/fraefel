@@ -1,0 +1,16 @@
+<fieldset>
+  <legend>Allgemein</fieldset>
+  <div class="control-group">
+    <%= f.label(:delivered_equals, "Versendet?", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:picked_up_equals, "Warenentnahme abg?", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:picked_up_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+    </div>
+  </div>
+</fieldset>

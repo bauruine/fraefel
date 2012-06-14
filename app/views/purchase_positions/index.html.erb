@@ -1,6 +1,8 @@
 <div data-type="modal2" style="display:none;"></div>
 
-<div class="modal hide fade" id="filter">
+<%= render("purchase_positions/partials/index/modal/filter") %>
+
+<div class="modal hide fade" id="filter2">
   <%= form_for @search, :url => purchase_positions_path, :html => {:class => "", :method => :get, :style => "margin: 0;"} do |f| %>
   
     <div class="modal-header">
