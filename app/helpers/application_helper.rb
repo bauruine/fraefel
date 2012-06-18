@@ -24,7 +24,13 @@ module ApplicationHelper
   
   def boolean_buttler(params, *filter_args)
   end
-
+  
+  def prio_title(number)
+    prio_level = number.to_s
+    @prio_hash = {"0" => "TS Aktiv", "1" => "Normal", "2" => "Termin verschoben"}
+    return @prio_hash[prio_level]
+  end
+  
 	# returns "active" if in @search
 	def active_department?(requested_department, department_id)
 		# puts requested_department + "   #{department_id}"

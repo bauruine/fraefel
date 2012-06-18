@@ -64,9 +64,9 @@
   <section class="filter_box">
     <header class="filter_box_header green_background"><h4>Angefügte Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
-      <% form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+      <% form_tag(remove_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table>
+        <table class="table no-margin">
           <thead>
             <tr>
               <th>NR</th>
@@ -126,9 +126,9 @@
   <section class="filter_box">
     <header class="filter_box_header orange_background"><h4>Verfügbare Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
-      <% form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+      <% form_tag(assign_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table>
+        <table class="table no-margin">
           <thead>
             <tr>
               <th>NR</th>

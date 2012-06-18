@@ -15,6 +15,7 @@
           <th><%= "Eingelagert <= ?%" %></th>
           <th><%= "Produziert >= ?%" %></th>
           <th><%= "Produziert <= ?%" %></th>
+          <th>Prio / TS</th>
         </tr>
       </thead>
       <tbody>
@@ -28,9 +29,27 @@
           <td><%= params[:search].present? ? params[:search][:warehousing_completed_lteq] : nil %></td>
           <td><%= params[:search][:manufacturing_completed_gteq] if params[:search].present? %></td>
           <td><%= params[:search][:manufacturing_completed_lteq] if params[:search].present? %></td>
+          <td><%= prio_title(params[:search][:priority_level_equals]) if params[:search].present? %></td>
         </tr>
       </tbody>
     </table>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 110px">Versendet?</th>
+          <th style="width: 110px">Warenentnahme abg?</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= params[:search][:delivered_equals] if params[:search].present? %></td>
+          <td><%= params[:search][:picked_up_equals] if params[:search].present? %></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    
   </section>
 </section>
 
