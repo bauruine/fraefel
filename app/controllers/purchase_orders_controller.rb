@@ -7,6 +7,26 @@ class PurchaseOrdersController < ApplicationController
     @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id)
     @pallets = @purchase_order.pallets
     @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL AND")
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render( 
+          :pdf => "fraefel_app-#{Date.today}",
+          :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
+          :layout => 'pdf.html',
+          :show_as_html => params[:debug].present?,
+          :orientation => 'Landscape',
+          :encoding => 'UTF-8',
+          :footer => {
+            :left => "#{Time.now.to_formatted_s(:swiss_date)}",
+            :right => "Seite [page] / [topage]",
+            :line => false
+          }
+        )
+      end
+    end
+    
   end
   
   def search_for
@@ -82,7 +102,7 @@ class PurchaseOrdersController < ApplicationController
     respond_to do |format|
       format.pdf do
         render( 
-          :pdf => "paletten_liste_VK##{@purchase_order.baan_id}",
+          :pdf => "print_VK##{@purchase_order.baan_id}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
           :show_as_html => params[:debug].present?,

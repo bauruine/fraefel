@@ -14,7 +14,7 @@ class TimeShiftingsController < ApplicationController
       format.html
       format.pdf do
         render( 
-          :pdf => "Kein Titel-#{Date.today}",
+          :pdf => "fraefel_app-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
           :show_as_html => params[:debug].present?,

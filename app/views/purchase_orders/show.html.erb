@@ -14,9 +14,19 @@
           <a class="btn btn-primary" href="<%= edit_purchase_order_path(@purchase_order) %>" data-role="edit_remote"><i class="icon-plus-sign icon-white"></i> Edit</a>
         </div>
       <% end %>
+      
       <div class="btn-group">
-        <a class="btn btn-primary" href="<%= print_pallets_purchase_order_path(@purchase_order, :format => :pdf) %>"><i class="icon-print icon-white"></i> PDF</a>
+        <a href="<%= purchase_order_path(@purchase_order, :format => :pdf) %>" class="btn btn-primary"><i class="icon-print icon-white"></i> Drucke PDF</a>
+        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="<%= print_pallets_purchase_order_path(@purchase_order, :format => :pdf, :pdf_type => "pallets") %>"><i class="icon-print"></i> Drucke PDF Paletten</a>
+          </li>
+        </ul>
       </div>
+      
     </div>
     <div class="clear"></div>
 </div>
