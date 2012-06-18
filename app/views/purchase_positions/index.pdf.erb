@@ -6,31 +6,54 @@
     <table>
       <thead>
         <tr>
-          <th>Von</th>
-          <th>Bis</th>
           <th>Tour</th>
           <th>Versandlager</th>
           <th>VK-Art</th>
+          <th>Einlagerung abg.</th>
           <th><%= "Eingelagert >= ?%" %></th>
           <th><%= "Eingelagert <= ?%" %></th>
+          <th>Produktion abg.</th>
           <th><%= "Produziert >= ?%" %></th>
           <th><%= "Produziert <= ?%" %></th>
+          <th>Prio / TS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= params[:search].present? && params[:search][:shipping_route_id_equals].present? ? ShippingRoute.where(:id => params[:search][:shipping_route_id_equals]).first.name : nil %></td>
+          <td><%= params[:search][:warehouse_number_equals] if params[:search].present? %></td>
+          <td><%= params[:search].present? && params[:search][:category_id_equals].present? ? Category.where(:id => params[:search][:category_id_equals]).first.title : nil %></td>
+          <td><%= params[:search][:stock_status_equals] if params[:search].present? %></td>
+          <td><%= params[:search].present? ? params[:search][:warehousing_completed_gteq] : nil %></td>
+          <td><%= params[:search].present? ? params[:search][:warehousing_completed_lteq] : nil %></td>
+          <td><%= params[:search][:production_status_equals] if params[:search].present? %></td>
+          <td><%= params[:search][:manufacturing_completed_gteq] if params[:search].present? %></td>
+          <td><%= params[:search][:manufacturing_completed_lteq] if params[:search].present? %></td>
+          <td><%= prio_title(params[:search][:priority_level_equals]) if params[:search].present? %></td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 130px">Von</th>
+          <th style="width: 130px">Bis</th>
+          <th style="width: 110px">Versendet?</th>
+          <th style="width: 110px">Warenentnahme abg?</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><%= params[:search][:delivery_date_greater_than_or_equal_to] if params[:search].present? %></td>
           <td><%= params[:search][:delivery_date_less_than_or_equal_to] if params[:search].present? %></td>
-          <td><%= params[:search].present? && params[:search][:shipping_route_id_equals].present? ? ShippingRoute.where(:id => params[:search][:shipping_route_id_equals]).first.name : nil %></td>
-          <td><%= params[:search][:warehouse_number_equals] if params[:search].present? %></td>
-          <td><%= params[:search].present? && params[:search][:category_id_equals].present? ? Category.where(:id => params[:search][:category_id_equals]).first.title : nil %></td>
-          <td><%= params[:search].present? ? params[:search][:warehousing_completed_gteq] : nil %></td>
-          <td><%= params[:search].present? ? params[:search][:warehousing_completed_lteq] : nil %></td>
-          <td><%= params[:search][:manufacturing_completed_gteq] if params[:search].present? %></td>
-          <td><%= params[:search][:manufacturing_completed_lteq] if params[:search].present? %></td>
+          <td><%= params[:search][:delivered_equals] if params[:search].present? %></td>
+          <td><%= params[:search][:picked_up_equals] if params[:search].present? %></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
+    
   </section>
 </section>
 
