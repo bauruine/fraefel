@@ -1,0 +1,93 @@
+<blockquote>
+  <p>
+    VK #<%= @purchase_order.baan_id %>
+  </p>
+</blockquote>
+
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">VK-Pos für VK <%= @purchase_order.baan_id %></h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    
+    <table class="table no-margin">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Artikel NR</th>
+          <th>Artikel</th>
+          <th>Produktlinie</th>
+          <th>Menge Total</th>
+          <th>Lager Ort</th>
+          <th>PLZ Gebiet</th>
+          <th>Versand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @purchase_positions.each do |purchase_position| %>
+          <tr>
+            <td><%= purchase_position.position %></td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.article %></td>
+            <td><%= purchase_position.product_line %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.storage_location %></td>
+            <td><%= purchase_position.zip_location_name %></td>
+            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+  </section>
+</section>
+
+<% if @pallets.present? %>
+  <% @pallets.each do |pallet| %>
+    <section class="filter_box">
+      <header class="filter_box_header clearfix">
+        <% if pallet.cargo_list.present? %>
+          <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
+        <% end %>
+        <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
+        <% if pallet.purchase_positions.present? %>
+          <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
+        <% end %>
+      </header>
+      <section class="filter_box_content clearfix">
+
+        <table class="table no-margin">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Artikel NR</th>
+              <th>Artikel</th>
+              <th>Produktlinie</th>
+              <th>Menge angefügt</th>
+              <th>Lager Ort</th>
+              <th>PLZ Gebiet</th>
+              <th>Versand</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% pallet.purchase_positions.each do |purchase_position| %>
+              <tr>
+                <td><%= title_for_purchase_position(purchase_position, @purchase_order) %></td>
+                <td><%= purchase_position.article_number %></td>
+                <td><%= purchase_position.article %></td>
+                <td><%= purchase_position.product_line %></td>
+                <td><%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity} / #{purchase_position.quantity}" %></td>
+                <td><%= purchase_position.storage_location %></td>
+                <td><%= purchase_position.zip_location_name %></td>
+                <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+              </tr>
+            <% end %>
+            
+          </tbody>
+        </table>
+
+      </section>
+    </section>
+  <% end %>
+<% end %>
