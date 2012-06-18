@@ -32,9 +32,9 @@
       <h4 class="floatLeft">Offene Positionen</h4>
     </header>
     <section class="filter_box_content clearfix">
-      <% form_tag(assign_positions_pallets_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+      <% form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
-        <table>
+        <table class="table no-margin">
           <thead>
             <tr>
               <th>Position</th>

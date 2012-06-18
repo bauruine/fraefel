@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120605225511) do
+ActiveRecord::Schema.define(:version => 20120618125159) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -468,6 +468,7 @@ ActiveRecord::Schema.define(:version => 20120605225511) do
     t.integer  "category_id"
     t.integer  "priority_level",          :default => 1
     t.boolean  "picked_up",               :default => false
+    t.integer  "pending_status",          :default => 0
   end
 
   create_table "purchase_position_time_shifting_assignments", :force => true do |t|

@@ -19,3 +19,11 @@
   max-height: 800px;
 }
 */
+
+.table select, .table input {
+  margin: 0;
+}
+
+.no-margin {
+  margin: 0;
+}

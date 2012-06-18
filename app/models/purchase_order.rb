@@ -57,7 +57,8 @@ class PurchaseOrder < ActiveRecord::Base
         workflow_status = "#{p_o.purchase_positions.sum(:production_status)}#{p_o.purchase_positions.sum(:stock_status)}"
         m_c_level = p_o.purchase_positions.sum(:production_status)
         w_c_level = p_o.purchase_positions.sum(:stock_status)
-        p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status, :production_status => m_c_level, :stock_status => w_c_level, :workflow_status => workflow_status)
+        @pending_status = p_o.calculation.try(:total_purchase_positions) - m_c_level
+        p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status, :production_status => m_c_level, :stock_status => w_c_level, :workflow_status => workflow_status, :pending_status => @pending_status)
       end
     end
   end

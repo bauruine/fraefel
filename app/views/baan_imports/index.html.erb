@@ -1,20 +1,37 @@
 <div data-type="modal" style="display:none;">
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Import Wizzard</h1>
-  <% if permitted_to? :import, :baan_imports %>
-    <%= link_to("Upload", new_baan_import_path(), :class => "floatRight no_text_decoration blue_link_button", "data-role" => "edit_remote") %>
-  <% end %>
-</header>
+
+<ul class="breadcrumb">
+  <li class="active">Import Wizzard</li>
+</ul>
+
+<div class="page-header">
+    <h1 class="pull-left">Import Wizzard</h1>
+    <div class="btn-toolbar pull-right">
+      <% if permitted_to? :import, :baan_imports %>
+        <div class="btn-group">
+          <a class="btn btn-primary" href="<%= new_baan_import_path() %>" data-role="edit_remote"><i class="icon-upload icon-white"></i> Import CSV</a>
+        </div>
+      <% end %>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<blockquote>
+  <p>
+    <i class="icon-warning-sign"></i> Neue Sortierung aktiv! id DESC
+  </p>
+</blockquote>
+
 
 <section class="filter_box">
   <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Gespeicherte CSV Dateien</h4>
+    <h4 class="floatLeft">&nbsp;</h4>
   </header>
   <section class="filter_box_content clearfix">
 
-    <table class="margin_bottom_big">
+    <table class="table">
       <thead>
         <tr>
           <th>ID</th>

@@ -141,7 +141,7 @@
             <button class="btn" disabled="disabled"><%= @purchase_positions.where(:stock_status => 1, :production_status => 1).count %></button>
           </div>
           <div class="btn-group">
-            <button class="btn btn-danger" disabled="disabled">Weder noch</button>
+            <button class="btn btn-danger" disabled="disabled">Offen</button>
             <button class="btn" disabled="disabled"><%= @purchase_positions.where(:production_status => 0).count %></button>
           </div>
         </div>

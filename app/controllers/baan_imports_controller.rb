@@ -2,7 +2,7 @@ class BaanImportsController < ApplicationController
   filter_access_to :all
   
   def index
-    @baan_imports = BaanImport.all
+    @baan_imports = BaanImport.order("id DESC")
   end
   
   def new

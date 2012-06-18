@@ -47,18 +47,23 @@
                   <ul class="dropdown-menu">
                     <% if permitted_to? :index, :purchase_orders %>
                       <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
+                      <li class="divider"></li>
                     <% end %>
                     <% if permitted_to? :index, :purchase_positions %>
                       <li><%= link_to("VK-Position Liste", purchase_positions_path) %></li>
+                      <li class="divider"></li>
                     <% end %>
                     <% if permitted_to? :index, :pallets %>
                       <li><%= link_to("Paletten Liste", pallets_path) %></li>
+                      <li class="divider"></li>
                     <% end %>
                     <% if permitted_to? :index, :cargo_lists %>
                       <li><%= link_to("Versandlisten", cargo_lists_path) %></li>
+                      <li class="divider"></li>
                     <% end %>
                     <% if permitted_to? :index, :delivery_rejections %>
                       <li><%= link_to("Konflikte", delivery_rejections_path) %></li>
+                      <li class="divider"></li>
                     <% end %>
                     <li><%= link_to("Terminverschiebungen", time_shiftings_path) %></li>
                   </ul>
@@ -81,9 +86,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench icon-white"></i> Verwaltung <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                       <li><%= link_to("Abteilungen", departments_path) %></li>
+                      <li class="divider"></li>
                       <li><%= link_to("Verschiebungsgründe", shifting_reasons_path) %></li>
+                      <li class="divider"></li>
                       <li><%= link_to("Benutzer", users_path) %></li>
+                      <li class="divider"></li>
                       <li><%= link_to("Kategorie", categories_path) %></li>
+                      <li class="divider"></li>
                       <li><%= link_to("Status", statuses_path) %></li>
                     </ul>
                   </li>
