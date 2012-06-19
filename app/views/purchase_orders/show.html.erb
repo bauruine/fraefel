@@ -69,9 +69,7 @@
                 <tr>
                     <% if permitted_to? :edit, :purchase_positions %>
                       <td>
-                        <span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
-                          <%= link_to(purchase_position.baan_id, "#purchase_position_#{purchase_position.id}", "data-toggle" => "modal") %>
-                        </span>
+                          <%= link_to(purchase_position.baan_id, "#purchase_position_#{purchase_position.id}", "data-toggle" => "modal", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
                       </td>
                     <% else %>
                       <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= purchase_position.position %></span></td>
