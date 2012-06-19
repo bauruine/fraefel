@@ -1,0 +1,16 @@
+<fieldset>
+  <legend>Allgemein</legend>
+  <div class="control-group">
+    <%= f.label :quantity, "Anzahl", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :quantity %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :commodity_code, "Zoll Position", :class => "control-label" %>
+    <div class="controls">
+      <%= f.collection_select(:commodity_code_id, CommodityCode.all, :id, :content) %>
+    </div>
+  </div>
+</fieldset>

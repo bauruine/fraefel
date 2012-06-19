@@ -1,0 +1,18 @@
+<fieldset>
+  <legend>Status</legend>
+  <div class="control-group">
+    <%= f.label :delivered, "Versendet?", :class => "control-label" %>
+    <div class="controls">
+      <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :picked_up, "Warenentnahme abg?", :class => "control-label" %>
+    <div class="controls">
+      <%= f.select(:picked_up, { 'Ja'=>true, 'Nein'=>false }) %>
+    </div>
+  </div>
+  
+  
+</fieldset>

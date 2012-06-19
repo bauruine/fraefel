@@ -1,0 +1,22 @@
+<fieldset>
+  <legend>Preis</legend>
+  <div class="control-group">
+    <%= f.label :gross_price, "Brutto Preis pro Stück", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :gross_price %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :value_discount, "Rabatt pro Stück", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :value_discount %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :net_price, "Netto Preis pro Stück", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :net_price %>
+    </div>
+  </div>
+  
+</fieldset>

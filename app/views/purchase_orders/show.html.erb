@@ -1,3 +1,7 @@
+<% @purchase_positions.each do |purchase_position| %>
+  <%= render("purchase_positions/partials/edit/modal/edit", :purchase_position => purchase_position) %>
+<% end %>
+
 <div data-type="modal" style="display:none;">
 </div>
 
@@ -64,7 +68,11 @@
               <% if purchase_position.pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
                 <tr>
                     <% if permitted_to? :edit, :purchase_positions %>
-                      <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %></span></td>
+                      <td>
+                        <span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>">
+                          <%= link_to(purchase_position.baan_id, "#purchase_position_#{purchase_position.id}", "data-toggle" => "modal") %>
+                        </span>
+                      </td>
                     <% else %>
                       <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= purchase_position.position %></span></td>
                     <% end %>
