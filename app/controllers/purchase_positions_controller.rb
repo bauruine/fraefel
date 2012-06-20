@@ -26,6 +26,7 @@ class PurchasePositionsController < ApplicationController
         # @purchase_positions = @search.relation.order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_positions.delivery_date asc, purchase_positions.stock_status desc, purchase_positions.production_status desc")
         @purchase_positions = @search.relation.order("purchase_positions.delivery_date asc, purchase_orders.level_3 asc, purchase_orders.shipping_route_id asc")
         @shipping_routes = ShippingRoute.order("name ASC")
+        @commodity_codes = CommodityCode.all
       end
       
       format.pdf do
@@ -56,14 +57,26 @@ class PurchasePositionsController < ApplicationController
   
   def edit
     @purchase_position = PurchasePosition.find(params[:id])
+    @shipping_routes = ShippingRoute.order("name ASC")
+    @commodity_codes = CommodityCode.all
+    
+    respond_to do |format|
+      format.html
+      format.xml
+    end
   end
   
   def update
     @purchase_position = PurchasePosition.find(params[:id])
-    if @purchase_position.update_attributes(params[:purchase_position])
-      redirect_to(:back)
-    else
-      render 'edit'
+    respond_to do |format|
+      if @purchase_position.update_attributes(params[:purchase_position])
+        format.html { redirect_to :back, notice: 'VK-Pos wurde erfolgreich gespeichert.' }
+        format.js
+      else
+        format.html { render action: "edit" }
+        format.js
+      end
     end
   end
+  
 end

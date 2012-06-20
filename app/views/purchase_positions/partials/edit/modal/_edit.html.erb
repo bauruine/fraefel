@@ -17,19 +17,19 @@
         </ul>
         <div class="tab-content">
           <div id="purchase_position_<%= purchase_position.id %>_tab_1" class="tab-pane active">
-            <%= render("purchase_positions/tabs/edit/edit/tab_1", :f => f) %>
+            <%= render("purchase_positions/tabs/edit/edit/tab_1.html.erb", :f => f) %>
           </div>
           <div id="purchase_position_<%= purchase_position.id %>_tab_2" class="tab-pane">
-            <%= render("purchase_positions/tabs/edit/edit/tab_2", :f => f) %>
+            <%= render("purchase_positions/tabs/edit/edit/tab_2.html.erb", :f => f) %>
           </div>
           <div id="purchase_position_<%= purchase_position.id %>_tab_3" class="tab-pane">
-            <%= render("purchase_positions/tabs/edit/edit/tab_3", :f => f) %>
+            <%= render("purchase_positions/tabs/edit/edit/tab_3.html.erb", :f => f) %>
           </div>
           <div id="purchase_position_<%= purchase_position.id %>_tab_4" class="tab-pane">
-            <%= render("purchase_positions/tabs/edit/edit/tab_4", :f => f) %>
+            <%= render("purchase_positions/tabs/edit/edit/tab_4.html.erb", :f => f) %>
           </div>
           <div id="purchase_position_<%= purchase_position.id %>_tab_5" class="tab-pane">
-            <%= render("purchase_positions/tabs/edit/edit/tab_5", :f => f) %>
+            <%= render("purchase_positions/tabs/edit/edit/tab_5.html.erb", :f => f) %>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
     
     <div class="modal-footer">
       <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
-      <button class="btn btn-primary" type="submit">Speichern</button>
+      <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
     </div>
   <% end %>
 </div>

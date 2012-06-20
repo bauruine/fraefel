@@ -113,6 +113,20 @@ $(document).ready(function(){
     $("html, body").animate({ scrollTop: 0 }, "slow");
   });
   
+  $(function () {
+    $('body').on('click.modal.data-api', '[data-toggle="modal-remote"]', function ( e ) {
+      var $this = $(this);
+      var href = $this.attr('href');
+      var $target = $($this.attr('data-target'));
+      var option = 'toggle';
+
+      e.preventDefault();
+      $target.load(href, function() {
+        $target.modal(option);
+      });
+    });
+  });
+  
   /*
   if ($(".section.endless")) {
     var num_pages = $("tbody#purchase_orders").attr("data-num-pages");

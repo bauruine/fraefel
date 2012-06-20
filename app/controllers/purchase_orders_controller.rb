@@ -10,6 +10,9 @@ class PurchaseOrdersController < ApplicationController
     @shipping_routes = ShippingRoute.order("name ASC")
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
+    @commodity_codes = CommodityCode.all
+    
+    
     respond_to do |format|
       format.html
       format.pdf do
@@ -80,10 +83,15 @@ class PurchaseOrdersController < ApplicationController
   
   def update
     @purchase_order = PurchaseOrder.find(params[:id])
-    if @purchase_order.update_attributes(params[:purchase_order])
-      redirect_to(:back)
-    else
-      render 'edit'
+    
+    respond_to do |format|
+      if @purchase_order.update_attributes(params[:purchase_order])
+        format.html { redirect_to @purchase_order, notice: 'VK wurde erfolgreich gespeichert.' }
+        format.js
+      else
+        format.html { render action: "edit" }
+        format.js
+      end
     end
   end
   
