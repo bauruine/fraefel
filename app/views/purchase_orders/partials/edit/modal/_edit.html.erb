@@ -1,0 +1,43 @@
+<div class="modal hide fade" id="purchase_order_<%= @purchase_order.id %>">
+  <%= form_for @purchase_order, :html => {:class => "form-horizontal", :style => "margin: 0;"}, :remote => true do |f| %>
+  
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Edit VK <%= @purchase_order.baan_id %></h3>
+    </div>
+    
+    <div class="modal-body">
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#purchase_order_<%= @purchase_order.id %>_tab_1">Allgemein</a></li>
+          <li><a data-toggle="tab" href="#purchase_order_<%= @purchase_order.id %>_tab_2">Versand</a></li>
+          <li><a data-toggle="tab" href="#purchase_order_<%= @purchase_order.id %>_tab_3">Produktion</a></li>
+          <li><a data-toggle="tab" href="#purchase_order_<%= @purchase_order.id %>_tab_4">TS / Prio</a></li>
+          <li><a data-toggle="tab" href="#purchase_order_<%= @purchase_order.id %>_tab_5">Status</a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="purchase_order_<%= @purchase_order.id %>_tab_1" class="tab-pane active">
+            <%= render("purchase_orders/tabs/edit/edit/tab_1", :f => f) %>
+          </div>
+          <div id="purchase_order_<%= @purchase_order.id %>_tab_2" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_2", :f => f) %>
+          </div>
+          <div id="purchase_order_<%= @purchase_order.id %>_tab_3" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_3", :f => f) %>
+          </div>
+          <div id="purchase_order_<%= @purchase_order.id %>_tab_4" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_4", :f => f) %>
+          </div>
+          <div id="purchase_order_<%= @purchase_order.id %>_tab_5" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_5", :f => f) %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button class="btn btn-primary" type="submit">Speichern</button>
+    </div>
+  <% end %>
+</div>

@@ -7,6 +7,8 @@ class PurchaseOrdersController < ApplicationController
     @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id)
     @pallets = @purchase_order.pallets
     @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL AND")
+    @shipping_routes = ShippingRoute.order("name ASC")
+    @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
     respond_to do |format|
       format.html

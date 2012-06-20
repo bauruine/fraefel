@@ -1,0 +1,10 @@
+<fieldset>
+  <legend>TS / Prio</legend>
+  <div class="control-group">
+    <%= f.label(:priority_level, "Prio Stufe", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:priority_level, { 'TS Aktiv' => 0, 'Normal' => 1, 'Termin Verschoben' => 2 }, {}, {}) %>
+    </div>
+  </div>
+  
+</fieldset>

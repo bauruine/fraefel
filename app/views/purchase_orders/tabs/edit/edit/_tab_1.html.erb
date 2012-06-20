@@ -1,0 +1,11 @@
+<fieldset>
+  <legend>Allgemein</legend>
+  
+  <div class="control-group">
+    <%= f.label(:category_id_, "VK-Art", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:category_id, @purchase_order_categories, :id, :title, {:include_blank => true}, {"data-foo" => "categories"}) %>
+    </div>
+  </div>
+  
+</fieldset>

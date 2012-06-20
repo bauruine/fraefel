@@ -2,6 +2,8 @@
   <%= render("purchase_positions/partials/edit/modal/edit", :purchase_position => purchase_position) %>
 <% end %>
 
+<%= render("purchase_orders/partials/edit/modal/edit") %>
+
 <div data-type="modal" style="display:none;">
 </div>
 
@@ -15,7 +17,7 @@
     <div class="btn-toolbar pull-right">
       <% if permitted_to? :edit, :purchase_orders %>
         <div class="btn-group">
-          <a class="btn btn-primary" href="<%= edit_purchase_order_path(@purchase_order) %>" data-role="edit_remote"><i class="icon-plus-sign icon-white"></i> Edit</a>
+          <a class="btn btn-primary" href="#purchase_order_<%= @purchase_order.id %>" data-toggle="modal"><i class="icon-plus-sign icon-white"></i> Edit</a>
         </div>
       <% end %>
       
@@ -154,8 +156,8 @@
         </dl>
       <% end %>
       
-      <% form_tag(remove_positions_pallet_path(pallet), {:class => "form", "data-submit_handler" => "true", :method => :delete}) do %>
-        <table>
+      <% form_tag(remove_positions_pallet_path(pallet), {:class => "form no-margin", "data-submit_handler" => "true", :method => :delete}) do %>
+        <table class="table no-margin">
           <thead>
             <tr>
               <th>Position</th>
@@ -172,7 +174,9 @@
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
               <tr>
-                <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= title_for_purchase_position(purchase_position, @purchase_order) %></span></td>
+                <td>
+                    <%= title_for_purchase_position(purchase_position, @purchase_order) %>
+                </td>
                 <td><%= purchase_position.article_number %></td>
                 <td><%= purchase_position.article %></td>
                 <td><%= purchase_position.product_line %></td>
