@@ -7,7 +7,7 @@
 
 #load database.yml generator
 # TODO: none
-require "config/capistrano_database_yml.rb"
+require File.dirname(__FILE__) + "/capistrano_database_yml.rb"
 require "highline/import"
 # needs to be before bundler 
 set :bundle_flags,    "--deployment --quiet --binstubs"
