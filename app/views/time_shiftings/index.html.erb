@@ -32,14 +32,6 @@
     <div class="clear"></div>
 </div>
 
-<ul class="nav nav-pills pull-right">
-  <li class="<%= active_department?(@requested_department_id, nil) %>"><a href="<%= filter_url(params, :department_id_equals => "") %>">Alle Abteilungen</a></li>
-  <% @departments.each do |department| %>
-		<li class="<%= active_department?(@requested_department_id, department.id) %>" ><a href="<%= filter_url(params, :department_id_equals => department.id) %>"><%= department.title %></a></li>
-  <% end %>
-</ul>
-<div class="clear"></div>
-  
 <section class="filter_box">
   <header class="filter_box_header clearfix">
     <h4 class="floatLeft">&nbsp;</h4>
@@ -60,17 +52,21 @@
         </tr>
       </thead>
       <tbody>
-        <% @time_shiftings.each do |time_shifting| %>
-          <tr>
-            <td><%= link_to(time_shifting.id, time_shifting) %></td>
-            <td><%= time_shifting.purchase_order_id %></td>
-            <td><%= time_shifting.simple %></td>
-            <td><%= time_shifting.lt_date.to_formatted_s(:swiss_date) if time_shifting.lt_date.present? %></td>
-            <td><%= time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).count %></td>
-            <td><%= time_shifting.shifting_reasons.collect(&:title) %></td>
-            <td><%= "#{time_shifting.departments.last.try(:title)} ...seit #{distance_of_time_in_words(time_shifting.department_time_shifting_assignments.last.created_at, Time.now)}" %></td>
-            <td><%= time_shifting.updated_at.to_formatted_s(:swiss_date) %></td>
-          </tr>
+        <% if @time_shiftings.present? %>
+          <% @time_shiftings.each do |time_shifting| %>
+            <tr>
+              <td><%= link_to(time_shifting.id, time_shifting) %></td>
+              <td><%= time_shifting.purchase_order_id %></td>
+              <td><%= time_shifting.simple %></td>
+              <td><%= time_shifting.lt_date.to_formatted_s(:swiss_date) if time_shifting.lt_date.present? %></td>
+              <td><%= time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).count %></td>
+              <td><%= time_shifting.shifting_reasons.collect(&:title) %></td>
+              <td><%= "#{time_shifting.departments.last.try(:title)} ...seit #{distance_of_time_in_words(time_shifting.department_time_shifting_assignments.last.created_at, Time.now)}" %></td>
+              <td><%= time_shifting.updated_at.to_formatted_s(:swiss_date) %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr><td>Keine aktiven Verschiebungen vorhanden.</td></tr>
         <% end %>
       </tbody>
       <tfoot>

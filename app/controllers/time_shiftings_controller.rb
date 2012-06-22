@@ -35,7 +35,7 @@ class TimeShiftingsController < ApplicationController
     @search = TimeShifting.includes(:purchase_order).order("time_shiftings.id DESC, time_shiftings.lt_date ASC, time_shiftings.purchase_order_id ASC").search(params[:search] || {:closed_equals => "false"})
     @time_shiftings = @search.relation
     
-    @requested_department_id = params["search"]["department_id_equals"] if params[:search]
+    #@requested_department_id = params["search"]["department_id_equals"] if params[:search]
 
     
     respond_to do |format|
