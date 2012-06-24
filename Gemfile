@@ -25,7 +25,6 @@ gem "jquery-rails"
 gem "magic_user"
 gem "RedCloth", :require => 'redcloth'
 gem 'simple_form'
-gem 'newrelic_rpm'
 gem 'rabl'
 gem 'prawn'
 gem 'private_pub'

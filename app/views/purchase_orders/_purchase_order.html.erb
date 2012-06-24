@@ -1,25 +1,23 @@
 <tr class="purchase_order">
   <td>
-    <% if purchase_order.priority_level == 0 %>
-      <i class="icon-asterisk"></i>
-    <% elsif purchase_order.priority_level > 1 %>
-      <i class="icon-fire"></i>
+    <% if purchase_order.priority_level != 1 %>
+      <i class="icon-prio<%= purchase_order.priority_level %>"></i>
     <% end %>
-    <%= link_to(purchase_order.baan_id, purchase_order_path(purchase_order)) %>
+    <a href="/purchase_orders/<%= purchase_order.id %>"><%= purchase_order.baan_id %></a>
   </td>
   <td>
-    <% if purchase_order.pending_status > 0 %>
-      <span class="label label-important"><%= purchase_order.pending_status %></span> -
+    <% if purchase_order.pending_status != 0 %>
+      <span class="label label-important"><%= purchase_order.pending_status %></span><span> - </span>
     <% end %>
     <% if purchase_order.production_status != purchase_order.stock_status %>
-      <span class="label label-info"><%= purchase_order.production_status %></span> -
+      <span class="label label-info"><%= purchase_order.production_status %></span><span> - </span>
     <% end %>
-    <span class="label label-success"><%= purchase_order.stock_status %></span> -
-    <span class="label label-inverse"><%= purchase_order.calculation.try(:total_purchase_positions) %></span>
+    <span class="label label-success"><%= purchase_order.stock_status %></span><span> - </span>
+    <span class="label label-inverse"><%= purchase_order.calculation.total_purchase_positions %></span>
   </td>
-  <td><%= purchase_order.calculation.try(:total_pallets) %></td>
-  <td><%= purchase_order.purchase_positions.try(:first).try(:consignee_full) %></td>
-  <td><%= purchase_order.try(:shipping_route).try(:name) %></td>
-  <td><%= purchase_order.purchase_positions.first.zip_location_name %></td>
+  <td><%= purchase_order.calculation.total_pallets %></td>
+  <td><%= purchase_order.purchase_positions.first.consignee_full %></td>
+  <td><%= purchase_order.shipping_route.name %></td>
+  <td><%= purchase_order.purchase_positions.first.zip_location.title %></td>
   <td><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>
 </tr>

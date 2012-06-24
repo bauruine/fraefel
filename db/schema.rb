@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120618125159) do
+ActiveRecord::Schema.define(:version => 20120621160155) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "customer_id"
@@ -219,8 +219,8 @@ ActiveRecord::Schema.define(:version => 20120618125159) do
   end
 
   create_table "calculations", :force => true do |t|
-    t.integer  "total_pallets"
-    t.integer  "total_purchase_positions"
+    t.integer  "total_pallets",            :default => 0
+    t.integer  "total_purchase_positions", :default => 0
     t.integer  "calculable_id"
     t.string   "calculable_type"
     t.datetime "created_at"
@@ -451,7 +451,6 @@ ActiveRecord::Schema.define(:version => 20120618125159) do
     t.string   "baan_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "status"
     t.integer  "shipping_route_id"
     t.date     "delivery_date"
     t.boolean  "delivered",               :default => false
@@ -492,7 +491,6 @@ ActiveRecord::Schema.define(:version => 20120618125159) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
-    t.string   "status"
     t.integer  "pallet_id"
     t.string   "product_line"
     t.string   "article"
@@ -502,7 +500,6 @@ ActiveRecord::Schema.define(:version => 20120618125159) do
     t.string   "consignee_full"
     t.boolean  "delivered",                                        :default => false
     t.integer  "zip_location_id"
-    t.string   "zip_location_name"
     t.string   "baan_id"
     t.decimal  "gross_price",       :precision => 12, :scale => 2
     t.decimal  "net_price",         :precision => 12, :scale => 2
@@ -656,5 +653,9 @@ ActiveRecord::Schema.define(:version => 20120618125159) do
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+
+  create_table "zip_locations", :force => true do |t|
+    t.string "title"
+  end
 
 end

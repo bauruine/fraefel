@@ -104,7 +104,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td>PLZ Gebiet: <strong><%= pallet.purchase_positions.where("purchase_positions.zip_location_id IS NOT NULL").try(:first).try(:zip_location_name) %></strong></td>
+            <td>PLZ Gebiet: <strong><%= pallet.purchase_positions.first.zip_location.title %></strong></td>
             <td></td>
             <td></td>
             <td></td>

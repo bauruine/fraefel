@@ -1,3 +1,11 @@
+.icon-prio0 {
+  background-position: -456px -96px;
+}
+
+.icon-prio2, .icon-prio3, .icon-prio4, .icon-prio5, .icon-prio6, .icon-prio7, .icon-prio8, .icon-prio9, .icon-prio10 {
+  background-position: -72px -120px;
+}
+
 .btn-10,
 .btn-10:hover,
 .btn-11,

@@ -108,7 +108,6 @@ class PurchaseOrder < ActiveRecord::Base
     BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
       purchase_order_attributes = {}
       
-      purchase_order_attributes.merge!(:status => "open")
       purchase_order_attributes.merge!(:baan_id => baan_raw_data.attributes["baan_2"])
       purchase_order_attributes.merge!(:customer_id => Customer.where(:baan_id => baan_raw_data.attributes["baan_6"]).first.try(:id))
       purchase_order_attributes.merge!(:shipping_route_id => ShippingRoute.where(:name => baan_raw_data.attributes["baan_21"]).first.try(:id))

@@ -4,6 +4,7 @@
 
 <%= render("purchase_orders/partials/edit/modal/edit") %>
 
+
 <div data-type="modal" style="display:none;">
 </div>
 
@@ -18,6 +19,14 @@
       <% if permitted_to? :edit, :purchase_orders %>
         <div class="btn-group">
           <a class="btn btn-primary" href="#purchase_order_<%= @purchase_order.id %>" data-toggle="modal"><i class="icon-plus-sign icon-white"></i> Edit</a>
+          <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a rel="nofollow" data-remote="true" data-method="put" href="<%= purchase_order_path(@purchase_order, aggregation_for(@purchase_order.id)) %>"><i class="icon-refresh"></i> Status berechnen</a>
+            </li>
+          </ul>
         </div>
       <% end %>
       
@@ -81,7 +90,7 @@
                     <td><%= purchase_position.product_line %></td>
                     <td><%= purchase_position.quantity %></td>
                     <td><%= purchase_position.storage_location %></td>
-                    <td><%= purchase_position.zip_location_name %></td>
+                    <td><%= purchase_position.zip_location.title %></td>
                     <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                     <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.available_quantity), :to_i, :to_s, purchase_position.available_quantity) %></td>
                     <% if permitted_to? :assign_positions, :pallets %>
@@ -182,7 +191,7 @@
                 <td><%= purchase_position.product_line %></td>
                 <td><%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity} / #{purchase_position.quantity}" %></td>
                 <td><%= purchase_position.storage_location %></td>
-                <td><%= purchase_position.zip_location_name %></td>
+                <td><%= purchase_position.zip_location.title %></td>
                 <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                 <td class="align-center">
                   <% if permitted_to? :remove_positions, :pallets %>

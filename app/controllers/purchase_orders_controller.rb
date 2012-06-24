@@ -42,7 +42,7 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false"})
+    @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false"})
     @purchase_orders = @search.relation.ordered_for_delivery
     @level_1 = Address.where("addresses.category_id" => 8, "addresses.id" => @purchase_orders.collect(&:level_1)).order("addresses.company_name ASC")
     @level_2 = Address.where("addresses.category_id" => 9, "addresses.id" => @purchase_orders.collect(&:level_2)).order("addresses.company_name ASC")
@@ -54,6 +54,7 @@ class PurchaseOrdersController < ApplicationController
       format.html
       format.js
       format.json
+      format.xml
       format.pdf do
         render( 
           :pdf => "print-#{Date.today}",

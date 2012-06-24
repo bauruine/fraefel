@@ -2,6 +2,7 @@ class PurchasePosition < ActiveRecord::Base
   belongs_to :commodity_code, :class_name => "CommodityCode", :foreign_key => "commodity_code_id"
   belongs_to :purchase_order, :class_name => "PurchaseOrder", :foreign_key => "purchase_order_id"
   belongs_to :old_pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
+  belongs_to :zip_location, :class_name => "ZipLocation", :foreign_key => "zip_location_id"
   
   has_many :pallet_purchase_position_assignments, :class_name => "PalletPurchasePositionAssignment"
   has_many :pallets, :class_name => "Pallet", :through => :pallet_purchase_position_assignments
@@ -76,10 +77,9 @@ class PurchasePosition < ActiveRecord::Base
     BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
       purchase_position_attributes = {}
       
-      purchase_position_attributes.merge!(:status => "open")
       purchase_position_attributes.merge!(:commodity_code_id => CommodityCode.where(:code => baan_raw_data.attributes["baan_0"]).first.try(:id))
       purchase_position_attributes.merge!(:purchase_order_id => PurchaseOrder.where(:baan_id => baan_raw_data.attributes["baan_2"]).first.try(:id))
-      purchase_position_attributes.merge!(:baan_id => "#{PurchaseOrder.where(:baan_id => baan_raw_data.attributes["baan_2"]).first.try(:baan_id)}-#{baan_raw_data.attributes["baan_4"]}")
+      purchase_position_attributes.merge!(:baan_id => "#{baan_raw_data.attributes["baan_2"]}-#{baan_raw_data.attributes["baan_4"]}")
       purchase_position_attributes.merge!(:position => baan_raw_data.attributes["baan_4"].to_i)
       purchase_position_attributes.merge!(:delivery_date => baan_raw_data.attributes["baan_13"])
       purchase_position_attributes.merge!(:weight_single => baan_raw_data.attributes["baan_15"].to_f)
@@ -91,8 +91,8 @@ class PurchasePosition < ActiveRecord::Base
       purchase_position_attributes.merge!(:article => baan_raw_data.attributes["baan_28"])
       purchase_position_attributes.merge!(:product_line => baan_raw_data.attributes["baan_30"])
       purchase_position_attributes.merge!(:consignee_full => baan_raw_data.attributes["baan_33"])
-      purchase_position_attributes.merge!(:zip_location_id => baan_raw_data.attributes["baan_34"])
-      purchase_position_attributes.merge!(:zip_location_name => baan_raw_data.attributes["baan_35"])
+      
+      purchase_position_attributes.merge!(:zip_location_id => ZipLocation.find_or_create_by_title(:title => baan_raw_data.attributes["baan_35"]).id)
       purchase_position_attributes.merge!(:gross_price => baan_raw_data.attributes["baan_38"])
       purchase_position_attributes.merge!(:value_discount => baan_raw_data.attributes["baan_39"])
       purchase_position_attributes.merge!(:net_price => baan_raw_data.attributes["baan_40"])

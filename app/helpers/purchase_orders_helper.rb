@@ -52,4 +52,22 @@ module PurchaseOrdersHelper
     end
   end
   
+  def aggregation_for(purchase_order_id)
+    @purchase_order = PurchaseOrder.where(:id => purchase_order_id)
+    @purchase_order_attributes = {:purchase_order => {}}
+    
+    if @purchase_order.present?
+      @purchase_order = @purchase_order.first
+      @purchase_positions = @purchase_order.purchase_positions
+      @sum_production_status, @sum_stock_status, @count_purchase_positions = @purchase_positions.sum(:production_status), @purchase_positions.sum(:stock_status), @purchase_positions.count.to_f
+      @purchase_order_attributes[:purchase_order].merge!(:manufacturing_completed => @sum_production_status * (100.to_f / @count_purchase_positions))
+      @purchase_order_attributes[:purchase_order].merge!(:warehousing_completed => @sum_stock_status * (100.to_f / @count_purchase_positions))
+      @purchase_order_attributes[:purchase_order].merge!(:pending_status => @count_purchase_positions - @sum_production_status)
+      @purchase_order_attributes[:purchase_order].merge!(:production_status => @sum_production_status)
+      @purchase_order_attributes[:purchase_order].merge!(:stock_status => @sum_stock_status)
+      @purchase_order_attributes[:purchase_order].merge!(:workflow_status => "#{@sum_production_status}#{@sum_stock_status}")
+    end
+    return @purchase_order_attributes
+  end
+  
 end
