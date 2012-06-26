@@ -18,6 +18,10 @@
       </div>
       <% unless @cargo_list.country == 'CH' %>
         <div class="btn-group">
+          <a class="btn btn-primary" href="<%= pdf_reports_path(:cargo_list_id => @cargo_list.id) %>" data-method="post"><i class="icon-print icon-white"></i> Proforma Rechnung</a>
+        </div>
+      
+        <div class="btn-group">
           <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice_beta") %>"><i class="icon-print icon-white"></i> Zollpapiere NEU</a>
         </div>
         <div class="btn-group">

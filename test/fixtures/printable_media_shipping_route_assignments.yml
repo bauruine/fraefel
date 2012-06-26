@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  printable_media_id: 1
+  shipping_route_id: 1
+
+two:
+  printable_media_id: 1
+  shipping_route_id: 1

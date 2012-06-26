@@ -1,0 +1,47 @@
+<ul class="breadcrumb">
+  <li class="active">Versand Touren</li>
+</ul>
+
+<div class="page-header">
+    <h1 class="pull-left">Versand Touren</h1>
+    <div class="clear"></div>
+</div>
+
+<section class="filter_box">
+  <header class="filter_box_header clearfix">
+    <h4 class="floatLeft">&nbsp;</h4>
+  </header>
+  <section class="filter_box_content clearfix">
+    
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tour</th>
+          <th>Erstellt am</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @shipping_routes.present? %>
+          <% @shipping_routes.each do |shipping_route| %>
+            <tr>
+              <td><%= link_to(shipping_route.id, edit_shipping_route_path(shipping_route)) %></td>
+              <td><%= shipping_route.name %></td>
+              <td><%= shipping_route.created_at.to_formatted_s(:swiss_date) %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr><td>Keine Versand Touren vorhanden.</td></tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    
+  </section>
+</section>
