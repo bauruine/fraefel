@@ -3,6 +3,9 @@ class ShippingRoute < ActiveRecord::Base
   validates_presence_of :name
   has_many :purchase_orders
   
+  has_many :printable_media_shipping_route_assignments
+  has_many :printable_media, :through => :printable_media_shipping_route_assignments
+  
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     
