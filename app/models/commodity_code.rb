@@ -1,4 +1,6 @@
 class CommodityCode < ActiveRecord::Base
+  has_many :purchase_positions
+  
   validates_uniqueness_of :code
   
   def self.import(arg)
