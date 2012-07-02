@@ -43,7 +43,7 @@ class PurchaseOrder < ActiveRecord::Base
     if @purchase_order.present?
       @purchase_order.each do |p_o|
         p_o.create_calculation unless p_o.calculation.present?
-        p_o.calculation.update_attributes(:total_pallets => p_o.pallets.count, :total_purchase_positions => p_o.purchase_positions.count)
+        p_o.calculation.update_attributes(:total_pallets => p_o.pallets.count, :total_purchase_positions => p_o.purchase_positions.where("purchase_positions.cancelled" => false).count)
       end
     end
   end
@@ -52,11 +52,11 @@ class PurchaseOrder < ActiveRecord::Base
     @purchase_order = PurchaseOrder.where(:baan_id => arg)
     if @purchase_order.present?
       @purchase_order.each do |p_o|
-        m_c_status = p_o.purchase_positions.sum(:production_status) * (100.to_f / p_o.purchase_positions.count.to_f)
-        w_c_status = p_o.purchase_positions.sum(:stock_status) * (100.to_f / p_o.purchase_positions.count.to_f)
-        workflow_status = "#{p_o.purchase_positions.sum(:production_status)}#{p_o.purchase_positions.sum(:stock_status)}"
-        m_c_level = p_o.purchase_positions.sum(:production_status)
-        w_c_level = p_o.purchase_positions.sum(:stock_status)
+        m_c_status = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:production_status) * (100.to_f / p_o.purchase_positions.where("purchase_positions.cancelled" => false).count.to_f)
+        w_c_status = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:stock_status) * (100.to_f / p_o.purchase_positions.where("purchase_positions.cancelled" => false).count.to_f)
+        workflow_status = "#{p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:production_status)}#{p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:stock_status)}"
+        m_c_level = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:production_status)
+        w_c_level = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:stock_status)
         @pending_status = p_o.calculation.try(:total_purchase_positions) - m_c_level
         p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status, :production_status => m_c_level, :stock_status => w_c_level, :workflow_status => workflow_status, :pending_status => @pending_status)
       end
@@ -110,7 +110,7 @@ class PurchaseOrder < ActiveRecord::Base
       
       purchase_order_attributes.merge!(:baan_id => baan_raw_data.attributes["baan_2"])
       purchase_order_attributes.merge!(:customer_id => Customer.where(:baan_id => baan_raw_data.attributes["baan_6"]).first.try(:id))
-      purchase_order_attributes.merge!(:shipping_route_id => ShippingRoute.where(:name => baan_raw_data.attributes["baan_21"]).first.try(:id))
+      purchase_order_attributes.merge!(:shipping_route_id => ShippingRoute.find_or_create_by_name(:name => baan_raw_data.attributes["baan_21"], :active => true).id)
       purchase_order_attributes.merge!(:warehouse_number => baan_raw_data.attributes["baan_22"])
       purchase_order_attributes.merge!(:level_2 => Address.where(:code => baan_raw_data.attributes["baan_47"], :category_id => 9).first.try(:id))
       purchase_order_attributes.merge!(:level_1 => Address.where(:code => baan_raw_data.attributes["baan_55"], :category_id => 8).first.try(:id))
@@ -137,4 +137,13 @@ class PurchaseOrder < ActiveRecord::Base
     ab = Time.now
     puts (ab - ag).to_s
   end
+  
+  def self.clean_up_delivered
+    self.where("purchase_orders.picked_up" => false).where("purchase_positions.picked_up" => true).includes(:purchase_positions).each do |p_o|
+      if p_o.purchase_positions.count == p_o.purchase_positions.where("purchase_positions.picked_up" => true).count
+        p_o.update_attribute("picked_up", true)
+      end
+    end
+  end
+  
 end

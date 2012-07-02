@@ -4,9 +4,9 @@ class PurchaseOrdersController < ApplicationController
   
   def show
     @purchase_order = PurchaseOrder.find(params[:id])
-    @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id)
+    @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id).where("purchase_positions.cancelled" => false)
     @pallets = @purchase_order.pallets
-    @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL AND")
+    @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL")
     @shipping_routes = ShippingRoute.order("name ASC")
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
@@ -42,7 +42,7 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false"})
+    @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false", :cancelled_equals => "false"})
     @purchase_orders = @search.relation.ordered_for_delivery
     @level_1 = Address.where("addresses.category_id" => 8, "addresses.id" => @purchase_orders.collect(&:level_1)).order("addresses.company_name ASC")
     @level_2 = Address.where("addresses.category_id" => 9, "addresses.id" => @purchase_orders.collect(&:level_2)).order("addresses.company_name ASC")

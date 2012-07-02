@@ -128,16 +128,6 @@
           <%= content_tag :div, msg, :id => "flash_#{name}" %>
         <% end %>
         
-        <% if current_user && current_user.pdf_reports.present? %>
-        
-          <% current_user.pdf_reports.order("created_at DESC").limit(1).each do |pdf_report| %>
-            <div id="flash_notice" data-id="<%= pdf_report.id %>">
-              <p>Dein PDF wurde generiert. Klicke <a href="<%= pdf_report_path(pdf_report) %>">hier</a> um es zu speichern.</p>
-              <p><%= link_to("Lösche Nachricht", pdf_report_path(pdf_report), :method => :delete, :remote => true) %></p>
-            </div>
-          <% end %>
-        <% end %>
-        
         <%= content_tag :h1, yield(:title) if show_title? %>
         <%= yield %>
       </section>

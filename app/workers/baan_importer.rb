@@ -8,8 +8,8 @@ class BaanImporter
       Address.import(baan_import_id)
       Customer.import(baan_import_id)
       ShippingAddress.import(baan_import_id)
-      CommodityCode.import(baan_import_id)
-      ShippingRoute.import(baan_import_id)
+      #CommodityCode.import(baan_import_id)
+      #ShippingRoute.import(baan_import_id)
       PurchaseOrder.import(baan_import_id)
       PurchasePosition.import(baan_import_id)
       BaanRawData.patch_import(baan_import_id)
@@ -30,6 +30,10 @@ class BaanImporter
     when "Versand-Verrechnet"
       BaanRawData.import(baan_import_id)
       PurchasePosition.clean_up_delivered(baan_import_id)
+      PurchaseOrder.clean_up_delivered
+      BaanRawData.patch_import(baan_import_id)
+    when "Versand-Storniert"
+      BaanRawData.import_cancelled(baan_import_id)
       BaanRawData.patch_import(baan_import_id)
     else
       #do something expceted
