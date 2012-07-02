@@ -77,7 +77,7 @@ class PurchasePosition < ActiveRecord::Base
     BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
       purchase_position_attributes = {}
       
-      purchase_position_attributes.merge!(:commodity_code_id => CommodityCode.find_or_create_by_code(:code => baan_raw_data.attributes["baan_0"], :content => baan_raw_data.attributes["baan_1"]).first.id)
+      purchase_position_attributes.merge!(:commodity_code_id => CommodityCode.find_or_create_by_code(:code => baan_raw_data.attributes["baan_0"], :content => baan_raw_data.attributes["baan_1"]).id)
       purchase_position_attributes.merge!(:purchase_order_id => PurchaseOrder.where(:baan_id => baan_raw_data.attributes["baan_2"]).first.try(:id))
       purchase_position_attributes.merge!(:baan_id => "#{baan_raw_data.attributes["baan_2"]}-#{baan_raw_data.attributes["baan_4"]}")
       purchase_position_attributes.merge!(:position => baan_raw_data.attributes["baan_4"].to_i)
