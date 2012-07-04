@@ -50,7 +50,7 @@
   <div class="clear"></div>
 </div>
 
-<% if @cargo_list.delivered == true %>
+<% if @cargo_list.delivered %>
   <div id="flash_notice">Versand NR<%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
 <% end %>
 
@@ -70,7 +70,7 @@
   <section class="filter_box">
     <header class="filter_box_header green_background"><h4>Angefügte Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
-      <% form_tag(remove_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
+      <%= form_tag(remove_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
         <table class="table no-margin">
           <thead>
@@ -92,7 +92,7 @@
                 <td><%= pallet.additional_space %></td>
                 <td><%= pallet.purchase_orders.where("shipping_route_id IS NOT NULL").present? ? pallet.purchase_orders.where("shipping_route_id IS NOT NULL").first.shipping_route.name : nil %></td>
                 <td><%= pallet.purchase_positions.first.zip_location.title %></td>
-                <td><%= pallet.purchase_positions.where("consignee_full IS NOT NULL").present? ? pallet.purchase_positions.where("consignee_full IS NOT NULL").first.consignee_full : nil %></td>
+                <td><%= Address.where("addresses.category_id = ?", 10).where("pallets.id = ?", pallet.id).includes(:purchase_orders => :pallets).limit(1).first.consignee_full %></td>
                 <% if permitted_to? :remove_pallets, :cargo_lists %>
                   <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
                 <% else %>
@@ -132,7 +132,7 @@
   <section class="filter_box">
     <header class="filter_box_header orange_background"><h4>Verfügbare Paletten / Coli</h4></header>
     <section class="filter_box_content clearfix">
-      <% form_tag(assign_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
+      <%= form_tag(assign_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
         <table class="table no-margin">
           <thead>
@@ -157,7 +157,7 @@
                   <td><%= pallet.additional_space %></td>
                   <td><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
                   <td><%= pallet.purchase_positions.first.zip_location.title %></td>
-                  <td><%= pallet.purchase_positions.first.consignee_full.present? ? pallet.purchase_positions.first.consignee_full : pallet.purchase_orders.first.customer.company %></td>
+                  <td><%= Address.where("addresses.category_id = ?", 10).where("pallets.id = ?", pallet.id).includes(:purchase_orders => :pallets).limit(1).first.consignee_full %></td>
                   <% if permitted_to? :assign_pallets, :cargo_lists %>
                     <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
                   <% else %>

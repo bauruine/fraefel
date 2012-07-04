@@ -10,23 +10,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120701221037) do
+ActiveRecord::Schema.define(:version => 20120703132506) do
 
   create_table "addresses", :force => true do |t|
-    t.integer  "customer_id"
-    t.string   "street"
-    t.integer  "postal_code"
-    t.string   "city"
-    t.string   "country"
-    t.integer  "category_id"
-    t.integer  "created_by"
-    t.integer  "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "delivery_rejection_id"
-    t.integer  "referee_id"
-    t.string   "company_name"
-    t.string   "code"
+    t.integer "customer_id"
+    t.string  "street"
+    t.integer "postal_code"
+    t.string  "city"
+    t.string  "country"
+    t.integer "category_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.integer "delivery_rejection_id"
+    t.integer "referee_id"
+    t.string  "company_name"
+    t.string  "code"
   end
 
   create_table "article_groups", :force => true do |t|
@@ -401,24 +399,16 @@ ActiveRecord::Schema.define(:version => 20120701221037) do
   end
 
   create_table "pallet_types", :force => true do |t|
-    t.string   "description"
-    t.float    "count_as"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "description"
+    t.float  "count_as"
   end
 
   create_table "pallets", :force => true do |t|
-    t.integer  "purchase_order_id"
-    t.integer  "cargo_list_id"
-    t.decimal  "amount",                :precision => 10, :scale => 0
-    t.decimal  "weight_total",          :precision => 10, :scale => 0
-    t.datetime "delivery_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.float    "additional_space",                                     :default => 0.0
-    t.integer  "pallet_type_id"
-    t.boolean  "delivered",                                            :default => false
-    t.integer  "delivery_rejection_id"
+    t.integer "cargo_list_id"
+    t.float   "additional_space",      :default => 0.0
+    t.integer "pallet_type_id"
+    t.boolean "delivered",             :default => false
+    t.integer "delivery_rejection_id"
   end
 
   create_table "pdf_reports", :force => true do |t|
@@ -507,7 +497,6 @@ ActiveRecord::Schema.define(:version => 20120701221037) do
     t.string   "storage_location"
     t.string   "article_number"
     t.decimal  "total_amount",      :precision => 12, :scale => 2
-    t.string   "consignee_full"
     t.boolean  "delivered",                                        :default => false
     t.integer  "zip_location_id"
     t.string   "baan_id"

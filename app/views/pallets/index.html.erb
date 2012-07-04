@@ -43,7 +43,7 @@
       <% end %>
       <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
       <% if pallet.purchase_positions.present? %>
-        <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
+        <h4 class="floatLeft"><%= pallet.purchase_orders.first.shipping_address.consignee_full %></h4>
       <% end %>
       <% if permitted_to? :edit, :pallets %>
         <a href="<%= edit_pallet_path(pallet) %>" class="header_link" data-role="edit_remote" data-show-tooltip="true" title="Zeige Palette-Optionen">
@@ -70,25 +70,21 @@
         </thead>
         <tbody>
           <% pallet.purchase_positions.each do |purchase_position| %>
-            <% if (purchase_position.weight_total.to_f == 0.to_f) or (purchase_position.amount.to_i == 0) %>
-              <tr class="yellow_background">
-            <% else %>
-              <tr>
-            <% end %>
+            <tr>
               <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
                 <td id="column_1" class="red">
                   <% if permitted_to? :edit, :purchase_positions %>
-                    <%= link_to("#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
+                    <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
                   <% else %>
-                    <%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %>
+                    <%= purchase_position.baan_id %>
                   <% end %>
                 </td>
               <% else %>
               <td id="column_1">
                 <% if permitted_to? :edit, :purchase_positions %>
-                  <%= link_to("#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}", edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
+                  <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), "data-role" => "edit_remote") %>
                 <% else %>
-                  <%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %>
+                  <%= purchase_position.baan_id %>
                 <% end %>
               </td>
               <% end %>

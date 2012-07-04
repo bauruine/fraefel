@@ -53,12 +53,10 @@
 <%= content_tag(:div, nil, :class => "clear") %>
 
 <hr />
-
-<% @purchase_positions.group("consignee_full").count.each do | k, v | %>
-  <% pallet_helper_ids = Pallet.where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => k}).includes(:purchase_positions, :cargo_list).map(&:id) %>
+<% Address.where("cargo_lists.id = ?", @cargo_list.id).where("addresses.category_id = ?", 10).includes(:purchase_orders => [:pallets => :cargo_list]).each do |address| %>
   <section class="filter_box">
     <header class="filter_box_header">
-      <h4 class="floatLeft"><%= k %></h4>
+      <h4 class="floatLeft"><%= address.consignee_full %></h4>
     </header>
     <section class="filter_box_content clearfix">
       <table>
@@ -72,7 +70,7 @@
           </tr>
         </thead>
         <tbody>
-          <% Pallet.order("pallets.id asc").where(:cargo_lists => {:id => @cargo_list.id}, :purchase_positions => {:consignee_full => k}).includes(:purchase_positions, :cargo_list).each do |pallet| %>
+          <% Pallet.order("pallets.id asc").where("cargo_lists.id = ?", @cargo_list.id).where("addresses.id = ?", address.id).includes([:purchase_orders => :addresses], :pallet_type, :cargo_list).each do |pallet| %>
             <tr>
               <td><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
               <td><%= pallet.mixed? ? "Ja" : nil %></td>
@@ -85,7 +83,7 @@
         <tfoot>
           <tr>
             <td class="bold">
-              <%= "Paletten-Plätze #{Pallet.where(:id => pallet_helper_ids).sum(:additional_space) + Pallet.where(:id => pallet_helper_ids).includes(:pallet_type).sum('pallet_types.count_as')}" %>
+              <%= "Paletten-Plätze #{Pallet.where("cargo_lists.id = ?", @cargo_list.id).where("addresses.id = ?", address.id).includes([:purchase_orders => :addresses], :cargo_list).sum(:additional_space) + PalletType.where("cargo_lists.id = ?", @cargo_list.id).where("addresses.id = ?", address.id).includes(:pallets => [:cargo_list, {:purchase_orders => :addresses}]).sum('count_as')}" %>
             </td>
             <td></td>
             <td></td>

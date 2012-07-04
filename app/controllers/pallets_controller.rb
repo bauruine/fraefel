@@ -33,7 +33,7 @@ class PalletsController < ApplicationController
   end
   
   def index
-    @pallets = Pallet.where(:delivered => false).where("purchase_positions.id IS NOT NULL").includes(:cargo_list, :purchase_positions => [:commodity_code, :purchase_order])
+    @pallets = Pallet.where(:delivered => false).where("purchase_positions.id IS NOT NULL").includes(:cargo_list, [:purchase_positions => :commodity_code], [:purchase_orders => :shipping_address], :pallet_type)
     #@purchase_orders = PurchaseOrder.joins(:pallets)
     
     respond_to do |format|
