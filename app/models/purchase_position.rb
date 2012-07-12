@@ -3,6 +3,7 @@ class PurchasePosition < ActiveRecord::Base
   belongs_to :purchase_order, :class_name => "PurchaseOrder", :foreign_key => "purchase_order_id"
   belongs_to :old_pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
   belongs_to :zip_location, :class_name => "ZipLocation", :foreign_key => "zip_location_id"
+  belongs_to :shipping_address, :class_name => "Address", :foreign_key => "level_3"
   
   has_many :pallet_purchase_position_assignments, :class_name => "PalletPurchasePositionAssignment"
   has_many :pallets, :class_name => "Pallet", :through => :pallet_purchase_position_assignments
@@ -90,7 +91,8 @@ class PurchasePosition < ActiveRecord::Base
       purchase_position_attributes.merge!(:article_number => baan_raw_data.attributes["baan_27"])
       purchase_position_attributes.merge!(:article => baan_raw_data.attributes["baan_28"])
       purchase_position_attributes.merge!(:product_line => baan_raw_data.attributes["baan_30"])
-      purchase_position_attributes.merge!(:consignee_full => baan_raw_data.attributes["baan_33"])
+      purchase_position_attributes.merge!(:level_3 => Address.where(:code => baan_raw_data.attributes["baan_71"], :category_id => 10).first.try(:id))
+      
       
       purchase_position_attributes.merge!(:zip_location_id => ZipLocation.find_or_create_by_title(:title => baan_raw_data.attributes["baan_35"]).id)
       purchase_position_attributes.merge!(:gross_price => baan_raw_data.attributes["baan_38"])

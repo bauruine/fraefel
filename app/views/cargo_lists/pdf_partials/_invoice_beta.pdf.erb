@@ -145,7 +145,7 @@
       <tr>
         <td></td>
         <td class="bold">Total brutto kg</td>
-        <td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@assigned_pallets.sum("count_as", :include => [:pallet_type]) * 20) %></td>
+        <td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@pallets.sum("count_as", :include => [:pallet_type]) * 20) %></td>
         <td></td>
         <td></td>
         <td></td>
@@ -207,9 +207,9 @@
   var pallet_total_value = $("tr")[2].children[1];
   var coli_count_value = $("tr")[3].children[1];
   
-  $(pallet_count).html(<%= @assigned_pallets.sum('count_as', :include => :pallet_type) %>);
-  $(pallet_total).html(<%= @assigned_pallets.sum('pallets.additional_space') + @assigned_pallets.sum('count_as', :include => :pallet_type) %>);
-  $(coli_count).html(<%= @assigned_pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
+  $(pallet_count).html(<%= @pallets.sum('count_as', :include => :pallet_type) %>);
+  $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallets.sum('count_as', :include => :pallet_type) %>);
+  $(coli_count).html(<%= @pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
   
   $(pallet_count_value).html("Paletten");
   $(pallet_total_value).html("Palettenplätze");

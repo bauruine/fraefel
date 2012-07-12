@@ -1,0 +1,36 @@
+<div class="btn-toolbar pull-right">
+  <%# if @assigned_pallets.present? %>
+    <div class="btn-group">
+      <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert") %>"><i class="icon-print icon-white"></i> Transport Anmeldung</a>
+    </div>
+    <div class="btn-group">
+      <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report") %>"><i class="icon-print icon-white"></i> Rüstschein</a>
+    </div>
+    <div class="btn-group">
+      <a class="btn btn-primary" href="<%= pdf_reports_path(:pdf_type => "TransportAssignmentDocument", :args_for_printing => {:cargo_list_id => @cargo_list.id}) %>" data-method="post"><i class="icon-print icon-white"></i> Transport Auftrag</a>
+    </div>
+    <% unless @cargo_list.country == 'CH' %>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= pdf_reports_path(:pdf_type => "ProformaInvoiceDocument", :args_for_printing => {:cargo_list_id => @cargo_list.id}) %>" data-method="post"><i class="icon-print icon-white"></i> Proforma Rechnung</a>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice_beta") %>"><i class="icon-print icon-white"></i> Zollpapiere</a>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll") %>"><i class="icon-print icon-white"></i> Kontrolle</a>
+      </div>
+    <% else %>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "delivery_receipt") %>"><i class="icon-print icon-white"></i> Lieferschein</a>
+      </div>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "pick_up_receipt") %>"><i class="icon-print icon-white"></i> Abholschein</a>
+      </div>
+    <% end %>
+  <%# end %>
+  <% if permitted_to? :edit, :cargo_lists %>
+    <div class="btn-group">
+      <a class="btn btn-primary" href="<%= edit_cargo_list_path(@cargo_list) %>" data-role="edit_remote"><i class="icon-pencil icon-white"></i> Edit</a>
+    </div>
+  <% end %>
+</div>

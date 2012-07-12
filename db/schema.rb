@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120703132506) do
+ActiveRecord::Schema.define(:version => 20120710091342) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -240,16 +240,9 @@ ActiveRecord::Schema.define(:version => 20120703132506) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "delivered",                                               :default => false
+    t.boolean  "delivered",             :default => false
     t.string   "referee"
-    t.integer  "zip"
     t.string   "country"
-    t.string   "street"
-    t.string   "city"
-    t.decimal  "vat",                      :precision => 12, :scale => 2
-    t.decimal  "effective_invoice_amount", :precision => 12, :scale => 2
-    t.decimal  "subtotal",                 :precision => 12, :scale => 2
-    t.decimal  "total_amount",             :precision => 12, :scale => 2
   end
 
   create_table "categories", :force => true do |t|
@@ -405,10 +398,11 @@ ActiveRecord::Schema.define(:version => 20120703132506) do
 
   create_table "pallets", :force => true do |t|
     t.integer "cargo_list_id"
-    t.float   "additional_space",      :default => 0.0
+    t.float   "additional_space",          :default => 0.0
     t.integer "pallet_type_id"
-    t.boolean "delivered",             :default => false
+    t.boolean "delivered",                 :default => false
     t.integer "delivery_rejection_id"
+    t.integer "purchase_position_counter"
   end
 
   create_table "pdf_reports", :force => true do |t|
@@ -508,6 +502,7 @@ ActiveRecord::Schema.define(:version => 20120703132506) do
     t.integer  "priority_level",                                   :default => 1
     t.boolean  "picked_up",                                        :default => false
     t.boolean  "cancelled",                                        :default => false
+    t.integer  "level_3"
   end
 
   create_table "referees", :force => true do |t|

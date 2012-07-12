@@ -15,7 +15,15 @@ class PurchaseOrder < ActiveRecord::Base
   
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
-  # has_paper_trail
+  after_create :create_calculation
+  
+  def self.get_performance_time
+    @time_start = Time.now
+    self.includes(:purchase_positions)
+    @time_stop = Time.now
+    
+    return @time_stop - @time_start
+  end
   
   def self.clean
     where("purchase_orders.baan_id NOT IN(?)", TimeShifting.all.collect(&:purchase_order_id)).where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
@@ -145,6 +153,12 @@ class PurchaseOrder < ActiveRecord::Base
         p_o.update_attribute("picked_up", true)
       end
     end
+  end
+  
+  private
+  
+  def create_calculation
+    self.create_calculation unless self.calculation.present?
   end
   
 end

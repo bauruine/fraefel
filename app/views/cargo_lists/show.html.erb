@@ -8,45 +8,7 @@
 
 <div class="page-header">
   <h1 class="pull-left">Versand NR#<%= @cargo_list.id %></h1>
-  <div class="btn-toolbar pull-right">
-    <% if @assigned_pallets.present? %>
-      <div class="btn-group">
-        <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert") %>"><i class="icon-print icon-white"></i> Transport Anmeldung</a>
-      </div>
-      <div class="btn-group">
-        <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report") %>"><i class="icon-print icon-white"></i> Rüstschein</a>
-      </div>
-      <div class="btn-group">
-        <a class="btn btn-primary" href="<%= pdf_reports_path(:pdf_type => "TransportAssignmentDocument", :cargo_list_id => @cargo_list.id) %>" data-method="post"><i class="icon-print icon-white"></i> Transport Auftrag</a>
-      </div>
-      <% unless @cargo_list.country == 'CH' %>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= pdf_reports_path(:pdf_type => "ProformaInvoiceDocument", :cargo_list_id => @cargo_list.id) %>" data-method="post"><i class="icon-print icon-white"></i> Proforma Rechnung</a>
-        </div>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice_beta") %>"><i class="icon-print icon-white"></i> Zollpapiere NEU</a>
-        </div>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice") %>"><i class="icon-print icon-white"></i> Zollpapiere</a>
-        </div>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_controll") %>"><i class="icon-print icon-white"></i> Kontrolle</a>
-        </div>
-      <% else %>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "delivery_receipt") %>"><i class="icon-print icon-white"></i> Lieferschein</a>
-        </div>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "pick_up_receipt") %>"><i class="icon-print icon-white"></i> Abholschein</a>
-        </div>
-      <% end %>
-    <% end %>
-    <% if permitted_to? :edit, :cargo_lists %>
-      <div class="btn-group">
-        <a class="btn btn-primary" href="<%= edit_cargo_list_path(@cargo_list) %>" data-role="edit_remote"><i class="icon-pencil icon-white"></i> Edit</a>
-      </div>
-    <% end %>
-  </div>
+  <%= render 'cargo_lists/partials/show/btn_toolbar' %>
   <div class="clear"></div>
 </div>
 
@@ -54,141 +16,123 @@
   <div id="flash_notice">Versand NR<%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
 <% end %>
 
-<% if @assigned_pallets.present? %>
-  
-  <dl class="dl-horizontal">
-    <dt>Versand:</dt>
-    <dd><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %> / <%= @cargo_list.country %></dd>
-    <dt>Empfänger</dt>
-    <dd><%= @cargo_list.referee %></dd>
-    <dt>Anzahl Paletten:</dt>
-    <dd><%= @pallets_count.to_i %></dd>
-    <dt>Mehrplatz</dt>
-    <dd><%= @cargo_list.additional_space %></dd>
-  </dl>
-  
-  <section class="filter_box">
-    <header class="filter_box_header green_background"><h4>Angefügte Paletten / Coli</h4></header>
-    <section class="filter_box_content clearfix">
-      <%= form_tag(remove_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
-        <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table class="table no-margin">
-          <thead>
+<dl class="dl-horizontal">
+  <dt>Versand:</dt>
+  <dd><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %> / <%= @cargo_list.country %></dd>
+  <dt>Empfänger</dt>
+  <dd><%= @cargo_list.referee %></dd>
+  <dt>Anzahl Paletten:</dt>
+  <dd><%= @pallets.count.to_i %></dd>
+  <dt>Mehrplatz</dt>
+  <dd><%= @cargo_list.additional_space %></dd>
+</dl>
+
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Angefügte Paletten / Coli</h4></header>
+  <section class="filter_box_content clearfix">
+      <table class="table no-margin">
+        <thead>
+          <tr>
+            <th>NR</th>
+            <th>Positionen</th>
+            <th>Mehrplatz</th>
+            <th>Tour</th>
+            <th>PLZ Gebiet</th>
+            <th>Empfänger</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @pallets.each do |pallet| %>
             <tr>
-              <th>NR</th>
-              <th>Positionen</th>
-              <th>Mehrplatz</th>
-              <th>Tour</th>
-              <th>PLZ Gebiet</th>
-              <th>Empfänger</th>
-              <th>Auswahl</th>
+              <td id="column_1">
+                <%= link_to("#{pallet.pallet_type.description.capitalize} #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
+              </td>
+              <td id="column_2"><%= pallet.purchase_position_counter %></td>
+              <td id="column_3"><%= pallet.additional_space %></td>
+              <td id="column_4"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
+              <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
+              <td id="column_6"><%= pallet.purchase_orders.first.shipping_address.consignee_full %></td>
             </tr>
-          </thead>
-          <tbody>
-            <% @assigned_pallets.each do |pallet| %>
-              <tr>
-                <td class="<%= pallet.mixed? ? "mixed" : "not_mixed" %>"><%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %></td>
-                <td><%= pallet.purchase_positions.count %></td>
-                <td><%= pallet.additional_space %></td>
-                <td><%= pallet.purchase_orders.where("shipping_route_id IS NOT NULL").present? ? pallet.purchase_orders.where("shipping_route_id IS NOT NULL").first.shipping_route.name : nil %></td>
-                <td><%= pallet.purchase_positions.first.zip_location.title %></td>
-                <td><%= Address.where("addresses.category_id = ?", 10).where("pallets.id = ?", pallet.id).includes(:purchase_orders => :pallets).limit(1).first.consignee_full %></td>
-                <% if permitted_to? :remove_pallets, :cargo_lists %>
-                  <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
-                <% else %>
-                  <td></td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-          <tfoot>
-            <% if permitted_to? :remove_pallets, :cargo_lists %>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="align-center">
-                  <button class="btn btn-warning" type="submit" data-disable-with="Please wait...">
-                    Entfernen
-                  </button>
-                </td>
-              </tr>
-            <% end %>
-          </tfoot>
-        </table>
-      <% end %>
-    </section>
+          <% end %>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
   </section>
-  
-<% else %>
-  <div id="flash_notice">Es sind noch keine Paletten zugewiesen worden.</div>
-<% end %>
+</section>
 
 
-<% if @pallets.present? %>
-  <section class="filter_box">
-    <header class="filter_box_header orange_background"><h4>Verfügbare Paletten / Coli</h4></header>
-    <section class="filter_box_content clearfix">
-      <%= form_tag(assign_pallets_cargo_lists_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
-        <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table class="table no-margin">
-          <thead>
+<section class="filter_box">
+  <header class="filter_box_header"><h4>Verfügbare Paletten / Coli</h4></header>
+  <section class="filter_box_content clearfix">
+      <table class="table no-margin">
+        <thead>
+          <tr>
+            <th>NR</th>
+            <th>Positionen</th>
+            <th>Mehrplatz</th>
+            <th>Tour</th>
+            <th>PLZ Gebiet</th>
+            <th>Empfänger</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @available_pallets.each do |pallet| %>
             <tr>
-              <th>NR</th>
-              <th>Positionen</th>
-              <th>Mehrplatz</th>
-              <th>Tour</th>
-              <th>PLZ Gebiet</th>
-              <th>Empfänger</th>
-              <th>Auswahl</th>
+              <td id="column_1">
+                <%= link_to("#{pallet.pallet_type.description.capitalize} #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
+              </td>
+              <td id="column_2"><%= pallet.purchase_position_counter %></td>
+              <td id="column_3"><%= pallet.additional_space %></td>
+              <td id="column_4"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
+              <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
+              <td id="column_6"><%= pallet.purchase_orders.first.shipping_address.consignee_full %></td>
             </tr>
-          </thead>
-          <tbody>
-            <% @pallets.each do |pallet| %>
-              <% if pallet.purchase_positions.present? %>
-                <tr>
-                  <td class="<%= pallet.mixed? ? "mixed" : "not_mixed" %>">
-                    <%= pallet.pallet_type.description == "coli" ? link_to("Coli #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") : link_to("Palette #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
-                  </td>
-                  <td><%= pallet.purchase_positions.count %></td>
-                  <td><%= pallet.additional_space %></td>
-                  <td><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
-                  <td><%= pallet.purchase_positions.first.zip_location.title %></td>
-                  <td><%= Address.where("addresses.category_id = ?", 10).where("pallets.id = ?", pallet.id).includes(:purchase_orders => :pallets).limit(1).first.consignee_full %></td>
-                  <% if permitted_to? :assign_pallets, :cargo_lists %>
-                    <td class="align-center"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
-                  <% else %>
-                    <td></td>
-                  <% end %>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-          <tfoot>
-            <% if permitted_to? :assign_pallets, :cargo_lists %>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="align-center">
-                  <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">
-                    Hinzufügen
-                  </button>
-                </td>
-              </tr>
-            <% end %>
-          </tfoot>
-        </table>
-      <% end %>
-    </section>
+          <% end %>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
   </section>
+</section>
+
+<script type="text/javascript" charset="utf-8">
+  var column_1 = 0;
+  var column_2 = 0;
+  var column_3 = 0;
+  var column_4 = 0;
+  var column_5 = 0;
+  var column_6 = 0;
   
-<% else %>
-  <div id="flash_notice">Es wurden bereits alle Palleten bearbeitet!</div>
-<% end %>
+  $('td#column_1').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_1) {column_1 = this_width};
+  });
+  $('td#column_2').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_2) {column_2 = this_width};
+  });
+  $('td#column_3').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_3) {column_3 = this_width};
+  });
+  $('td#column_4').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_4) {column_4 = this_width};
+  });
+  $('td#column_5').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_5) {column_5 = this_width};
+  });
+  $('td#column_6').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_6) {column_6 = this_width};
+  });
+  
+  $('td#column_1').css('width', column_1 + 'px');
+  $('td#column_2').css('width', column_2 + 'px');
+  $('td#column_3').css('width', column_3 + 'px');
+  $('td#column_4').css('width', column_4 + 'px');
+  $('td#column_5').css('width', column_5 + 'px');
+  $('td#column_6').css('width', column_6 + 'px');
+</script>

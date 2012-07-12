@@ -68,7 +68,7 @@ class Address < ActiveRecord::Base
     BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
       csv_todos.each do |k, v|
         address_attributes.merge!(:country => baan_raw_data.attributes["baan_9"])
-        address_attributes.merge!(:address_code => baan_raw_data.attributes["baan_#{v[0]}"])
+        address_attributes.merge!(:code => baan_raw_data.attributes["baan_#{v[0]}"])
         address_attributes.merge!(:company_name => baan_raw_data.attributes["baan_#{v[1]}"])
         address_attributes.merge!(:street => baan_raw_data.attributes["baan_#{v[2]}"] + " " + baan_raw_data.attributes["baan_#{v[3]}"])
         address_attributes.merge!(:postal_code => baan_raw_data.attributes["baan_#{v[4]}"])

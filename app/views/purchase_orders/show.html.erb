@@ -48,7 +48,7 @@
 
 <dl class="dl-horizontal">
   <dt>Empfänger:</dt>
-  <dd><%= @purchase_order.purchase_positions.first.consignee_full.present? ? @purchase_order.purchase_positions.first.consignee_full : @purchase_order.customer.company %></dd>
+  <dd><%= @purchase_order.shipping_address.consignee_full %></dd>
 </dl>
 
 <% if @purchase_positions.present? %>
@@ -57,7 +57,7 @@
       <h4 class="floatLeft">Offene Positionen</h4>
     </header>
     <section class="filter_box_content clearfix">
-      <% form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
+      <%= form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
         <table class="table no-margin">
           <thead>
@@ -141,7 +141,7 @@
       <% end %>
       <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
       <% if pallet.purchase_positions.present? %>
-        <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
+        <h4 class="floatLeft"><%= pallet.purchase_orders.first.shipping_address.consignee_full %></h4>
       <% end %>
       
       <% if permitted_to? :edit, :pallets %>
@@ -165,7 +165,7 @@
         </dl>
       <% end %>
       
-      <% form_tag(remove_positions_pallet_path(pallet), {:class => "form no-margin", "data-submit_handler" => "true", :method => :delete}) do %>
+      <%= form_tag(remove_positions_pallet_path(pallet), {:class => "form no-margin", "data-submit_handler" => "true", :method => :delete}) do %>
         <table class="table no-margin">
           <thead>
             <tr>

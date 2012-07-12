@@ -3,9 +3,9 @@ class PurchaseOrdersController < ApplicationController
   before_filter :is_currently_importing, :only => :index
   
   def show
-    @purchase_order = PurchaseOrder.find(params[:id])
+    @purchase_order = PurchaseOrder.where(:id => params[:id]).first
     @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id).where("purchase_positions.cancelled" => false)
-    @pallets = @purchase_order.pallets
+    @pallets = Pallet.where("purchase_orders.id = ?", @purchase_order.id).includes([:purchase_orders => :shipping_address], [:purchase_positions => :shipping_address])
     @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL")
     @shipping_routes = ShippingRoute.order("name ASC")
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
@@ -42,12 +42,17 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def index
-    @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false", :cancelled_equals => "false"})
+    @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :shipping_address).search(params[:search] || {:delivered_equals => "false", :picked_up_equals => "false", :cancelled_equals => "false"})
     @purchase_orders = @search.relation.ordered_for_delivery
-    @level_1 = Address.where("addresses.category_id" => 8, "addresses.id" => @purchase_orders.collect(&:level_1)).order("addresses.company_name ASC")
-    @level_2 = Address.where("addresses.category_id" => 9, "addresses.id" => @purchase_orders.collect(&:level_2)).order("addresses.company_name ASC")
-    @level_3 = Address.where("addresses.category_id" => 10, "addresses.id" => @purchase_orders.collect(&:level_3)).order("addresses.company_name ASC")
-    @shipping_routes = ShippingRoute.order("name ASC")
+    #@level_1 = Address.where("addresses.category_id" => 8, "addresses.id" => @purchase_orders.collect(&:level_1)).order("addresses.company_name ASC")
+    @level_1 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 8).where("purchase_orders.delivered = ?", params[:search].present? ? params[:search][:delivered_equals] : true).joins(:purchase_orders)
+    #@level_2 = Address.where("addresses.category_id" => 9, "addresses.id" => @purchase_orders.collect(&:level_2)).order("addresses.company_name ASC")
+    @level_2 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 9).where("purchase_orders.delivered = ?", params[:search].present? ? params[:search][:delivered_equals] : true).joins(:purchase_orders)
+    #@level_3 = Address.where("addresses.category_id" => 10, "addresses.id" => @purchase_orders.collect(&:level_3)).order("addresses.company_name ASC")
+    @level_3 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 10).where("purchase_orders.delivered = ?", params[:search].present? ? params[:search][:delivered_equals] : true).joins(:purchase_orders)
+    
+    #@shipping_routes = ShippingRoute.order("name ASC")
+    @shipping_routes = ShippingRoute.select("DISTINCT `shipping_routes`.*").where("purchase_orders.delivered = ?", params[:search].present? ? params[:search][:delivered_equals] : true).joins(:purchase_orders)
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
     respond_to do |format|
@@ -74,7 +79,6 @@ class PurchaseOrdersController < ApplicationController
   end
   
   def index_beta
-    # @purchase_orders = PurchaseOrder.group("purchase_orders.id").having("count(purchase_positions.id) = purchase_orders.stock_status").where("purchase_orders.delivered = false").includes(:purchase_positions, :shipping_route, :calculation, :addresses)
     @purchase_orders = PurchaseOrder.where("purchase_orders.warehousing_completed = true").where("purchase_orders.delivered = false").includes(:purchase_positions, :shipping_route, :calculation, :addresses)
   end
   

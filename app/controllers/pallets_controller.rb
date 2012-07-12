@@ -1,10 +1,9 @@
 class PalletsController < ApplicationController
   filter_access_to :all
-  # before_filter :valid_for_assignment?, :only => :assign_positions
-  # before_filter :valid_for_deletion?, :only => :remove_positions
   
   def show
     @pallet = Pallet.find(params[:id])
+    @purchase_positions = @pallet.purchase_positions.includes(:shipping_address)
     respond_to do |format|
       format.pdf do
         render( 
@@ -97,7 +96,9 @@ class PalletsController < ApplicationController
     @pallet = Pallet.find(params[:id])
     @purchase_positions = PurchasePosition.where(:id => params[:purchase_position_ids])
     @purchase_order = @purchase_positions.first.purchase_order
-    @pallet.purchase_positions -= @purchase_positions
+    
+    PalletPurchasePositionAssignment.where(:pallet_id => @pallet.id, :purchase_position_id => params[:purchase_position_ids]).destroy_all
+    
     if !Pallet.find(@pallet).purchase_positions.where(:purchase_order_id => @purchase_positions.first.purchase_order_id).present?
       # remove purchase_order assignment from table
       @pallet.purchase_orders -= [@purchase_positions.first.purchase_order]
@@ -118,36 +119,32 @@ class PalletsController < ApplicationController
   
   def assign_positions
     @purchase_order = PurchaseOrder.where(:id => params[:purchase_order_id]).first
-    @purchase_order.create_calculation unless @purchase_order.calculation.present?
     if params[:pallet_id].present?
       @pallet = Pallet.where(:id => params[:pallet_id]).first
     else
       @pallet = Pallet.create
     end
     
-    @pallet.purchase_positions += PurchasePosition.where(:id => params[:purchase_position_ids])
-    @purchase_order.pallets += [@pallet]
-    @purchase_order.calculation.update_attribute(:total_pallets, @purchase_order.pallets.count)
+    if params[:purchase_position_ids].present?
+      @purchase_order.pallets += [@pallet]
+    end
     
+    pallet_purchase_position_assignment_attributes = {}
     params[:quantity_with_ids].each do |k, v|
-      purchase_position = PurchasePosition.find(k.to_i)
-      pallet_purchase_position_assignment = PalletPurchasePositionAssignment.where(:pallet_id => @pallet.id, :purchase_position_id => purchase_position.id).first
-      pallet_purchase_position_assignment.update_attributes(:value_discount => (pallet_purchase_position_assignment.purchase_position.value_discount * v.to_i), :net_price => (pallet_purchase_position_assignment.purchase_position.net_price * v.to_i), :gross_price => (pallet_purchase_position_assignment.purchase_position.gross_price * v.to_i), :quantity => v.to_i, :amount => (pallet_purchase_position_assignment.purchase_position.amount * v.to_i), :weight => (pallet_purchase_position_assignment.purchase_position.weight_single * v.to_i)) if pallet_purchase_position_assignment.present?
+      if params[:purchase_position_ids].present? && params[:purchase_position_ids].include?(k)
+        purchase_position = PurchasePosition.find(k.to_i)
+        pallet_purchase_position_assignment_attributes.merge!(:purchase_position_id => purchase_position.id)
+        pallet_purchase_position_assignment_attributes.merge!(:value_discount => purchase_position.value_discount * v.to_i)
+        pallet_purchase_position_assignment_attributes.merge!(:net_price => purchase_position.net_price * v.to_i)
+        pallet_purchase_position_assignment_attributes.merge!(:gross_price => purchase_position.gross_price * v.to_i)
+        pallet_purchase_position_assignment_attributes.merge!(:quantity => v.to_i)
+        pallet_purchase_position_assignment_attributes.merge!(:amount => purchase_position.amount * v.to_i)
+        pallet_purchase_position_assignment_attributes.merge!(:weight => purchase_position.weight_single * v.to_i)
+        
+        @pallet.pallet_purchase_position_assignments.create(pallet_purchase_position_assignment_attributes)
+      end
     end
     redirect_to(:back)
   end
   
-  private
-  
-  def valid_for_deletion?
-    unless params[:purchase_position_ids].present?
-      render "pallets/valid_for_deletion", :status => 400
-    end
-  end
-  
-  def valid_for_assignment?
-    unless (params[:quantity_with_ids].present? && params[:purchase_position_ids].present? && params[:purchase_order_id].present?)
-      render "pallets/valid_for_assignment", :status => 400
-    end
-  end
 end

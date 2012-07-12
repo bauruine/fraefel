@@ -1,7 +1,8 @@
 # encoding: utf-8
 class ProformaInvoiceDocument < Prawn::Document
-  def initialize(cargo_list_id)
+  def initialize(args)
     super(top_margin: 5, page_layout: :portrait, page_size: 'A4')
+    cargo_list_id = args[:cargo_list_id]
     @cargo_list = CargoList.where(:id => cargo_list_id).first
     @address_category = Category.where(:title => "kat_c").first
     @invoice_address_category_id = Category.where(:title => "kat_b").first

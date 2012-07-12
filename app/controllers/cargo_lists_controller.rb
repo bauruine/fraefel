@@ -1,14 +1,17 @@
 class CargoListsController < ApplicationController
   filter_access_to :all
-  before_filter :calculate_cargo_list, :only => [:collective_invoice]
   
   def show
     @cargo_list = CargoList.where(:id => params[:id]).first
+    @pallets = @cargo_list.pallets.order("pallets.id DESC").includes(:pallet_type, [:purchase_orders => [:shipping_route, :shipping_address]], [:purchase_positions => :zip_location])
+    @available_pallets = Pallet.where("cargo_lists.id IS NULL AND pallets.delivered = false AND pallets.purchase_position_counter != 0").includes(:pallet_type, [:purchase_orders => [:shipping_route, :shipping_address]], [:purchase_positions => :zip_location], :cargo_list)
     @purchase_positions = PurchasePosition.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
-    @assigned_pallets = @cargo_list.pallets
-    @pallets_count = PalletType.includes(:pallets => :cargo_list).sum(:count_as)
-    @pallets = Pallet.where("pallets.cargo_list_id IS NULL").where("pallets.delivery_rejection_id IS NULL").where("purchase_positions.id IS NOT NULL").order("purchase_positions.delivery_date asc").includes(:purchase_orders => [:purchase_positions])
-    @address = Address.where("cargo_lists.id = ?", @cargo_list.id).includes(:purchase_orders => [:pallets => :cargo_list])
+    @pallet_types = PalletType.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
+    
+    @addresses = Address.select("DISTINCT `addresses`.*").where("cargo_lists.id = ?", @cargo_list.id).where("addresses.category_id = ?", 10).joins(:purchase_orders => [:pallets => :cargo_list])
+    #@assigned_pallets = @cargo_list.pallets
+    #@pallets_count = PalletType.includes(:pallets => :cargo_list).sum(:count_as)
+    #@address = Address.where("cargo_lists.id = ?", @cargo_list.id).includes(:purchase_orders => [:pallets => :cargo_list])
     
     respond_to do |format|
       format.html

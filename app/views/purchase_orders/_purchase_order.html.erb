@@ -16,7 +16,7 @@
     <span class="label label-inverse"><%= purchase_order.calculation.total_purchase_positions %></span>
   </td>
   <td><%= purchase_order.calculation.total_pallets %></td>
-  <td><%= purchase_order.purchase_positions.first.consignee_full %></td>
+  <td><%= purchase_order.shipping_address.consignee_full %></td>
   <td><%= purchase_order.shipping_route.name %></td>
   <td><%= purchase_order.purchase_positions.first.zip_location.title %></td>
   <td><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>

@@ -16,10 +16,10 @@ class PdfReportsController < ApplicationController
     
     @crypted_file_name = Digest::MD5.hexdigest("#{User.current.object_id}_#{Time.now}").concat(".pdf")
     @file_path = "public/pdfs/".concat(@crypted_file_name)
-    @pdf_document = DeliveryRejectionProformaInvoiceDocument.new(params[:delivery_rejection_id])
+    @pdf_document = eval(params[:pdf_type]).new(params[:args_for_printing])
     
     @pdf_document.render_file(@file_path)
-    @pdf_report.update_attributes(:pdf_type => "proforma_invoice", :report_file_name => @crypted_file_name, :report_file_path => @file_path, :saved_local => false)
+    @pdf_report.update_attributes(:pdf_type => params[:pdf_type], :report_file_name => @crypted_file_name, :report_file_path => @file_path, :saved_local => false)
     
     
     respond_to do |format|

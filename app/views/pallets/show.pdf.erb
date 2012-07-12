@@ -7,7 +7,7 @@
       <% end %>
       <h4 class="floatLeft m-r_5px"><%= @pallet.pallet_type.description == "coli" ? "Coli NR #{@pallet.id} | " : "Palette NR #{@pallet.id} | " %></h4>
       <% if @pallet.purchase_positions.present? %>
-        <h4 class="floatLeft"><%= @pallet.purchase_positions.first.consignee_full %></h4>
+        <h4 class="floatLeft"><%= @purchase_positions.first.shipping_address.consignee_full %></h4>
       <% end %>
     </header>
     <section class="filter_box_content clearfix">
@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @pallet.purchase_positions.each do |purchase_position| %>
+          <% @purchase_positions.each do |purchase_position| %>
             <tr>
               <% if purchase_position.purchase_order != @pallet.purchase_orders.first %>
                 <td class="red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
