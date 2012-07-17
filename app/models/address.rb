@@ -6,6 +6,8 @@ class Address < ActiveRecord::Base
   has_many :purchase_order_address_assignments, :class_name => "PurchaseOrderAddressAssignment"
   has_many :purchase_orders, :class_name => "PurchaseOrder", :through => :purchase_order_address_assignments
   
+  has_many :purchase_positions, :class_name => "PurchasePosition", :foreign_key => "level_3"
+  
   def consignee_full
     "#{self.company_name}, #{self.street}, #{self.country}-#{self.postal_code} #{self.city}"
   end

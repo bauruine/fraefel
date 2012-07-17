@@ -32,8 +32,8 @@ class PalletsController < ApplicationController
   end
   
   def index
-    @pallets = Pallet.where(:delivered => false).where("purchase_positions.id IS NOT NULL").includes(:cargo_list, [:purchase_positions => :commodity_code], [:purchase_orders => :shipping_address], :pallet_type)
-    #@purchase_orders = PurchaseOrder.joins(:pallets)
+    @search = Pallet.where("purchase_positions.id IS NOT NULL").includes(:zip_location, :shipping_address, :cargo_list, {:pallet_purchase_position_assignments => {:purchase_position => :commodity_code}}, :purchase_orders, :pallet_type).search(params[:search] || {:delivered_equals => "false"})
+    @pallets = @search.relation
     
     respond_to do |format|
       format.html

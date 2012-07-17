@@ -8,9 +8,7 @@
         <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
       <% end %>
       <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
-      <% if pallet.purchase_positions.present? %>
-        <h4 class="floatLeft"><%= pallet.purchase_positions.first.consignee_full %></h4>
-      <% end %>
+      <h4 class="floatLeft"><%= pallet.shipping_address.consignee_full %></h4>
     </header>
     <section class="filter_box_content clearfix">
       <table class="margin_bottom_big">
@@ -26,34 +24,78 @@
           </tr>
         </thead>
         <tbody>
-          <% pallet.purchase_positions.each do |purchase_position| %>
+          <% pallet.pallet_purchase_position_assignments.each do |pallet_purchase_position_assignment| %>
+            <% purchase_position = pallet_purchase_position_assignment.purchase_position %>
             <tr>
-              <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
-                <td class="align-center red"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
-              <% else %>
-              <td class="align-center"><%= link_to("#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}", edit_purchase_position_path(purchase_position)) %></td>
-              <% end %>
-              <td class="align-center"><%= purchase_position.article_number %></td>
-              <td class="align-center"><%= purchase_position.article %></td>
-              <td class="align-center"><%= purchase_position.product_line %></td>
-              <td class="align-center"><%= purchase_position.quantity %></td>
-              <td class="align-center"><%= purchase_position.storage_location %></td>
-              <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+              <td id="column_1"><%= purchase_position.baan_id %></td>
+              <td id="column_2"><%= purchase_position.article_number %></td>
+              <td id="column_3"><%= purchase_position.article %></td>
+              <td id="column_4"><%= purchase_position.product_line %></td>
+              <td id="column_5"><%= purchase_position.quantity %></td>
+              <td id="column_6"><%= pallet_purchase_position_assignment.quantity %></td>
+              <td id="column_7"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
             </tr>
           <% end %>
         </tbody>
         <tfoot>
           <tr>
+            <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></strong></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="align-center"></td>
           </tr>
         </tfoot>
       </table>
     </section>
   </section>
 <% end %>
+
+<script type="text/javascript" charset="utf-8">
+  var column_1 = 0;
+  var column_2 = 0;
+  var column_3 = 0;
+  var column_4 = 0;
+  var column_5 = 0;
+  var column_6 = 0;
+  var column_7 = 0;
+  
+  $('td#column_1').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_1) {column_1 = this_width};
+  });
+  $('td#column_2').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_2) {column_2 = this_width};
+  });
+  $('td#column_3').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_3) {column_3 = this_width};
+  });
+  $('td#column_4').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_4) {column_4 = this_width};
+  });
+  $('td#column_5').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_5) {column_5 = this_width};
+  });
+  $('td#column_6').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_6) {column_6 = this_width};
+  });
+  $('td#column_7').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_7) {column_7 = this_width};
+  });
+  
+  $('td#column_1').css('width', column_1 + 'px');
+  $('td#column_2').css('width', column_2 + 'px');
+  $('td#column_3').css('width', column_3 + 'px');
+  $('td#column_4').css('width', column_4 + 'px');
+  $('td#column_5').css('width', column_5 + 'px');
+  $('td#column_6').css('width', column_6 + 'px');
+  $('td#column_7').css('width', column_7 + 'px');
+</script>

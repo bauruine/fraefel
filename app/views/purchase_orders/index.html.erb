@@ -50,6 +50,21 @@
     </div>
     <div class="clear"></div>
 </div>
+<div class="btn-toolbar pull-right">
+  <div class="btn-group">
+    <button class="btn btn-primary" disabled="disabled">Produziert</button>
+    <button class="btn" disabled="disabled"><%= @production_status_count.where(:production_status => 1, :stock_status => 0).count %></button>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-success" disabled="disabled">Eingelagert</button>
+    <button class="btn" disabled="disabled"><%= @stock_status_count.where(:stock_status => 1, :production_status => 1).count %></button>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-danger" disabled="disabled">Offen</button>
+    <button class="btn" disabled="disabled"><%= @pending_status_count.where(:production_status => 0).count %></button>
+  </div>
+</div>
+<div class="clear"></div>
 
 <blockquote>
   <p>

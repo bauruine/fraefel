@@ -1,0 +1,16 @@
+<fieldset>
+  <legend>Allgemein</fieldset>
+  <div class="control-group">
+    <%= f.label(:delivered_equals, "Versendet?", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:id_equals, "Palette-/Coli Nr.", :class => "control-label") %>
+    <div class="controls">
+      <%= f.text_field(:id_equals) %>
+    </div>
+  </div>
+</fieldset>

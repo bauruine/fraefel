@@ -1,8 +1,10 @@
 class Pallet < ActiveRecord::Base
-  belongs_to :cargo_list, :class_name => "CargoList", :foreign_key => "cargo_list_id"
+  belongs_to :cargo_list, :class_name => "CargoList", :foreign_key => "cargo_list_id", :counter_cache => true
   has_many :old_purchase_positions, :class_name => "PurchasePosition", :foreign_key => "pallet_id"
   belongs_to :old_purchase_order, :class_name => "PurchaseOrder", :foreign_key => "purchase_order_id"
   belongs_to :pallet_type, :class_name => "PalletType", :foreign_key => "pallet_type_id"
+  belongs_to :shipping_address, :class_name => "Address", :foreign_key => "level_3"
+  belongs_to :zip_location, :class_name => "ZipLocation", :foreign_key => "zip_location_id"
   
   has_many :purchase_order_pallet_assignments, :class_name => "PurchaseOrderPalletAssignment"
   has_many :purchase_orders, :class_name => "PurchaseOrder", :through => :purchase_order_pallet_assignments

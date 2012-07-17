@@ -67,7 +67,7 @@
 </blockquote>
 
 
-<% Address.where(:category_id => 10).where("purchase_positions.id" => @purchase_positions.collect(&:id)).includes(:purchase_orders => :purchase_positions).order("purchase_orders.delivery_date ASC").each do |ordered_address| %>
+<% Address.where("addresses.category_id" => 10).where("purchase_positions.id" => @purchase_positions.collect(&:id)).order("purchase_orders.delivery_date ASC").joins(:purchase_positions, :purchase_orders).each do |ordered_address| %>
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft"><%= ordered_address.consignee_full %></h4>
@@ -88,28 +88,6 @@
           </tr>
         </thead>
         <tbody>
-          <% PurchaseOrder.includes(:shipping_route, :purchase_positions => [:pallets]).order("purchase_orders.delivery_date ASC").where("purchase_positions.id" => @purchase_positions.collect(&:id)).where(:level_3 => ordered_address.id).each do |purchase_order| %>
-            <% purchase_order.purchase_positions.search(params[:search] || {:delivered_equals => "false"}).each do |p_o_p| %>
-              <tr>
-                <td id="column_1"><%= p_o_p.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                <td id="column_2"><%= purchase_order.shipping_route.name %></td>
-                <td id="column_3">
-                  <% if p_o_p.priority_level == 0 %>
-                    &#x2605;
-                  <% elsif p_o_p.priority_level > 1 %>
-                    &#x26a0;
-                  <% end %>
-                  <%= "#{purchase_order.baan_id}-#{p_o_p.position}" %>
-                </td>
-                <td id="column_4"><%= p_o_p.article_number %></td>
-                <td id="column_5"><%= p_o_p.quantity %></td>
-                <td id="column_6"><%= p_o_p.article %></td>
-                <td id="column_7"><%= p_o_p.product_line %></td>
-                <td id="column_8"><%= p_o_p.storage_location %></td>
-                <td id="column_9"><%= p_o_p.pallets.collect(&:id).join(", ") %></td>
-              </tr>
-            <% end %>
-          <% end %>
         </tbody>
       </table>
     </section>

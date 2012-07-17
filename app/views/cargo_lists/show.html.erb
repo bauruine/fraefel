@@ -51,7 +51,7 @@
               <td id="column_3"><%= pallet.additional_space %></td>
               <td id="column_4"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
               <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
-              <td id="column_6"><%= pallet.purchase_orders.first.shipping_address.consignee_full %></td>
+              <td id="column_6"><%= pallet.shipping_address.consignee_full %></td>
             </tr>
           <% end %>
         </tbody>
@@ -86,7 +86,7 @@
               <td id="column_3"><%= pallet.additional_space %></td>
               <td id="column_4"><%= pallet.purchase_orders.first.shipping_route.present? ? pallet.purchase_orders.first.shipping_route.name : nil %></td>
               <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
-              <td id="column_6"><%= pallet.purchase_orders.first.shipping_address.consignee_full %></td>
+              <td id="column_6"><%= pallet.shipping_address.consignee_full %></td>
             </tr>
           <% end %>
         </tbody>

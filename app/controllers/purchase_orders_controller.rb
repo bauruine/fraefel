@@ -55,6 +55,7 @@ class PurchaseOrdersController < ApplicationController
     @shipping_routes = ShippingRoute.select("DISTINCT `shipping_routes`.*").where("purchase_orders.delivered = ?", params[:search].present? ? params[:search][:delivered_equals] : true).joins(:purchase_orders)
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
+    @production_status_count = PurchasePosition.where().count
     respond_to do |format|
       format.html
       format.js
@@ -151,6 +152,12 @@ class PurchaseOrdersController < ApplicationController
   end
   
   private
+  
+  def method_name
+    if params[:search].present?
+      
+    end
+  end
   
   def is_currently_importing
     unless Resque::Worker.working.empty?

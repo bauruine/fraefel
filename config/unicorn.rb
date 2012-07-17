@@ -1,8 +1,23 @@
-working_directory "/home/tzhbami7/code/rails/fraefel"
-pid "/home/tzhbami7/code/rails/fraefel/tmp/pids/unicorn.pid"
-stderr_path "/home/tzhbami7/code/rails/fraefel/log/unicorn.log"
-stdout_path "/home/tzhbami7/code/rails/fraefel/log/unicorn.log"
+# unicorn config file based on github config
+# customnized by Stefan Spühler for i-v-o.ch
+rails_env = 'development'
 
-listen "/tmp/unicorn.fraefel.sock"
-worker_processes 5
-timeout 500
+# 16 workers and 1 master
+worker_processes 2
+
+# Load rails+github.git into the master before forking workers
+# for super-fast worker spawn times
+#preload_app true
+
+# Restart any workers that haven't responded in 30 seconds
+timeout 900
+
+# change this for other apps
+approot = '/Users/sufu/Code/rails/fraefel/'
+#appuser = 'fraefel'
+# Listen on a Unix data socket
+listen 3000
+# path to pid file
+pid "#{approot}/tmp/pids/app.pid"
+stderr_path "#{approot}/log/unicorn_error.log"
+stdout_path "#{approot}/log/unicorn_message.log"
