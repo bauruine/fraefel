@@ -3,7 +3,7 @@
 rails_env = 'development'
 
 # 16 workers and 1 master
-worker_processes 2
+worker_processes 1
 
 # Load rails+github.git into the master before forking workers
 # for super-fast worker spawn times
@@ -13,7 +13,7 @@ worker_processes 2
 timeout 900
 
 # change this for other apps
-approot = '/Users/sufu/Code/rails/fraefel/'
+approot = '/home/parallels/Code/rails/fraefel/'
 #appuser = 'fraefel'
 # Listen on a Unix data socket
 listen 3000

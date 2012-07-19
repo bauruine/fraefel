@@ -1,7 +1,8 @@
 # encoding: utf-8
 class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
-  def initialize(delivery_rejection_id)
+  def initialize(args)
     super(top_margin: 5, page_layout: :portrait, page_size: 'A4')
+    delivery_rejection_id = args[:delivery_rejection_id]
     @delivery_rejection = DeliveryRejection.where(:id => delivery_rejection_id).first
     #@address_category = Category.where(:title => "kat_c").first
     #@invoice_address_category_id = Category.where(:title => "kat_b").first

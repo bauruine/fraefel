@@ -6,8 +6,9 @@ class CargoListsController < ApplicationController
     @pallets = @cargo_list.pallets.order("pallets.id DESC").includes(:pallet_type, [:purchase_orders => :shipping_route], [:purchase_positions => :zip_location])
     @available_pallets = Pallet.where("cargo_lists.id IS NULL AND pallets.delivered = false AND pallets.purchase_position_counter != 0").includes(:pallet_type, [:purchase_orders => :shipping_route], [:purchase_positions => :zip_location], :cargo_list)
     @purchase_positions = PurchasePosition.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
-    @pallet_types = PalletType.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
-    
+    @pallet_types = PalletType.select("DISTINCT `cargo_lists`.*").where("cargo_lists.id = ?", @cargo_list.id).joins(:pallets => :cargo_list)
+    @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.select("DISTINCT `pallet_purchase_position_assignments`.*").where("cargo_lists.id = ?", @cargo_list.id ).joins(:pallet => :cargo_list)
+
     @addresses = Address.select("DISTINCT `addresses`.*").where("cargo_lists.id = ?", @cargo_list.id).where("addresses.category_id = ?", 10).joins(:purchase_orders => [:pallets => :cargo_list])
     #@assigned_pallets = @cargo_list.pallets
     #@pallets_count = PalletType.includes(:pallets => :cargo_list).sum(:count_as)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120717123020) do
+ActiveRecord::Schema.define(:version => 20120718132816) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -407,6 +407,7 @@ ActiveRecord::Schema.define(:version => 20120717123020) do
     t.integer "level_3"
     t.integer "zip_location_id"
     t.boolean "mixed",                     :default => false
+    t.integer "shipping_route_id"
   end
 
   create_table "pdf_reports", :force => true do |t|

@@ -1,10 +1,9 @@
 class Pallet < ActiveRecord::Base
   belongs_to :cargo_list, :class_name => "CargoList", :foreign_key => "cargo_list_id", :counter_cache => true
-  has_many :old_purchase_positions, :class_name => "PurchasePosition", :foreign_key => "pallet_id"
-  belongs_to :old_purchase_order, :class_name => "PurchaseOrder", :foreign_key => "purchase_order_id"
   belongs_to :pallet_type, :class_name => "PalletType", :foreign_key => "pallet_type_id"
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => "level_3"
   belongs_to :zip_location, :class_name => "ZipLocation", :foreign_key => "zip_location_id"
+  belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
   
   has_many :purchase_order_pallet_assignments, :class_name => "PurchaseOrderPalletAssignment"
   has_many :purchase_orders, :class_name => "PurchaseOrder", :through => :purchase_order_pallet_assignments
@@ -14,13 +13,7 @@ class Pallet < ActiveRecord::Base
   
   belongs_to :delivery_rejection, :class_name => "DeliveryRejection", :foreign_key => "delivery_rejection_id"
   after_create :assign_default_pallet_type
-  
-  
-  def mixed?
-    self.purchase_orders.group("purchase_orders.id").count.size > 1 ? true : false
-  end
-  
-  
+
   def self.patch_pallets
     Pallet.all.each do |pallet|
       p_o_ids = Array.new
@@ -32,6 +25,15 @@ class Pallet < ActiveRecord::Base
     end
   end
   
+  def self.patch_shipping_route_id
+    self.select("DISTINCT `pallets`.*").joins(:purchase_orders, :purchase_positions).readonly(false).each do |pallet|
+      @purchase_orders = pallet.purchase_orders
+      @shipping_route_id = @purchase_orders.collect(&:shipping_route_id).uniq.compact.first
+
+      pallet.update_attribute("shipping_route_id", @shipping_route_id)
+    end
+  end
+
   def self.patch_pallet_purchase_position_assignments
     Pallet.all.each do |pallet|
       p_p_ids = Array.new

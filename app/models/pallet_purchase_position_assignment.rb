@@ -31,6 +31,12 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
     end
   end
   
+  def self.patch_pallet_purchase_position_counter
+    self.select("DISTINCT `pallet_purchase_position_assignments`.*").joins(:pallet, :purchase_position).readonly(false).each do |pallet_purchase_position_assignment|
+      pallet_purchase_position_assignment.pallet.update_attribute("purchase_position_counter", pallet_purchase_position_assignment.quantity)
+    end
+  end
+
   private
   
   def update_purchase_position_counter

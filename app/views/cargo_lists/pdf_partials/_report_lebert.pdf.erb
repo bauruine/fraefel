@@ -36,7 +36,7 @@
           <strong>Paletten / Paletten-Plätze:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= @pallets.count %> / <%= @pallet_types.sum(:count_as) %>
+          <%= @pallets.count %> / <%= @pallet_types.sum("pallet_types.count_as") %>
         </td>
       </tr>
       <tr>
@@ -44,7 +44,7 @@
           <strong>Gewicht Brutto</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= "#{PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@cargo_list.pallets.sum("count_as", :include => [:pallet_type]) * 20)} kg" %>
+          <%= "#{@pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.weight") + (@pallet_types.sum("pallet_types.count_as") * 20)} kg" %>
         </td>
       </tr>
     </tbody>
@@ -73,7 +73,7 @@
           <% Pallet.order("pallets.id asc").where("cargo_lists.id = ?", @cargo_list.id).where("addresses.id = ?", address.id).includes([:purchase_orders => :addresses], :pallet_type, :cargo_list).each do |pallet| %>
             <tr>
               <td><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></td>
-              <td><%= pallet.mixed? ? "Ja" : nil %></td>
+              <td><%= pallet.mixed ? "Ja" : nil %></td>
               <td>"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
               <td><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) + (pallet.pallet_type.description == "coli" ? 0 : (pallet.pallet_type.count_as * 20)) %></td>
               <td><%= pallet.additional_space %></td>
