@@ -26,4 +26,13 @@ class Customer < ActiveRecord::Base
     end
   end
   
+  def create_from_raw_data(arg)
+    customer_attributes = Hash.new
+    
+    customer_attributes.merge!(:company => arg.attributes["baan_5"])
+    customer_attributes.merge!(:baan_id => arg.attributes["baan_6"])
+    
+    customer = Customer.find_or_create_by_baan_id(customer_attributes)
+  end
+
 end

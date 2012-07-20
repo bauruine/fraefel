@@ -13,7 +13,7 @@ worker_processes 1
 timeout 900
 
 # change this for other apps
-approot = '/home/parallels/Code/rails/fraefel/'
+approot = '/home/sufu/Code/rails/fraefel/'
 #appuser = 'fraefel'
 # Listen on a Unix data socket
 listen 3000

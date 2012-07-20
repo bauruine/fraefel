@@ -7,7 +7,7 @@ class BaanImporter
       BaanRawData.import(baan_import_id)
       Address.import(baan_import_id)
       Customer.import(baan_import_id)
-      ShippingAddress.import(baan_import_id)
+      #ShippingAddress.import(baan_import_id)
       #CommodityCode.import(baan_import_id)
       #ShippingRoute.import(baan_import_id)
       PurchaseOrder.import(baan_import_id)

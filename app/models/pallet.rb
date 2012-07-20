@@ -33,17 +33,6 @@ class Pallet < ActiveRecord::Base
       pallet.update_attribute("shipping_route_id", @shipping_route_id)
     end
   end
-
-  def self.patch_pallet_purchase_position_assignments
-    Pallet.all.each do |pallet|
-      p_p_ids = Array.new
-      pallet.old_purchase_positions.each do |p_p|
-        p_p_ids << p_p.id
-      end
-      purchase_positions_array = PurchasePosition.where(:id => p_p_ids)
-      pallet.purchase_positions += purchase_positions_array
-    end
-  end
   
   def self.patch_pallet_purchase_position_assignments_quantity
     PalletPurchasePositionAssignment.all.each do |p_p_p_a|

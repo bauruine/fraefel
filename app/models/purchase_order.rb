@@ -25,6 +25,24 @@ class PurchaseOrder < ActiveRecord::Base
     return @time_stop - @time_start
   end
   
+  def create_from_raw_data(arg)
+    purchase_order_attributes = Hash.new
+    
+    purchase_order_attributes.merge!(:baan_id => arg.attributes["baan_2"])
+    purchase_order_attributes.merge!(:customer_id => Customer.where(:baan_id => arg.attributes["baan_6"]).first.try(:id))
+    purchase_order_attributes.merge!(:shipping_route_id => ShippingRoute.find_or_create_by_name(:name => arg.attributes["baan_21"], :active => true).id)
+    purchase_order_attributes.merge!(:warehouse_number => baan_raw_data.attributes["baan_22"])
+    purchase_order_attributes.merge!(:level_2 => Address.where(:code => baan_raw_data.attributes["baan_47"], :category_id => 9).first.try(:id))
+    purchase_order_attributes.merge!(:level_1 => Address.where(:code => baan_raw_data.attributes["baan_55"], :category_id => 8).first.try(:id))
+    purchase_order_attributes.merge!(:level_3 => Address.where(:code => baan_raw_data.attributes["baan_71"], :category_id => 10).first.try(:id))
+    purchase_order_attributes.merge!(:address_id => Address.where(:code => baan_raw_data.attributes["baan_71"]).first.try(:id))
+    purchase_order_attributes.merge!(:category_id => Category.find_or_create_by_title_and_categorizable_type(:title => baan_raw_data.attributes["baan_81"], :categorizable_type => "purchase_order").id)
+
+    # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_order
+    purchase_order_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_order_attributes[:shipping_route_id].present?
+
+  end
+  
   def self.clean
     where("purchase_orders.baan_id NOT IN(?)", TimeShifting.all.collect(&:purchase_order_id)).where(:delivered => false).where("pallets.id IS NULL").includes(:purchase_positions => :pallets).each do |purchase_order|
       purchase_order.destroy
