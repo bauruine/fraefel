@@ -13,3 +13,4 @@ public/javascripts/.DS_Store
 .DS_Store
 *.pdf
 public/pdfs/
+*~
