@@ -37,9 +37,9 @@
         </a>
     </header>
     <section class="filter_box_content clearfix">
-      <%= form_tag(remove_positions_delivery_rejection_path(@delivery_rejection), {:method => :delete}) do %>
+      <%= form_tag(remove_positions_delivery_rejection_path(@delivery_rejection), {:method => :delete, :class => "no-margin"}) do %>
         <%= hidden_field_tag(:pallet_id, pallet.id) %>
-        <table>
+        <table class="table no-margin">
           <thead>
             <tr>
               <th>#</th>
@@ -75,7 +75,11 @@
               <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
               <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
               <td></td>
-              <td class="align-center"><%= submit_tag "Entfernen", :class => "form_submit" %></td>
+              <td class="align-center">
+                <button data-disable-with="Please wait..." type="submit" class="btn btn-warning">
+                  Entfernen
+                </button>
+              </td>
             </tr>
           </tfoot>
         </table>
@@ -90,9 +94,9 @@
     <h4 class="floatLeft"></h4>
   </header>
   <section class="filter_box_content clearfix">
-    <% form_tag(assign_positions_delivery_rejection_path, {:class => "form", :method => :post}) do %>
+    <% form_tag(assign_positions_delivery_rejection_path, {:class => "form no-margin", :method => :post}) do %>
       <%= hidden_field_tag(:delivery_rejection_id, @delivery_rejection.id) %>
-      <table>
+      <table class="table no-margin">
         <thead>
           <tr>
             <th>#</th>
@@ -127,7 +131,11 @@
             <td></td>
             <td></td>
             <td class="align-center"><%= text_field_tag(:pallet_id, nil) %></td>
-            <td class="align-center"><%= submit_tag "Hinzufügen", :class => "form_submit" %></td>
+            <td class="align-center">
+              <button data-disable-with="Please wait..." type="submit" class="btn btn-primary">
+                Hinzufügen
+              </button>
+            </td>
           </tr>
         </tfoot>
       </table>

@@ -103,30 +103,6 @@ a.blue_link_button {
 	border-color: #5F5F62;
 }
 
-section#login {
-  overflow: auto;
-}
-section#loginLeft {
-
-}
-section#loginRight {
-  overflow: hidden;
-  margin-bottom: auto;
-  margin-top: 105px;
-}
-form#new_user_session {
-  margin: auto;
-  overflow: auto;
-  width: 305px;
-}
-p.formLabel {
-  margin-bottom: 8px;
-}
-
-p.formInput {
-  margin-bottom: 8px;
-}
-
 section#pageContainer {
   min-width: 91.429em;
   min-height: 500px;

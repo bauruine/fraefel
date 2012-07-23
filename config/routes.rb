@@ -33,7 +33,7 @@ Fraefel::Application.routes.draw do
   
   resources :microsoft_databases
 
-  resources :user_sessions
+  resources :user_sessions, :only => [:new, :create, :destroy]
   
   resources :roles
   

@@ -1,16 +1,25 @@
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Konflikte / Annahme Verweigerung</h1>
-</header>
+<ul class="breadcrumb">
+  <li class="active">Konflikte</li>
+</ul>
+
+<div class="page-header">
+    <h1 class="pull-left">Konflikte</h1>
+    <div class="btn-toolbar pull-right">
+      <% if permitted_to? :import, :baan_imports %>
+        <div class="btn-group">
+          <a class="btn btn-primary" href="<%= new_delivery_rejection_path %>"><i class="icon-upload icon-white"></i> Konflikt erfassen</a>
+        </div>
+      <% end %>
+    </div>
+    <div class="clear"></div>
+</div>
 
 <section class="filter_box">
   <header class="filter_box_header">
     <h4 class="floatLeft">&nbsp;</h4>
-    <a href="<%= new_delivery_rejection_path %>" class="header_link" data-role="add" data-show-tooltip="true" title="Konflikt erfassen">
-      <span class="header_pack _74"></span>
-    </a>
   </header>
   <section class="filter_box_content clearfix">
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>Konflikt NR</th>

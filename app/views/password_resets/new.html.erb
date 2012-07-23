@@ -1,27 +1,42 @@
-<section id="login" class="clearfix">
-<section id="loginLeft" class="floatLeft">
-  <%= image_tag("blau_kreuz_klein_01.gif")%>
-</section>
+<%#= render 'form' %>
 
-<section id="loginRight">
-  <%= form_tag password_resets_path, {:id => "new_user_session"} do %>
-
-    <div class="form-element">
-      <%= label_tag :username, "Benutzername" %>
-      <%= text_field_tag :username, nil, :size => 30 %>
+<div class="modal hide" id="login">
+  <%= form_tag(password_resets_path, {:class => "form-horizontal", :style => "margin: 0;"}) do |f| %>
+    <div class="modal-header">
+      <h3>Passwort vergessen: Step 1 / 2</h3>
     </div>
-  
-    <div class="form-element">
-      <%= label_tag :email, "oder Email" %>
-      <%= text_field_tag :email, nil, :size => 30 %>
+    
+    <div class="modal-body">
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, msg, :class => "alert alert-#{name}" %>
+      <% end %>
+      <fieldset>
+        <div class="control-group">
+          <%= label_tag :username, "Benutzername", :class => "control-label" %>
+          <div class="controls">
+            <%= text_field_tag :username %>
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <%= label_tag :email, "Email", :class => "control-label" %>
+          <div class="controls">
+            <%= text_field_tag :email %>      
+          </div>
+        </div>
+      </fieldset>
     </div>
-  
-    <div class="form-element clearfix">
-      <%= link_to("Zurück", login_path(), :class => "linkSubmit greySubmit floatLeft") %>
-      <%= submit_tag("Weiter", :class => "blueSubmit floatLeft") %>
-    </div>
-  
+    
+    <div class="modal-footer">
+      <a href="<%= login_path %>" class="btn btn-danger">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Instruktionen anfordern</button>
+    </div>  
   <% end %>
-</section>
+</div>
 
-</section>
+<script>
+  $('#login').modal({
+    keyboard: false,
+    backdrop: "static"
+  });
+</script>
