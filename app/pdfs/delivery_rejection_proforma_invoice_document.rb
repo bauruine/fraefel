@@ -4,6 +4,10 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
     super(top_margin: 5, page_layout: :portrait, page_size: 'A4')
     delivery_rejection_id = args[:delivery_rejection_id]
     @delivery_rejection = DeliveryRejection.where(:id => delivery_rejection_id).first
+    level_3_id = args[:level_3]
+    @level_3 = Address.where(:id => level_3_id).first
+    @level_3 ||= Address.where(:id => 1447).first
+    
     #@address_category = Category.where(:title => "kat_c").first
     #@invoice_address_category_id = Category.where(:title => "kat_b").first
     #@address = Address.where("cargo_lists.id = ?", @cargo_list.id).where("addresses.category_id = ?", @address_category.id).includes(:purchase_orders => [:pallets => :cargo_list]).first
@@ -85,11 +89,11 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
   
   def address_of_sender_table
     [
-      ["Firma:", " SCHWEIZERBAD GmbH"],
-      ["Strasse/Nr:", "Hochfeilerweg 48a"],
-      ["Postleitzahl:", "12107"],
-      ["Ort:", "Berlin"],
-      ["Land:", "Deutschland"],
+      ["Firma:", "#{@level_3.company_name}"],
+      ["Strasse/Nr:", "#{@level_3.street}"],
+      ["Postleitzahl:", "#{@level_3.postal_code}"],
+      ["Ort:", "#{@level_3.city}"],
+      ["Land:", "#{@level_3.country}"],
       ["", ""],
       ["", ""]
     ]
@@ -154,7 +158,7 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
   
   def foobar4_items
     [
-      ["Ort / Datum:", "Berlin / #{Date.today.to_formatted_s(:swiss_date)}", "Unterschrift:", ""],
+      ["Ort / Datum:", "#{@level_3.city} / #{Date.today.to_formatted_s(:swiss_date)}", "Unterschrift:", ""],
       ["", "", "Name:", ""]
     ]
   end
