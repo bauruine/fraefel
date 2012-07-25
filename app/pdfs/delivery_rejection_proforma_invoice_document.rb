@@ -44,8 +44,8 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
     [
       ["Fraefel AG", ""],
       ["Lerchenfeld", ""],
-      ["9601 Lütisburg-Station", ""],
-      ["Schweiz", ""]
+      ["CH-9601 Lütisburg-Station", ""],
+      ["Eori Nr. DE 893514633232115", ""]
     ]
     
   end
@@ -90,8 +90,8 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
       ["Postleitzahl:", "12107"],
       ["Ort:", "Berlin"],
       ["Land:", "Deutschland"],
-      ["Telefon:", "+49 30 702 06 640"],
-      ["EORI Nr.:", "7662858"]
+      ["", ""],
+      ["", ""]
     ]
   end
   
@@ -129,14 +129,14 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
         "#{CommodityCode.find(k).code}",
         "#{@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:quantity) }",
         "#{@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:weight) }",
-        "#{@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:amount) }"
+        "#{(@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:amount) / 100) * 10}"
       ]
     end
   end
   
   def foobar2_items
     [
-      ["", "", "", "Rechnungswert", "#{@pallet_purchase_position_assignments.sum(:amount) }"],
+      ["", "", "", "Rechnungswert", "#{(@pallet_purchase_position_assignments.sum(:amount) / 100) * 10}"],
       ["", "", "", "Währung", "EUR"]
     ]
   end
@@ -144,7 +144,7 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
   def foobar3_items
     [
       ["Transport:", "per LKW", "Lieferbedingung:", "frei Haus, unverzollt"],
-      ["Netto Gewicht (kg):", "#{@pallet_purchase_position_assignments.sum(:weight) }", "U/Z:", "WS / #{Date.today.to_formatted_s(:swiss_date)}"],
+      ["Netto Gewicht (kg):", "#{@pallet_purchase_position_assignments.sum(:weight) }", "U/Z:", "RV #{@delivery_rejection.id} / #{Date.today.to_formatted_s(:swiss_date)}"],
       ["Brutto Gewicht (kg):", "#{@pallet_purchase_position_assignments.sum(:weight) + (@pallet_types.sum(:count_as) * 20)}", "", ""],
       ["Paletten:", "#{@pallets.count}", "", ""],
       ["Paletten Plätze:", "#{@pallet_types.sum(:count_as)}", "", ""],
