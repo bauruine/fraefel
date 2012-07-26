@@ -19,11 +19,11 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
     
     font_size 8
     #move_down 97
-    bounding_box [0, 690], :width => 261.64, :height => 200 do
+    bounding_box [0, 665], :width => 261.64, :height => 200 do
       invoice_address
       #stroke_bounds
     end
-    bounding_box [261.64, 690], :width => 261.64, :height => 200 do
+    bounding_box [261.64, 665], :width => 261.64, :height => 200 do
       delivery_address
       move_down 14
       address_of_sender
@@ -159,6 +159,7 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
   def foobar4_items
     [
       ["Ort / Datum:", "#{@level_3.city} / #{Date.today.to_formatted_s(:swiss_date)}", "Unterschrift:", ""],
+      ["", "", "", ""],
       ["", "", "Name:", ""]
     ]
   end
@@ -195,6 +196,8 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
       self.cell_style = { :padding_left => 0, :padding_bottom => 0, :padding_top => 3, :borders => [] }
       column(0).width = 130
       row(0).columns(3).borders = [:bottom]
+      row(1).height = 20
+      row(2).columns(3).borders = [:bottom]
     end
     
   end
