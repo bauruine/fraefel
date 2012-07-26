@@ -133,14 +133,14 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
         "#{CommodityCode.find(k).code}",
         "#{@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:quantity) }",
         "#{@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:weight) }",
-        "#{(@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:amount) / 100) * 10}"
+        "#{((@pallet_purchase_position_assignments.where("commodity_codes.id = ?", k).sum(:amount) / 100) * 10).round(2)}"
       ]
     end
   end
   
   def foobar2_items
     [
-      ["", "", "", "Rechnungswert", "#{(@pallet_purchase_position_assignments.sum(:amount) / 100) * 10}"],
+      ["", "", "", "Rechnungswert", "#{((@pallet_purchase_position_assignments.sum(:amount) / 100) * 10).round(2)}"],
       ["", "", "", "Währung", "EUR"]
     ]
   end

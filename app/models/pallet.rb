@@ -14,6 +14,17 @@ class Pallet < ActiveRecord::Base
   belongs_to :delivery_rejection, :class_name => "DeliveryRejection", :foreign_key => "delivery_rejection_id"
   after_create :assign_default_pallet_type
 
+  def self.patch_purchase_orders
+    where("purchase_orders.id IS NULL").includes(:purchase_orders).each do |pallet|
+      @purchase_orders_array = Array.new
+      pallet.purchase_positions.each do |purchase_position|
+        @purchase_orders_array << purchase_position.purchase_order
+      end
+      puts @purchase_orders_array.size
+      pallet.purchase_orders += @purchase_orders_array.uniq!
+    end
+  end
+  
   def self.patch_pallets
     Pallet.all.each do |pallet|
       p_o_ids = Array.new

@@ -40,12 +40,16 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   private
   
   def update_purchase_position_counter
-    @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.where(:pallet_id => self.pallet.id)
-    self.pallet.update_attribute("purchase_position_counter", @pallet_purchase_position_assignments.sum("quantity"))
+    if self.pallet.present? && self.purchase_position.present?
+      @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.where(:pallet_id => self.pallet.id)
+      self.pallet.update_attribute("purchase_position_counter", @pallet_purchase_position_assignments.sum("quantity"))
+    end
   end
   
   def update_purchase_order_calculation
-    self.purchase_position.purchase_order.calculation.update_attribute(:total_pallets, self.purchase_position.purchase_order.pallets.count)
+    if self.purchase_position.present?
+      self.purchase_position.purchase_order.calculation.update_attribute(:total_pallets, self.purchase_position.purchase_order.pallets.count)
+    end
   end
   
 end
