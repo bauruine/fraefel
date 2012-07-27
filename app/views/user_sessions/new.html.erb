@@ -7,6 +7,9 @@
     </div>
     
     <div class="modal-body">
+      <div class="alert alert-error">
+        Wartungsarbeiten aktiv. Zur Zeit ist die Verbindung unterbrochen.
+      </div>
       <% flash.each do |name, msg| %>
         <%= content_tag :div, msg, :class => "alert alert-#{name}" %>
       <% end %>
