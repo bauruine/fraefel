@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   before_filter :require_user, :user_setup
-  # before_filter { |c| Authorization.current_user = c.current_user }
   
   private
   
@@ -31,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
   
   def store_location
-    session[:return_to] = request.request_uri
+    session[:return_to] = request.url
   end
   
   def user_setup

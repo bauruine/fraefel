@@ -1,0 +1,31 @@
+<div class="container-fluid">
+
+  <div class="row-fluid">
+  
+    <div class="span10">
+      <% if Resque::Worker.all.size == 0 %>
+        <div class="alert alert-error">
+          ZUR ZEIT KÖNNEN KEINE NEUE IMPORTS DURCHGEFÜHRT ODER VK GELÖSCHT WERDEN
+        </div>
+      <% end %>
+    </div>
+    <div class="span2">
+      <%= image_tag(asset_path("logo.gif"), :class => "pull-right", :id => "logo") %>
+    </div>
+    
+  </div>
+  
+  <div class="row-fluid">
+    <div class="span12">
+      <% if current_user %>
+      
+        <% flash.each do |name, msg| %>
+          <%= content_tag :div, msg, :class => "alert alert-#{name}" %>
+        <% end %>
+      <% end %>
+              
+      <%= yield %>
+    </div>
+  </div>
+  
+</div>

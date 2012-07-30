@@ -1,0 +1,94 @@
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      
+      <!-- Be sure to leave the brand out there if you want it shown -->
+      <a class="brand" href="<%= root_path %>">Fraefel App</a>
+      
+      <!-- Everything you want hidden at 940px or less, place within here -->
+      <div class="nav-collapse">
+        <% if current_user %>
+          <ul class="nav">
+            <li class="">
+              <a href="<%= dashboard_path() %>"><i class="icon-home icon-white"></i> Dashboard</a>
+            </li>
+            <li class="divider-vertical"></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-road icon-white"></i> Versand <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <% if permitted_to? :index, :purchase_orders %>
+                  <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
+                  <li class="divider"></li>
+                <% end %>
+                <% if permitted_to? :index, :purchase_positions %>
+                  <li><%= link_to("VK-Position Liste", purchase_positions_path) %></li>
+                  <li class="divider"></li>
+                <% end %>
+                <% if permitted_to? :index, :pallets %>
+                  <li><%= link_to("Paletten Liste", pallets_path) %></li>
+                  <li class="divider"></li>
+                <% end %>
+                <% if permitted_to? :index, :cargo_lists %>
+                  <li><%= link_to("Versandlisten", cargo_lists_path) %></li>
+                  <li class="divider"></li>
+                <% end %>
+                <% if permitted_to? :index, :delivery_rejections %>
+                  <li><%= link_to("Konflikte", delivery_rejections_path) %></li>
+                  <li class="divider"></li>
+                <% end %>
+                <li><%= link_to("Terminverschiebungen", time_shiftings_path) %></li>
+              </ul>
+            </li>
+            <li class="divider-vertical"></li>
+            <% if permitted_to? :index, :articles %>
+              <li class="">
+                <a href="<%= articles_path %>"><i class="icon-th icon-white"></i> Inventar</a>
+              </li>
+              <li class="divider-vertical"></li>
+            <% end %>
+            <% if permitted_to? :import, :baan_imports %>
+              <li class="">
+                <a href="<%= baan_imports_path %>"><i class="icon-upload icon-white"></i> Import Wizzard</a>
+              </li>
+              <li class="divider-vertical"></li>
+            <% end %>
+            <% if permitted_to? :index, :users %>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench icon-white"></i> Verwaltung <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to("Abteilungen", departments_path) %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to("Verschiebungsgründe", shifting_reasons_path) %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to("Versand Tour", shipping_routes_path) %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to("Benutzer", users_path) %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to("Kategorie", categories_path) %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to("Status", statuses_path) %></li>
+                </ul>
+              </li>
+            <% end %>
+          </ul>
+          <ul class="nav pull-right">
+            <li class="divider-vertical"></li>
+            <li class="">
+              <a href="<%= logout_path() %>"><i class="icon-off icon-white"></i> Abmelden</a>
+            </li>
+          </ul>
+        <% end %>
+        <!-- .nav, .navbar-search, .navbar-form, etc -->
+      </div>
+      
+    </div>
+  </div>
+</div>
+
