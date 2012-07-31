@@ -22,6 +22,13 @@ class PurchasePosition < ActiveRecord::Base
   
   # has_paper_trail
   
+  def self.patch_level_3
+    select("DISTINCT `purchase_positions`.*").joins(:purchase_order).each do |purchase_position|
+      level_3 = purchase_position.purchase_order.level_3
+      purchase_position.update_attribute("level_3", level_3)
+    end
+  end
+  
   def available_quantity
     self.quantity.to_i - self.pallet_purchase_position_assignments.sum("quantity")
   end

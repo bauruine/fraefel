@@ -19,34 +19,58 @@
         <tr>
           <td>Pendente Aufträge</td>
           <td>
-            <a class="btn btn-mini">
-              CH: <%= @pending_purchase_orders.where("addresses.country" => "CH").count("DISTINCT `purchase_orders`.id") %>
-            </a>
-            <a class="btn btn-mini">
-              DE: <%= @pending_purchase_orders.where("addresses.country" => "DE").count("DISTINCT `purchase_orders`.id") %>
-            </a>
+            <div class="btn-toolbar" style="margin: 0; height: 20px;">
+              <div class="btn-group">
+                <span class="btn btn-mini disabled">CH</span>
+                <a class="btn btn-mini">
+                  <%= @pending_purchase_orders.where("addresses.country" => "CH").count("DISTINCT `purchase_orders`.id") %>
+                </a>
+              </div>
+              <div class="btn-group">
+                <span class="btn btn-mini disabled">DE</span>
+                <a class="btn btn-mini">
+                  <%= @pending_purchase_orders.where("addresses.country" => "DE").count("DISTINCT `purchase_orders`.id") %>
+                </a>
+              </div>
+            </div>
           </td>
         </tr>
         <tr>
           <td>Versendete Aufträge</td>
           <td>
-            <a class="btn btn-mini">
-              CH: <%= @delivered_purchase_orders.where("addresses.country" => "CH").count("DISTINCT `purchase_orders`.id") %>
-            </a>
-            <a class="btn btn-mini">
-              DE: <%= @delivered_purchase_orders.where("addresses.country" => "DE").count("DISTINCT `purchase_orders`.id") %>
-            </a>
+            <div class="btn-toolbar" style="margin: 0; height: 20px;">
+              <div class="btn-group">
+                <span class="btn btn-mini disabled">CH</span>
+                <a class="btn btn-mini">
+                  <%= @delivered_purchase_orders.where("addresses.country" => "CH").count("DISTINCT `purchase_orders`.id") %>
+                </a>
+              </div>
+              <div class="btn-group">
+                <span class="btn btn-mini disabled">DE</span>
+                <a class="btn btn-mini">
+                  <%= @delivered_purchase_orders.where("addresses.country" => "DE").count("DISTINCT `purchase_orders`.id") %>
+                </a>
+              </div>
+            </div>
           </td>
         </tr>
         <tr>
           <td>Offene Konflikte</td>
           <td>
-            <a class="btn btn-mini">
-              CH: 0
-            </a>
-            <a class="btn btn-mini">
-              DE: <%= @pending_delivery_rejections.count %>
-            </a>
+            <div class="btn-toolbar" style="margin: 0; height: 20px;">
+              <div class="btn-group">
+                <span class="btn btn-mini disabled">CH</span>
+                <a class="btn btn-mini">
+                  0
+                </a>
+              </div>
+              <div class="btn-group">
+                <span class="btn btn-mini disabled">DE</span>
+                <a class="btn btn-mini">
+                  <%= @pending_delivery_rejections.count %>
+                </a>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -134,19 +158,22 @@
           <td>
             <div class="btn-toolbar" style="margin: 0; height: 20px;">
               <div class="btn-group">
-                <span class="btn btn-mini"><= 20%</span>
+                <span class="btn btn-mini disabled"><=</span>
+                <span class="btn btn-mini disabled">20%</span>
                 <a class="btn btn-mini btn-danger">
                   <%= @pending_purchase_orders.where("purchase_orders.manufacturing_completed <=20").count("DISTINCT `purchase_orders`.id") %>
                 </a>
               </div>
               <div class="btn-group">
-                <span class="btn btn-mini">>= 70%</span>
+                <span class="btn btn-mini disabled">>=</span>
+                <span class="btn btn-mini disabled">70%</span>
                 <a class="btn btn-mini btn-primary">
                   <%= @pending_purchase_orders.where("purchase_orders.manufacturing_completed >= 70").count("DISTINCT `purchase_orders`.id") %>
                 </a>
               </div>
               <div class="btn-group">
-                <span class="btn btn-mini">>= 70%</span>
+                <span class="btn btn-mini disabled">>=</span>
+                <span class="btn btn-mini disabled">70%</span>
                 <a class="btn btn-mini btn-success">
                   <%= @pending_purchase_orders.where("purchase_orders.warehousing_completed >= 70").count("DISTINCT `purchase_orders`.id") %>
                 </a>

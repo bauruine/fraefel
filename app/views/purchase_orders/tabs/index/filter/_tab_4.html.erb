@@ -1,23 +1,23 @@
 <fieldset>
   <legend>Adresse</legend>
   <div class="control-group">
-    <%= f.label(:level_1_equals, "Zahlungsleister", :class => "control-label") %>
+    <%= f.label(:level_1_eq, "Zahlungsleister", :class => "control-label") %>
     <div class="controls">
-      <%= f.collection_select(:level_1_equals, @level_1, :id, :location_for_select, {:include_blank => true}, {"data-foo" => "level_1"}) %>
+      <%= f.collection_select(:level_1_eq, @level_1, :id, :location_for_select, {:include_blank => true}, {"data-foo" => "level_1"}) %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label(:level_2_equals, "Rechnungsempfänger", :class => "control-label") %>
+    <%= f.label(:level_2_eq, "Rechnungsempfänger", :class => "control-label") %>
     <div class="controls">
-      <%= f.collection_select(:level_2_equals, @level_2, :id, :location_for_select, {:include_blank => true}, {"data-foo" => "level_2"}) %>
+      <%= f.collection_select(:level_2_eq, @level_2, :id, :location_for_select, {:include_blank => true}, {"data-foo" => "level_2"}) %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label(:level_3_equals, "Lieferadresse", :class => "control-label") %>
+    <%= f.label(:level_3_eq, "Lieferadresse", :class => "control-label") %>
     <div class="controls">
-      <%= f.collection_select(:level_3_equals, @level_3, :id, :location_for_select, {:include_blank => true}, {"data-foo" => "level_3"}) %>
+      <%= f.collection_select(:level_3_eq, @level_3, :id, :location_for_select, {:include_blank => true}, {"data-foo" => "level_3"}) %>
     </div>
   </div>
 </fieldset>

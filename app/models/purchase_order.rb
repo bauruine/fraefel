@@ -17,6 +17,13 @@ class PurchaseOrder < ActiveRecord::Base
   
   after_create :create_calculation
   
+  def self.patch_level_3
+    select("DISTINCT `purchase_orders`.*").joins(:purchase_positions).each do |purchase_order|
+      level_3 = purchase_order.purchase_positions.collect(&:level_3).uniq.compact.first
+      purchase_order.update_attribute("level_3", level_3)
+    end
+  end
+  
   def self.get_performance_time
     @time_start = Time.now
     self.includes(:purchase_positions)

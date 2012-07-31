@@ -1,16 +1,16 @@
 <fieldset>
   <legend>Datum</legend>
   <div class="control-group">
-    <%= f.label(:delivery_date_greater_than_or_equal_to, "Von", :class => "control-label") %>
+    <%= f.label(:delivery_date_gteq, "Von", :class => "control-label") %>
     <div class="controls">
-      <%= f.text_field :delivery_date_greater_than_or_equal_to, :class => "date_picker" %>
+      <%= f.text_field :delivery_date_gteq, :class => "date_picker" %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label(:delivery_date_less_than_or_equal_to, "Bis", :class => "control-label") %>
+    <%= f.label(:delivery_date_lteq, "Bis", :class => "control-label") %>
     <div class="controls">
-      <%= f.text_field :delivery_date_less_than_or_equal_to, :class => "date_picker" %>
+      <%= f.text_field :delivery_date_lteq, :class => "date_picker" %>
     </div>
   </div>
 </fieldset>
