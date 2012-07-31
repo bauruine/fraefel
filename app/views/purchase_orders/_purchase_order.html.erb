@@ -6,14 +6,19 @@
     <a href="/purchase_orders/<%= purchase_order.id %>"><%= purchase_order.baan_id %></a>
   </td>
   <td>
-    <% if purchase_order.pending_status != 0 %>
-      <span class="label label-important"><%= purchase_order.pending_status %></span><span> - </span>
-    <% end %>
-    <% if purchase_order.production_status != purchase_order.stock_status %>
-      <span class="label label-info"><%= purchase_order.production_status %></span><span> - </span>
-    <% end %>
-    <span class="label label-success"><%= purchase_order.stock_status %></span><span> - </span>
-    <span class="label label-inverse"><%= purchase_order.calculation.total_purchase_positions %></span>
+    <div class="btn-group">
+      <% if purchase_order.pending_status != 0 %>
+        <span class="btn btn-danger btn-mini disabled"><%= purchase_order.pending_status %></span>
+        <span class="btn btn-mini disabled">-</span>
+      <% end %>
+      <% if purchase_order.production_status != purchase_order.stock_status %>
+        <span class="btn btn-primary btn-mini disabled"><%= purchase_order.production_status %></span>
+        <span class="btn btn-mini disabled">-</span>
+      <% end %>
+      <span class="btn btn-success btn-mini disabled"><%= purchase_order.stock_status %></span>
+      <span class="btn btn-mini disabled">-</span>
+      <span class="btn btn-inverse btn-mini disabled"><%= purchase_order.calculation.total_purchase_positions %></span>
+    </div>
   </td>
   <td><%= purchase_order.calculation.total_pallets %></td>
   <td><%= purchase_order.shipping_address.consignee_full %></td>

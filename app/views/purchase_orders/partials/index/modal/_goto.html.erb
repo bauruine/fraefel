@@ -1,0 +1,23 @@
+<div class="modal hide fade" id="goto">
+  <%= form_tag(search_for_purchase_orders_path, {:class => "form-horizontal", :method => :get, :style => "margin: 0;"}) do %>
+  
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Gehe zu VK-Auftrag</h3>
+    </div>
+    
+    <div class="modal-body">
+      <div class="control-group">
+        <%= label_tag(:purchase_order_id, "VK NR", :class => "control-label") %>
+        <div class="controls">
+          <%= text_field_tag(:purchase_order_id) %>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Gehe zu</button>
+    </div>
+  
+  <% end %>
+</div>

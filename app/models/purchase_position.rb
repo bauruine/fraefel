@@ -15,12 +15,7 @@ class PurchasePosition < ActiveRecord::Base
   has_many :time_shiftings, :class_name => "TimeShifting", :through => :purchase_position_time_shifting_assignments
   
   has_many :delivery_dates, :as => :dateable
-  
-  after_save :update_purchase_order_date
-  
-  scope :to_be_checked, where("amount = 0 OR weight_single = 0 OR quantity = 0")
-  
-  # has_paper_trail
+
   
   def self.patch_level_3
     select("DISTINCT `purchase_positions`.*").joins(:purchase_order).each do |purchase_position|
@@ -50,34 +45,7 @@ class PurchasePosition < ActiveRecord::Base
   end
   
   protected
-  
-  def update_purchase_order_date
-    @purchase_order = self.purchase_order
-    @purchase_position = self
-    if @purchase_order.present?
-      if @purchase_order.time_shiftings.where(:closed => false).present? && @purchase_order.time_shiftings.where(:closed => false).where("lt_date IS NOT NULL").collect(&:lt_date).compact.present?
-        @date_for_update = @purchase_order.time_shiftings.where(:closed => false).where("lt_date IS NOT NULL").collect(&:lt_date).last
-      else
-        @date_for_update = @purchase_order.purchase_positions.order("delivery_date asc").limit(1).first.delivery_date.to_date
-      end
-      @purchase_order.update_attributes(:delivery_date => @date_for_update)
-    end
-    @purchase_position_assignment = PalletPurchasePositionAssignment.where(:purchase_position_id => self.id)
-    if @purchase_position_assignment.present?
-      @purchase_position_assignment.each do |p_p_p_a|
-        p_p_p_a.update_attributes(:value_discount => ((@purchase_position.value_discount.present? ? @purchase_position.value_discount : 0) * p_p_p_a.quantity), :net_price => ((@purchase_position.net_price.present? ? @purchase_position.net_price : 0) * p_p_p_a.quantity), :gross_price => ((@purchase_position.gross_price.present? ? @purchase_position.gross_price : 0) * p_p_p_a.quantity), :amount => ((@purchase_position.amount.present? ? @purchase_position.amount : 0) * p_p_p_a.quantity), :weight => ((@purchase_position.weight_single.present? ? @purchase_position.weight_single : 0) * p_p_p_a.quantity))
-      end
-    end
-  end
-  
-  def self.calculate_for_invoice(type, attrs)
-    if attrs[1].present?
-      sum("#{type}", :include => [:commodity_code, {:pallets => :cargo_list}], :conditions => {:cargo_lists => { :id => attrs[0] }, :commodity_codes => { :id => attrs[1] }})
-    else
-      sum("#{type}", :include => [:pallets => :cargo_list], :conditions => {:cargo_lists => { :id => attrs[0] }})
-    end
-  end
-  
+    
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     

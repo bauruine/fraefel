@@ -1,32 +1,11 @@
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li class="active">VK-Aufträge</li>
+  </ul>
+<% end %>
+
 <%= render("purchase_orders/partials/index/modal/filter") %>
-
-<div class="modal hide fade" id="goto">
-  <%= form_tag(search_for_purchase_orders_path, {:class => "form-horizontal", :method => :get, :style => "margin: 0;"}) do %>
-  
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal">×</button>
-      <h3>Gehe zu VK-Auftrag</h3>
-    </div>
-    
-    <div class="modal-body">
-      <div class="control-group">
-        <%= label_tag(:purchase_order_id, "VK NR", :class => "control-label") %>
-        <div class="controls">
-          <%= text_field_tag(:purchase_order_id) %>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
-      <button type="submit" class="btn btn-primary">Gehe zu</button>
-    </div>
-  
-  <% end %>
-</div>
-
-<ul class="breadcrumb">
-  <li class="active">VK-Aufträge</li>
-</ul>
+<%= render("purchase_orders/partials/index/modal/goto") %>
 
 <div class="page-header">
     <h1 class="pull-left">VK-Aufträge</h1>
@@ -50,18 +29,22 @@
     </div>
     <div class="clear"></div>
 </div>
+
 <div class="btn-toolbar pull-right">
   <div class="btn-group">
-    <button class="btn btn-primary" disabled="disabled">Produziert</button>
-    <button class="btn" disabled="disabled"><%#= @production_status_count.where(:production_status => 1, :stock_status => 0).count %></button>
+    <span class="btn btn disabled">VK-Pos</span>
+    <span class="btn btn-primary disabled">Produziert</span>
+    <span class="btn disabled">0</span>
   </div>
   <div class="btn-group">
-    <button class="btn btn-success" disabled="disabled">Eingelagert</button>
-    <button class="btn" disabled="disabled"><%#= @stock_status_count.where(:stock_status => 1, :production_status => 1).count %></button>
+    <span class="btn btn disabled">VK-Pos</span>
+    <span class="btn btn-success disabled">Eingelagert</span>
+    <span class="btn disabled">0</span>
   </div>
   <div class="btn-group">
-    <button class="btn btn-danger" disabled="disabled">Offen</button>
-    <button class="btn" disabled="disabled"><%#= @pending_status_count.where(:production_status => 0).count %></button>
+    <span class="btn btn disabled">VK-Pos</span>
+    <span class="btn btn-danger disabled">Offen</span>
+    <span class="btn disabled">0</span>
   </div>
 </div>
 <div class="clear"></div>
@@ -75,12 +58,9 @@
   </p>
 </blockquote>
 
-<section class="filter_box">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">VK-Aufträge</h4>
-  </header>
-  <section class="filter_box_content clearfix">
-    <table class="table">
+<div class="row-fluid">
+  <div class="span12">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>VK-Auftrag</th>
@@ -98,5 +78,5 @@
       <tfoot>
       </tfoot>
     </table>
-  </section>
-</section>
+  </div>
+</div>
