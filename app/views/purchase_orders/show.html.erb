@@ -1,3 +1,10 @@
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li><a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span></li>
+    <li class="active"><%= @purchase_order.id %></li>
+  </ul>
+<% end %>
+
 <% @purchase_positions.each do |purchase_position| %>
   <%= render("purchase_positions/partials/edit/modal/edit", :purchase_position => purchase_position) %>
 <% end %>
@@ -7,11 +14,6 @@
 
 <div data-type="modal" style="display:none;">
 </div>
-
-<ul class="breadcrumb">
-  <li><a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span></li>
-  <li class="active"><%= @purchase_order.id %></li>
-</ul>
 
 <div class="page-header">
     <h1 class="pull-left">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
@@ -59,7 +61,7 @@
     <section class="filter_box_content clearfix">
       <%= form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
-        <table class="table no-margin">
+        <table class="table table-striped no-margin">
           <thead>
             <tr>
               <th>Position</th>

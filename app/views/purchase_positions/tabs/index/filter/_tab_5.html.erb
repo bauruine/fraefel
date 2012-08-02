@@ -1,9 +1,9 @@
 <fieldset>
   <legend>Produktion</legend>
   <div class="control-group">
-    <%= f.label(:stock_status_equals, "Einlagerung beendet?", :class => "control-label") %>
+    <%= f.label(:stock_status_eq, "Einlagerung beendet?", :class => "control-label") %>
     <div class="controls">
-      <%= f.select(:stock_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {}) %>
+      <%= f.select(:stock_status_eq, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {}) %>
     </div>
   </div>
   
@@ -22,9 +22,9 @@
   </div>
   
   <div class="control-group">
-    <%= f.label(:production_status_equals, "Produktion beendet?", :class => "control-label") %>
+    <%= f.label(:production_status_eq, "Produktion beendet?", :class => "control-label") %>
     <div class="controls">
-      <%= f.select(:production_status_equals, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {}) %>
+      <%= f.select(:production_status_eq, { 'Nein' => 0, 'Ja' => 1 }, {:include_blank => true}, {}) %>
     </div>
   </div>
   

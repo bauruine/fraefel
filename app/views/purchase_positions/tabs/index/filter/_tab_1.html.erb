@@ -1,23 +1,23 @@
 <fieldset>
   <legend>Allgemein</fieldset>
   <div class="control-group">
-    <%= f.label(:delivered_equals, "Versendet?", :class => "control-label") %>
+    <%= f.label(:delivered_eq, "Versendet?", :class => "control-label") %>
     <div class="controls">
-      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+      <%= f.select(:delivered_eq, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label(:picked_up_equals, "Warenentnahme abg?", :class => "control-label") %>
+    <%= f.label(:picked_up_eq, "Warenentnahme abg?", :class => "control-label") %>
     <div class="controls">
-      <%= f.select(:picked_up_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+      <%= f.select(:picked_up_eq, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
     </div>
   </div>
   
   <div class="control-group">
-    <%= f.label(:cancelled_equals, "Storniert?", :class => "control-label") %>
+    <%= f.label(:cancelled_eq, "Storniert?", :class => "control-label") %>
     <div class="controls">
-      <%= f.select(:cancelled_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+      <%= f.select(:cancelled_eq, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
     </div>
   </div>
   

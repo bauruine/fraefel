@@ -14,3 +14,25 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require_tree .
+
+$(document).ready(function() {
+  $('[data-toggle="foobar"]').click(function() {
+    $.get($(this).attr("href"), function(data) {
+      alert(data);
+    });
+    return false;
+  });
+  
+  $('body').on('click.modal.data-api', '[data-toggle="modal-remote"]', function ( e ) {
+    var $this = $(this);
+    var href = $this.attr('href');
+    var $target = $($this.attr('data-target'));
+    var option = 'toggle';
+    
+    e.preventDefault();
+    $target.load(href, function() {
+      $target.modal(option);
+    });
+  });
+
+});

@@ -8,16 +8,13 @@
   <td>
     <div class="btn-group">
       <% if purchase_order.pending_status != 0 %>
-        <span class="btn btn-danger btn-mini disabled"><%= purchase_order.pending_status %></span>
-        <span class="btn btn-mini disabled">-</span>
+        <a class="btn btn-danger btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id, :production_status_eq => 0, :stock_status_eq => 0}) %>"><%= purchase_order.pending_status %></a>
       <% end %>
       <% if purchase_order.production_status != purchase_order.stock_status %>
-        <span class="btn btn-primary btn-mini disabled"><%= purchase_order.production_status %></span>
-        <span class="btn btn-mini disabled">-</span>
+        <a class="btn btn-primary btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id, :production_status_eq => 1}) %>"><%= purchase_order.production_status %></a>
       <% end %>
-      <span class="btn btn-success btn-mini disabled"><%= purchase_order.stock_status %></span>
-      <span class="btn btn-mini disabled">-</span>
-      <span class="btn btn-inverse btn-mini disabled"><%= purchase_order.calculation.total_purchase_positions %></span>
+      <a class="btn btn-success btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id, :stock_status_eq => 1}) %>"><%= purchase_order.stock_status %></a>
+      <a class="btn btn-inverse btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id}) %>"><%= purchase_order.calculation.total_purchase_positions %></a>
     </div>
   </td>
   <td><%= purchase_order.calculation.total_pallets %></td>

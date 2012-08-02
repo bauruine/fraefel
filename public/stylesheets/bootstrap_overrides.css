@@ -128,11 +128,6 @@
 .label a, .badge a {
   color: #ffffff;
 }
-/*
-.modal-body {
-  max-height: 800px;
-}
-*/
 
 .table select, .table input {
   margin: 0;

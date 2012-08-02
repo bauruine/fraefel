@@ -1,0 +1,40 @@
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>VK-Aufrag</h3>
+  </div>
+  
+  <div class="modal-body">
+    <div class="tabbable tabs-left">
+      <ul class="nav nav-tabs">
+        <% @purchase_positions.each do |purchase_position| %>
+          <li><a data-toggle="tab" href="#purchase_position_<%= purchase_position.id %>"><%= purchase_position.baan_id %></a></li>
+        <% end %>
+      </ul>
+      <div class="tab-content">
+        <div id="default" class="tab-pane active">
+          VK-Pos anklicken um weitere Informationen darüber zu erhalten.
+        </div>
+        <% @purchase_positions.each do |purchase_position| %>
+          <div id="purchase_position_<%= purchase_position.id %>" class="tab-pane">
+            <legend>VK-Pos <%= purchase_position.baan_id %></legend>
+            <dl class="dl-horizontal">
+            <dt>Empfänger</dt>
+            <dd><%= purchase_position.shipping_address.consignee_full %></dd>
+            <dt>Artikel</dt>
+            <dd><%= purchase_position.article %></dd>
+            <dt>Menge Total</dt>
+            <dd><%= purchase_position.quantity %></dd>
+            <dt>Lager Ort</dt>
+            <dd><%= purchase_position.storage_location %></dd>
+            <dt>Versand</dt>
+            <dd><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></dd>
+            </dl>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Schliessen</a>
+  </div>

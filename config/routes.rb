@@ -15,6 +15,10 @@ Fraefel::Application.routes.draw do
     end
   end
   
+  namespace :api do
+    resources :purchase_positions
+  end
+  
   resources :users
   
   resources :addresses

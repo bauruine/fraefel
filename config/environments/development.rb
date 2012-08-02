@@ -37,19 +37,14 @@ Fraefel::Application.configure do
   
   config.action_mailer.default_url_options = { :host => "localhost:3000" }
   
-  config.middleware.use ExceptionNotifier,
-    sender_address: 'api.fraefel@gmail.com',
-    exception_recipients: 'sufu90@gmail.com',
-    ignore_exceptions: ExceptionNotifier.default_ignore_exceptions - [ActiveRecord::RecordNotFound, AbstractController::ActionNotFound, ActionController::RoutingError]
-  
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-      :address => "smtp.gmail.com",
-      :port => 587,
-      :user_name => "api.fraefel",
-      :password => "masT!44!1502",
-      :authentication => "plain",
-      :enable_starttls_auto => true
-    }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => "smtp.gmail.com",
+    :port => 587,
+    :user_name => "api.fraefel",
+    :password => "masT!44!1502",
+    :authentication => "plain",
+    :enable_starttls_auto => true
+  }
 end
 
