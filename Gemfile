@@ -32,6 +32,7 @@ gem 'paper_trail'
 gem 'paperclip'
 gem 'prawn'
 gem 'private_pub'
+gem 'rack-mini-profiler'
 gem "ransack"
 gem 'rabl'
 gem "RedCloth", :require => 'redcloth'

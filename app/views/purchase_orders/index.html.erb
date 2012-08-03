@@ -36,17 +36,17 @@
   <div class="btn-group">
     <span class="btn btn disabled">VK-Pos</span>
     <span class="btn btn-primary disabled">Produziert</span>
-    <span class="btn disabled">0</span>
+    <span class="btn disabled"><%= @production_status_count %></span>
   </div>
   <div class="btn-group">
     <span class="btn btn disabled">VK-Pos</span>
     <span class="btn btn-success disabled">Eingelagert</span>
-    <span class="btn disabled">0</span>
+    <span class="btn disabled"><%= @stock_status_count %></span>
   </div>
   <div class="btn-group">
     <span class="btn btn disabled">VK-Pos</span>
     <span class="btn btn-danger disabled">Offen</span>
-    <span class="btn disabled">0</span>
+    <span class="btn disabled"><%= @pending_status_count %></span>
   </div>
 </div>
 <div class="clear"></div>

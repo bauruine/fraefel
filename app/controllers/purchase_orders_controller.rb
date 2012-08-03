@@ -44,18 +44,19 @@ class PurchaseOrdersController < ApplicationController
   def index
     @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :shipping_address).search(params[:q] || {:delivered_eq => "false", :picked_up_eq => "false", :cancelled_eq => "false"})
     @purchase_orders = @search.result.ordered_for_delivery
-    #@level_1 = Address.where("addresses.category_id" => 8, "addresses.id" => @purchase_orders.collect(&:level_1)).order("addresses.company_name ASC")
-    @level_1 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 8).where("purchase_orders.delivered = ?", params[:q].present? ? params[:q][:delivered_equals] : true).joins(:purchase_orders)
-    #@level_2 = Address.where("addresses.category_id" => 9, "addresses.id" => @purchase_orders.collect(&:level_2)).order("addresses.company_name ASC")
-    @level_2 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 9).where("purchase_orders.delivered = ?", params[:q].present? ? params[:q][:delivered_equals] : true).joins(:purchase_orders)
-    #@level_3 = Address.where("addresses.category_id" => 10, "addresses.id" => @purchase_orders.collect(&:level_3)).order("addresses.company_name ASC")
-    @level_3 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 10).where("purchase_orders.delivered = ?", params[:q].present? ? params[:q][:delivered_equals] : true).joins(:purchase_orders)
     
-    #@shipping_routes = ShippingRoute.order("name ASC")
-    @shipping_routes = ShippingRoute.select("DISTINCT `shipping_routes`.*").where("purchase_orders.delivered = ?", params[:q].present? ? params[:q][:delivered_equals] : true).joins(:purchase_orders)
+    @purchase_order_ids = @purchase_orders.collect(&:id)
+    
+    @level_1 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 8).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+    @level_2 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 9).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+    @level_3 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 10).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+    
+    @shipping_routes = ShippingRoute.select("DISTINCT `shipping_routes`.*").where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
-    ####@production_status_count = PurchasePosition.where().count
+    @production_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 1).joins(:purchase_order).count("DISTINCT `purchase_positions`.id")
+    @stock_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.stock_status" => 1).joins(:purchase_order).count("DISTINCT `purchase_positions`.id")
+    @pending_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 0, "purchase_positions.stock_status" => 0).joins(:purchase_order).count("DISTINCT `purchase_positions`.id")
     respond_to do |format|
       format.html
       format.js
