@@ -20,92 +20,89 @@
 </div>
 
 <% @pallets.each do |pallet| %>
+  <blockquote style="margin-bottom: 0;">
+    <p><%= pallet.shipping_address.consignee_full %></p>
+  </blockquote>
   
-  <section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <% if pallet.cargo_list.present? %>
-        <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
-      <% end %>
-      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
-      <% if pallet.purchase_position_counter != 0 %>
-        <h4 class="floatLeft"><%= pallet.shipping_address.consignee_full %></h4>
-      <% end %>
-      <% if permitted_to? :edit, :pallets %>
-        <a href="<%= edit_pallet_path(pallet) %>" class="header_link" data-role="edit_remote" data-show-tooltip="true" title="Zeige Palette-Optionen">
-          <span class="header_pack _1"></span>
-        </a>
-      <% end %>
-      <a href="<%= pallet_path(pallet, :format => :pdf) %>" class="header_link" data-show-tooltip="true" title="Drucke Pelette">
-        <span class="header_pack _193"></span>
-      </a>
-    </header>
-    <section class="filter_box_content clearfix">
-      <table class="table no-margin">
-        <thead>
-          <tr>
-            <th>VK-Position</th>
-            <th>Artikel NR</th>
-            <th>Zoll</th>
-            <th>Artikel</th>
-            <th>Produktlinie</th>
-            <th>Menge Total</th>
-            <th>Lager Ort</th>
-            <th>Versand</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% pallet.pallet_purchase_position_assignments.each do |pallet_purchase_position_assignment| %>
-            <% purchase_position = pallet_purchase_position_assignment.purchase_position %>
-            <tr>
-              <% if permitted_to? :edit, :purchase_positions %>
-                <td id="column_1">
-                  <div class="btn-group">
-                    <% if purchase_position.priority_level == 0 %>
-                      <span class="btn btn-mini disabled">
-                        <i class="icon-asterisk"></i>
-                      </span>
-                    <% elsif purchase_position.priority_level > 1 %>
-                      <span class="btn btn-mini disabled">
-                        <i class="icon-fire"></i>
-                      </span>
-                    <% end %>
-                    <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position, :format => :xml), "data-toggle" => "modal-remote", "data-target" => "#edit_purchase_position", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
-                  </div>
-                </td>
-              <% else %>
-                <td id="column_1">
-                  <% if purchase_position.purchase_order.priority_level == 0 %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>VK-Position</th>
+        <th>Artikel NR</th>
+        <th>Zoll</th>
+        <th>Artikel</th>
+        <th>Produktlinie</th>
+        <th>Menge Total</th>
+        <th>Lager Ort</th>
+        <th>Versand</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pallet.pallet_purchase_position_assignments.each do |pallet_purchase_position_assignment| %>
+        <% purchase_position = pallet_purchase_position_assignment.purchase_position %>
+        <tr>
+          <% if permitted_to? :edit, :purchase_positions %>
+            <td id="column_1">
+              <div class="btn-group">
+                <% if purchase_position.priority_level == 0 %>
+                  <span class="btn btn-mini disabled">
                     <i class="icon-asterisk"></i>
-                  <% elsif purchase_position.priority_level > 1 %>
+                  </span>
+                <% elsif purchase_position.priority_level > 1 %>
+                  <span class="btn btn-mini disabled">
                     <i class="icon-fire"></i>
-                  <% end %>
-                  <span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></span>
-                </td>
+                  </span>
+                <% end %>
+                <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position, :format => :xml), "data-toggle" => "modal-remote", "data-target" => "#edit_purchase_position", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
+              </div>
+            </td>
+          <% else %>
+            <td id="column_1">
+              <% if purchase_position.purchase_order.priority_level == 0 %>
+                <i class="icon-asterisk"></i>
+              <% elsif purchase_position.priority_level > 1 %>
+                <i class="icon-fire"></i>
               <% end %>
-              <td id="column_2"><%= purchase_position.article_number %></td>
-              <td id="column_3"><%= purchase_position.commodity_code.content %></td>
-              <td id="column_4"><%= purchase_position.article %></td>
-              <td id="column_5"><%= purchase_position.product_line %></td>
-              <td id="column_6"><%= pallet_purchase_position_assignment.quantity %></td>
-              <td id="column_7"><%= purchase_position.storage_location %></td>
-              <td id="column_8"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-            </tr>
+              <span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></span>
+            </td>
           <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></strong></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="align-center"></td>
-          </tr>
-        </tfoot>
-      </table>
-    </section>
-  </section>
+          <td id="column_2"><%= purchase_position.article_number %></td>
+          <td id="column_3"><%= purchase_position.commodity_code.content %></td>
+          <td id="column_4"><%= purchase_position.article %></td>
+          <td id="column_5"><%= purchase_position.product_line %></td>
+          <td id="column_6"><%= pallet_purchase_position_assignment.quantity %></td>
+          <td id="column_7"><%= purchase_position.storage_location %></td>
+          <td id="column_8"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><%= pallet.pallet_type.description %>: <strong><%= pallet.id %></strong></td>
+        <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></strong></td>
+        <td>
+          <% if pallet.cargo_list.present? %>
+            Versand: <%= link_to(pallet.cargo_list.id, pallet.cargo_list) %>
+          <% end %>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="btn-toolbar" style="margin: 0;">
+          <div class="btn-group">
+            <a href="<%= edit_pallet_path(pallet) %>" data-role="edit_remote" class="btn btn-mini">Edit</a>
+            <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
+            <ul class="dropdown-menu pull-right">
+              <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
+            </ul>
+          </div>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
 <% end %>
 
 <script type="text/javascript" charset="utf-8">

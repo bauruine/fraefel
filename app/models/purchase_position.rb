@@ -18,9 +18,17 @@ class PurchasePosition < ActiveRecord::Base
 
   
   def self.patch_level_3
-    select("DISTINCT `purchase_positions`.*").joins(:purchase_order).each do |purchase_position|
-      level_3 = purchase_position.purchase_order.level_3
-      purchase_position.update_attribute("level_3", level_3)
+    select("DISTINCT `purchase_positions`.*").joins(:purchase_order).readonly(false).each do |purchase_position|
+      @level_3_id = purchase_position.purchase_order.level_3
+      purchase_position.update_attribute("level_3", @level_3_id)
+    end
+  end
+  
+  def self.patch_baan_id
+    select("DISTINCT `purchase_positions`.*").joins(:purchase_order).readonly(false).each do |purchase_position|
+      @purchase_order_baan_id = purchase_position.purchase_order.baan_id
+      @purchase_position_baan_id = "#{@purchase_order_baan_id}-#{purchase_position.position}"
+      purchase_position.update_attribute("baan_id", @purchase_position_baan_id)
     end
   end
   

@@ -80,10 +80,6 @@ class PurchaseOrdersController < ApplicationController
     end
   end
   
-  def index_beta
-    @purchase_orders = PurchaseOrder.where("purchase_orders.warehousing_completed = true").where("purchase_orders.delivered = false").includes(:purchase_positions, :shipping_route, :calculation, :addresses)
-  end
-  
   def edit
     @purchase_order = PurchaseOrder.find(params[:id])
   end

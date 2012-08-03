@@ -1,16 +1,23 @@
 <fieldset>
   <legend>Allgemein</fieldset>
   <div class="control-group">
-    <%= f.label(:delivered_equals, "Versendet?", :class => "control-label") %>
+    <%= f.label(:delivered_eq, "Versendet?", :class => "control-label") %>
     <div class="controls">
-      <%= f.select(:delivered_equals, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+      <%= f.select(:delivered_eq, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label(:id_equals, "Palette-/Coli Nr.", :class => "control-label") %>
+    <%= f.label(:id_eq, "Palette-/Coli Nr.", :class => "control-label") %>
     <div class="controls">
-      <%= f.text_field(:id_equals) %>
+      <%= f.text_field(:id_eq) %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label(:level_3_eq, "Lieferadresse", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:level_3_eq, @level_3, :id, :location_for_select, {:include_blank => true}, {"data-foo" => "level_3"}) %>
     </div>
   </div>
 </fieldset>

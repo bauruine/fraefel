@@ -45,6 +45,24 @@ class Pallet < ActiveRecord::Base
     end
   end
   
+  def self.patch_level_3
+    self.select("DISTINCT `pallets`.*").joins(:purchase_orders, :purchase_positions).readonly(false).each do |pallet|
+      @purchase_orders = pallet.purchase_orders
+      @level_3_id = @purchase_orders.collect(&:level_3).uniq.compact.first
+
+      pallet.update_attribute("level_3", @level_3_id)
+    end
+  end
+  
+  def self.patch_zip_location_id
+    self.select("DISTINCT `pallets`.*").joins(:purchase_orders, :purchase_positions).readonly(false).each do |pallet|
+      @purchase_positions = pallet.purchase_positions
+      @zip_location_id = @purchase_positions.collect(&:zip_location_id).uniq.compact.first
+
+      pallet.update_attribute("zip_location_id", @zip_location_id)
+    end
+  end
+      
   def self.patch_pallet_purchase_position_assignments_quantity
     PalletPurchasePositionAssignment.all.each do |p_p_p_a|
       @p_p = PurchasePosition.find(p_p_p_a.purchase_position_id)
