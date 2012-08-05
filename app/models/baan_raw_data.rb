@@ -5,14 +5,14 @@ class BaanRawData < ActiveRecord::Base
     @baan_import = BaanImport.find(arg)
     csv_file_path = @baan_import.baan_upload.path
     
-    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
+    csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     ag = Time.now
 
     csv_file.each do |row|
       @baan_raw_attributes = {}
       # added new lines 82 83 84
       for i in 0..84 do
-        @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s.undress)
+        @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s)
       end
       @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)
       BaanRawData.find_or_create_by_baan_2_and_baan_4_and_baan_import_id(@baan_raw_attributes)

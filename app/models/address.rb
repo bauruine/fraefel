@@ -33,32 +33,75 @@ class Address < ActiveRecord::Base
     (self.postal_code.present? && self.city.present? && self.city.present?) ? true : false
   end
   
-  def self.patch_import(upload_id)
-    puts Address.count
-    #@baan_import = BaanImport.find(upload_id)
-    
-    csv_file_path = upload_id
-    
-    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
+  def self.patch_import(arg)
+    @baan_import = BaanImport.find(arg)
+    csv_file_path = @baan_import.baan_upload.path
+    csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     ag = Time.now
-    csv_todos = {"kat_b" => [21, 22, 23, 24, 25, 26], "kat_a" => [29, 30, 35, 36, 37, 38], "kat_c" => [45, 46, 47, 48, 50, 51]}
-
+    csv_todos = {"kat_b" => [21, 22, 23, 24, 25, 26], "kat_a" => [29, 30, 35, 36, 37, 38], "kat_c" => [45, 46, 47, 48, 49, 50]}
+    categories = {"kat_b" => Category.where(:title => "kat_b").first.id, "kat_a" => Category.where(:title => "kat_a").first.id, "kat_c" => Category.where(:title => "kat_c").first.id}
+    address_level_mapper = {8 => "level_1", 9 => "level_2", 10 => "level_3"}
+    address_attributes = {}
+    
     csv_file.each do |row|
       csv_todos.each do |k, v|
-        csv_address_code = row[v[0]].to_s.undress
-        csv_company_name = row[v[1]].to_s.undress
-        csv_street = row[v[2]].to_s.undress
-        csv_street_number = row[v[3]].to_s.undress
-        csv_postal_code = row[v[4]].to_s.undress
-        csv_city = row[v[5]].to_s.undress
+      
+        purchase_order = PurchaseOrder.where(:baan_id => row[2].to_s).first
+        if purchase_order.present? and (purchase_order.level_1.nil? or purchase_order.level_2.nil? or purchase_order.level_3.nil?)
+          address_attributes.merge!(:country => row["49".to_i])
+          address_attributes.merge!(:code => row["#{v[0]}".to_i])
+          address_attributes.merge!(:company_name => row["#{v[1]}".to_i])
+          address_attributes.merge!(:street => row["#{v[2]}".to_i] + " " + row["#{v[3]}".to_i])
+          address_attributes.merge!(:postal_code => row["#{v[4]}".to_i])
+          address_attributes.merge!(:city => row["#{v[5]}".to_i])
+          address_attributes.merge!(:category_id => categories[k])
+          
+          address = Address.find_or_create_by_code_and_category_id(address_attributes)
+          purchase_order.update_attributes(address_level_mapper[address.category_id] => address.id)
+          purchase_order.addresses += [address]
+        end
         
-        csv_category = Category.where(:title => k).first
-        address = Address.find_or_create_by_code_and_category_id(:code => csv_address_code, :category_id => csv_category.id, :company_name => csv_company_name, :street => (csv_street + " " + csv_street_number), :postal_code => csv_postal_code, :city => csv_city)
       end
     end
     ab = Time.now
     puts (ab - ag).to_s
-    puts Address.count
+  end
+  
+  def self.patch_import_with_raw_data
+    
+    ag = Time.now
+    csv_todos = {"kat_b" => [47, 48, 49, 50, 51, 52], "kat_a" => [55, 56, 61, 62, 63, 64], "kat_c" => [71, 72, 73, 74, 75, 76]}
+    address_attributes = {}
+    categories = {"kat_b" => Category.where(:title => "kat_b").first.id, "kat_a" => Category.where(:title => "kat_a").first.id, "kat_c" => Category.where(:title => "kat_c").first.id}
+    address_level_mapper = {8 => "level_1", 9 => "level_2", 10 => "level_3"}
+    
+    purchase_orders = PurchaseOrder.where("level_3 IS NULL OR level_2 IS NULL OR level_1 IS NULL")
+    purchase_order_baan_ids = purchase_orders.collect(&:baan_id)
+
+    @baan_raw_data = BaanRawData.where("baan_71 IS NOT NULL").where("baan_2" => purchase_order_baan_ids)
+    
+    if @baan_raw_data.present?
+      @baan_raw_data.each do |baan_raw_data|
+        csv_todos.each do |k, v|
+        
+          purchase_order = PurchaseOrder.where(:baan_id => baan_raw_data.attributes["baan_2"]).first
+          
+          address_attributes.merge!(:country => baan_raw_data.attributes["baan_9"])
+          address_attributes.merge!(:code => baan_raw_data.attributes["baan_#{v[0]}"])
+          address_attributes.merge!(:company_name => baan_raw_data.attributes["baan_#{v[1]}"])
+          address_attributes.merge!(:street => baan_raw_data.attributes["baan_#{v[2]}"] + " " + baan_raw_data.attributes["baan_#{v[3]}"])
+          address_attributes.merge!(:postal_code => baan_raw_data.attributes["baan_#{v[4]}"])
+          address_attributes.merge!(:city => baan_raw_data.attributes["baan_#{v[5]}"])
+          address_attributes.merge!(:category_id => categories[k])
+          
+          address = Address.find_or_create_by_code_and_category_id(address_attributes)
+          purchase_order.update_attributes(address_level_mapper[address.category_id] => address.id)
+          purchase_order.addresses += [address]
+        end
+      end
+    end
+    ab = Time.now
+    puts (ab - ag).to_s
   end
   
   def self.import(arg)

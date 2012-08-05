@@ -21,7 +21,7 @@ class Pallet < ActiveRecord::Base
         @purchase_orders_array << purchase_position.purchase_order
       end
       puts @purchase_orders_array.size
-      pallet.purchase_orders += @purchase_orders_array.uniq!
+      pallet.purchase_orders += @purchase_orders_array.uniq
     end
   end
   

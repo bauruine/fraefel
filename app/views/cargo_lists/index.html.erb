@@ -1,5 +1,5 @@
 <div class="modal hide fade" id="filter">
-  <%= form_for :search, @search, :html => {:class => "form-horizontal", :method => :get, :style => "margin: 0;"} do |f| %>
+  <%= search_form_for @search, :html => {:class => "form-horizontal", :method => :get, :style => "margin: 0;"} do |f| %>
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal">×</button>
       <h3>Filter Optionen</h3>
@@ -8,15 +8,15 @@
     <div class="modal-body">
       
       <div class="control-group">
-        <%= f.label :delivered_equals, "Versendet", :class => "control-label" %>
+        <%= f.label :delivered_eq, "Versendet", :class => "control-label" %>
         <div class="controls">
-          <%= f.select(:delivered_equals, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
+          <%= f.select(:delivered_eq, { 'Ja'=>true, 'Nein'=>false }, :include_blank => true) %>
         </div>
       </div>
       <div class="control-group">
-        <%= f.label :country_equals, "Land", :class => "control-label" %>
+        <%= f.label :country_eq, "Land", :class => "control-label" %>
         <div class="controls">
-          <%= f.select(:country_equals, { 'Deutschland' => 'DE', 'Schweiz' => 'CH' }, :include_blank => true) %>
+          <%= f.select(:country_eq, { 'Deutschland' => 'DE', 'Schweiz' => 'CH' }, :include_blank => true) %>
         </div>
       </div>
       

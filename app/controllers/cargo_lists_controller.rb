@@ -43,12 +43,12 @@ class CargoListsController < ApplicationController
   end
   
   def index
-    if params[:search].present? && params[:search][:delivered_equals].present? && params[:search][:delivered_equals] == "true"
-      @search = CargoList.search(params[:search])
+    if params[:q].present? && params[:q][:delivered_eq].present? && params[:q][:delivered_eq] == "true"
+      @search = CargoList.search(params[:q])
     else
       @search = CargoList.where(:delivered => false).search(params[:search])
     end
-    @cargo_lists = @search
+    @cargo_lists = @search.result
   end
   
   def new
