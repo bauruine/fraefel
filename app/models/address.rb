@@ -34,8 +34,8 @@ class Address < ActiveRecord::Base
   end
   
   def self.patch_import(arg)
-    @baan_import = BaanImport.find(arg)
-    csv_file_path = @baan_import.baan_upload.path
+    #@baan_import = BaanImport.find(arg)
+    csv_file_path = arg
     csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     ag = Time.now
     csv_todos = {"kat_b" => [21, 22, 23, 24, 25, 26], "kat_a" => [29, 30, 35, 36, 37, 38], "kat_c" => [45, 46, 47, 48, 49, 50]}
