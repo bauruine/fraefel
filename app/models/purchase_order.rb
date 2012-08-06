@@ -15,7 +15,7 @@ class PurchaseOrder < ActiveRecord::Base
   
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
-  after_create :create_calculation
+  after_create :handle_calculation
   
   def self.patch_level_3
     select("DISTINCT `purchase_orders`.*").joins(:purchase_positions).each do |purchase_order|
@@ -206,7 +206,7 @@ class PurchaseOrder < ActiveRecord::Base
   
   private
   
-  def create_calculation
+  def handle_calculation
     self.create_calculation unless self.calculation.present?
   end
   

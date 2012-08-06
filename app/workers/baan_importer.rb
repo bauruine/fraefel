@@ -5,15 +5,15 @@ class BaanImporter
     case baan_import.baan_import_group.title
     when "Versand"
       BaanRawData.import(baan_import_id)
-      #BaanRawData.where(:baan_import_id => baan_import.id).each do |baan_raw_data|
-      #  Address.create_from_raw_data(baan_raw_data)
-      #  Customer.create_from_raw_data(baan_raw_data)
-      #  ZipLocation.create_from_raw_data(baan_raw_data)
-      #  CommodityCode.create_from_raw_data(baan_raw_data)
-      #  ShippingRoute.create_from_raw_data(baan_raw_data)
-      #  PurchaseOrder.create_from_raw_data(baan_raw_data)
-      #  PurchasePosition.create_from_raw_data(baan_raw_data)
-      #end
+      BaanRawData.where(:baan_import_id => baan_import.id).each do |baan_raw_data|
+        Address.create_from_raw_data(baan_raw_data)
+        Customer.create_from_raw_data(baan_raw_data)
+        ZipLocation.create_from_raw_data(baan_raw_data)
+        CommodityCode.create_from_raw_data(baan_raw_data)
+        ShippingRoute.create_from_raw_data(baan_raw_data)
+        PurchaseOrder.create_from_raw_data(baan_raw_data)
+        PurchasePosition.create_from_raw_data(baan_raw_data)
+      end
       ###BaanRawData.patch_import(baan_import_id)
       #PurchaseOrder.patch_calculation
       #PurchaseOrder.patch_aggregations
