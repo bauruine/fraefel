@@ -7,7 +7,7 @@
     <% else %>
       <%= wicked_pdf_stylesheet_link_tag "pdf_css_application" %>
     <% end %>
-    <%= wicked_pdf_javascript_src_tag "pdf_js_application" %>
+    <%= wicked_pdf_javascript_include_tag "pdf_js_application" %>
   </head>
   <body>
     <%= yield %>
