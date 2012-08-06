@@ -1,16 +1,16 @@
 <fieldset>
   <legend>Grund</legend>
   <div class="control-group">
-    <%= f.label(:shifting_reasons_id_equals, "Grund", :class => "control-label") %>
+    <%= f.label(:shifting_reasons_id_eq, "Grund", :class => "control-label") %>
     <div class="controls">
-      <%= f.collection_select(:shifting_reasons_id_equals, @shifting_reasons, :id, :title, {:include_blank => true}, {}) %>
+      <%= f.collection_select(:shifting_reasons_id_eq, @shifting_reasons, :id, :title, {:include_blank => true}, {}) %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label(:shifting_reasons_id_does_not_equal, "Grund ausklammern", :class => "control-label") %>
+    <%= f.label(:shifting_reasons_id_not_eq, "Grund ausklammern", :class => "control-label") %>
     <div class="controls">
-      <%= f.collection_select(:shifting_reasons_id_does_not_equal, @shifting_reasons, :id, :title, {:include_blank => true}, {}) %>
+      <%= f.collection_select(:shifting_reasons_id_not_eq, @shifting_reasons, :id, :title, {:include_blank => true}, {}) %>
     </div>
   </div>
 </fieldset>
