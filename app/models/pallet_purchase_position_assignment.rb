@@ -4,6 +4,9 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   
   after_create :update_purchase_position_counter
   after_create :update_purchase_order_calculation
+  after_create :update_pallet_level_3
+  after_create :update_pallet_zip_location_id
+  after_create :update_pallet_shipping_route_id
   after_destroy :update_purchase_position_counter
   
   def self.fix_amount_and_weight
@@ -38,6 +41,33 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   end
 
   private
+  
+  def update_pallet_shipping_route_id
+    if self.pallet.present? && self.purchase_position.present?
+      @purchase_orders = self.pallet.purchase_orders
+      @shipping_route_id = @purchase_orders.collect(&:shipping_route_id).uniq.compact.first
+
+      self.pallet.update_attribute("shipping_route_id", @shipping_route_id)
+    end
+  end
+  
+  def update_pallet_level_3
+    if self.pallet.present? && self.purchase_position.present?
+      @purchase_orders = self.pallet.purchase_orders
+      @level_3_id = @purchase_orders.collect(&:level_3).uniq.compact.first
+
+      self.pallet.update_attribute("level_3", @level_3_id)
+    end
+  end
+  
+  def update_pallet_zip_location_id
+    if self.pallet.present? && self.purchase_position.present?
+      @purchase_positions = self.pallet.purchase_positions
+      @zip_location_id = @purchase_positions.collect(&:zip_location_id).uniq.compact.first
+
+      self.pallet.update_attribute("zip_location_id", @zip_location_id)
+    end
+  end
   
   def update_purchase_position_counter
     if self.pallet.present? && self.purchase_position.present?
