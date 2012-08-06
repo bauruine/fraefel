@@ -12,7 +12,7 @@ class BaanRawData < ActiveRecord::Base
       @baan_raw_attributes = {}
       # added new lines 82 83 84
       for i in 0..84 do
-        @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s)
+        @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s.undress)
       end
       @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)
       BaanRawData.find_or_create_by_baan_2_and_baan_4_and_baan_import_id(@baan_raw_attributes)
