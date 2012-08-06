@@ -12,10 +12,11 @@
 <div class="page-header">
     <h1 class="pull-left">VK-Aufträge</h1>
     <div class="btn-toolbar pull-right">
+    
       <div class="btn-group">
-        <a class="btn btn-primary" href="<%= url_for(params.merge(:format => :pdf)) %>"><i class="icon-print icon-white"></i> Drucke PDF</a>
+        <a class="btn btn-primary" href="<%= pdf_reports_path(:pdf_type => 'PurchaseOrdersDocument', :args_for_printing => {:q => params[:q]}) %>" data-method="post"><i class="icon-print icon-white"></i> Drucke PDF</a>
       </div>
-      
+
       <div class="btn-group">
         <button data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</button>
         <button class="btn dropdown-toggle" data-toggle="dropdown">

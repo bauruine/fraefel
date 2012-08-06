@@ -1,10 +1,12 @@
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li><a href="<%= cargo_lists_path %>">Versand Listen</a> <span class="divider">/</span></li>
+    <li class="active"><%= @cargo_list.id %></li>
+  </ul>
+<% end %>
+
 <div class="modal hide fade" id="edit_cargo_list">
 </div>
-
-<ul class="breadcrumb">
-  <li><a href="<%= cargo_lists_path %>">Versand Listen</a> <span class="divider">/</span></li>
-  <li class="active"><%= @cargo_list.id %></li>
-</ul>
 
 <div class="page-header">
   <h1 class="pull-left">Versand NR#<%= @cargo_list.id %></h1>
@@ -27,12 +29,14 @@
   <dd><%= @cargo_list.additional_space %></dd>
 </dl>
 
-<section class="filter_box">
-  <header class="filter_box_header"><h4>Angefügte Paletten / Coli</h4></header>
-  <section class="filter_box_content clearfix">
+<blockquote>
+  <p>
+    Angefügte Paletten / Coli
+  </p>
+</blockquote>
       <%= form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table class="table no-margin">
+        <table class="table table-striped">
           <thead>
             <tr>
               <th>NR</th>
@@ -69,16 +73,16 @@
           </tfoot>
         </table>
       <% end %>
-  </section>
-</section>
 
+<blockquote>
+  <p>
+    Verfügbare Paletten / Coli
+  </p>
+</blockquote>
 
-<section class="filter_box">
-  <header class="filter_box_header"><h4>Verfügbare Paletten / Coli</h4></header>
-  <section class="filter_box_content clearfix">
     <%= form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
       <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-      <table class="table no-margin">
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>NR</th>
@@ -114,8 +118,6 @@
         </tfoot>
       </table>
     <% end %>
-  </section>
-</section>
 
 <script type="text/javascript" charset="utf-8">
   var column_1 = 0;
