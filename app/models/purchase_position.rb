@@ -52,6 +52,70 @@ class PurchasePosition < ActiveRecord::Base
     end
   end
   
+  def self.create_from_raw_data(arg)
+    commodity_code_id = CommodityCode.where(:code => arg.attributes["baan_0"]).first.try(:id)
+    purchase_order = PurchaseOrder.where(:baan_id => arg.attributes["baan_2"])
+    purchase_order_id = purchase_order.first.try(:id)
+    level_3 = Address.where(:code => arg.attributes["baan_71"], :category_id => 10).first.try(:id)
+    zip_location_id = ZipLocation.where(:title => arg.attributes["baan_35"]).first.try(:id)
+    
+    purchase_position_attributes = {}
+    purchase_position_attributes.merge!(:commodity_code_id => commodity_code_id)
+    purchase_position_attributes.merge!(:purchase_order_id => purchase_order_id)
+    purchase_position_attributes.merge!(:baan_id => "#{arg.attributes["baan_2"]}-#{arg.attributes["baan_4"]}")
+    purchase_position_attributes.merge!(:position => arg.attributes["baan_4"].to_i)
+    purchase_position_attributes.merge!(:delivery_date => arg.attributes["baan_13"])
+    purchase_position_attributes.merge!(:weight_single => arg.attributes["baan_15"].to_f)
+    purchase_position_attributes.merge!(:weight_total => arg.attributes["baan_16"].to_f)
+    purchase_position_attributes.merge!(:amount => arg.attributes["baan_17"].to_f)
+    purchase_position_attributes.merge!(:quantity => arg.attributes["baan_18"].to_f)
+    purchase_position_attributes.merge!(:storage_location => arg.attributes["baan_23"])
+    purchase_position_attributes.merge!(:article_number => arg.attributes["baan_27"])
+    purchase_position_attributes.merge!(:article => arg.attributes["baan_28"])
+    purchase_position_attributes.merge!(:product_line => arg.attributes["baan_30"])
+    purchase_position_attributes.merge!(:level_3 => level_3)
+    purchase_position_attributes.merge!(:zip_location_id => zip_location_id)
+    purchase_position_attributes.merge!(:gross_price => arg.attributes["baan_38"])
+    purchase_position_attributes.merge!(:value_discount => arg.attributes["baan_39"])
+    purchase_position_attributes.merge!(:net_price => arg.attributes["baan_40"])
+    purchase_position_attributes.merge!(:stock_status => arg.attributes["baan_78"].to_i)
+    purchase_position_attributes.merge!(:production_status => arg.attributes["baan_79"].to_i)
+    purchase_position_attributes.merge!(:picked_up => arg.attributes["baan_84"])
+    
+    purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
+    if purchase_position.new_record?
+      purchase_position.save
+      purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
+      if purchase_position.purchase_order.delivered
+        purchase_order.update_attribute("delivered", false)
+      end
+    else
+      update_entry = false
+      purchase_position_attributes.merge!(:id => purchase_position.id)
+      
+      purchase_position_attributes.each do |k, v|
+        if purchase_position.attributes[k] != v
+          update_entry = true
+        end
+      end
+      
+      if update_entry
+        purchase_position_attributes.delete(:id)
+        purchase_position.update_attributes(purchase_position_attributes)
+        if purchase_position.delivery_date != purchase_position.delivery_dates.last.try(:date_of_delivery)
+          purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
+        end
+      end
+    end
+    
+    if purchase_order.present?
+      if purchase_order.first.purchase_positions.collect(&:picked_up).count {|x| x == true} == purchase_order.first.purchase_positions.collect(&:picked_up).size
+        purchase_order.first.update_attribute("picked_up", true)
+      end
+    end
+    
+  end
+  
   protected
     
   def self.import(arg)

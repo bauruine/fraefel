@@ -22,4 +22,13 @@ class CommodityCode < ActiveRecord::Base
     
   end
   
+  def self.create_from_raw_data(arg)
+    commodity_code_attributes = Hash.new
+    
+    commodity_code_attributes.merge!(:code => arg.attributes["baan_0"])
+    commodity_code_attributes.merge!(:content => arg.attributes["baan_1"])
+    
+    commodity_code = CommodityCode.find_or_create_by_code(commodity_code_attributes)
+  end
+  
 end

@@ -128,8 +128,10 @@ class Address < ActiveRecord::Base
     puts (ab - ag).to_s
   end
   
-  def create_from_raw_data(arg)
+  def self.create_from_raw_data(arg)
     address_categories = {"kat_b" => [9, 47, 48, 49, 50, 51, 52], "kat_a" => [9, 55, 56, 61, 62, 63, 64], "kat_c" => [9, 71, 72, 73, 74, 75, 76]}
+    categories = {"kat_b" => Category.where(:title => "kat_b").first.id, "kat_a" => Category.where(:title => "kat_a").first.id, "kat_c" => Category.where(:title => "kat_c").first.id}
+
     address_attributes = Hash.new
     
     address_categories.each do |k, v|
@@ -140,7 +142,7 @@ class Address < ActiveRecord::Base
       address_attributes.merge!(:street => arg.attributes["baan_#{v[3]}"] + " " + arg.attributes["baan_#{v[4]}"])
       address_attributes.merge!(:postal_code => arg.attributes["baan_#{v[5]}"])
       address_attributes.merge!(:city => arg.attributes["baan_#{v[6]}"])
-      address_attributes.merge!(:category_id => Category.where(:title => k).first.id)
+      address_attributes.merge!(:category_id => categories[k])
 
       address = Address.find_or_create_by_code_and_category_id(address_attributes)
     end

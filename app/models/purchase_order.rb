@@ -32,21 +32,45 @@ class PurchaseOrder < ActiveRecord::Base
     return @time_stop - @time_start
   end
   
-  def create_from_raw_data(arg)
-    purchase_order_attributes = Hash.new
+  def self.create_from_raw_data(arg)
+    customer_id = Customer.where(:baan_id => arg.attributes["baan_6"]).first.try(:id)
+    shipping_route_id = ShippingRoute.where(:name => arg.attributes["baan_21"]).first.try(:id)
+    level_1 = Address.where(:code => arg.attributes["baan_55"], :category_id => 8).first.try(:id)
+    level_2 = Address.where(:code => arg.attributes["baan_47"], :category_id => 9).first.try(:id)
+    level_3 = Address.where(:code => arg.attributes["baan_71"], :category_id => 10).first.try(:id)
+    category_id = Category.find_or_create_by_title_and_categorizable_type(:title => arg.attributes["baan_81"], :categorizable_type => "purchase_order").id
     
+    purchase_order_attributes = Hash.new
     purchase_order_attributes.merge!(:baan_id => arg.attributes["baan_2"])
-    purchase_order_attributes.merge!(:customer_id => Customer.where(:baan_id => arg.attributes["baan_6"]).first.try(:id))
-    purchase_order_attributes.merge!(:shipping_route_id => ShippingRoute.find_or_create_by_name(:name => arg.attributes["baan_21"], :active => true).id)
-    purchase_order_attributes.merge!(:warehouse_number => baan_raw_data.attributes["baan_22"])
-    purchase_order_attributes.merge!(:level_2 => Address.where(:code => baan_raw_data.attributes["baan_47"], :category_id => 9).first.try(:id))
-    purchase_order_attributes.merge!(:level_1 => Address.where(:code => baan_raw_data.attributes["baan_55"], :category_id => 8).first.try(:id))
-    purchase_order_attributes.merge!(:level_3 => Address.where(:code => baan_raw_data.attributes["baan_71"], :category_id => 10).first.try(:id))
-    purchase_order_attributes.merge!(:address_id => Address.where(:code => baan_raw_data.attributes["baan_71"]).first.try(:id))
-    purchase_order_attributes.merge!(:category_id => Category.find_or_create_by_title_and_categorizable_type(:title => baan_raw_data.attributes["baan_81"], :categorizable_type => "purchase_order").id)
+    purchase_order_attributes.merge!(:customer_id => customer_id)
+    purchase_order_attributes.merge!(:shipping_route_id => shipping_route_id)
+    purchase_order_attributes.merge!(:warehouse_number => arg.attributes["baan_22"])
+    purchase_order_attributes.merge!(:level_2 => level_2)
+    purchase_order_attributes.merge!(:level_1 => level_1)
+    purchase_order_attributes.merge!(:level_3 => level_3)
+    purchase_order_attributes.merge!(:address_id => level_3)
+    purchase_order_attributes.merge!(:category_id => category_id)
 
     # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_order
     purchase_order_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_order_attributes[:shipping_route_id].present?
+    
+    purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(purchase_order_attributes)
+    
+    if purchase_order.new_record?
+      purchase_order.save
+    else
+      update_entry = false
+      purchase_order_attributes.merge!(:id => purchase_order.id)
+      purchase_order_attributes.each do |k, v|
+        if purchase_order.attributes[k] != v
+          update_entry = true
+        end
+      end
+      if update_entry
+        purchase_order_attributes.delete(:id)
+        purchase_order.update_attributes(purchase_order_attributes)
+      end
+    end
 
   end
   

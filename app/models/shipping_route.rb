@@ -20,4 +20,13 @@ class ShippingRoute < ActiveRecord::Base
     
   end
   
+  def self.create_from_raw_data(arg)
+    shipping_route_attributes = Hash.new
+    
+    shipping_route_attributes.merge!(:name => arg.attributes["baan_21"])
+    shipping_route_attributes.merge!(:active => true)
+    
+    shipping_route = ShippingRoute.find_or_create_by_name(shipping_route_attributes)
+  end
+  
 end
