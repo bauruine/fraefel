@@ -3,11 +3,11 @@
   <head>
 
     <% unless params[:pdf_type] == "invoice" or params[:pdf_type] == "delivery_receipt" or params[:pdf_type] == "pick_up_receipt" or params[:pdf_type] == "invoice_beta" %>
-      <%= wicked_pdf_stylesheet_link_tag "report" %>
+      <%= wicked_pdf_stylesheet_link_tag "report.css" %>
     <% else %>
-      <%= wicked_pdf_stylesheet_link_tag "pdf" %>
+      <%= wicked_pdf_stylesheet_link_tag "pdf.css" %>
     <% end %>
-    <%= wicked_pdf_javascript_src_tag "pdf" %>
+    <%= wicked_pdf_javascript_src_tag "pdf.js" %>
   </head>
   <body>
     <%= yield %>
