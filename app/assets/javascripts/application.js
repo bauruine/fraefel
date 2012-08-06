@@ -16,6 +16,9 @@
 //= require_tree .
 
 $(document).ready(function() {
+
+  $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
+  
   $('[data-toggle="foobar"]').click(function() {
     $.get($(this).attr("href"), function(data) {
       alert(data);

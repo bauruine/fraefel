@@ -37,7 +37,7 @@ class BaanRawData < ActiveRecord::Base
     @baan_import = BaanImport.find(arg)
     csv_file_path = @baan_import.baan_upload.path
     
-    csv_file = CSV.open(csv_file_path, {:col_sep => ";", :headers => :first_row})
+    csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     ag = Time.now
 
     csv_file.each do |row|
