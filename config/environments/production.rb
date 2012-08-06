@@ -49,6 +49,7 @@ Fraefel::Application.configure do
   # config.assets.precompile += %w( search.js )
   config.assets.precompile += %w(pdf.css)
   config.assets.precompile += %w(report.css)
+  config.assets.precompile += %w(pdf.js)
   
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
