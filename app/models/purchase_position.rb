@@ -4,6 +4,7 @@ class PurchasePosition < ActiveRecord::Base
   belongs_to :old_pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
   belongs_to :zip_location, :class_name => "ZipLocation", :foreign_key => "zip_location_id"
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => "level_3"
+  belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
   
   has_many :pallet_purchase_position_assignments, :class_name => "PalletPurchasePositionAssignment"
   has_many :pallets, :class_name => "Pallet", :through => :pallet_purchase_position_assignments
@@ -21,6 +22,13 @@ class PurchasePosition < ActiveRecord::Base
     select("DISTINCT `purchase_positions`.*").joins(:purchase_order).readonly(false).each do |purchase_position|
       @level_3_id = purchase_position.purchase_order.level_3
       purchase_position.update_attribute("level_3", @level_3_id)
+    end
+  end
+  
+  def self.patch_shipping_route_id
+    select("DISTINCT `purchase_positions`.*").joins(:purchase_order).readonly(false).each do |purchase_position|
+      @shipping_route_id = purchase_position.purchase_order.shipping_route_id
+      purchase_position.update_attribute("shipping_route_id", @shipping_route_id)
     end
   end
   
@@ -58,6 +66,7 @@ class PurchasePosition < ActiveRecord::Base
     purchase_order_id = purchase_order.first.try(:id)
     level_3 = Address.where(:code => arg.attributes["baan_71"], :category_id => 10).first.try(:id)
     zip_location_id = ZipLocation.where(:title => arg.attributes["baan_35"]).first.try(:id)
+    shipping_route_id = ShippingRoute.where(:name => arg.attributes["baan_21"]).first.try(:id)
     
     purchase_position_attributes = {}
     purchase_position_attributes.merge!(:commodity_code_id => commodity_code_id)
@@ -74,6 +83,7 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!(:article => arg.attributes["baan_28"])
     purchase_position_attributes.merge!(:product_line => arg.attributes["baan_30"])
     purchase_position_attributes.merge!(:level_3 => level_3)
+    purchase_position_attributes.merge!(:shipping_route_id => shipping_route_id)
     purchase_position_attributes.merge!(:zip_location_id => zip_location_id)
     purchase_position_attributes.merge!(:gross_price => arg.attributes["baan_38"])
     purchase_position_attributes.merge!(:value_discount => arg.attributes["baan_39"])
@@ -81,6 +91,9 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!(:stock_status => arg.attributes["baan_78"].to_i)
     purchase_position_attributes.merge!(:production_status => arg.attributes["baan_79"].to_i)
     purchase_position_attributes.merge!(:picked_up => arg.attributes["baan_84"])
+    
+    # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_position
+    purchase_position_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_position_attributes[:shipping_route_id].present?
     
     purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
     if purchase_position.new_record?

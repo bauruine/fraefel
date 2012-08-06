@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120718132816) do
+ActiveRecord::Schema.define(:version => 20120806100319) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -508,6 +509,7 @@ ActiveRecord::Schema.define(:version => 20120718132816) do
     t.boolean  "picked_up",                                        :default => false
     t.boolean  "cancelled",                                        :default => false
     t.integer  "level_3"
+    t.integer  "shipping_route_id"
   end
 
   create_table "referees", :force => true do |t|
