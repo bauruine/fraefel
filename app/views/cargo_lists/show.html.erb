@@ -30,34 +30,45 @@
 <section class="filter_box">
   <header class="filter_box_header"><h4>Angefügte Paletten / Coli</h4></header>
   <section class="filter_box_content clearfix">
-      <table class="table no-margin">
-        <thead>
-          <tr>
-            <th>NR</th>
-            <th>Positionen</th>
-            <th>Mehrplatz</th>
-            <th>Tour</th>
-            <th>PLZ Gebiet</th>
-            <th>Empfänger</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @pallets.each do |pallet| %>
+      <%= form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+        <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
+        <table class="table no-margin">
+          <thead>
             <tr>
-              <td id="column_1">
-                <%= link_to("#{pallet.pallet_type.description.capitalize} #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
-              </td>
-              <td id="column_2"><%= pallet.purchase_position_counter %></td>
-              <td id="column_3"><%= pallet.additional_space %></td>
-              <td id="column_4"><%= pallet.shipping_route.name %></td>
-              <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
-              <td id="column_6"><%= pallet.shipping_address.consignee_full %></td>
+              <th>NR</th>
+              <th>Positionen</th>
+              <th>Mehrplatz</th>
+              <th>Tour</th>
+              <th>PLZ Gebiet</th>
+              <th>Empfänger</th>
+              <th></th>
             </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            <% @pallets.each do |pallet| %>
+              <tr>
+                <td id="column_1">
+                  <%= link_to("#{pallet.pallet_type.description.capitalize} #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
+                </td>
+                <td id="column_2"><%= pallet.purchase_position_counter %></td>
+                <td id="column_3"><%= pallet.additional_space %></td>
+                <td id="column_4"><%= pallet.shipping_route.name %></td>
+                <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
+                <td id="column_6"><%= pallet.shipping_address.consignee_full %></td>
+                <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <% 6.times do %>
+                <td></td>
+              <% end %>
+              <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-small btn-danger", :disable_with => "Entferne..." %></td>
+            </tr>
+          </tfoot>
+        </table>
+      <% end %>
   </section>
 </section>
 
@@ -65,6 +76,8 @@
 <section class="filter_box">
   <header class="filter_box_header"><h4>Verfügbare Paletten / Coli</h4></header>
   <section class="filter_box_content clearfix">
+    <%= form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+      <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
       <table class="table no-margin">
         <thead>
           <tr>
@@ -87,12 +100,20 @@
               <td id="column_4"><%= pallet.shipping_route.name %></td>
               <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
               <td id="column_6"><%= pallet.shipping_address.consignee_full %></td>
+              <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
             </tr>
           <% end %>
         </tbody>
         <tfoot>
+          <tr>
+            <% 6.times do %>
+              <td></td>
+            <% end %>
+            <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-small btn-primary", :disable_with => "Füge hinzu..." %></td>
+          </tr>
         </tfoot>
       </table>
+    <% end %>
   </section>
 </section>
 
