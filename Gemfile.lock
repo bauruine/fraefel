@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/mileszs/wicked_pdf.git
+  revision: 934bf1217a32bb3c2a1d20cc648b071b74199ae2
+  specs:
+    wicked_pdf (0.7.9)
+
+GIT
   remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
   revision: 908e150800610138e2b48738f842afb85b3a832e
   specs:
@@ -243,7 +249,6 @@ GEM
       raindrops (~> 0.7)
     vegas (0.1.11)
       rack (>= 1.0.0)
-    wicked_pdf (0.7.9)
     yajl-ruby (1.1.0)
 
 PLATFORMS
@@ -282,4 +287,4 @@ DEPENDENCIES
   twitter-bootstrap-rails!
   uglifier (>= 1.0.3)
   unicorn
-  wicked_pdf
+  wicked_pdf!

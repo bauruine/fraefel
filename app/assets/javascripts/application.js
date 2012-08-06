@@ -20,13 +20,70 @@ $(document).ready(function() {
 
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
   
-  $('[data-toggle="foobar"]').click(function() {
-    $.get($(this).attr("href"), function(data) {
-      alert(data);
+  $('div[data-type="modal"], div[data-type="modal2"]').dialog({
+    autoOpen: false,
+    width: 'auto',
+    height: 'auto',
+    modal: true
+  });
+  
+  $('a[data-role="table_remote"]').click(function() {
+    var remote_url = $(this).attr("href");
+    $('div[data-type=modal]').load(remote_url + ' table', function() {
+      $('div[data-type="modal"]').show();
+      $('div[data-type=modal]').dialog('open');
     });
     return false;
   });
   
+  $('a[data-role="edit_local"]').click(function() {
+    $('div[data-type="modal"]').show();
+    $('div[data-type="modal"]').dialog('open');
+    return false;
+  });
+  /*
+  if ($("form[data-tab]").size() != 0) {
+    $("form:not([data-tab=filter])").hide()
+  };
+  */
+  $('a[data-role="tab"]').click(function() {
+    var warpToTab = $(this).attr("data-warp");
+    var currentForm = $("form[data-tab]")
+    $("form").hide();
+    $("form[data-tab=" + warpToTab + "]").show();
+    $('div[data-type="modal"]').show();
+    $('div[data-type=modal]').dialog('open');
+    
+    return false;
+  });
+  
+  $('input#delivery_rejection_customer_company').autocomplete({
+    source: $('input#delivery_rejection_customer_company').data("autocomplete_source")
+  });
+  
+  $('a[data-role="edit_remote"]').click(function() {
+    var remote_url = $(this).attr("href");
+    $('div[data-type="modal"]').load(remote_url + ' form', function() {
+      $('div[data-type="modal"]').show();
+      $('div[data-type="modal"]').dialog('open');
+    });
+    return false;
+  });
+  
+  $('a[data-role="edit_remote2"]').click(function() {
+    var remote_url = $(this).attr("href");
+    $('div[data-type="modal2"]').load(remote_url + ' form', function() {
+      $('div[data-type="modal2"]').show();
+      $('div[data-type="modal2"]').dialog('open');
+    });
+    return false;
+  });
+  
+  $('body').on('click', 'a[data-toggle="scroll-top"]', function (e) {
+    e.preventDefault();
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+  });
+
   $('body').on('click.modal.data-api', '[data-toggle="modal-remote"]', function ( e ) {
     var $this = $(this);
     var href = $this.attr('href');

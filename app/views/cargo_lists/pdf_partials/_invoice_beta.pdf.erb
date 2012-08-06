@@ -17,8 +17,8 @@
 <h1 class="logo_title">Sammelrechnung</h1>
 <section class="clearfix">
   <h1 class="floatLeft">Diverse Empfänger in Deutschland</h1>
-  <% if PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).present? %>
-    <h1 class="floatRight">Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).first.zip_location.title %></h1>
+  <% if PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).present? %>
+    <h1 class="floatRight">Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).first.zip_location.title %></h1>
   <% end %>
 </section>
 <hr>
@@ -145,7 +145,7 @@
       <tr>
         <td></td>
         <td class="bold">Total brutto kg</td>
-        <td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@pallets.sum("count_as", :include => [:pallet_type]) * 20) %></td>
+        <td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@pallet_types.sum("count_as") * 20) %></td>
         <td></td>
         <td></td>
         <td></td>
@@ -207,8 +207,8 @@
   var pallet_total_value = $("tr")[2].children[1];
   var coli_count_value = $("tr")[3].children[1];
   
-  $(pallet_count).html(<%= @pallets.sum('count_as', :include => :pallet_type) %>);
-  $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallets.sum('count_as', :include => :pallet_type) %>);
+  $(pallet_count).html(<%= @pallet_types.sum('count_as') %>);
+  $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as') %>);
   $(coli_count).html(<%= @pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
   
   $(pallet_count_value).html("Paletten");

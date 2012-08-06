@@ -42,4 +42,4 @@ gem 'rest-client'
 gem 'simple_form'
 gem 'thin'
 gem 'unicorn'
-gem 'wicked_pdf'
+gem 'wicked_pdf', :git => "git://github.com/mileszs/wicked_pdf.git"
