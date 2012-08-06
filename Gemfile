@@ -31,7 +31,7 @@ gem 'mysql2'
 gem 'nokogiri'
 gem 'paper_trail'
 gem 'paperclip'
-gem 'prawn'
+gem 'prawn', :git => 'git://github.com/prawnpdf/prawn', :branch => 'master'
 gem 'private_pub'
 gem 'rack-mini-profiler'
 gem "ransack"

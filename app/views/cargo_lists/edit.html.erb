@@ -1,43 +1,45 @@
 <h1>Versand NR#<%= @cargo_list.id %></h3>
 
-<% form_for @cargo_list do |f| %>
+<%= form_for @cargo_list, :html => {:class => "form-horizontal", :style => "margin: 0;"}, :remote => true do |f| %>
 
-  <div class="form-element">
-    <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
-    <%= f.datetime_select :pick_up_time_earliest %>
+  <div class="control-group">
+    <%= f.label :pick_up_time_earliest, "Früheste Abholzeit", :class => "control-label" %>
+    <div class="controls">
+      <%= f.datetime_select :pick_up_time_earliest %>
+    </div>
   </div>
 
-  <div class="form-element">
-    <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
-    <%= f.datetime_select :pick_up_time_latest %>
+  <div class="control-group">
+    <%= f.label :pick_up_time_latest, "Späteste Abholzeit", :class => "control-label" %>
+    <div class="controls">
+      <%= f.datetime_select :pick_up_time_latest %>
+    </div>
   </div>
   
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :referee, "Kunden Name" %>
-    <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
+  <div class="control-group">
+    <%= f.label :referee, "Kunden Name", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :referee %>
+    </div>
   </div>
   
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :country, "Versand nach" %>
-    <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Einzelne Funktionen sind Länderspezifisch</small>
+  <div class="control-group">
+    <%= f.label :country, "Versand nach", :class => "control-label" %>
+    <div class="controls">
+      <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
+      <p class="help-block">Achtung - Einzelne Funktionen sind Länderspezifisch</p>
+    </div>
   </div>
   
-  <hr />
-  
-  <div class="form-element">
-    <%= f.label :delivered, "Versendet?" %>
-    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-    <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Hinzugefügte Paletten und VK-Positionen werden automatisch berücksichtigt</small>
+  <div class="control-group">
+    <%= f.label :delivered, "Versendet?", :class => "control-label" %>
+    <div class="controls">
+      <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+      <p class="help-block">Achtung - Hinzugefügte Paletten und VK-Positionen werden automatisch berücksichtigt</p>
+    </div>
   </div>
   
-  <hr />
-  
-  <div class="form-element">
+  <div class="control-group">
     <%= f.submit("Speichern") %>
   </div>
 <% end %>

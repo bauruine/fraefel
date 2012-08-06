@@ -67,6 +67,10 @@ class CargoListsController < ApplicationController
   
   def edit
     @cargo_list = CargoList.find(params[:id])
+    respond_to do |format|
+      format.xml
+      format.html
+    end
   end
   
   def update

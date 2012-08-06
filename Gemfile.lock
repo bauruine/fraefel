@@ -5,8 +5,17 @@ GIT
     wicked_pdf (0.7.9)
 
 GIT
+  remote: git://github.com/prawnpdf/prawn
+  revision: 9d3e103867b5dcd7bfe94538ee139112dc25ce28
+  branch: master
+  specs:
+    prawn (1.0.0.rc1)
+      pdf-reader (>= 0.9.0, < 2.0)
+      ttfunk (~> 1.0.3)
+
+GIT
   remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
-  revision: 908e150800610138e2b48738f842afb85b3a832e
+  revision: ca703a2349e9a0c26dc5a8a5bb8f5d6dee3b0cff
   specs:
     twitter-bootstrap-rails (2.1.1)
       actionpack (>= 3.1)
@@ -155,9 +164,6 @@ GEM
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.3)
-    prawn (0.12.0)
-      pdf-reader (>= 0.9.0)
-      ttfunk (~> 1.0.2)
     private_pub (1.0.1)
       faye
     rabl (0.7.0)
@@ -271,7 +277,7 @@ DEPENDENCIES
   nokogiri
   paper_trail
   paperclip
-  prawn
+  prawn!
   private_pub
   rabl
   rack-mini-profiler

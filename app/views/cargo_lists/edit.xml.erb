@@ -1,0 +1,54 @@
+<%= form_for @cargo_list, :html => {:class => "form-horizontal", :style => "margin: 0;"}, :remote => true do |f| %>
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Edit Versand <%= @cargo_list.id %></h3>
+  </div>
+  
+  <div class="modal-body">
+    <fieldset>
+      <legend>Allgemein</legend>
+      <div class="control-group">
+        <%= f.label :pick_up_time_earliest, "Früheste Abholzeit", :class => "control-label" %>
+        <div class="controls">
+          <%= f.datetime_select :pick_up_time_earliest %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :pick_up_time_latest, "Späteste Abholzeit", :class => "control-label" %>
+        <div class="controls">
+          <%= f.datetime_select :pick_up_time_latest %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <%= f.label :referee, "Kunden Name", :class => "control-label" %>
+        <div class="controls">
+          <%= f.text_field :referee %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <%= f.label :country, "Versand nach", :class => "control-label" %>
+        <div class="controls">
+          <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
+          <p class="help-block">Achtung - Einzelne Funktionen sind Länderspezifisch</p>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <%= f.label :delivered, "Versendet?", :class => "control-label" %>
+        <div class="controls">
+          <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
+          <p class="help-block">Achtung - Hinzugefügte Paletten und VK-Positionen werden automatisch berücksichtigt</p>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+    <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
+  </div>
+<% end %>

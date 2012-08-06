@@ -30,7 +30,7 @@
   <%# end %>
   <% if permitted_to? :edit, :cargo_lists %>
     <div class="btn-group">
-      <a class="btn btn-primary" href="<%= edit_cargo_list_path(@cargo_list) %>" data-role="edit_remote"><i class="icon-pencil icon-white"></i> Edit</a>
+      <a class="btn btn-primary" href="<%= edit_cargo_list_path(@cargo_list, :format => :xml) %>" data-toggle="modal-remote" data-target="#edit_cargo_list"><i class="icon-pencil icon-white"></i> Edit</a>
     </div>
   <% end %>
 </div>
