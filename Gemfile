@@ -24,6 +24,7 @@ gem "declarative_authorization"
 gem 'exception_notification'
 gem 'hirb'
 gem 'jquery-rails'
+gem 'jquery-ui-themes'
 gem "kaminari"
 gem "magic_user"
 gem 'mysql2'

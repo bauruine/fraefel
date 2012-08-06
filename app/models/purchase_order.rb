@@ -45,6 +45,7 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order_attributes.merge!(:customer_id => customer_id)
     purchase_order_attributes.merge!(:shipping_route_id => shipping_route_id)
     purchase_order_attributes.merge!(:warehouse_number => arg.attributes["baan_22"])
+    purchase_order_attributes.merge!(:delivery_date => arg.attributes["baan_13"])
     purchase_order_attributes.merge!(:level_2 => level_2)
     purchase_order_attributes.merge!(:level_1 => level_1)
     purchase_order_attributes.merge!(:level_3 => level_3)
