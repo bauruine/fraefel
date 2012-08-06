@@ -13,7 +13,8 @@ require "highline/import"
 set :bundle_flags,    "--deployment --quiet --binstubs"
 require 'bundler/capistrano'
 # require 'lib/cap_tasks'
-
+# Uncomment if you are using Rails' asset pipeline
+load 'deploy/assets'
 # use rbenv environment
 
 set :application, "FRAEFEL"
