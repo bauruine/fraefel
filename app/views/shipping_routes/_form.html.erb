@@ -1,16 +1,12 @@
 <%= simple_form_for(@shipping_route, :html => {:class => 'form-horizontal no-margin' }) do |f| %>
   <fieldset>
-    <%= f.input :name %>
+    <%= f.input :name, :label => "Tour" %>
     <%= f.input :active %>
     <%= f.association :printable_media, :as => :check_boxes %>
     
     <div class="form-actions no-margin-bottom">
-      <a href="/shipping_routes" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
+      <a href="/shipping_routes" class="btn">Abbrechen</a>
+      <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
       
     </div>
   </fieldset>

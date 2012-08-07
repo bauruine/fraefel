@@ -1,10 +1,12 @@
-<section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Bearbeite Verschiebungsgrund</h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <%= render 'form' %>
-      </div>
-    </section>
-</section>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li class="active">Verschiebungsgrund</li>
+  </ul>
+<% end %>
+
+<div class="page-header">
+    <h1 class="pull-left">Verschiebungsgrund bearbeiten</h1>
+    <div class="clear"></div>
+</div>
+
+<%= render 'form' %>

@@ -2,8 +2,8 @@ class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.json
   def index
-    @search = Category.order("id DESC").search(params[:search])
-    @categories = @search.page(params[:page]).per(50)
+    @search = Category.order("id DESC").search(params[:q])
+    @categories = @search.result
 
     respond_to do |format|
       format.html # index.html.erb

@@ -2,8 +2,8 @@ class StatusesController < ApplicationController
   # GET /statuses
   # GET /statuses.json
   def index
-    @search = Status.order("id DESC").search(params[:search])
-    @statuses = @search.page(params[:page]).per(50)
+    @search = Status.order("id DESC").search(params[:q])
+    @statuses = @search.result
 
     respond_to do |format|
       format.html # index.html.erb

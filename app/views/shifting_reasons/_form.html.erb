@@ -1,17 +1,13 @@
-<%= simple_form_for(@shifting_reason) do |f| %>
-
-  <%= f.error_notification %>
-  <%= f.input :title, :label => "Name des Verschiebungsgrund" %>
-  
-  <hr />
-  
-  <%= f.association :departments, :as => :check_boxes %>
-  
-  <hr />
-  
-  <div class="form-element clearfix">
-    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
-  </div>
-
+<%= simple_form_for @shifting_reason, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <%= f.input :title, :label => "Verschiebungsgrund" %>
+    <%= f.association :departments, :label => "Abteilung", :as => :check_boxes %>
+    
+    <div class="form-actions">
+      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', shifting_reasons_path, :class => 'btn' %>
+    </div>
+  </fieldset>
 <% end %>
+
+

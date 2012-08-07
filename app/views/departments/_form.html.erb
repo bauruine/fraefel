@@ -1,17 +1,14 @@
-<%= simple_form_for(@department) do |f| %>
+<%= simple_form_for @department, :html => { :class => 'form-horizontal' } do |f| %>
+  <fieldset>
+    <%= f.input :title, :label => "Name der Abteilung" %>
+    <%= f.input :abbreviation, :label => "Kürzel" %>
+    <%= f.association :shifting_reasons, :as => :check_boxes, :label => "Verwendbare Verschiebungsgründe" %>
 
-  <%= f.error_notification %>
-  <%= f.input :title, :label => "Name der Abteilung" %>
-  <%= f.input :abbreviation %>
-  <hr />
-  
-  <%= f.association :shifting_reasons, :as => :check_boxes, :label => "Verwendbare Verschiebungsgründe" %>
-  
-  <hr />
-  
-  <div class="form-element clearfix">
-    <%= link_to("Zurück", :back, :class => "linkSubmit greySubmit floatLeft") %>
-    <%= f.submit(nil, :class => "blueSubmit floatLeft") %>
-  </div>
-
+    <div class="form-actions">
+      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+      <%= link_to 'Cancel', departments_path, :class => 'btn' %>
+    </div>
+  </fieldset>
 <% end %>
+
+
