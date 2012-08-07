@@ -2,6 +2,7 @@ class BaanImporter
   @queue = :baan_imports_queue
   def self.perform(baan_import_id)
     baan_import = BaanImport.find(baan_import_id)
+    @start_time = Time.now
     case baan_import.baan_import_group.title
     when "Versand"
       BaanRawData.import(baan_import_id)
@@ -15,6 +16,7 @@ class BaanImporter
         PurchasePosition.create_from_raw_data(baan_raw_data)
       end
       BaanRawData.patch_import(baan_import_id)
+      puts "Time to complete -- #{Time.now - @start_time}"
       #PurchaseOrder.patch_calculation
       #PurchaseOrder.patch_aggregations
     when "Inventar-Baan-Artikel"
