@@ -99,8 +99,8 @@ class PurchasePosition < ActiveRecord::Base
     if purchase_position.new_record?
       purchase_position.save
       purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
-      if purchase_position.purchase_order.delivered
-        purchase_order.update_attribute("delivered", false)
+      if purchase_order.first.delivered
+        purchase_order.first.update_attribute("delivered", false)
       end
     else
       update_entry = false
