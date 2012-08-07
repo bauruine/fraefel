@@ -13,6 +13,8 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :old_pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
   has_many :time_shiftings, :class_name => "TimeShifting", :foreign_key => "purchase_order_id", :primary_key => "baan_id"
   
+  has_one :html_content, :class_name => "HtmlContent"
+  
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
   after_create :handle_calculation

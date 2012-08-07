@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120806100319) do
+ActiveRecord::Schema.define(:version => 20120807130312) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -361,6 +361,12 @@ ActiveRecord::Schema.define(:version => 20120806100319) do
     t.string   "web_address"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "html_contents", :force => true do |t|
+    t.text    "code"
+    t.integer "purchase_order_id"
+    t.integer "purchase_position_id"
   end
 
   create_table "microsoft_database_types", :force => true do |t|

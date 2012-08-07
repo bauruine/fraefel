@@ -7,14 +7,7 @@
   </td>
   <td>
     <div class="btn-group">
-      <% if purchase_order.pending_status != 0 %>
-        <a class="btn btn-danger btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id, :production_status_eq => 0, :stock_status_eq => 0}) %>"><%= purchase_order.pending_status %></a>
-      <% end %>
-      <% if purchase_order.production_status != purchase_order.stock_status %>
-        <a class="btn btn-primary btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id, :production_status_eq => 1}) %>"><%= purchase_order.production_status %></a>
-      <% end %>
-      <a class="btn btn-success btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id, :stock_status_eq => 1}) %>"><%= purchase_order.stock_status %></a>
-      <a class="btn btn-inverse btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id}) %>"><%= purchase_order.calculation.total_purchase_positions %></a>
+      <%= purchase_order.html_content.code.html_safe %>
     </div>
   </td>
   <td><%= purchase_order.calculation.total_pallets %></td>
@@ -23,3 +16,4 @@
   <td><%= purchase_order.purchase_positions.first.zip_location.title %></td>
   <td><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>
 </tr>
+
