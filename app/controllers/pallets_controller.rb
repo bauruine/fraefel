@@ -67,22 +67,25 @@ class PalletsController < ApplicationController
   
   def edit
     @pallet = Pallet.find(params[:id])
-    #@purchase_order = @pallet.purchase_order
-    #@purchase_positions = @purchase_order.purchase_positions.where("pallet_id IS NULL")
-    if request.xhr?
-      render :template => 'pallets/ajax_edit'
+    respond_to do |format|
+      format.html
+      format.xml
     end
   end
   
   def update
     @pallet = Pallet.find(params[:id])
-    if @pallet.update_attributes(params[:pallet])
-      if params[:purchase_position_ids].present?
-        @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+    respond_to do |format|
+      if @pallet.update_attributes(params[:pallet])
+        if params[:purchase_position_ids].present?
+          @pallet.purchase_positions << PurchasePosition.find(params[:purchase_position_ids])
+        end
+        format.html { redirect_to(:back) }
+        format.js
+      else
+        format.html { render action: "edit" }
+        format.js
       end
-      redirect_to(:back)
-    else
-      render 'edit'
     end
   end
   
