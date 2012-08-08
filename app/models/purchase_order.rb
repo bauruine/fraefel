@@ -84,18 +84,30 @@ class PurchaseOrder < ActiveRecord::Base
   end
   
   def stock_status_btn
-    btn_href = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :stock_status_eq => 1})
+    url = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :stock_status_eq => 1})
     btn_value = self.stock_status
+    tag_options = {:class => "btn btn-danger btn-mini", "data-toggle" => "modal-remote", "data-target" => "#remote"}.stringify_keys.to_tag_options
+    href_attr = "href=\"#{ERB::Util.html_escape(url)}\""
+    
+    return "<a #{href_attr}#{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
   end
   
   def pending_status_btn
-    btn_href = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :stock_status_eq => 0, :production_status => 0})
+    url = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :stock_status_eq => 0, :production_status => 0})
     btn_value = self.pending_status
+    tag_options = {:class => "btn btn-danger btn-mini", "data-toggle" => "modal-remote", "data-target" => "#remote"}.stringify_keys.to_tag_options
+    href_attr = "href=\"#{ERB::Util.html_escape(url)}\""
+    
+    return "<a #{href_attr}#{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
   end
 
   def production_status_btn
-    btn_href = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :production_status_eq => 1})
+    url = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :production_status_eq => 1})
     btn_value = self.production_status
+    tag_options = {:class => "btn btn-success btn-mini", "data-toggle" => "modal-remote", "data-target" => "#remote"}.stringify_keys.to_tag_options
+    href_attr = "href=\"#{ERB::Util.html_escape(url)}\""
+    
+    return "<a #{href_attr}#{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
   end
 
   def amount
