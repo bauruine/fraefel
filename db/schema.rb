@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120807130312) do
+ActiveRecord::Schema.define(:version => 20120808090819) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -402,6 +402,7 @@ ActiveRecord::Schema.define(:version => 20120807130312) do
   create_table "pallet_types", :force => true do |t|
     t.string "description"
     t.float  "count_as"
+    t.string "read_as"
   end
 
   create_table "pallets", :force => true do |t|

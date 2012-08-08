@@ -5,7 +5,7 @@
   </ul>
 <% end %>
 
-<div class="modal hide fade" id="edit_cargo_list">
+<div class="modal hide fade" id="remote">
 </div>
 
 <div class="page-header">
@@ -52,7 +52,7 @@
             <% @pallets.each do |pallet| %>
               <tr>
                 <td id="column_1">
-                  <%= link_to("#{pallet.pallet_type.description.capitalize} #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
+                  <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
                 </td>
                 <td id="column_2"><%= pallet.purchase_position_counter %></td>
                 <td id="column_3"><%= pallet.additional_space %></td>
@@ -68,7 +68,7 @@
               <% 6.times do %>
                 <td></td>
               <% end %>
-              <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-small btn-danger", :disable_with => "Entferne..." %></td>
+              <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-mini btn-danger", :disable_with => "Entferne..." %></td>
             </tr>
           </tfoot>
         </table>
@@ -97,7 +97,7 @@
           <% @available_pallets.each do |pallet| %>
             <tr>
               <td id="column_1">
-                <%= link_to("#{pallet.pallet_type.description.capitalize} #{pallet.id}", ajax_show_pallet_path(pallet), "data-role" => "table_remote") %>
+                <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
               </td>
               <td id="column_2"><%= pallet.purchase_position_counter %></td>
               <td id="column_3"><%= pallet.additional_space %></td>
@@ -113,7 +113,7 @@
             <% 6.times do %>
               <td></td>
             <% end %>
-            <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-small btn-primary", :disable_with => "Füge hinzu..." %></td>
+            <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-mini btn-primary", :disable_with => "Füge hinzu..." %></td>
           </tr>
         </tfoot>
       </table>

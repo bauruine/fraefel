@@ -1,0 +1,12 @@
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li class="active">Paletten Typ</li>
+  </ul>
+<% end %>
+
+<div class="page-header">
+    <h1 class="pull-left">Paletten Typ <%= @pallet_type.read_as %> bearbeiten</h1>
+    <div class="clear"></div>
+</div>
+
+<%= render 'form' %>

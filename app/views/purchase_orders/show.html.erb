@@ -57,11 +57,12 @@
 </dl>
 
 <% if @purchase_positions.present? %>
-  <section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Offene Positionen</h4>
-    </header>
-    <section class="filter_box_content clearfix">
+  <blockquote>
+    <p>
+      Offene Positionen
+    </p>
+  </blockquote>
+  
       <%= form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
         <table class="table table-striped">
@@ -129,8 +130,6 @@
           </tfoot>
         </table>
       <% end %>
-    </section>
-  </section>
   
 <% else %>
   <div id="flash_notice">Für diesen Auftrag wurden bereits alle Positionen bearbeitet!</div>
@@ -193,7 +192,7 @@
           <tfoot>
             <% if permitted_to? :remove_positions, :pallets %>
               <tr>
-                <td><%= pallet.pallet_type.description %>: <strong><%= pallet.id %></strong></td>
+                <td><%= pallet.pallet_type.read_as %>: <strong><%= pallet.id %></strong></td>
                 <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></td>
                 <td>
                   <% if pallet.cargo_list.present? %>

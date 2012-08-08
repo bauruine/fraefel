@@ -1,0 +1,12 @@
+<%= simple_form_for(@pallet_type, :html => {:class => 'form-horizontal no-margin' }) do |f| %>
+  
+  <%= f.input :read_as, :label => "Paletten Typ"  %>
+  <%= f.input :description, :label => "Typ Grösse" %>
+  <%= f.input :count_as, :label => "Zählen als" %>
+  
+  <div class="form-actions no-margin-bottom">
+    <a href="/pallet_types" class="btn">Abbrechen</a>
+    <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
+  </div>
+
+<% end %>

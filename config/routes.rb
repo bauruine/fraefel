@@ -19,6 +19,8 @@ Fraefel::Application.routes.draw do
     resources :purchase_positions
   end
   
+  resources :pallet_types
+  
   resources :users
   
   resources :addresses

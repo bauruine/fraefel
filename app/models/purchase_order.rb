@@ -83,6 +83,21 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
+  def stock_status_btn
+    btn_href = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :stock_status_eq => 1})
+    btn_value = self.stock_status
+  end
+  
+  def pending_status_btn
+    btn_href = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :stock_status_eq => 0, :production_status => 0})
+    btn_value = self.pending_status
+  end
+
+  def production_status_btn
+    btn_href = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :production_status_eq => 1})
+    btn_value = self.production_status
+  end
+
   def amount
     amount = 0
     purchase_positions.each do |purchase_position|
