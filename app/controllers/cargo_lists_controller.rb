@@ -75,10 +75,14 @@ class CargoListsController < ApplicationController
   
   def update
     @cargo_list = CargoList.find(params[:id])
-    if @cargo_list.update_attributes(params[:cargo_list])
-      redirect_to(cargo_list_url(@cargo_list))
-    else
-      render 'edit'
+    respond_to do |format|
+      if @cargo_list.update_attributes(params[:cargo_list])
+        format.html { redirect_to :back, notice: 'Versand wurde erfolgreich gespeichert.' }
+        format.js
+      else
+        format.html { render action: "edit" }
+        format.js
+      end
     end
   end
   

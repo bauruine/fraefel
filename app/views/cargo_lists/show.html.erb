@@ -15,7 +15,7 @@
 </div>
 
 <% if @cargo_list.delivered %>
-  <div id="flash_notice">Versand NR<%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
+  <div class="alert alert-success">Versand <%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
 <% end %>
 
 <dl class="dl-horizontal">

@@ -91,13 +91,13 @@
         <td></td>
         <td>
           <div class="btn-toolbar" style="margin: 0;">
-          <div class="btn-group">
-            <a href="<%= edit_pallet_path(pallet, :format => :xml) %>" data-toggle="modal-remote" data-target="#edit_pallet" class="btn btn-mini">Edit</a>
-            <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
-            <ul class="dropdown-menu pull-right">
-              <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
-            </ul>
-          </div>
+            <div class="btn-group">
+              <a href="<%= edit_pallet_path(pallet, :format => :xml) %>" data-toggle="modal-remote" data-target="#edit_pallet" class="btn btn-mini">Edit</a>
+              <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
+              <ul class="dropdown-menu pull-right">
+                <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
+              </ul>
+            </div>
           </div>
         </td>
       </tr>

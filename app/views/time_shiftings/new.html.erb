@@ -1,7 +1,9 @@
-<ul class="breadcrumb">
-  <li><a href="<%= time_shiftings_path %>">Terminverschiebungen</a> <span class="divider">/</span></li>
-  <li class="active">Neue Terminverschiebung</li>
-</ul>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li><a href="<%= time_shiftings_path %>">Terminverschiebungen</a> <span class="divider">/</span></li>
+    <li class="active">Neue Terminverschiebung</li>
+  </ul>
+<% end %>
 
 <div class="page-header">
   <h1>Erfasse neue Terminverschiebung</h1>

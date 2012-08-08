@@ -7,6 +7,10 @@ class BaanImportsController < ApplicationController
   
   def new
     @baan_import = BaanImport.new
+    respond_to do |format|
+      format.xml
+      format.html
+    end
   end
   
   def create
