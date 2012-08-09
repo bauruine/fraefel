@@ -106,7 +106,6 @@ class TransportAssignmentDocument < Prawn::Document
   def section_3_table
     [
       ["Lieferadresse:", "Paletten", "Paletten Plätze", "Stk.", "Netto kg", "Brutto kg", "Total CHF", "Total EUR"],
-      ["#{@address.company_name}", "", "", "", "", "", "", ""],
       [
         "#{@address.company_name}", "#{@pallets.count}",
         "#{@pallet_types.count}", "#{@pallet_purchase_position_assignments.sum(:quantity)}",

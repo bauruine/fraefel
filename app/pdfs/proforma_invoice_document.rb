@@ -15,11 +15,11 @@ class ProformaInvoiceDocument < Prawn::Document
     
     font_size 8
     #move_down 97
-    bounding_box [0, 690], :width => 261.64, :height => 200 do
+    bounding_box [0, 690], :width => 261.64, :height => 220 do
       invoice_address
       #stroke_bounds
     end
-    bounding_box [261.64, 690], :width => 261.64, :height => 200 do
+    bounding_box [261.64, 690], :width => 261.64, :height => 220 do
       delivery_address
       move_down 14
       address_of_sender
@@ -45,7 +45,8 @@ class ProformaInvoiceDocument < Prawn::Document
       ["Schweizerbad GmbH", ""],
       ["Hochfeilerweg 48a", ""],
       ["12107 Berlin", ""],
-      ["Deutschland", ""]
+      ["Deutschland", ""],
+      ["Eori Nr. DE 7662858", ""]
     ]
     
   end
@@ -91,7 +92,8 @@ class ProformaInvoiceDocument < Prawn::Document
       ["Ort:", "Lütisburg-Station"],
       ["Land:", "Schweiz"],
       ["Telefon:", "+41 71 982 80 80"],
-      ["EORI Nr.:", "DE 7662858"]
+      ["DE-ST-Nr.:", "DE 09408/24772"],
+      ["DE-Zollnummer.:", "6207308"]
     ]
   end
   
@@ -146,8 +148,8 @@ class ProformaInvoiceDocument < Prawn::Document
       ["Transport:", "Lebert", "Lieferbedingung:", "frei Haus, verzollt, versteuert (DDP)"],
       ["Netto Gewicht (kg):", "#{@pallet_purchase_position_assignments.sum(:weight) }", "Versand Nr.:", "#{@cargo_list.id}"],
       ["Brutto Gewicht (kg):", "#{@pallet_purchase_position_assignments.sum(:weight) + (@pallet_types.sum(:count_as) * 20)}", "", ""],
-      ["Paletten:", "0", "", ""],
-      ["Paletten Plätze:", "#{@pallet_types.sum(:count_as)}", "", ""],
+      ["Paletten:", "#{@pallet_types.sum('count_as')}", "", ""],
+      ["Paletten Plätze:", "#{@pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as')}", "", ""],
       ["Coli:", "#{@pallet_types.where("pallet_types.description = ?", "coli").count}", "", ""]
     ]
   end

@@ -227,6 +227,7 @@ class PurchaseOrder < ActiveRecord::Base
       purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(purchase_order_attributes)
       if purchase_order.new_record?
         purchase_order.save
+        purcase_order.create_html_content
       else
         purchase_order_attributes.merge!(:id => purchase_order.id)
         unless PurchaseOrder.select(purchase_order_attributes.keys).where(:id => purchase_order.id).first.attributes == purchase_order_attributes
