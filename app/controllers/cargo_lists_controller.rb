@@ -9,7 +9,7 @@ class CargoListsController < ApplicationController
     @pallet_types = PalletType.where("pallets.cargo_list_id" => @cargo_list.id).joins(:pallets)
     @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.select("DISTINCT `pallet_purchase_position_assignments`.*").where("cargo_lists.id = ?", @cargo_list.id ).joins(:pallet => :cargo_list)
 
-    @addresses = Address.select("DISTINCT `addresses`.*").where("cargo_lists.id = ?", @cargo_list.id).where("addresses.category_id = ?", 10).joins(:purchase_orders => [:pallets => :cargo_list])
+    @addresses = Address.select("DISTINCT `addresses`.*").where("cargo_lists.id" => @cargo_list.id).where("addresses.category_id" => 10).joins(:pallets => :cargo_list)
     #@assigned_pallets = @cargo_list.pallets
     #@pallets_count = PalletType.includes(:pallets => :cargo_list).sum(:count_as)
     #@address = Address.where("cargo_lists.id = ?", @cargo_list.id).includes(:purchase_orders => [:pallets => :cargo_list])
