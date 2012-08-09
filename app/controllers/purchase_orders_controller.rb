@@ -51,7 +51,7 @@ class PurchaseOrdersController < ApplicationController
     @level_2 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 9).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
     @level_3 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 10).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
     
-    @shipping_routes = ShippingRoute.select("DISTINCT `shipping_routes`.*").where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+    @shipping_routes = ShippingRoute.select("DISTINCT `shipping_routes`.*").order("shipping_routes.name ASC").where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     
     @production_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 1).joins(:purchase_order).count("DISTINCT `purchase_positions`.id")

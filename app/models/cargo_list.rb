@@ -29,6 +29,33 @@ class CargoList < ActiveRecord::Base
     end
     return weight_total
   end
+
+  def so_en_michi
+      self.pallets.each do |pallet|
+        pallet.update_attribute(:delivered, true)
+        pallet.purchase_positions.each do |p_p|
+          puts "asdfasdf"
+          @delivered_p_p_quantity = PalletPurchasePositionAssignment.where(:purchase_position_id => p_p.id).where("pallets.delivered" => true).includes(:pallet).sum(:quantity)
+          if p_p.quantity == @delivered_p_p_quantity
+            puts "update position"
+            p_p.update_attribute(:delivered, true)
+          else
+            puts "wTFFFFF"
+          end
+        end
+        if !pallet.purchase_positions.where("delivered = false or delivered IS NULL").present?
+          
+          pallet.purchase_orders.each do |p_o|
+            if !p_o.purchase_positions.where("delivered = false or delivered IS NULL").present?
+              p_o.update_attribute(:delivered, true)
+            end
+          end
+          
+        end
+        
+      end
+
+  end
   
   private
   

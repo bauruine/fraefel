@@ -26,6 +26,17 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
+  def self.patch_html_content
+    self.all.each do |purchase_order|
+      purchase_order.create_html_content if purchase_order.html_content.nil?
+      buttons = String.new
+      buttons += purchase_order.pending_status_btn if purchase_order.pending_status != 0
+      buttons += purchase_order.production_status_btn if purchase_order.production_status != purchase_order.stock_status
+      buttons += purchase_order.stock_status_btn
+      purchase_order.html_content.update_attribute("code", buttons)
+    end
+  end
+  
   def self.get_performance_time
     @time_start = Time.now
     self.includes(:purchase_positions)
@@ -86,7 +97,7 @@ class PurchaseOrder < ActiveRecord::Base
   def stock_status_btn
     url = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :stock_status_eq => 1})
     btn_value = self.stock_status
-    tag_options = {:class => "btn btn-danger btn-mini", "data-toggle" => "modal-remote", "data-target" => "#remote"}.stringify_keys.to_tag_options
+    tag_options = {:class => "btn btn-success btn-mini", "data-toggle" => "modal-remote", "data-target" => "#remote"}.stringify_keys.to_tag_options
     href_attr = "href=\"#{ERB::Util.html_escape(url)}\""
     
     return "<a #{href_attr}#{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
@@ -104,7 +115,7 @@ class PurchaseOrder < ActiveRecord::Base
   def production_status_btn
     url = Rails.application.routes.url_helpers.api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => self.baan_id, :production_status_eq => 1})
     btn_value = self.production_status
-    tag_options = {:class => "btn btn-success btn-mini", "data-toggle" => "modal-remote", "data-target" => "#remote"}.stringify_keys.to_tag_options
+    tag_options = {:class => "btn btn-primary btn-mini", "data-toggle" => "modal-remote", "data-target" => "#remote"}.stringify_keys.to_tag_options
     href_attr = "href=\"#{ERB::Util.html_escape(url)}\""
     
     return "<a #{href_attr}#{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"

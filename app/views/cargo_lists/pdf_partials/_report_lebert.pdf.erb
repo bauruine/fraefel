@@ -54,6 +54,7 @@
 
 <hr />
 <% @addresses.each do |address| %>
+  <% pallet_types = PalletType.select("DISTINCT `cargo_lists`.*").where("cargo_lists.id = ?", @cargo_list.id).joins(:pallets => :cargo_list) %>
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft"><%= address.consignee_full %></h4>
