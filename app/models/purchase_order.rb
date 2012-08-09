@@ -37,6 +37,8 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
+  
+  
   def self.get_performance_time
     @time_start = Time.now
     self.includes(:purchase_positions)
@@ -85,6 +87,8 @@ class PurchaseOrder < ActiveRecord::Base
         purchase_order.update_attributes(purchase_order_attributes)
       end
     end
+    
+    purchase_order.address_ids = [level_1, level_2, level_3]
 
   end
   
@@ -162,12 +166,12 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
-  def self.patch_addresses_local
+  def self.patch_addresses
     self.all.each do |purchase_order|
-      @level_1 = purchase_order.addresses.where(:category_id => 5).try(:first).try(:id)
-      @level_2 = purchase_order.addresses.where(:category_id => 6).try(:first).try(:id)
-      @level_3 = purchase_order.addresses.where(:category_id => 7).try(:first).try(:id)
-      purchase_order.update_attributes(:level_1 => @level_1, :level_2 => @level_2, :level_3 => @level_3)
+      level_1 = Address.where(:id => purchase_order.level_1).first.try(:id)
+      level_2 = Address.where(:id => purchase_order.level_2).first.try(:id)
+      level_3 = Address.where(:id => purchase_order.level_3).first.try(:id)
+      purchase_order.address_ids = [level_1, level_2, level_3].compact
     end
   end
   

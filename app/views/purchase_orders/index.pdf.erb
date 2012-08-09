@@ -20,16 +20,16 @@
       </thead>
       <tbody>
         <tr>
-          <td><%= params[:search][:delivery_date_greater_than_or_equal_to] if params[:search].present? %></td>
-          <td><%= params[:search][:delivery_date_less_than_or_equal_to] if params[:search].present? %></td>
-          <td><%= params[:search].present? && params[:search][:shipping_route_id_equals].present? ? ShippingRoute.where(:id => params[:search][:shipping_route_id_equals]).first.name : nil %></td>
-          <td><%= params[:search][:warehouse_number_equals] if params[:search].present? %></td>
-          <td><%= params[:search].present? && params[:search][:category_id_equals].present? ? Category.where(:id => params[:search][:category_id_equals]).first.title : nil %></td>
-          <td><%= params[:search].present? ? params[:search][:warehousing_completed_gteq] : nil %></td>
-          <td><%= params[:search].present? ? params[:search][:warehousing_completed_lteq] : nil %></td>
-          <td><%= params[:search][:manufacturing_completed_gteq] if params[:search].present? %></td>
-          <td><%= params[:search][:manufacturing_completed_lteq] if params[:search].present? %></td>
-          <td><%= prio_title(params[:search][:priority_level_equals]) if params[:search].present? %></td>
+          <td><%= params[:q][:delivery_date_gteq] if params[:q].present? %></td>
+          <td><%= params[:q][:delivery_date_lteq] if params[:q].present? %></td>
+          <td><%= params[:q].present? && params[:q][:shipping_route_id_eq].present? ? ShippingRoute.where(:id => params[:q][:shipping_route_id_eq]).first.name : nil %></td>
+          <td><%= params[:q][:warehouse_number_eq] if params[:q].present? %></td>
+          <td><%= params[:q].present? && params[:q][:category_id_eq].present? ? Category.where(:id => params[:q][:category_id_eq]).first.title : nil %></td>
+          <td><%= params[:q].present? ? params[:q][:warehousing_completed_gteq] : nil %></td>
+          <td><%= params[:q].present? ? params[:q][:warehousing_completed_lteq] : nil %></td>
+          <td><%= params[:q][:manufacturing_completed_gteq] if params[:q].present? %></td>
+          <td><%= params[:q][:manufacturing_completed_lteq] if params[:q].present? %></td>
+          <td><%= prio_title(params[:q][:priority_level_eq]) if params[:q].present? %></td>
         </tr>
       </tbody>
     </table>
@@ -43,8 +43,8 @@
       </thead>
       <tbody>
         <tr>
-          <td><%= params[:search][:delivered_equals] if params[:search].present? %></td>
-          <td><%= params[:search][:picked_up_equals] if params[:search].present? %></td>
+          <td><%= params[:q][:delivered_eq] if params[:q].present? %></td>
+          <td><%= params[:q][:picked_up_eq] if params[:q].present? %></td>
           <td></td>
         </tr>
       </tbody>
@@ -62,7 +62,7 @@
   </p>
 </blockquote>
 
-<% Address.where(:category_id => 10, "purchase_orders.id" => @purchase_orders.collect(&:id)).includes(:purchase_orders).order("purchase_orders.delivery_date ASC").each do |ordered_address| %>
+<% Address.select("DISTINCT `addresses`.*").where("addresses.category_id" => 10, "purchase_orders.id" => @purchase_orders.collect(&:id)).joins(:purchase_orders).order("purchase_orders.delivery_date ASC").each do |ordered_address| %>
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft"><%= ordered_address.location_for_select %></h4>
