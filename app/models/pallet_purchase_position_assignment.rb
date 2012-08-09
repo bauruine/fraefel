@@ -8,6 +8,7 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   after_create :update_pallet_zip_location_id
   after_create :update_pallet_shipping_route_id
   after_destroy :update_purchase_position_counter
+  after_destroy :handle_assignments
   
   def self.fix_amount_and_weight
     self.all.each do |p_p_p_a|
@@ -79,6 +80,12 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   def update_purchase_order_calculation
     if self.purchase_position.present?
       self.purchase_position.purchase_order.calculation.update_attribute(:total_pallets, self.purchase_position.purchase_order.pallets.count)
+    end
+  end
+  
+  def handle_assignments
+    if self.pallet.purchase_position_counter == 0
+      self.pallet.update_attributes(:cargo_list_id => nil, :delivery_rejection_id => nil)
     end
   end
   

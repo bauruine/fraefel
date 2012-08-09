@@ -34,45 +34,50 @@
     Angefügte Paletten / Coli
   </p>
 </blockquote>
-      <%= form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
-        <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>NR</th>
-              <th>Positionen</th>
-              <th>Mehrplatz</th>
-              <th>Tour</th>
-              <th>PLZ Gebiet</th>
-              <th>Empfänger</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @pallets.each do |pallet| %>
-              <tr>
-                <td id="column_1">
-                  <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
-                </td>
-                <td id="column_2"><%= pallet.purchase_position_counter %></td>
-                <td id="column_3"><%= pallet.additional_space %></td>
-                <td id="column_4"><%= pallet.shipping_route.name %></td>
-                <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
-                <td id="column_6"><%= pallet.shipping_address.consignee_full %></td>
-                <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
-              </tr>
-            <% end %>
-          </tbody>
-          <tfoot>
-            <tr>
-              <% 6.times do %>
-                <td></td>
-              <% end %>
-              <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-mini btn-danger", :disable_with => "Entferne..." %></td>
-            </tr>
-          </tfoot>
-        </table>
+
+<%= form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+  <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th id="column_1">NR</th>
+        <th id="column_2">Positionen</th>
+        <th id="column_3">Mehrplatz</th>
+        <th id="column_4">Tour</th>
+        <th id="column_5">PLZ Gebiet</th>
+        <th id="column_6">Empfänger</th>
+        <th id="column_7"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @pallets.each do |pallet| %>
+        <tr>
+          <td>
+            <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
+          </td>
+          <td><%= pallet.purchase_position_counter %></td>
+          <td><%= pallet.additional_space %></td>
+          <td><%= pallet.shipping_route.name %></td>
+          <td><%= pallet.purchase_positions.first.zip_location.title %></td>
+          <td><%= pallet.shipping_address.consignee_full %></td>
+          <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+        </tr>
       <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <% if @pallets.present? %>
+          <% 6.times do %>
+            <td></td>
+          <% end %>
+          <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-mini btn-danger", :disable_with => "Entferne..." %></td>
+        <% else %>
+          <td colspan="7">Keine Zuweisungen.</td>
+        <% end %>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>
 
 <blockquote>
   <p>
@@ -80,44 +85,49 @@
   </p>
 </blockquote>
 
-    <%= form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
-      <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>NR</th>
-            <th>Positionen</th>
-            <th>Mehrplatz</th>
-            <th>Tour</th>
-            <th>PLZ Gebiet</th>
-            <th>Empfänger</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @available_pallets.each do |pallet| %>
-            <tr>
-              <td id="column_1">
-                <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
-              </td>
-              <td id="column_2"><%= pallet.purchase_position_counter %></td>
-              <td id="column_3"><%= pallet.additional_space %></td>
-              <td id="column_4"><%= pallet.shipping_route.name %></td>
-              <td id="column_5"><%= pallet.purchase_positions.first.zip_location.title %></td>
-              <td id="column_6"><%= pallet.shipping_address.consignee_full %></td>
-              <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
-            </tr>
+<%= form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
+  <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th id="column_1">NR</th>
+        <th id="column_2">Positionen</th>
+        <th id="column_3">Mehrplatz</th>
+        <th id="column_4">Tour</th>
+        <th id="column_5">PLZ Gebiet</th>
+        <th id="column_6">Empfänger</th>
+        <th id="column_7"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @available_pallets.each do |pallet| %>
+        <tr>
+          <td>
+            <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
+          </td>
+          <td><%= pallet.purchase_position_counter %></td>
+          <td><%= pallet.additional_space %></td>
+          <td><%= pallet.shipping_route.name %></td>
+          <td><%= pallet.purchase_positions.first.zip_location.title %></td>
+          <td><%= pallet.shipping_address.consignee_full %></td>
+          <td style="text-align:center;"><%= check_box_tag "pallet_ids[]", pallet.id %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <% if @available_pallets.present? %>
+          <% 6.times do %>
+            <td></td>
           <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <% 6.times do %>
-              <td></td>
-            <% end %>
-            <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-mini btn-primary", :disable_with => "Füge hinzu..." %></td>
-          </tr>
-        </tfoot>
-      </table>
-    <% end %>
+          <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-mini btn-primary", :disable_with => "Füge hinzu..." %></td>
+        <% else %>
+          <td colspan="7">Keine Paletten verfügbar.</td>
+        <% end %>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>
 
 <script type="text/javascript" charset="utf-8">
   var column_1 = 0;
@@ -126,36 +136,42 @@
   var column_4 = 0;
   var column_5 = 0;
   var column_6 = 0;
+  var column_7 = 0;
   
-  $('td#column_1').each(function(){
+  $('th#column_1').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_1) {column_1 = this_width};
   });
-  $('td#column_2').each(function(){
+  $('th#column_2').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_2) {column_2 = this_width};
   });
-  $('td#column_3').each(function(){
+  $('th#column_3').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_3) {column_3 = this_width};
   });
-  $('td#column_4').each(function(){
+  $('th#column_4').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_4) {column_4 = this_width};
   });
-  $('td#column_5').each(function(){
+  $('th#column_5').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_5) {column_5 = this_width};
   });
-  $('td#column_6').each(function(){
+  $('th#column_6').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_6) {column_6 = this_width};
   });
+  $('th#column_7').each(function(){
+          var this_width = $(this).outerWidth();
+          if (this_width > column_7) {column_7 = this_width};
+  });
   
-  $('td#column_1').css('width', column_1 + 'px');
-  $('td#column_2').css('width', column_2 + 'px');
-  $('td#column_3').css('width', column_3 + 'px');
-  $('td#column_4').css('width', column_4 + 'px');
-  $('td#column_5').css('width', column_5 + 'px');
-  $('td#column_6').css('width', column_6 + 'px');
+  $('th#column_1').css('width', column_1 + 'px');
+  $('th#column_2').css('width', column_2 + 'px');
+  $('th#column_3').css('width', column_3 + 'px');
+  $('th#column_4').css('width', column_4 + 'px');
+  $('th#column_5').css('width', column_5 + 'px');
+  $('th#column_6').css('width', column_6 + 'px');
+  $('th#column_7').css('width', column_7 + 'px');
 </script>
