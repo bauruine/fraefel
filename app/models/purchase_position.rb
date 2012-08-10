@@ -125,6 +125,8 @@ class PurchasePosition < ActiveRecord::Base
       if purchase_order.first.purchase_positions.collect(&:picked_up).count {|x| x == true} == purchase_order.first.purchase_positions.collect(&:picked_up).size
         purchase_order.first.update_attribute("picked_up", true)
       end
+      purchase_order.first.patch_calculation
+      purchase_order.first.patch_aggregations
     end
     
   end

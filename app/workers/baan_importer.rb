@@ -15,7 +15,7 @@ class BaanImporter
         PurchaseOrder.create_from_raw_data(baan_raw_data)
         PurchasePosition.create_from_raw_data(baan_raw_data)
       end
-      BaanRawData.patch_import(baan_import_id)
+      #BaanRawData.patch_import(baan_import_id)
       puts "Time to complete -- #{Time.now - @start_time}"
       #PurchaseOrder.patch_calculation
       #PurchaseOrder.patch_aggregations

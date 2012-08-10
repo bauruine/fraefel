@@ -131,47 +131,72 @@ class PurchaseOrder < ActiveRecord::Base
     
     return "<a #{href_attr}#{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
   end
-
-  def amount
-    amount = 0
-    purchase_positions.each do |purchase_position|
-      amount = amount + purchase_position.amount
-    end
-    return amount
-  end
-  
-  def weight_total
-    weight_total = 0
-    purchase_positions.each do |purchase_position|
-      weight_total = weight_total + purchase_position.weight_total
-    end
-    return weight_total
-  end
-  
-  def self.patch_calculation(arg)
-    @purchase_order = PurchaseOrder.where(:baan_id => arg)
-    if @purchase_order.present?
-      @purchase_order.each do |p_o|
-        p_o.create_calculation unless p_o.calculation.present?
-        p_o.calculation.update_attributes(:total_pallets => p_o.pallets.count, :total_purchase_positions => p_o.purchase_positions.where("purchase_positions.cancelled" => false).count)
-      end
+    
+  def self.patch_calculation
+    PurchaseOrder.all.each do |purchase_order|
+      purchase_order.patch_calculation
     end
   end
   
-  def self.patch_aggregations(arg)
-    @purchase_order = PurchaseOrder.where(:baan_id => arg)
-    if @purchase_order.present?
-      @purchase_order.each do |p_o|
-        m_c_status = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:production_status) * (100.to_f / p_o.purchase_positions.where("purchase_positions.cancelled" => false).count.to_f)
-        w_c_status = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:stock_status) * (100.to_f / p_o.purchase_positions.where("purchase_positions.cancelled" => false).count.to_f)
-        workflow_status = "#{p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:production_status)}#{p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:stock_status)}"
-        m_c_level = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:production_status)
-        w_c_level = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:stock_status)
-        @pending_status = p_o.calculation.try(:total_purchase_positions) - m_c_level
-        p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status, :production_status => m_c_level, :stock_status => w_c_level, :workflow_status => workflow_status, :pending_status => @pending_status)
-        p_o.patch_html_content
-      end
+  def patch_calculation
+    self.create_calculation if self.calculation.nil?
+    total_pallets = self.pallets.count
+    total_purchase_positions = self.purchase_positions.where("purchase_positions.cancelled" => false).count
+    self.calculation.update_attributes(:total_pallets => total_pallets, :total_purchase_positions => total_purchase_positions)
+  end
+  
+  def patch_warehousing_completed
+    purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
+    warehousing_completed = purchase_positions_cancelled.sum("purchase_positions.stock_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
+    self.update_attribute("warehousing_completed", warehousing_completed)
+  end
+  
+  def patch_manufacturing_completed
+    purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
+    manufacturing_completed = purchase_positions_cancelled.sum("purchase_positions.production_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
+    self.update_attribute("manufacturing_completed", manufacturing_completed)
+  end
+  
+  def patch_production_status
+    purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
+    production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
+    self.update_attribute("production_status", production_status)
+  end
+  
+  def patch_stock_status
+    purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
+    stock_status = purchase_positions_cancelled.sum("purchase_positions.stock_status")
+    self.update_attribute("stock_status", stock_status)
+  end
+  
+  def patch_workflow_status
+    purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
+    workflow_status = "#{purchase_positions_cancelled.sum(:production_status)}#{purchase_positions_cancelled.sum(:stock_status)}"
+    self.update_attribute("workflow_status", workflow_status)
+  end
+  
+  def patch_pending_status
+    purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
+    production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
+    pending_status = purchase_positions_cancelled - production_statusl
+    self.update_attribute("pending_status", pending_status)
+  end
+  
+  def self.patch_aggregations
+    self.all.each do |purchase_order|
+      purchase_order.patch_aggregations
     end
+  end
+  
+  def patch_aggregations
+    self.patch_manufacturing_completed
+    self.patch_warehousing_completed
+    self.patch_production_status
+    self.patch_stock_status
+    self.patch_workflow_status
+    self.patch_pending_status
+    # GTFO patch_html_content
+    self.patch_html_content
   end
   
   def self.patch_addresses
