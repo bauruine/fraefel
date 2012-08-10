@@ -37,7 +37,13 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
-  
+  def patch_html_content
+    buttons = String.new
+    buttons += self.pending_status_btn if self.pending_status != 0
+    buttons += self.production_status_btn if self.production_status != self.stock_status
+    buttons += self.stock_status_btn
+    self.html_content.update_attribute("code", buttons)
+  end  
   
   def self.get_performance_time
     @time_start = Time.now
@@ -74,6 +80,7 @@ class PurchaseOrder < ActiveRecord::Base
     
     if purchase_order.new_record?
       purchase_order.save
+      purchase_order.create_html_content
     else
       update_entry = false
       purchase_order_attributes.merge!(:id => purchase_order.id)
@@ -162,6 +169,7 @@ class PurchaseOrder < ActiveRecord::Base
         w_c_level = p_o.purchase_positions.where("purchase_positions.cancelled" => false).sum(:stock_status)
         @pending_status = p_o.calculation.try(:total_purchase_positions) - m_c_level
         p_o.update_attributes(:manufacturing_completed => m_c_status, :warehousing_completed => w_c_status, :production_status => m_c_level, :stock_status => w_c_level, :workflow_status => workflow_status, :pending_status => @pending_status)
+        p_o.patch_html_content
       end
     end
   end
