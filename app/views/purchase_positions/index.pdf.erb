@@ -20,9 +20,9 @@
       </thead>
       <tbody>
         <tr>
-          <td><%= ShippingRoute.where(:id => params[:q][:shipping_route_id_eq]).first.name if params[:q].present? %></td>
+          <td><%= params[:q].present? && params[:q][:shipping_route_id_eq].present? ? ShippingRoute.where(:id => params[:q][:shipping_route_id_eq]).first.name : nil %></td>
           <td><%= params[:q][:warehouse_number_equals] if params[:q].present? %></td>
-          <td><%= Category.where(:id => params[:q][:category_id_eq]).first.title if params[:q].present? %></td>
+          <td><%= params[:q].present? && params[:q][:category_id_eq].present? ? Category.where(:id => params[:q][:category_id_eq]).first.title : nil %></td>
           <td><%= params[:q][:stock_status_eq] if params[:q].present? %></td>
           <td><%= params[:q][:warehousing_completed_gteq] if params[:q].present? %></td>
           <td><%= params[:q][:warehousing_completed_lteq] if params[:q].present? %></td>
