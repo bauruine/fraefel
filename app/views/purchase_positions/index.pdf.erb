@@ -20,16 +20,16 @@
       </thead>
       <tbody>
         <tr>
-          <td><%= params[:search].present? && params[:search][:shipping_route_id_equals].present? ? ShippingRoute.where(:id => params[:search][:shipping_route_id_equals]).first.name : nil %></td>
-          <td><%= params[:search][:warehouse_number_equals] if params[:search].present? %></td>
-          <td><%= params[:search].present? && params[:search][:category_id_equals].present? ? Category.where(:id => params[:search][:category_id_equals]).first.title : nil %></td>
-          <td><%= params[:search][:stock_status_equals] if params[:search].present? %></td>
-          <td><%= params[:search].present? ? params[:search][:warehousing_completed_gteq] : nil %></td>
-          <td><%= params[:search].present? ? params[:search][:warehousing_completed_lteq] : nil %></td>
-          <td><%= params[:search][:production_status_equals] if params[:search].present? %></td>
-          <td><%= params[:search][:manufacturing_completed_gteq] if params[:search].present? %></td>
-          <td><%= params[:search][:manufacturing_completed_lteq] if params[:search].present? %></td>
-          <td><%= prio_title(params[:search][:priority_level_equals]) if params[:search].present? %></td>
+          <td><%= ShippingRoute.where(:id => params[:q][:shipping_route_id_eq]).first.name if params[:q].present? %></td>
+          <td><%= params[:q][:warehouse_number_equals] if params[:q].present? %></td>
+          <td><%= Category.where(:id => params[:q][:category_id_eq]).first.title if params[:q].present? %></td>
+          <td><%= params[:q][:stock_status_eq] if params[:q].present? %></td>
+          <td><%= params[:q][:warehousing_completed_gteq] if params[:q].present? %></td>
+          <td><%= params[:q][:warehousing_completed_lteq] if params[:q].present? %></td>
+          <td><%= params[:q][:production_status_eq] if params[:q].present? %></td>
+          <td><%= params[:q][:manufacturing_completed_gteq] if params[:q].present? %></td>
+          <td><%= params[:q][:manufacturing_completed_lteq] if params[:q].present? %></td>
+          <td><%= prio_title(params[:q][:priority_level_eq]) if params[:q].present? %></td>
         </tr>
       </tbody>
     </table>
@@ -45,10 +45,10 @@
       </thead>
       <tbody>
         <tr>
-          <td><%= params[:search][:delivery_date_greater_than_or_equal_to] if params[:search].present? %></td>
-          <td><%= params[:search][:delivery_date_less_than_or_equal_to] if params[:search].present? %></td>
-          <td><%= params[:search][:delivered_equals] if params[:search].present? %></td>
-          <td><%= params[:search][:picked_up_equals] if params[:search].present? %></td>
+          <td><%= params[:q][:delivery_date_gteq] if params[:q].present? %></td>
+          <td><%= params[:q][:delivery_date_less_lteq] if params[:q].present? %></td>
+          <td><%= params[:q][:delivered_eq] if params[:q].present? %></td>
+          <td><%= params[:q][:picked_up_eq] if params[:q].present? %></td>
           <td></td>
         </tr>
       </tbody>
@@ -67,7 +67,7 @@
 </blockquote>
 
 
-<% Address.where("addresses.category_id" => 10).where("purchase_positions.id" => @purchase_positions.collect(&:id)).order("purchase_orders.delivery_date ASC").joins(:purchase_positions, :purchase_orders).each do |ordered_address| %>
+<% Address.select("DISTINCT `addresses`.*").where("addresses.category_id" => 10).where("purchase_positions.id" => @purchase_positions.collect(&:id)).order("purchase_positions.delivery_date ASC").joins(:purchase_positions).each do |ordered_address| %>
   <section class="filter_box">
     <header class="filter_box_header">
       <h4 class="floatLeft"><%= ordered_address.consignee_full %></h4>
@@ -76,18 +76,31 @@
       <table>
         <thead>
           <tr>
-            <th>Versand</th>
-            <th>Tour</th>
-            <th>VK-Pos</th>
-            <th>Artikel</th>
-            <th>stk.</th>
-            <th>Bezeichnung</th>
-            <th>Produktlinie</th>
-            <th>Lager Ort</th>
-            <th>Palette</th>
+            <th id="column_1">Versand</th>
+            <th id="column_2">Tour</th>
+            <th id="column_3">VK-Pos</th>
+            <th id="column_4">Artikel</th>
+            <th id="column_5">stk.</th>
+            <th id="column_6">Bezeichnung</th>
+            <th id="column_7">Produktlinie</th>
+            <th id="column_8">Lager Ort</th>
+            <th id="column_9">Palette</th>
           </tr>
         </thead>
         <tbody>
+          <% PurchasePosition.includes(:pallets, :shipping_route).where("purchase_positions.id" => @purchase_positions.collect(&:id), "purchase_positions.level_3" => ordered_address.id).each do |purchase_position| %>
+            <tr>
+              <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date)%></td>
+              <td><%= purchase_position.shipping_route.name %></td>
+              <td><%= purchase_position.baan_id %></td>
+              <td><%= purchase_position.article_number %></td>
+              <td><%= purchase_position.quantity %></td>
+              <td><%= purchase_position.article %></td>
+              <td><%= purchase_position.product_line %></td>
+              <td><%= purchase_position.storage_location %></td>
+              <td><%= purchase_positions.pallets.collect(&:id).join(", ") %></td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </section>
@@ -105,50 +118,50 @@
   var column_8 = 0;
   var column_9 = 0;
   
-  $('td#column_1').each(function(){
+  $('th#column_1').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_1) {column_1 = this_width};
   });
-  $('td#column_2').each(function(){
+  $('th#column_2').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_2) {column_2 = this_width};
   });
-  $('td#column_3').each(function(){
+  $('th#column_3').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_3) {column_3 = this_width};
   });
-  $('td#column_4').each(function(){
+  $('th#column_4').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_4) {column_4 = this_width};
   });
-  $('td#column_5').each(function(){
+  $('th#column_5').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_5) {column_5 = this_width};
   });
-  $('td#column_6').each(function(){
+  $('th#column_6').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_6) {column_6 = this_width};
   });
-  $('td#column_7').each(function(){
+  $('th#column_7').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_7) {column_7 = this_width};
   });
-  $('td#column_8').each(function(){
+  $('th#column_8').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_8) {column_8 = this_width};
   });
-  $('td#column_9').each(function(){
+  $('th#column_9').each(function(){
           var this_width = $(this).outerWidth();
           if (this_width > column_9) {column_9 = this_width};
   });
   
-  $('td#column_1').css('width', column_1 + 'px');
-  $('td#column_2').css('width', column_2 + 'px');
-  $('td#column_3').css('width', column_3 + 'px');
-  $('td#column_4').css('width', column_4 + 'px');
-  $('td#column_5').css('width', column_5 + 'px');
-  $('td#column_6').css('width', column_6 + 'px');
-  $('td#column_7').css('width', column_7 + 'px');
-  $('td#column_8').css('width', column_8 + 'px');
-  $('td#column_9').css('width', column_9 + 'px');
+  $('th#column_1').css('width', column_1 + 'px');
+  $('th#column_2').css('width', column_2 + 'px');
+  $('th#column_3').css('width', column_3 + 'px');
+  $('th#column_4').css('width', column_4 + 'px');
+  $('th#column_5').css('width', column_5 + 'px');
+  $('th#column_6').css('width', column_6 + 'px');
+  $('th#column_7').css('width', column_7 + 'px');
+  $('th#column_8').css('width', column_8 + 'px');
+  $('th#column_9').css('width', column_9 + 'px');
 </script>
