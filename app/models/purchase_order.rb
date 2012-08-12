@@ -184,7 +184,7 @@ class PurchaseOrder < ActiveRecord::Base
   def patch_pending_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
-    pending_status = purchase_positions_cancelled - production_status
+    pending_status = purchase_positions_cancelled.count - production_status
     self.update_attribute("pending_status", pending_status)
   end
   
