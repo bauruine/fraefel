@@ -6,6 +6,8 @@ class PurchasePosition < ActiveRecord::Base
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => "level_3"
   belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
   
+  has_one :html_content, :class_name => "HtmlContent"
+  
   has_many :pallet_purchase_position_assignments, :class_name => "PalletPurchasePositionAssignment"
   has_many :pallets, :class_name => "Pallet", :through => :pallet_purchase_position_assignments
   
@@ -38,6 +40,32 @@ class PurchasePosition < ActiveRecord::Base
       @purchase_position_baan_id = "#{@purchase_order_baan_id}-#{purchase_position.position}"
       purchase_position.update_attribute("baan_id", @purchase_position_baan_id)
     end
+  end
+  
+  def self.patch_html_content
+    self.all.each do |purchase_position|
+      purchase_position.patch_html_content
+    end
+  end
+  
+  def patch_html_content
+    self.create_html_content(:code => "") if self.html_content.nil?
+    html_string = self.priority_level_btn
+    self.html_content.update_attribute("code", html_string)
+  end
+  
+  def priority_level_btn
+    html_string = String.new
+    if self.priority_level == 0 or self.priority_level > 1
+      html_string += %q(<span class="btn btn-mini disabled">)
+      if self.priority_level == 0
+        html_string += %q(<i class="icon-asterisk"></i>)
+      elsif self.priority_level > 1
+        html_string += %q(<i class="icon-fire"></i>)
+      end
+      html_string += %q(</span>)
+    end
+    return html_string
   end
   
   def available_quantity

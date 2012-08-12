@@ -88,15 +88,7 @@
             <td><%= purchase_position.shipping_route.name %></td>
             <td>
               <div class="btn-group">
-                <% if purchase_position.priority_level == 0 %>
-                  <span class="btn btn-mini disabled">
-                    <i class="icon-asterisk"></i>
-                  </span>
-                <% elsif purchase_position.priority_level > 1 %>
-                  <span class="btn btn-mini disabled">
-                    <i class="icon-fire"></i>
-                  </span>
-                <% end %>
+                <%= purchase_position.html_content.code.html_safe %>
                 <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position, :format => :xml), "data-toggle" => "modal-remote", "data-target" => "#edit_purchase_position", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
               </div>
             </td>
