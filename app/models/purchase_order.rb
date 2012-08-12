@@ -45,6 +45,12 @@ class PurchaseOrder < ActiveRecord::Base
     self.html_content.update_attribute("code", buttons)
   end  
   
+  def patch_picked_up
+    if PurchasePosition.where(:purchase_order_id => self.id).count == PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.picked_up" => true).count
+      self.update_attribute("picked_up", true)
+    end
+  end
+  
   def self.get_performance_time
     @time_start = Time.now
     self.includes(:purchase_positions)

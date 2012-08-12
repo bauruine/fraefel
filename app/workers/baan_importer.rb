@@ -33,9 +33,14 @@ class BaanImporter
       Article.import_baan_file(baan_import)
     when "Versand-Verrechnet"
       BaanRawData.import(baan_import_id)
-      PurchasePosition.clean_up_delivered(baan_import_id)
-      PurchaseOrder.clean_up_delivered
-      BaanRawData.patch_import(baan_import_id)
+      BaanRawData.where(:baan_import_id => baan_import.id).each do |baan_raw_data|
+        PurchasePosition.update_from_raw_data(baan_raw_data)
+      end
+      PurchaseOrder.where(:baan_id => BaanRawData.where(:baan_import_id => baan_import.id).collect(&:baan_2)).each do |purchase_order|
+        purchase_order.patch_picked_up
+        purchase_order.patch_calculation
+        purchase_order.patch_aggregations
+      end
     when "Versand-Storniert"
       BaanRawData.import_cancelled(baan_import_id)
     else

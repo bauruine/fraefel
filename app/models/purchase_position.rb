@@ -88,6 +88,21 @@ class PurchasePosition < ActiveRecord::Base
     end
   end
   
+  def self.update_from_raw_data(arg)
+    purchase_position_attributes = {}
+    purchase_position_attributes.merge!(:quantity => arg.attributes["baan_18"].to_f)
+    purchase_position_attributes.merge!(:stock_status => arg.attributes["baan_79"].to_i)
+    purchase_position_attributes.merge!(:production_status => arg.attributes["baan_79"].to_i)
+    purchase_position_attributes.merge!(:picked_up => arg.attributes["baan_84"])
+    
+    purchase_position = PurchasePosition.where(:baan_id => "#{arg.attributes["baan_2"]}-#{arg.attributes["baan_4"]}").first
+    
+    if purchase_position.present?
+      # update purchase_position
+      purchase_position.update_attributes(purchase_position_attributes)
+    end
+  end
+  
   def self.create_from_raw_data(arg)
     commodity_code_id = CommodityCode.where(:code => arg.attributes["baan_0"]).first.try(:id)
     purchase_order = PurchaseOrder.where(:baan_id => arg.attributes["baan_2"])
@@ -127,6 +142,7 @@ class PurchasePosition < ActiveRecord::Base
     if purchase_position.new_record?
       purchase_position.save
       purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
+      purchase_position.patch_html_content
       if purchase_order.first.delivered
         purchase_order.first.update_attribute("delivered", false)
       end

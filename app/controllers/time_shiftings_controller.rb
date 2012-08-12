@@ -98,6 +98,9 @@ class TimeShiftingsController < ApplicationController
       PurchaseOrder.where(:baan_id => @time_shifting.purchase_order_id).first.update_attribute("priority_level", 0)
       ### Move this away from here....
       @time_shifting.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments).update_all(:priority_level => 0)
+      @time_shifting.purchase_positions.each do |purchase_position|
+        purchase_position.patch_html_content
+      end
       redirect_to(time_shiftings_path)
     else
       render 'new'
@@ -141,6 +144,9 @@ class TimeShiftingsController < ApplicationController
           purchase_position.update_attribute(:delivery_date, @time_shifting.first.lt_date)
         end
         @purchase_order.first.update_attribute("delivery_date", @time_shifting.first.lt_date)
+        @time_shifting.first.purchase_positions.each do |purchase_position|
+          purchase_position.patch_html_content
+        end
       end
       
       redirect_to(@time_shifting.first)
