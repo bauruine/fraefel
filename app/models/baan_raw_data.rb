@@ -47,11 +47,14 @@ class BaanRawData < ActiveRecord::Base
         @purchase_position.update_attribute("cancelled", row[0].to_s.undress)
       end
     end
+    @baan_raw_data = BaanRawData.where(:baan_import_id => @baan_import.id)
     
-    PurchaseOrder.where("purchase_orders.cancelled" => false).where("purchase_positions.cancelled" => true).includes(:purchase_positions).each do |purchase_order|
-      if purchase_order.purchase_positions.count == purchase_order.purchase_positions.where("purchase_positions.cancelled" => true).count
+    PurchaseOrder.where(:baan_id => @baan_raw_data.collect(&:baan_2)).each do |purchase_order|
+      if PurchasePosition.where(:purchase_order_id => purchase_order.id).count == PurchasePosition.where(:purchase_order_id => purchase_order.id, "purchase_positions.cancelled" => true).count
         purchase_order.update_attribute("cancelled", true)
       end
+      purchase_order.patch_calculation
+      purchase_order.patch_aggregations
     end
     
     ab = Time.now

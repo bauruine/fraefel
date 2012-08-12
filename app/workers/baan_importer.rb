@@ -38,7 +38,6 @@ class BaanImporter
       BaanRawData.patch_import(baan_import_id)
     when "Versand-Storniert"
       BaanRawData.import_cancelled(baan_import_id)
-      BaanRawData.patch_import(baan_import_id)
     else
       #do something expceted
     end

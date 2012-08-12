@@ -67,7 +67,6 @@
     <h4 class="floatLeft">Dispoliste</h4>
   </header>
   <section class="filter_box_content clearfix">
-    <%#= link_to("Generiere PDF", pdf_reports_path(), :method => :post, :remote => true) %>
     <table class="table">
       <thead>
         <tr>
@@ -86,32 +85,21 @@
         <% @purchase_positions.each do |purchase_position| %>
           <tr>
             <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-            <td><%= purchase_position.purchase_order.shipping_route.name %></td>
-            <% if permitted_to? :edit, :purchase_positions %>
-              <td>
-                <div class="btn-group">
-                  <% if purchase_position.priority_level == 0 %>
-                    <span class="btn btn-mini disabled">
-                      <i class="icon-asterisk"></i>
-                    </span>
-                  <% elsif purchase_position.priority_level > 1 %>
-                    <span class="btn btn-mini disabled">
-                      <i class="icon-fire"></i>
-                    </span>
-                  <% end %>
-                  <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position, :format => :xml), "data-toggle" => "modal-remote", "data-target" => "#edit_purchase_position", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
-                </div>
-              </td>
-            <% else %>
-              <td>
-                <% if purchase_position.purchase_order.priority_level == 0 %>
-                  <i class="icon-asterisk"></i>
+            <td><%= purchase_position.shipping_route.name %></td>
+            <td>
+              <div class="btn-group">
+                <% if purchase_position.priority_level == 0 %>
+                  <span class="btn btn-mini disabled">
+                    <i class="icon-asterisk"></i>
+                  </span>
                 <% elsif purchase_position.priority_level > 1 %>
-                  <i class="icon-fire"></i>
+                  <span class="btn btn-mini disabled">
+                    <i class="icon-fire"></i>
+                  </span>
                 <% end %>
-                <span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></span>
-              </td>
-            <% end %>
+                <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position, :format => :xml), "data-toggle" => "modal-remote", "data-target" => "#edit_purchase_position", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
+              </div>
+            </td>
             <td><%= purchase_position.article_number %></td>
             <td><%= purchase_position.quantity %></td>
             <td><%= purchase_position.article %></td>
@@ -131,5 +119,3 @@
     </table>
   </section>
 </section>
-
-<%= subscribe_to "/pdf_reports/#{User.current.username}" %>
