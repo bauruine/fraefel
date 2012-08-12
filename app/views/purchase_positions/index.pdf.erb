@@ -98,7 +98,7 @@
               <td><%= purchase_position.article %></td>
               <td><%= purchase_position.product_line %></td>
               <td><%= purchase_position.storage_location %></td>
-              <td><%= purchase_positions.pallets.collect(&:id).join(", ") %></td>
+              <td><%= purchase_position.pallets.collect(&:id).join(", ") %></td>
             </tr>
           <% end %>
         </tbody>
