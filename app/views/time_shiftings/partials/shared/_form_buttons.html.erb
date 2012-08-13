@@ -1,0 +1,12 @@
+<div class="form-actions">
+  <a href="<%= time_shiftings_path() %>" class="btn btn-warning">Abbrechen</a>
+  <% if @btn_submit %>
+    <button class="btn btn-primary" type="submit">Speichern</button>
+  <% end %>
+  <% if @btn_back.present? %>
+    <a href="<%= @btn_back %>" data-toggle="tab-changer" class="btn">Zurück</a>
+  <% end %>
+  <% if @btn_next.present? %>
+    <a href="<%= @btn_next %>" data-toggle="tab-changer" class="btn">Weiter</a>
+  <% end %>
+</div>

@@ -1,0 +1,5 @@
+<fieldset>
+  <legend>VK-Auftrag</legend>
+  <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
+  <%= render 'time_shiftings/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab2"} %>
+</fieldset>

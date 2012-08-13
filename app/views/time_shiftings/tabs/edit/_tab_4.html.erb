@@ -1,0 +1,10 @@
+<fieldset>
+  <legend>Abteilung</legend>
+  <blockquote>
+    <p>
+      Zur Zeit wird diese Verschiebung von der Abteilung <%= @time_shifting.first.departments.last.try(:title) %> bearbeitet.
+    </p>
+  </blockquote>
+  <%= f.input :department_id, :collection => @departments, :label => "Abteilung", :hint => "Wähle die nächste betroffene Abteilung" %>
+  <%= render 'time_shiftings/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab5", :@btn_back => "#tab3"} %>
+</fieldset>

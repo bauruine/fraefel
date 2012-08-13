@@ -1,0 +1,5 @@
+<fieldset>
+  <legend>Verschiebung Abschliessen?</legend>
+  <%= f.input :closed, :as => :select, :label => false, :hint => "Terminverschiebung abschliessen?", :include_blank => false %>
+  <%= render 'time_shiftings/partials/shared/form_buttons', {:@btn_submit => true, :@btn_back => "#tab6"} %>
+</fieldset>

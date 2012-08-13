@@ -1,268 +1,36 @@
-<%= simple_form_for(@time_shifting.first) do |f| %>
+<%= simple_form_for(@time_shifting.first, :html => {:class => "form-horizontal"}) do |f| %>
 
-  <%= f.error_notification %>
-
-  <div data-step="1" style="<%= params[:tab].present? ? 'display: none;' : nil %>">
-  
-    <%= f.input :purchase_order_id, :disabled => true, :label => "VK-Auftrag", :hint => "VK-Auftrag wurde fixiert." %>
-    <hr />
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='2']" class="btn">
-        Weiter <i class="icon-arrow-right"></i>
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
-  </div>
-  
-  
-  <div data-step="2" style="display: none;">
-    
-    <fieldset>
-      <legend>Auftrag</fieldset>
-      <%= f.input :simple, :as => :select, :label => false, :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false, :selected => @time_shifting.first.simple.blank? ? false : @time_shifting.first.simple %>
-    </fieldset>
-    
-    <fieldset>
-      <legend>Kunde</legend>
-      <%= f.input :customer_was_informed, :as => :select, :label => false, :hint => "Wurde der Kunde informiert?", :include_blank => false, :selected => @time_shifting.first.customer_was_informed.blank? ? false : @time_shifting.first.customer_was_informed %>
-    </fieldset>
-    
-    <fieldset>
-      <legend>Baan</legend>
-      <%= f.input :baan_was_updated, :as => :select, :label => false, :hint => "Wurden die Termine in Baan eingetragen?", :include_blank => false, :selected => @time_shifting.first.baan_was_updated.blank? ? false : @time_shifting.first.baan_was_updated %>
-    </fieldset>
-    
-    <fieldset>
-      <legend>Termine</legend>
-      <%= f.input :lt_date, :as => :string, :label => "Neues LT Datum", :input_html => { :class => 'date_picker' } %>
-    </fieldset>
-    
-    <hr />
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='1']" class="btn">
-        <i class="icon-arrow-left"></i> Zurück
-      </a>
-      <a href="#" data-show="div[data-step='3']" class="btn">
-        Weiter <i class="icon-arrow-right"></i>
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
-  </div>
-  
-  <div data-step="3" style="<%= params[:tab] == "purchase_positions" ? nil : 'display: none;' %>">
-      
-    <table class="margin_bottom_big">
-      <thead>
-        <tr>
-          <th>Versand</th>
-          <th>Tour</th>
-          <th>Position</th>
-          <th>Artikel</th>
-          <th>stk.</th>
-          <th>Bezeichnung</th>
-          <th>Produktlinie</th>
-          <th>Artikelgruppe</th>
-          <th>Lager Ort</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |builder| %>
-          <%= render 'purchase_position_time_shifting_assignment_fields', :f => builder %>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <% 8.times do %>
-            <td></td>
-          <% end %>
-        </tr>
-      </tfoot>
-    </table>
-    <hr />
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='2']" class="btn">
-        <i class="icon-arrow-left"></i> Zurück
-      </a>
-      <a href="#" data-show="div[data-step='4']" class="btn">
-        Weiter <i class="icon-arrow-right"></i>
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
-          
-  </div>
-  
-  <div data-step="4" style="display: none;">
-    <%= f.association :shifting_reasons, :label => "Grund wählen", :as => :check_boxes %>
-    
-    <hr />
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='3']" class="btn">
-        <i class="icon-arrow-left"></i> Zurück
-      </a>
-      <a href="#" data-show="div[data-step='5']" class="btn">
-        Weiter <i class="icon-arrow-right"></i>
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
-  </div>
-  
-  <div data-step="5" style="<%= params[:tab] == "article_positions" ? nil : 'display: none;' %>">
-    
-    <table class="margin_bottom_big" style="">
-      <thead>
-        <tr>
-          <th>Versand</th>
-          <th>Tour</th>
-          <th>Position</th>
-          <th>Artikel</th>
-          <th>stk.</th>
-          <th>Bezeichnung</th>
-          <th>Produktlinie</th>
-          <th>Artikelgruppe</th>
-          <th>Lager Ort</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @purchase_positions.each do |t_s_p_a| %>
-          <tr>
-            <td><%= t_s_p_a.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-            <td><%= @purchase_order.first.shipping_route.name %></td>
-            <td><%= t_s_p_a.purchase_position.baan_id %></td>
-            <td><%= t_s_p_a.purchase_position.article_number %></td>
-            <td><%= t_s_p_a.purchase_position.quantity %></td>
-            <td><%= t_s_p_a.purchase_position.article %></td>
-            <td><%= t_s_p_a.purchase_position.product_line %></td>
-            <td><%= t_s_p_a.purchase_position.commodity_code.content %></td>
-            <td><%= t_s_p_a.purchase_position.storage_location %></td>
-          </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <% 9.times do %>
-            <td></td>
-          <% end %>
-        </tr>
-      </tfoot>
-    </table>
-    
-    <%= f.simple_fields_for :article_position_time_shifting_assignments do |builder| %>
-      <%= render 'article_position_time_shifting_assignment_fields', :f => builder %>
+  <div class="tab-content">
+    <%= content_tag :div, :id => "tab1", :class => ["tab-pane", params[:tab].present? ? nil : "active"].compact.join(" ") do %>
+      <%= render 'time_shiftings/tabs/edit/tab_1', :f => f %>
     <% end %>
     
-    <%= link_to_add_fields "Artikel Code hinzufügen", f, :article_position_time_shifting_assignments %>
-    <hr />
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='4']" class="btn">
-        <i class="icon-arrow-left"></i> Zurück
-      </a>
-      <a href="#" data-show="div[data-step='6']" class="btn">
-        Weiter <i class="icon-arrow-right"></i>
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
-    
-  </div>
-  
-  <div data-step="6" style="<%= params[:tab] == "departments" ? nil : 'display: none;' %>">
-    <blockquote>
-      <p>
-        Zur Zeit wird diese Verschiebung von der Abteilung <%= @time_shifting.first.departments.last.try(:title) %> bearbeitet.
-      </p>
-    </blockquote>
-    <%= f.input :department_id, :collection => @departments, :label => "Abteilung", :hint => "Wähle die nächste betroffene Abteilung" %>
-    
-    <hr />
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='5']" class="btn">
-        <i class="icon-arrow-left"></i> Zurück
-      </a>
-      <a href="#" data-show="div[data-step='7']" class="btn">
-        Weiter <i class="icon-arrow-right"></i>
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
-    
-  </div>
-  
-  <div data-step="7" style="<%= params[:tab] == "comments" ? nil : 'display: none;' %>">
-    
-    <%= f.simple_fields_for :comments do |comment_form| %>
-      <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+    <%= content_tag :div, :id => "tab2", :class => ["tab-pane", params[:tab] == "tab2" ? "active" : nil].compact.join(" ") do %>
+      <%= render 'time_shiftings/tabs/edit/tab_2', :f => f %>
     <% end %>
-    <hr />
-
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='6']" class="btn">
-        <i class="icon-arrow-left"></i> Zurück
-      </a>
-      <a href="#" data-show="div[data-step='8']" class="btn">
-        Weiter <i class="icon-arrow-right"></i>
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
     
-  </div>
-  
-  <div data-step="8" style="<%= params[:tab] == "close_time_shifting" ? nil : 'display: none;' %>">
-    <fieldset>
-      <legend>Verschiebung Abschliessen?</legend>
-      <%= f.input :closed, :as => :select, :label => false, :hint => "Terminverschiebung abschliessen?", :include_blank => false %>
-    </fieldset>
-    <hr />
-
-    <div class="form-actions">
-      <a href="<%= time_shifting_path(@time_shifting.first) %>" class="btn btn-warning">
-        <i class="icon-remove-circle icon-white"></i> Abbrechen
-      </a>
-      <a href="#" data-show="div[data-step='7']" class="btn">
-        <i class="icon-arrow-left"></i> Zurück
-      </a>
-      <button class="btn btn-primary" type="submit">
-        <i class="icon-ok-circle icon-white"></i> Änderungen speichern
-      </button>
-    </div>
+    <%= content_tag :div, :id => "tab3", :class => ["tab-pane", params[:tab] == "tab3" ? "active" : nil].compact.join(" ") do %>
+      <%= render 'time_shiftings/tabs/edit/tab_3', :f => f %>
+    <% end %>
     
+    <%= content_tag :div, :id => "tab4", :class => ["tab-pane", params[:tab] == "tab4" ? "active" : nil].compact.join(" ") do %>
+      <%= render 'time_shiftings/tabs/edit/tab_4', :f => f %>
+    <% end %>
+    
+    <%= content_tag :div, :id => "tab5", :class => ["tab-pane", params[:tab] == "tab5" ? "active" : nil].compact.join(" ") do %>
+      <%= render 'time_shiftings/tabs/edit/tab_5', :f => f %>
+    <% end %>
+    
+    <%= content_tag :div, :id => "tab6", :class => ["tab-pane", params[:tab] == "tab6" ? "active" : nil].compact.join(" ") do %>
+      <%= render 'time_shiftings/tabs/edit/tab_6', :f => f %>
+    <% end %>
+    
+    <%= content_tag :div, :id => "tab7", :class => ["tab-pane", params[:tab] == "tab7" ? "active" : nil].compact.join(" ") do %>
+      <%= render 'time_shiftings/tabs/edit/tab_7', :f => f %>
+    <% end %>
   </div>
   
 <% end %>
-
 <script type="text/javascript" charset="utf-8">
   $("form").on("click", ".add_fields", function(event){
     var time = new Date().getTime();
@@ -270,5 +38,4 @@
     $(this).before($(this).data('fields').replace(regexp, time));
     event.preventDefault();
   });
-    
 </script>

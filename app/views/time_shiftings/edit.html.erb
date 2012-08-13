@@ -1,54 +1,45 @@
-<ul class="breadcrumb">
-  <li><a href="<%= time_shiftings_path %>">Terminverschiebungen</a> <span class="divider">/</span></li>
-  <li><a href="<%= time_shifting_path(@time_shifting.first.id) %>"><%= @time_shifting.first.id %></a> <span class="divider">/</span></li>
-  <li class="active">Edit</li>
-</ul>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li><a href="<%= time_shiftings_path %>">Terminverschiebungen</a> <span class="divider">/</span></li>
+    <li><a href="<%= time_shifting_path(@time_shifting.first.id) %>"><%= @time_shifting.first.id %></a> <span class="divider">/</span></li>
+    <li class="active">Edit</li>
+  </ul>
+<% end %>
 
 <div class="page-header">
   <h1>Bearbeite Terminverschiebung</h1>
 </div>
 
-<section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <a href="#" class="<%= params[:tab] == "close_time_shifting" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='8']">
-        Abschliessen
-      </a>
-      <a href="#" class="<%= params[:tab] == "comments" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='7']">
-        Nachrichten
-      </a>
-      <a href="#" class="<%= params[:tab] == "departments" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='6']">
-        Abteilung
-      </a>
-      <a href="#" class="<%= params[:tab] == "article_positions" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='5']">
-        Beschaffung
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='4']">
-        Grund
-      </a>
-      <a href="#" class="<%= params[:tab] == "purchase_positions" ? 'header_link as_text active_tab' : 'header_link as_text' %>" data-show="div[data-step='3']">
-        VK-Pos
-      </a>
-      <a href="#" class="header_link as_text" data-show="div[data-step='2']">
-        Verschiebung
-      </a>
-      <a href="#" class="<%= params[:tab].present? ? 'header_link as_text' : 'header_link as_text active_tab' %>" data-show="div[data-step='1']">
-        VK-Auftrag
-      </a>
-    </header>
-    <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <%= render 'edit_form' %>
-      </div>
-    </section>
-</section>
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <%= content_tag :li, :class => params[:tab].present? ? nil : "active" do %>
+      <a data-toggle="tab" href="#tab1">VK-Auftrag</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab2" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab2">VK-Pos</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab3" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab3">Beschaffung</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab4" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab4">Abteilung</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab5" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab5">Bemerkung</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab6" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab6">Verschiebung</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab7" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab7">Abschliessen</a>
+    <% end %>
+  </ul>
+  <%= render 'edit_form' %>
+</div>
 
 <script type="text/javascript" charset="utf-8">
-  $('a[data-show^=]').click(function(event) {
-    var divToggle = $(this).attr("data-show");
-    $('a[data-show^=]').removeClass("active_tab");
-    $("header a[data-show=" + "'" + divToggle + "'" + "]").addClass("active_tab");
-    $('div[data-step^=]').hide();
-    $(divToggle).show();
+  $('a[data-toggle="tab-changer"]').click(function(event) {
     event.preventDefault();
+    $('.nav-tabs a[href="' + $(this).attr("href") + '"]').tab("show")
   });
 </script>

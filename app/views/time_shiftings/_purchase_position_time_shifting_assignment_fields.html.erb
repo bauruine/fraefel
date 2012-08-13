@@ -1,7 +1,7 @@
 <tr>
   <td><%= f.object.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
   <td><%= @purchase_order.first.shipping_route.name %></td>
-  <td><span class="label label-<%= f.object.purchase_position.production_status %><%= f.object.purchase_position.stock_status %>"><%= f.object.purchase_position.baan_id %></span></td>
+  <td><span class="btn btn-mini disabled btn-<%= f.object.purchase_position.production_status %><%= f.object.purchase_position.stock_status %>"><%= f.object.purchase_position.baan_id %></span></td>
   <td><%= f.object.purchase_position.article_number %></td>
   <td><%= f.object.purchase_position.quantity %></td>
   <td><%= f.object.purchase_position.article %></td>

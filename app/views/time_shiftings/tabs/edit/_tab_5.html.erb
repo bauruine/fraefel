@@ -1,0 +1,7 @@
+<fieldset>
+  <legend>Bemerkung</legend>
+  <%= f.simple_fields_for :comments do |comment_form| %>
+    <%= comment_form.input :content, :as => :text, :label => "Bemerkung", :hint => "Nachricht am nächste betroffene Abteilung?", :input_html => { :rows => 4 } %>
+  <% end %>
+  <%= render 'time_shiftings/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab6", :@btn_back => "#tab4"} %>
+</fieldset>

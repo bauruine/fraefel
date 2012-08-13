@@ -1,0 +1,46 @@
+<fieldset>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Versand</th>
+        <th>Tour</th>
+        <th>Position</th>
+        <th>Artikel</th>
+        <th>stk.</th>
+        <th>Bezeichnung</th>
+        <th>Produktlinie</th>
+        <th>Artikelgruppe</th>
+        <th>Lager Ort</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @purchase_positions.each do |t_s_p_a| %>
+        <tr>
+          <td><%= t_s_p_a.purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          <td><%= @purchase_order.first.shipping_route.name %></td>
+          <td><span class="btn btn-mini disabled btn-<%= t_s_p_a.purchase_position.production_status %><%= t_s_p_a.purchase_position.stock_status %>"><%= t_s_p_a.purchase_position.baan_id %></span></td>
+          <td><%= t_s_p_a.purchase_position.article_number %></td>
+          <td><%= t_s_p_a.purchase_position.quantity %></td>
+          <td><%= t_s_p_a.purchase_position.article %></td>
+          <td><%= t_s_p_a.purchase_position.product_line %></td>
+          <td><%= t_s_p_a.purchase_position.commodity_code.content %></td>
+          <td><%= t_s_p_a.purchase_position.storage_location %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <% 9.times do %>
+          <td></td>
+        <% end %>
+      </tr>
+    </tfoot>
+  </table>
+  
+  <%= f.simple_fields_for :article_position_time_shifting_assignments do |builder| %>
+    <%= render 'article_position_time_shifting_assignment_fields', :f => builder %>
+  <% end %>
+  
+  <%= link_to_add_fields "Artikel Code hinzufügen", f, :article_position_time_shifting_assignments %>
+  <%= render 'time_shiftings/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab4", :@btn_back => "#tab2"} %>
+</fieldset>

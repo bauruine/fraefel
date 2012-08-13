@@ -1,0 +1,32 @@
+<fieldset>
+  <legend>VK-Pos</legend>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Versand</th>
+        <th>Tour</th>
+        <th>Position</th>
+        <th>Artikel</th>
+        <th>stk.</th>
+        <th>Bezeichnung</th>
+        <th>Produktlinie</th>
+        <th>Artikelgruppe</th>
+        <th>Lager Ort</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= f.simple_fields_for :purchase_position_time_shifting_assignments do |builder| %>
+        <%= render 'purchase_position_time_shifting_assignment_fields', :f => builder %>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <% 10.times do %>
+          <td></td>
+        <% end %>
+      </tr>
+    </tfoot>
+  </table>
+  <%= render 'time_shiftings/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab3", :@btn_back => "#tab1"} %>
+</fieldset>

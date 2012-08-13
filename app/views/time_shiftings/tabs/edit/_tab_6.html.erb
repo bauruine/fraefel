@@ -1,0 +1,15 @@
+<fieldset>
+  <legend>Verschiebung</legend>
+  
+  <%= f.input :simple, :as => :select, :label => "Auftrag", :hint => "Wird der komplette Auftrag verschoben?", :include_blank => false, :selected => @time_shifting.first.simple.blank? ? false : @time_shifting.first.simple %>
+  <hr />
+  <%= f.input :customer_was_informed, :as => :select, :label => "Kunde", :hint => "Wurde der Kunde informiert?", :include_blank => false, :selected => @time_shifting.first.customer_was_informed.blank? ? false : @time_shifting.first.customer_was_informed %>
+  <hr />
+  <%= f.input :baan_was_updated, :as => :select, :label => "Baan", :hint => "Wurden die Termine in Baan eingetragen?", :include_blank => false, :selected => @time_shifting.first.baan_was_updated.blank? ? false : @time_shifting.first.baan_was_updated %>
+  <hr />
+  <%= f.input :lt_date, :as => :string, :label => "Neues LT Datum", :input_html => { :class => 'date_picker' } %>
+  <hr />
+  <%= f.association :shifting_reasons, :label => "Grund", :as => :check_boxes %>
+
+  <%= render 'time_shiftings/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab7", :@btn_back => "#tab5"} %>
+</fieldset>
