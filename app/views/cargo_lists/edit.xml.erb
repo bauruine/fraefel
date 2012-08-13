@@ -44,6 +44,12 @@
           <p class="help-block">Achtung - Hinzugefügte Paletten und VK-Positionen werden automatisch berücksichtigt</p>
         </div>
       </div>
+      <div class="control-group">
+        <%= f.label(:level_3, "Empfänger", :class => "control-label") %>
+        <div class="controls">
+          <%= f.collection_select(:level_3, @addresses, :id, :location_for_select, {:include_blank => true}, {}) %>
+        </div>
+      </div>
     </fieldset>
   </div>
   

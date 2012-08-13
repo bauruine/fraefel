@@ -1,0 +1,13 @@
+<fieldset>
+  <legend>Schritt 1 <small>Versand Nr. eingeben</small></legend>
+  <div class="control-group" data-role="appending">
+    <%= f.label :f_cargo_list_ids, "Betroffener Versand", :class => "control-label" %>
+    <div class="controls">
+      <div class="input-append">
+        <%= f.text_field(:f_cargo_list_ids) %><span class="add-on"><%= link_to("Suche", new_delivery_rejection_path(), "data-role" => "edit_local") %></span>
+      </div>
+      <span class="help-block">Bitte Versand Nr. eingeben</span>
+    </div>
+  </div>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => false, :@btn_back => false, :@btn_next => "#tab2"} %>
+</fieldset>

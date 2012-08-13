@@ -1,0 +1,9 @@
+<fieldset>
+  <legend>Schritt 4 <small>Bermerkung eingeben</small></legend>
+  <%= f.simple_fields_for :comments do |co_f| %>
+    <% unless !co_f.object.new_record? %>
+      <%= co_f.input(:content, :label => "Bemerkung") %>
+    <% end %>
+  <% end %>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_back => "#tab3", :@btn_next => false} %>
+</fieldset>

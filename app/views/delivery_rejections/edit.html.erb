@@ -1,3 +1,11 @@
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li><a href="<%= delivery_rejections_path %>">Konflikte</a> <span class="divider">/</span></li>
+    <li><a href="<%= delivery_rejection_path(@delivery_rejection) %>"><%= @delivery_rejection.id %></a> <span class="divider">/</span></li>
+    <li class="active">Edit</li>
+  </ul>
+<% end %>
+
 <div data-type="modal" style="display: none;">
   <div class="box-padder">
     <%= form_tag(search_delivery_rejections_path, {:method => :post, :remote => true}) do %>
@@ -13,18 +21,40 @@
   </div>
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Konflikte / Annahme Verweigerung</h1>
-</header>
+<div class="page-header">
+  <h1>Konflikt / Annahme Verweigerung</h1>
+</div>
 
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <%= content_tag :li, :class => params[:tab].present? ? nil : "active" do %>
+      <a data-toggle="tab" href="#tab1">Versand</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab2" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab2">Referenz</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab3" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab3">Handelspartner</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab4" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab4">Adressen</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab5" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab5">Bemerkung</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab6" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab6">Konflikt</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab7" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab7">Abschliessen</a>
+    <% end %>
+  </ul>
+  <%= render 'edit_form' %>
+</div>
 
-<section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Editiere Konflikt</h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <%= render 'edit_form' %>
-      </div>
-    </section>
-</section>
+<script type="text/javascript" charset="utf-8">
+  $('a[data-toggle="tab-changer"]').click(function(event) {
+    event.preventDefault();
+    $('.nav-tabs a[href="' + $(this).attr("href") + '"]').tab("show")
+  });
+</script>

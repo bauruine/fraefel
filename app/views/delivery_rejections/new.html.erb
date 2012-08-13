@@ -13,17 +13,31 @@
   </div>
 </div>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Konflikte / Annahme Verweigerung</h1>
-</header>
+<div class="page-header">
+  <h1>Konflikt / Annahme Verweigerung</h1>
+</div>
 
-<section class="filter_box">
-    <header class="filter_box_header clearfix">
-      <h4 class="floatLeft">Erfasse neuen Konflikt</h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <div class="box-padder">
-        <%= render 'form' %>
-      </div>
-    </section>
-</section>
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <%= content_tag :li, :class => params[:tab].present? ? nil : "active" do %>
+      <a data-toggle="tab" href="#tab1">Versand</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab2" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab2">Handelspartner</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab3" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab3">Konflikt</a>
+    <% end %>
+    <%= content_tag :li, :class => params[:tab] == "tab4" ? "active" : nil do %>
+      <a data-toggle="tab" href="#tab4">Bemerkung</a>
+    <% end %>
+  </ul>
+  <%= render 'form' %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $('a[data-toggle="tab-changer"]').click(function(event) {
+    event.preventDefault();
+    $('.nav-tabs a[href="' + $(this).attr("href") + '"]').tab("show")
+  });
+</script>

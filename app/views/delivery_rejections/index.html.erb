@@ -4,40 +4,39 @@
   </ul>
 <% end %>
 
+<%= render("delivery_rejections/partials/index/modal/filter") %>
+
+
 <div class="page-header">
     <h1 class="pull-left">Konflikte</h1>
     <div class="btn-toolbar pull-right">
-      <% if permitted_to? :import, :baan_imports %>
+      <% if permitted_to? :new, :delivery_rejections %>
         <div class="btn-group">
           <a class="btn btn-primary" href="<%= new_delivery_rejection_path %>"><i class="icon-upload icon-white"></i> Konflikt erfassen</a>
         </div>
       <% end %>
+      <div class="btn-group">
+        <a data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</a>
+      </div>
     </div>
     <div class="clear"></div>
 </div>
 
-<section class="filter_box">
-  <header class="filter_box_header">
-    <h4 class="floatLeft">&nbsp;</h4>
-  </header>
-  <section class="filter_box_content clearfix">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Konflikt NR</th>
-          <th>Grund</th>
-          <th>Status</th>
-          <th>Anz. Positionen</th>
-          <th>Kunde</th>
-          <th>Erfasst von</th>
-          <th>Erstellt am</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= render @delivery_rejections %>
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>
-  </section>
-</section>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Konflikt NR</th>
+      <th>Grund</th>
+      <th>Status</th>
+      <th>Anz. Positionen</th>
+      <th>Kunde</th>
+      <th>Erfasst von</th>
+      <th>Erstellt am</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @delivery_rejections %>
+  </tbody>
+  <tfoot>
+  </tfoot>
+</table>

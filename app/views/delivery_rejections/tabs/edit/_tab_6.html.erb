@@ -1,0 +1,7 @@
+<fieldset>
+  <legend>Konflikt</legend>
+  <%= f.input(:category_id, :label => "Grund", :hint => "Was ist der Grund der Konflikterfassung", :collection => Category.where(:categorizable_type => "delivery_rejection"), :label_method => :title, :value_method => :id) %>
+  <%= f.input(:status_id, :label => "Status", :hint => "Status wählen.", :collection => Status.where(:statusable_type => "delivery_rejection"), :value_method => :id, :label_method => :title) %>
+  <%= f.input :discount, :label => "Warenwert", :hint => "Warenwert in % angeben" %>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab7", :@btn_back => "#tab5"} %>
+</fieldset>

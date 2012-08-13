@@ -1,0 +1,5 @@
+<fieldset>
+  <legend>Konflikt abschliessen?</legend>
+  <%= f.input :closed, :as => :select, :label => false, :hint => "Konflikt abschliessen?", :include_blank => false %>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_back => "#tab6", :@btn_next => false} %>
+</fieldset>

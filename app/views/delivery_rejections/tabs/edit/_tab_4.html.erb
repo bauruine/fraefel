@@ -1,0 +1,12 @@
+<fieldset>
+  <legend>Adressen</legend>
+  <%= f.simple_fields_for :addresses do |a_f| %>
+    <%= a_f.input(:category_id, :label => "Adressen Art", :collection => Category.where(:categorizable_type => "address"), :value_method => :id, :label_method => :title) %>
+    <%= a_f.input :company_name, :label => "Firma" %>
+    <%= a_f.input :street, :label => "Strasse + Nr." %>
+    <%= a_f.input :postal_code, :label => "PLZ" %>
+    <%= a_f.input :city, :label => "Ort" %>
+    <%= a_f.input(:country, :label => "Land", :collection => { 'Deutschland'=>"Deutschland", 'Schweiz'=>"Schweiz" }) %>
+  <% end %>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab5", :@btn_back => "#tab3"} %>
+</fieldset>

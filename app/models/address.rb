@@ -2,6 +2,7 @@ class Address < ActiveRecord::Base
   belongs_to :category, :class_name => "Category", :foreign_key => "category_id"
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
   belongs_to :referee, :class_name => "Referee", :foreign_key => "referee_id"
+  belongs_to :delivery_rejection, :class_name => "DeliveryRejection", :foreign_key => "delivery_rejection_id"
   
   has_many :purchase_order_address_assignments, :class_name => "PurchaseOrderAddressAssignment"
   has_many :purchase_orders, :class_name => "PurchaseOrder", :through => :purchase_order_address_assignments

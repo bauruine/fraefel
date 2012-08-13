@@ -1,0 +1,31 @@
+<div class="modal hide fade" id="filter">
+  <%= search_form_for(@search, :html => {:class => "form-horizontal", :method => :get, :style => "margin: 0;"}) do |f| %>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">×</button>
+      <h3>Filter Optionen</h3>
+    </div>
+    
+    <div class="modal-body">
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#tab_1">Allgemein</a></li>
+        </ul>
+        
+        <div class="tab-content">
+          
+          <div id="tab_1" class="tab-pane active">
+            <%= render("delivery_rejections/tabs/index/filter/tab_1", :f => f) %>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <a href="<%= delivery_rejections_path() %>" class="btn btn-danger">Filter Löschen</a>
+      <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
+      <button type="submit" class="btn btn-primary">Filtern</button>
+    </div>
+  
+  <% end %>
+</div>

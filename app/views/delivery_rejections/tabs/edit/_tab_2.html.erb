@@ -1,0 +1,11 @@
+<fieldset>
+  <legend>Referenz</legend>
+  <%= f.simple_fields_for :referee do |r_f| %>
+    <%= r_f.input :forename, :label => "Vorname", :hint => "Wer hat den Konflikt gemeldet?" %>
+
+    <%= r_f.input :surname, :label => "Nachname" %>
+    
+    <%= r_f.input :phone_number, :label => "Telefon" %>
+  <% end %>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab3", :@btn_back => "#tab1"} %>
+</fieldset>

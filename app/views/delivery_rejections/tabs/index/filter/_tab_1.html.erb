@@ -1,0 +1,44 @@
+<fieldset>
+  <legend>Allgemein</fieldset>
+  <div class="control-group">
+    <%= f.label(:closed_eq, "Abgeschlossen?", :class => "control-label") %>
+    <div class="controls">
+      <%= f.select(:closed_eq, { 'Nein' => false, 'Ja' => true }, {}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:cargo_lists_id_eq, "Versand Nr.", :class => "control-label") %>
+    <div class="controls">
+      <%= f.text_field(:cargo_lists_id_eq) %>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label(:addresses_id_eq, "Abholadresse", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:addresses_id_eq, @addresses, :id, :location_for_select, {:include_blank => true}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:category_id_eq, "Kategorie", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:category_id_eq, @categories, :id, :title, {:include_blank => true}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:status_id_eq, "Status", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:status_id_eq, @statuses, :id, :title, {:include_blank => true}, {}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label(:customer_id_eq, "Handelspartner", :class => "control-label") %>
+    <div class="controls">
+      <%= f.collection_select(:customer_id_eq, @customers, :id, :company, {:include_blank => true}, {}) %>
+    </div>
+  </div>
+</fieldset>

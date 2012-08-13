@@ -5,9 +5,12 @@ class DeliveryRejectionsController < ApplicationController
     @delivery_rejection = DeliveryRejection.find(params[:id])
     @cargo_lists = @delivery_rejection.cargo_lists
     @purchase_positions = PurchasePosition.where("delivery_rejections.id = ?", @delivery_rejection.id).includes(:pallets => :delivery_rejection)
-    @pallets = @delivery_rejection.pallets
+    @pallets = Pallet.where("pallets.delivery_rejection_id" => @delivery_rejection.id)
+    @coli_count = Pallet.joins(:pallet_type).where("pallets.delivery_rejection_id" => @delivery_rejection.id, "pallet_types.description" => "coli").count("DISTINCT pallets.id")
     @referee = @delivery_rejection.referee
     @address = @delivery_rejection.address
+    @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.select("DISTINCT `pallet_purchase_position_assignments`.*").joins(:pallet => :delivery_rejection).where("delivery_rejections.id" => @delivery_rejection.id)
+    @pallet_types = PalletType.joins(:pallets).where("pallets.delivery_rejection_id" => @delivery_rejection.id)
     
     respond_to do |format|
       format.html
@@ -26,7 +29,14 @@ class DeliveryRejectionsController < ApplicationController
   end
   
   def index
-    @delivery_rejections = DeliveryRejection.order("delivery_rejections.id DESC").where("status_id != ?", Status.find_or_create_by_title(:title => "Abgeschlossen").id)
+    @search = DeliveryRejection.search(params[:q] || {:closed_eq => false})
+    @delivery_rejections = @search.result.order("delivery_rejections.id DESC")
+    @delivery_rejection_ids = @delivery_rejections.collect(&:id)
+    @address_category = Category.where(:title => "Abholadresse").first
+    @addresses = Address.select("DISTINCT `addresses`.*").joins(:delivery_rejection).where("delivery_rejections.id" => @delivery_rejection_ids, "addresses.category_id" => @address_category.id)
+    @categories = Category.select("DISTINCT `categories`.*").joins(:delivery_rejections).where("delivery_rejections.id" => @delivery_rejection_ids)
+    @statuses = Status.select("DISTINCT `statuses`.*").joins(:delivery_rejections).where("delivery_rejections.id" => @delivery_rejection_ids)
+    @customers = Customer.select("DISTINCT `customers`.*").joins(:delivery_rejections).where("delivery_rejections.id" => @delivery_rejection_ids)
   end
   
   def new

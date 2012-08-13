@@ -22,10 +22,10 @@
 
   <section class="clearfix" style="margin-bottom: 140px;">
     <ul class="floatLeft">
-      <% if @addresses.present? %>
-        <li class="bold" style="font-size: 15px;"><%= @addresses.first.company_name %></li>
-        <li class="bold" style="font-size: 15px;"><%= @addresses.first.street %></li>
-        <li class="bold" style="font-size: 15px;"><%= "#{@addresses.first.country}-#{@addresses.first.postal_code} #{@addresses.first.city}" %></li>
+      <% if @address.present? %>
+        <li class="bold" style="font-size: 15px;"><%= @address.company_name %></li>
+        <li class="bold" style="font-size: 15px;"><%= @address.street %></li>
+        <li class="bold" style="font-size: 15px;"><%= "#{@address.country}-#{@address.postal_code} #{@address.city}" %></li>
       <% else %>
         <li class="bold" style="font-size: 15px;">ACHTUNG - Keine Adresse!</li>
       <% end %>

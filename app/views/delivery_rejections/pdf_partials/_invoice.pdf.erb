@@ -107,16 +107,16 @@
       <tr>
         <td></td>
         <td>Total netto kg</td>
-        <td><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:weight) %></td>
+        <td><%= @pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.weight") %></td>
         <td>&nbsp;</td>
         <td class="align-right">&nbsp;</td>
       </tr>
       <tr>
         <td></td>
         <td class="bold">Total brutto kg</td>
-        <td class="bold"><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:weight) + (@delivery_rejection.pallets.sum("count_as", :include => [:pallet_type]) * 20) %></td>
+        <td class="bold"><%= @pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.weight") + (@pallet_types.sum("pallet_types.count_as") * 20) %></td>
         <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:reduced_price) %></td>
+        <td class="align-right bold"><%= @pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.reduced_price") %></td>
       </tr>
     </tbody>
   </table>
@@ -165,9 +165,9 @@
   var pallet_total_value = $("tr")[2].children[1];
   var coli_count_value = $("tr")[3].children[1];
   
-  $(pallet_count).html(<%= @pallets.sum('count_as', :include => :pallet_type) %>);
-  $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallets.sum('count_as', :include => :pallet_type) %>);
-  $(coli_count).html(<%= @pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
+  $(pallet_count).html(<%= @pallet_types.sum("pallet_types.count_as") %>);
+  $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('pallet_types.count_as') %>);
+  $(coli_count).html(<%= @coli_count %>);
   
   $(pallet_count_value).html("Paletten");
   $(pallet_total_value).html("Palettenplätze");

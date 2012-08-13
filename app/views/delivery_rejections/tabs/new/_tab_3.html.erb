@@ -1,0 +1,7 @@
+<fieldset>
+  <legend>Schritt 3 <small>Konflikt konfigurieren</small></legend>
+  <%= f.input(:category_id, :label => "Grund", :hint => "Was ist der Grund der Konflikterfassung", :collection => Category.where(:categorizable_type => "delivery_rejection"), :label_method => :title, :value_method => :id, :include_blank => false) %>
+  <%= f.input(:status_id, :label => "Status", :hint => "Status wählen.", :collection => Status.where(:statusable_type => "delivery_rejection"), :value_method => :id, :label_method => :title, :include_blank => false) %>
+  <%= f.input :discount, :label => "Warenwert", :hint => "Warenwert in % angeben" %>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => false, :@btn_next => "#tab4", :@btn_back => "#tab2"} %>
+</fieldset>

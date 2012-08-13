@@ -1,0 +1,11 @@
+<fieldset>
+  <legend>Handelspartner</legend>
+  <div class="control-group">
+    <%= f.label :customer_company, "Handelspartner", :class => "control-label" %>
+    <div class="controls">
+      <%= f.text_field :customer_company, "data-autocomplete_source" => customers_path(:format => :json) %>
+      <p class="help-block">Welcher Handelspartner ist in diesen Konflikt verwickelt?</p>
+    </div>
+  </div>
+  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab4", :@btn_back => "#tab2"} %>
+</fieldset>

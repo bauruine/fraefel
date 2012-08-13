@@ -1,25 +1,39 @@
-<div data-type="modal" style="display:none;">
-  
-</div>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li><a href="<%= delivery_rejections_path %>">Konflikte</a> <span class="divider">/</span></li>
+    <li class="active"><%= @delivery_rejection.id %></a></li>
+  </ul>
+<% end %>
 
-<header class="resource_header margin_bottom_big clearfix">
-  <h1 class="floatLeft">Konflikt #<%= @delivery_rejection.id %> / <%= @delivery_rejection.customer.try(:company) %></h1>
-  <%= link_to("Edit", edit_delivery_rejection_path(@delivery_rejection), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  
-  <% if @delivery_rejection.pallets.present? %>
-    <%= link_to("Detail Ansicht", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-    <%= link_to("Proformarechnung", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-    <%= link_to("Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external"), :class => "floatRight no_text_decoration blue_link_button m-r_5px") %>
-  <% end %>
-</header>
+<div class="modal hide fade" id="remote">
+</div>
 
 <div class="page-header">
   <h1 class="pull-left">Konflikt NR#<%= @delivery_rejection.id %></h1>
   <div class="btn-toolbar pull-right">
 
     <div class="btn-group">
-      <a class="btn btn-primary" href="<%= pdf_reports_path(:pdf_type => 'DeliveryRejectionProformaInvoiceDocument', :args_for_printing => {:delivery_rejection_id => @delivery_rejection.id, :level_3 => 152}) %>" data-method="post"><i class="icon-print icon-white"></i> Schweizerbad -> Fraefel</a>
+      <a class="btn btn-primary" href="<%= edit_delivery_rejection_path(@delivery_rejection) %>">Edit</a>
     </div>
+
+    <% if @delivery_rejection.pallets.present? %>
+      <div class="btn-group">
+        <%= link_to("Detail", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report"), :class => "btn btn-primary") %>
+        <a data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></a>
+        <ul class="dropdown-menu pull-right">
+          <li>
+            <%= link_to "Proforma Alt", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "invoice") %>
+          </li>
+          <li>
+            <%= link_to "Proforma Neu", pdf_reports_path(:pdf_type => 'DeliveryRejectionProformaInvoiceDocument', :args_for_printing => {:delivery_rejection_id => @delivery_rejection.id, :level_3 => 152}), "data-method" => :post %>
+          </li>
+          <li>
+            <%= link_to "Lieferschein", delivery_rejection_path(@delivery_rejection, :format => :pdf, :pdf_type => "report_external") %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
+    
   </div>
   <div class="clear"></div>
 </div>
@@ -29,17 +43,12 @@
 <% end %>
 
 <% @delivery_rejection.pallets.each do |pallet| %>
-  <section class="filter_box">
-    <header class="filter_box_header">
-      <h4 class="floatLeft">Palette Nr <%= pallet.id %></h4>
-        <a data-show-tooltip="true" data-role="edit_remote" class="header_link" href="<%= edit_pallet_path(pallet) %>" title="Zeige Palette-Optionen">
-          <span class="header_pack _1"></span>
-        </a>
-    </header>
-    <section class="filter_box_content clearfix">
+    <blockquote style="margin-bottom: 0;">
+      <p>Palette Nr.: <%= pallet.id %></p>
+    </blockquote>
       <%= form_tag(remove_positions_delivery_rejection_path(@delivery_rejection), {:method => :delete, :class => "no-margin"}) do %>
         <%= hidden_field_tag(:pallet_id, pallet.id) %>
-        <table class="table no-margin">
+        <table class="table">
           <thead>
             <tr>
               <th>#</th>
@@ -55,7 +64,11 @@
           <tbody>
             <% pallet.purchase_positions.each do |purchase_position| %>
               <tr>
-                <td><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
+                <td>
+                  <%= content_tag :span, :class =>"btn disabled btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}" do %>
+                    <%= purchase_position.baan_id %>
+                  <% end %>
+                </td>
                 <td><%= purchase_position.article %></td>
                 <td><%= purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity %></td>
                 <td><%= purchase_position.amount %></td>
@@ -68,15 +81,25 @@
           </tbody>
           <tfoot>
             <tr>
+              <td>
+                <div class="btn-toolbar" style="margin: 0;">
+                  <div class="btn-group">
+                    <a href="<%= edit_pallet_path(pallet, :format => :xml) %>" data-toggle="modal-remote" data-target="#remote" class="btn btn-mini">Edit</a>
+                    <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </td>
               <td></td>
               <td></td>
+              <td style="font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:amount) %></td>
+              <td style="font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
+              <td style="font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
               <td></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:amount) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:reduced_price) %></td>
-              <td style="text-align:left; font-weight: bold;"><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) %></td>
-              <td></td>
-              <td class="align-center">
-                <button data-disable-with="Please wait..." type="submit" class="btn btn-warning">
+              <td>
+                <button data-disable-with="Please wait..." type="submit" class="btn btn-mini btn-warning">
                   Entfernen
                 </button>
               </td>
@@ -84,8 +107,6 @@
           </tfoot>
         </table>
       <% end %>
-    </section>
-  </section>
 <% end %>
 <hr />
 
