@@ -22,10 +22,10 @@
 
   <section class="clearfix" style="margin-bottom: 140px;">
     <ul class="floatLeft">
-      <% if @purchase_positions.first.purchase_order.address.present? %>
-        <li class="bold" style="font-size: 15px;"><%= @purchase_positions.first.purchase_order.address.company_name %></li>
-        <li class="bold" style="font-size: 15px;"><%= @purchase_positions.first.purchase_order.address.street %></li>
-        <li class="bold" style="font-size: 15px;"><%= "CH - #{@purchase_positions.first.purchase_order.address.postal_code} #{@purchase_positions.first.purchase_order.address.city}" %></li>
+      <% if @addresses.present? %>
+        <li class="bold" style="font-size: 15px;"><%= @addresses.first.company_name %></li>
+        <li class="bold" style="font-size: 15px;"><%= @addresses.first.street %></li>
+        <li class="bold" style="font-size: 15px;"><%= "#{@addresses.first.country}-#{@addresses.first.postal_code} #{@addresses.first.city}" %></li>
       <% else %>
         <li class="bold" style="font-size: 15px;">ACHTUNG - Keine Adresse!</li>
       <% end %>
