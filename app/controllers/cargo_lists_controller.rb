@@ -68,7 +68,6 @@ class CargoListsController < ApplicationController
     @cargo_list = CargoList.find(params[:id])
     @addresses = Address.select("DISTINCT `addresses`.*").where("cargo_lists.id" => @cargo_list.id).where("addresses.category_id" => 10).joins(:pallets => :cargo_list)
     respond_to do |format|
-      format.xml
       format.html
     end
   end
@@ -77,11 +76,9 @@ class CargoListsController < ApplicationController
     @cargo_list = CargoList.find(params[:id])
     respond_to do |format|
       if @cargo_list.update_attributes(params[:cargo_list])
-        format.html { redirect_to :back, notice: 'Versand wurde erfolgreich gespeichert.' }
-        format.js
+        format.html { redirect_to @cargo_list, notice: 'Versand wurde erfolgreich gespeichert.' }
       else
         format.html { render action: "edit" }
-        format.js
       end
     end
   end

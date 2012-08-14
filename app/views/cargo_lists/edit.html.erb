@@ -1,45 +1,19 @@
-<h1>Versand NR#<%= @cargo_list.id %></h3>
-
-<%= form_for @cargo_list, :html => {:class => "form-horizontal", :style => "margin: 0;"}, :remote => true do |f| %>
-
-  <div class="control-group">
-    <%= f.label :pick_up_time_earliest, "Früheste Abholzeit", :class => "control-label" %>
-    <div class="controls">
-      <%= f.datetime_select :pick_up_time_earliest %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :pick_up_time_latest, "Späteste Abholzeit", :class => "control-label" %>
-    <div class="controls">
-      <%= f.datetime_select :pick_up_time_latest %>
-    </div>
-  </div>
-  
-  <div class="control-group">
-    <%= f.label :referee, "Kunden Name", :class => "control-label" %>
-    <div class="controls">
-      <%= f.text_field :referee %>
-    </div>
-  </div>
-  
-  <div class="control-group">
-    <%= f.label :country, "Versand nach", :class => "control-label" %>
-    <div class="controls">
-      <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
-      <p class="help-block">Achtung - Einzelne Funktionen sind Länderspezifisch</p>
-    </div>
-  </div>
-  
-  <div class="control-group">
-    <%= f.label :delivered, "Versendet?", :class => "control-label" %>
-    <div class="controls">
-      <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-      <p class="help-block">Achtung - Hinzugefügte Paletten und VK-Positionen werden automatisch berücksichtigt</p>
-    </div>
-  </div>
-  
-  <div class="control-group">
-    <%= f.submit("Speichern") %>
-  </div>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li><a href="<%= cargo_lists_path %>">Versand</a> <span class="divider">/</span></li>
+    <li><a href="<%= cargo_list_path(@cargo_list) %>"><%= @cargo_list.id %></a> <span class="divider">/</span></li>
+    <li class="active">Edit</li>
+  </ul>
 <% end %>
+<div class="page-header">
+  <h1>Verdsand</h1>
+</div>
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <%= content_tag :li, :class => params[:tab].present? ? nil : "active" do %>
+      <a data-toggle="tab" href="#tab1">Allgemein</a>
+    <% end %>
+  </ul>
+  <%= render 'edit_form' %>
+</div>
