@@ -1,12 +1,53 @@
-<fieldset>
-  <legend>Adressen</legend>
-  <%= f.simple_fields_for :addresses do |a_f| %>
-    <%= a_f.input(:category_id, :label => "Adressen Art", :collection => Category.where(:categorizable_type => "address"), :value_method => :id, :label_method => :title) %>
-    <%= a_f.input :company_name, :label => "Firma" %>
-    <%= a_f.input :street, :label => "Strasse + Nr." %>
-    <%= a_f.input :postal_code, :label => "PLZ" %>
-    <%= a_f.input :city, :label => "Ort" %>
-    <%= a_f.input(:country, :label => "Land", :collection => { 'Deutschland'=>"Deutschland", 'Schweiz'=>"Schweiz" }) %>
-  <% end %>
-  <%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab5", :@btn_back => "#tab3"} %>
-</fieldset>
+<div class="tabbable tabs-left">
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#lA">Lieferadresse</a></li>
+    <li class=""><a data-toggle="tab" href="#lB">Abholadresse</a></li>
+    <li class=""><a data-toggle="tab" href="#lC">Rechnungsadresse</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="lA" class="tab-pane active">
+      <fieldset>
+        <legend>Lieferadresse</legend>
+        <%= f.input(:delivery_address_id, :label => "Adresse", :collection => @delivery_addresses, :label_method => :location_for_select, :value_method => :id) %>
+        <%= f.simple_fields_for :new_delivery_address do |a_f| %>
+          <%= a_f.input :company_name, :label => "Firma" %>
+          <%= a_f.input :street, :label => "Strasse + Nr." %>
+          <%= a_f.input :postal_code, :label => "PLZ" %>
+          <%= a_f.input :city, :label => "Ort" %>
+          <%= a_f.input(:country, :label => "Land", :collection => { 'Deutschland'=>"Deutschland", 'Schweiz'=>"Schweiz" }) %>
+        <% end %>
+      </fieldset>
+    </div>
+    <div id="lB" class="tab-pane">
+      <fieldset>
+        <legend>Abholadresse</legend>
+        <%= f.input(:pick_up_address_id, :label => "Adresse", :collection => @pick_up_addresses, :label_method => :location_for_select, :value_method => :id) %>
+        <%= f.simple_fields_for :new_pick_up_address do |a_f| %>
+          <%= a_f.input :company_name, :label => "Firma" %>
+          <%= a_f.input :street, :label => "Strasse + Nr." %>
+          <%= a_f.input :postal_code, :label => "PLZ" %>
+          <%= a_f.input :city, :label => "Ort" %>
+          <%= a_f.input(:country, :label => "Land", :collection => { 'Deutschland'=>"Deutschland", 'Schweiz'=>"Schweiz" }) %>
+        <% end %>
+      </fieldset>
+    </div>
+    <div id="lC" class="tab-pane">
+      <fieldset>
+        <legend>Rechnungsadresse</legend>
+        <%= f.input(:invoice_address_id, :label => "Adresse", :collection => @invoice_addresses, :label_method => :location_for_select, :value_method => :id) %>
+        <%= f.simple_fields_for :new_invoice_address do |a_f| %>
+          <%= a_f.input :company_name, :label => "Firma" %>
+          <%= a_f.input :street, :label => "Strasse + Nr." %>
+          <%= a_f.input :postal_code, :label => "PLZ" %>
+          <%= a_f.input :city, :label => "Ort" %>
+          <%= a_f.input(:country, :label => "Land", :collection => { 'Deutschland'=>"Deutschland", 'Schweiz'=>"Schweiz" }) %>
+        <% end %>
+      </fieldset>
+    </div>
+  </div>
+</div>
+
+<%= render 'delivery_rejections/partials/shared/form_buttons', {:@btn_submit => true, :@btn_next => "#tab5", :@btn_back => "#tab3"} %>
+
+
+

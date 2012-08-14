@@ -9,6 +9,11 @@ class DeliveryRejectionsController < ApplicationController
     @coli_count = Pallet.joins(:pallet_type).where("pallets.delivery_rejection_id" => @delivery_rejection.id, "pallet_types.description" => "coli").count("DISTINCT pallets.id")
     @referee = @delivery_rejection.referee
     @address = @delivery_rejection.address
+    
+    @delivery_address = @delivery_rejection.delivery_address
+    @invoice_address = @delivery_rejection.invoice_address
+    @pick_up_address = @delivery_rejection.pick_up_address
+    
     @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.select("DISTINCT `pallet_purchase_position_assignments`.*").joins(:pallet => :delivery_rejection).where("delivery_rejections.id" => @delivery_rejection.id)
     @pallet_types = PalletType.joins(:pallets).where("pallets.delivery_rejection_id" => @delivery_rejection.id)
     
@@ -42,13 +47,13 @@ class DeliveryRejectionsController < ApplicationController
   def new
     @delivery_rejection = DeliveryRejection.new
     @comment = @delivery_rejection.comments.build
-    @search = PurchasePosition.search(params[:search])
+    @search = PurchasePosition.search(params[:q])
   end
   
   def create
     @delivery_rejection = DeliveryRejection.new(params[:delivery_rejection])
     #@comment = @delivery_rejection.comments.build
-    @search = PurchasePosition.search(params[:search])
+    @search = PurchasePosition.search(params[:q])
     
     if @delivery_rejection.save
       redirect_to delivery_rejection_url(@delivery_rejection)
@@ -60,14 +65,17 @@ class DeliveryRejectionsController < ApplicationController
   def edit
     @delivery_rejection = DeliveryRejection.find(params[:id])
     @comment = @delivery_rejection.comments.build
-    if @delivery_rejection.referee.nil?
-      @referee = @delivery_rejection.build_referee
-    end
-    @search = PurchasePosition.search(params[:search])
-    if @delivery_rejection.addresses.empty?
-        @delivery_rejection.addresses.build(:category_id => 4)
-        @delivery_rejection.addresses.build(:category_id => 3)
-    end
+
+    @delivery_rejection.build_referee if @delivery_rejection.referee.nil?
+    @delivery_rejection.build_new_delivery_address if @delivery_rejection.new_delivery_address.nil?
+    @delivery_rejection.build_new_pick_up_address if @delivery_rejection.new_pick_up_address.nil?
+    @delivery_rejection.build_new_invoice_address if @delivery_rejection.new_invoice_address.nil?
+    
+    @delivery_addresses = Address.where(:category_id => 3).order("company_name ASC")
+    @invoice_addresses = Address.where(:category_id => 14).order("company_name ASC")
+    @pick_up_addresses = Address.where(:category_id => 4).order("company_name ASC")
+    
+    @search = PurchasePosition.search(params[:q])
   end
   
   def update

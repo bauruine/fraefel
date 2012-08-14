@@ -16,8 +16,18 @@ class DeliveryRejection < ActiveRecord::Base
   has_many :addresses, :class_name => "Address", :foreign_key => "delivery_rejection_id"
   has_many :cargo_list_delivery_rejection_assignments
   has_many :cargo_lists, :through => :cargo_list_delivery_rejection_assignments
+
+  belongs_to :delivery_address, :class_name => "Address"
+  belongs_to :pick_up_address, :class_name => "Address"
+  belongs_to :invoice_address, :class_name => "Address"
+    
+  has_one :new_delivery_address, :class_name => "Address", :conditions => {:category_id => 3}
+  has_one :new_pick_up_address, :class_name => "Address", :conditions => {:category_id => 4}
+  has_one :new_invoice_address, :class_name => "Address", :conditions => {:category_id => 14}
   
   accepts_nested_attributes_for :comments, :address, :addresses, :referee
+  accepts_nested_attributes_for :delivery_address, :pick_up_address, :invoice_address
+  accepts_nested_attributes_for :new_delivery_address, :new_pick_up_address, :new_invoice_address
   
   validates_presence_of :category, :message => "Es wurde kein Grund angegeben"
   validates_presence_of :status, :message => "Es wurde kein Status gewählt"

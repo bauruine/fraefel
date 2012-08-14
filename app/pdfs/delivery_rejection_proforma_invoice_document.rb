@@ -7,6 +7,10 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
     level_3_id = args[:level_3]
     @level_3 = Address.where(:id => level_3_id).first
     @level_3 ||= Address.where(:id => 1447).first
+
+    @delivery_address = @delivery_rejection.delivery_address
+    @invoice_address = @delivery_rejection.invoice_address
+    @pick_up_address = @delivery_rejection.pick_up_address
     
     #@address_category = Category.where(:title => "kat_c").first
     #@invoice_address_category_id = Category.where(:title => "kat_b").first
@@ -67,11 +71,11 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
   
   def delivery_address_table
     [
-      ["Firma:", "Fraefel AG"],
-      ["Strasse/Nr:", "Lerchenfeld"],
-      ["Postleitzahl:", "9601"],
-      ["Ort:", "Lütisburg-Station"],
-      ["Land:", "Schweiz"]
+      ["Firma:", "#{@delivery_address.try(:company_name)}"],
+      ["Strasse/Nr:", "#{@delivery_address.try(:street)}"],
+      ["Postleitzahl:", "#{@delivery_address.try(:postal_code)}"],
+      ["Ort:", "#{@delivery_address.try(:city)}"],
+      ["Land:", "#{@delivery_address.try(:country)}"]
     ]
   end
   
@@ -89,11 +93,11 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
   
   def address_of_sender_table
     [
-      ["Firma:", "#{@level_3.company_name}"],
-      ["Strasse/Nr:", "#{@level_3.street}"],
-      ["Postleitzahl:", "#{@level_3.postal_code}"],
-      ["Ort:", "#{@level_3.city}"],
-      ["Land:", "#{@level_3.country}"],
+      ["Firma:", "#{@pick_up_address.try(:company_name)}"],
+      ["Strasse/Nr:", "#{@pick_up_address.try(:street)}"],
+      ["Postleitzahl:", "#{@pick_up_address.try(:postal_code)}"],
+      ["Ort:", "#{@pick_up_address.try(:city)}"],
+      ["Land:", "#{@pick_up_address.try(:country)}"],
       ["", ""],
       ["", ""]
     ]
