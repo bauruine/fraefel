@@ -1,8 +1,6 @@
-<tr class="purchase_order">
+<tr>
   <td>
-    <% if purchase_order.priority_level != 1 %>
-      <i class="icon-prio<%= purchase_order.priority_level %>"></i>
-    <% end %>
+    <%= purchase_order.btn_cat_a.code.html_safe %>
     <a href="/purchase_orders/<%= purchase_order.id %>"><%= purchase_order.baan_id %></a>
   </td>
   <td>

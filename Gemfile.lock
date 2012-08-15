@@ -1,12 +1,12 @@
 GIT
   remote: git://github.com/mileszs/wicked_pdf.git
-  revision: 934bf1217a32bb3c2a1d20cc648b071b74199ae2
+  revision: 4c45c978719cd456378e3470a66dc81c1209b186
   specs:
     wicked_pdf (0.7.9)
 
 GIT
   remote: git://github.com/prawnpdf/prawn
-  revision: 9d3e103867b5dcd7bfe94538ee139112dc25ce28
+  revision: 7e2fe9e2925c537c1cfcb9ae09eb4a7d1c0da90f
   branch: master
   specs:
     prawn (1.0.0.rc1)
@@ -15,13 +15,13 @@ GIT
 
 GIT
   remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
-  revision: ca703a2349e9a0c26dc5a8a5bb8f5d6dee3b0cff
+  revision: 86cffd50084953ce59938a1f2f097a0be8b973b0
   specs:
     twitter-bootstrap-rails (2.1.1)
       actionpack (>= 3.1)
       less-rails (~> 2.2.3)
       railties (>= 3.1)
-      therubyracer (= 0.10.1)
+      therubyracer (>= 0.11.0beta5)
 
 GEM
   remote: http://rubygems.org/
@@ -77,15 +77,15 @@ GEM
     coffee-script-source (1.3.3)
     commonjs (0.2.6)
     cookiejar (0.3.0)
-    daemons (1.1.8)
+    daemons (1.1.9)
     declarative_authorization (0.5.5)
-    em-http-request (1.0.2)
+    em-http-request (1.0.3)
       addressable (>= 2.2.3)
       cookiejar
       em-socksify
       eventmachine (>= 1.0.0.beta.4)
       http_parser.rb (>= 0.5.3)
-    em-socksify (0.2.0)
+    em-socksify (0.2.1)
       eventmachine (>= 1.0.0.beta.4)
     erubis (2.7.0)
     eventmachine (1.0.0.rc.4)
@@ -122,7 +122,7 @@ GEM
       activesupport (>= 3.0.0)
       railties (>= 3.0.0)
     kgio (2.7.4)
-    launchy (2.1.1)
+    launchy (2.1.2)
       addressable (~> 2.3)
     less (2.2.1)
       commonjs (~> 0.2.6)
@@ -131,7 +131,6 @@ GEM
       less (~> 2.2.0)
     letter_opener (0.0.2)
       launchy
-    libv8 (3.3.10.4)
     magic_user (0.0.2)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -166,13 +165,13 @@ GEM
     polyglot (0.3.3)
     private_pub (1.0.1)
       faye
-    rabl (0.7.0)
+    rabl (0.7.1)
       activesupport (>= 2.3.14)
       multi_json (~> 1.0)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-mini-profiler (0.1.9)
+    rack-mini-profiler (0.1.10)
       rack (>= 1.1.3)
     rack-protection (1.2.0)
       rack
@@ -204,8 +203,9 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     redis (3.0.1)
-    redis-namespace (1.2.0)
+    redis-namespace (1.2.1)
       redis (~> 3.0.0)
+    ref (1.0.0)
     resque (1.21.0)
       multi_json (~> 1.0)
       redis-namespace (~> 1.0)
@@ -216,7 +216,7 @@ GEM
     ruby-rc4 (0.1.5)
     ruby_parser (2.3.1)
       sexp_processor (~> 3.0)
-    sass (3.1.20)
+    sass (3.2.0)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -233,13 +233,13 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    therubyracer (0.10.1)
-      libv8 (~> 3.3.10)
+    therubyracer (0.11.0beta7)
+      ref
     thin (1.4.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
-    thor (0.15.4)
+    thor (0.16.0)
     tilt (1.3.3)
     treetop (1.4.10)
       polyglot
@@ -288,7 +288,7 @@ DEPENDENCIES
   ruby_parser
   sass-rails (~> 3.2.3)
   simple_form
-  therubyracer
+  therubyracer (= 0.11.0beta7)
   thin
   twitter-bootstrap-rails!
   uglifier (>= 1.0.3)

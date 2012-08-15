@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120814183843) do
+ActiveRecord::Schema.define(:version => 20120815151521) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -372,6 +372,7 @@ ActiveRecord::Schema.define(:version => 20120814183843) do
     t.text    "code"
     t.integer "purchase_order_id"
     t.integer "purchase_position_id"
+    t.integer "category_id"
   end
 
   create_table "microsoft_database_types", :force => true do |t|

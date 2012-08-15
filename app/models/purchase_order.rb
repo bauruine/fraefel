@@ -14,6 +14,8 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :time_shiftings, :class_name => "TimeShifting", :foreign_key => "purchase_order_id", :primary_key => "baan_id"
   
   has_one :html_content, :class_name => "HtmlContent"
+  has_one :btn_cat_a, :class_name => "HtmlContent", :conditions => {:category_id => 15}
+  has_one :btn_cat_b, :class_name => "HtmlContent", :conditions => {:category_id => 16}
   
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
@@ -44,6 +46,17 @@ class PurchaseOrder < ActiveRecord::Base
     buttons += self.stock_status_btn
     self.html_content.update_attribute("code", buttons)
   end  
+  
+  def self.patch_btn_cat_a
+    self.all.each do |purchase_order|
+      purchase_order.patch_btn_cat_a
+    end
+  end
+  
+  def patch_btn_cat_a
+    self.create_btn_cat_a(:code => "") if self.btn_cat_a.nil?
+    self.btn_cat_a.update_attribute("code", self.priority_level_btn)
+  end
   
   def patch_picked_up
     if PurchasePosition.where(:purchase_order_id => self.id).count == PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.picked_up" => true).count
@@ -137,7 +150,17 @@ class PurchaseOrder < ActiveRecord::Base
     
     return "<a #{href_attr}#{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
   end
-    
+  
+  def priority_level_btn
+    tag_options = {}
+    case
+      when self.priority_level == 0 then tag_options.merge!(:class => "icon-asterisk")
+      when self.priority_level > 1 then tag_options.merge!(:class => "icon-fire")
+    end
+    tag_options = tag_options.stringify_keys.to_tag_options
+    return tag_options.present? ? "<i #{tag_options}></i>" : ""
+  end
+  
   def self.patch_calculation
     PurchaseOrder.all.each do |purchase_order|
       purchase_order.patch_calculation
