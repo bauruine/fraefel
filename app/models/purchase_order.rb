@@ -154,38 +154,38 @@ class PurchaseOrder < ActiveRecord::Base
   def patch_warehousing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     warehousing_completed = purchase_positions_cancelled.sum("purchase_positions.stock_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
-    self.update_attribute("warehousing_completed", warehousing_completed)
+    self.save
   end
   
   def patch_manufacturing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     manufacturing_completed = purchase_positions_cancelled.sum("purchase_positions.production_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
-    self.update_attribute("manufacturing_completed", manufacturing_completed)
+    self.save
   end
   
   def patch_production_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
-    self.update_attribute("production_status", production_status)
+    self.save
   end
   
   def patch_stock_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     stock_status = purchase_positions_cancelled.sum("purchase_positions.stock_status")
-    self.update_attribute("stock_status", stock_status)
+    self.save
   end
   
   def patch_workflow_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     workflow_status = "#{purchase_positions_cancelled.sum(:production_status)}#{purchase_positions_cancelled.sum(:stock_status)}"
-    self.update_attribute("workflow_status", workflow_status)
+    self.save
   end
   
   def patch_pending_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
     pending_status = purchase_positions_cancelled.count - production_status
-    self.update_attribute("pending_status", pending_status)
+    self.save
   end
   
   def self.patch_aggregations
