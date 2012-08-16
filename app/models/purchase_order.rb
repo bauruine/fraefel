@@ -39,6 +39,7 @@ class PurchaseOrder < ActiveRecord::Base
   end
   
   def patch_html_content
+    self.create_html_content if self.html_content.nil?
     buttons = String.new
     buttons += self.pending_status_btn if self.pending_status != 0
     buttons += self.production_status_btn if self.production_status != self.stock_status
@@ -98,7 +99,8 @@ class PurchaseOrder < ActiveRecord::Base
     
     if purchase_order.new_record?
       purchase_order.save
-      purchase_order.create_html_content
+      Redis.connect.sadd("purchase_order_ids", purchase_order.id)
+      # purchase_order.create_html_content
     else
       update_entry = false
       purchase_order_attributes.merge!(:id => purchase_order.id)
@@ -110,6 +112,7 @@ class PurchaseOrder < ActiveRecord::Base
       if update_entry
         purchase_order_attributes.delete(:id)
         purchase_order.update_attributes(purchase_order_attributes)
+        Redis.connect.sadd("purchase_order_ids", purchase_order.id)
       end
     end
     

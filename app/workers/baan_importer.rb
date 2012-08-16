@@ -5,6 +5,7 @@ class BaanImporter
     @start_time = Time.now
     case baan_import.baan_import_group.title
     when "Versand"
+      Redis.connect.del("purchase_order_ids")
       BaanRawData.import(baan_import_id)
       BaanRawData.where(:baan_import_id => baan_import.id).each do |baan_raw_data|
         Address.create_from_raw_data(baan_raw_data)
@@ -15,10 +16,12 @@ class BaanImporter
         PurchaseOrder.create_from_raw_data(baan_raw_data)
         PurchasePosition.create_from_raw_data(baan_raw_data)
       end
-      #BaanRawData.patch_import(baan_import_id)
+      PurchaseOrder.where(:id => Redis.connect.smembers("purchase_order_ids").collect{|v| v.to_i}.uniq).each do |purchase_order|
+        # Updating considered PurchaseOrder instances
+        purchase_order.patch_calculation
+        purchase_order.patch_aggregations
+      end
       puts "Time to complete -- #{Time.now - @start_time}"
-      #PurchaseOrder.patch_calculation
-      #PurchaseOrder.patch_aggregations
     when "Inventar-Baan-Artikel"
       Article.import(baan_import)
     when "Inventar-Lager-Adresse"

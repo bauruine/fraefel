@@ -141,11 +141,13 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
     if purchase_position.new_record?
       purchase_position.save
+      # move to after_create filter
       purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
       purchase_position.patch_html_content
       if purchase_order.first.delivered
         purchase_order.first.update_attribute("delivered", false)
       end
+      Redis.connect.sadd("purchase_order_ids", purchase_order_id)
     else
       update_entry = false
       purchase_position_attributes.merge!(:id => purchase_position.id)
@@ -162,6 +164,7 @@ class PurchasePosition < ActiveRecord::Base
         if purchase_position.delivery_date != purchase_position.delivery_dates.last.try(:date_of_delivery)
           purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
         end
+        Redis.connect.sadd("purchase_order_ids", purchase_order_id)
       end
     end
     
@@ -169,8 +172,6 @@ class PurchasePosition < ActiveRecord::Base
       if purchase_order.first.purchase_positions.collect(&:picked_up).count {|x| x == true} == purchase_order.first.purchase_positions.collect(&:picked_up).size
         purchase_order.first.update_attribute("picked_up", true)
       end
-      purchase_order.first.patch_calculation
-      purchase_order.first.patch_aggregations
     end
     
   end
