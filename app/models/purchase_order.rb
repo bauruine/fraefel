@@ -84,7 +84,7 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order_attributes.merge!(:baan_id => arg.attributes["baan_2"])
     purchase_order_attributes.merge!(:customer_id => customer_id)
     purchase_order_attributes.merge!(:shipping_route_id => shipping_route_id)
-    purchase_order_attributes.merge!(:warehouse_number => arg.attributes["baan_22"])
+    purchase_order_attributes.merge!(:warehouse_number => arg.attributes["baan_22"].to_i)
     purchase_order_attributes.merge!(:delivery_date => arg.attributes["baan_13"])
     purchase_order_attributes.merge!(:level_2 => level_2)
     purchase_order_attributes.merge!(:level_1 => level_1)
@@ -104,13 +104,16 @@ class PurchaseOrder < ActiveRecord::Base
     else
       update_entry = false
       purchase_order_attributes.merge!(:id => purchase_order.id)
+      purchase_order_attributes[:delivery_date] = Date.parse(arg.attributes["baan_13"])
+      
       purchase_order_attributes.each do |k, v|
-        if purchase_order.attributes[k] != v
+        if purchase_order.attributes[k.to_s] != v
           update_entry = true
         end
       end
       if update_entry
         purchase_order_attributes.delete(:id)
+        purchase_order_attributes[:delivery_date] = arg.attributes["baan_13"]
         purchase_order.update_attributes(purchase_order_attributes)
         Redis.connect.sadd("purchase_order_ids", purchase_order.id)
       end

@@ -128,15 +128,16 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!(:level_3 => level_3)
     purchase_position_attributes.merge!(:shipping_route_id => shipping_route_id)
     purchase_position_attributes.merge!(:zip_location_id => zip_location_id)
-    purchase_position_attributes.merge!(:gross_price => arg.attributes["baan_38"])
-    purchase_position_attributes.merge!(:value_discount => arg.attributes["baan_39"])
-    purchase_position_attributes.merge!(:net_price => arg.attributes["baan_40"])
+    purchase_position_attributes.merge!(:gross_price => BigDecimal(arg.attributes["baan_38"]))
+    purchase_position_attributes.merge!(:value_discount => BigDecimal(arg.attributes["baan_39"]))
+    purchase_position_attributes.merge!(:net_price => BigDecimal(arg.attributes["baan_40"]))
     purchase_position_attributes.merge!(:stock_status => arg.attributes["baan_78"].to_i)
     purchase_position_attributes.merge!(:production_status => arg.attributes["baan_79"].to_i)
     purchase_position_attributes.merge!(:picked_up => arg.attributes["baan_84"])
     
     # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_position
     purchase_position_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_position_attributes[:shipping_route_id].present?
+    purchase_position_attributes[:picked_up] = false unless purchase_position_attributes[:picked_up].present?
     
     purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
     if purchase_position.new_record?
@@ -151,15 +152,18 @@ class PurchasePosition < ActiveRecord::Base
     else
       update_entry = false
       purchase_position_attributes.merge!(:id => purchase_position.id)
+      purchase_position_attributes[:delivery_date] = Time.parse(arg.attributes["baan_13"])
       
       purchase_position_attributes.each do |k, v|
-        if purchase_position.attributes[k] != v
+        if purchase_position.attributes[k.to_s] != v
           update_entry = true
         end
       end
       
       if update_entry
         purchase_position_attributes.delete(:id)
+        purchase_position_attributes[:delivery_date] = arg.attributes["baan_13"]
+
         purchase_position.update_attributes(purchase_position_attributes)
         if purchase_position.delivery_date != purchase_position.delivery_dates.last.try(:date_of_delivery)
           purchase_position.delivery_dates.create(:date_of_delivery => purchase_position.delivery_date)
