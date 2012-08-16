@@ -1,7 +1,9 @@
 <tr>
   <td>
-    <%= purchase_order.btn_cat_a.code.html_safe %>
-    <a href="/purchase_orders/<%= purchase_order.id %>"><%= purchase_order.baan_id %></a>
+    <div class="btn-group">
+      <%= purchase_order.btn_cat_a.code.html_safe %>
+      <a href="/purchase_orders/<%= purchase_order.id %>" class="btn btn-mini"><%= purchase_order.baan_id %></a>
+    </div>
   </td>
   <td>
     <div class="btn-group">

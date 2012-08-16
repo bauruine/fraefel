@@ -10,7 +10,6 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :pallets, :class_name => "Pallet", :through => :purchase_order_pallet_assignments
   has_many :purchase_order_address_assignments
   has_many :addresses, :class_name => "Address", :through => :purchase_order_address_assignments
-  has_many :old_pallets, :class_name => "Pallet", :foreign_key => "purchase_order_id"
   has_many :time_shiftings, :class_name => "TimeShifting", :foreign_key => "purchase_order_id", :primary_key => "baan_id"
   
   has_one :html_content, :class_name => "HtmlContent"
@@ -152,13 +151,14 @@ class PurchaseOrder < ActiveRecord::Base
   end
   
   def priority_level_btn
-    tag_options = {}
+    tag_options, span_tag_options = {}, {}
     case
       when self.priority_level == 0 then tag_options.merge!(:class => "icon-asterisk")
       when self.priority_level > 1 then tag_options.merge!(:class => "icon-fire")
     end
-    tag_options = tag_options.stringify_keys.to_tag_options
-    return tag_options.present? ? "<i #{tag_options}></i>" : ""
+    tag_options, span_tag_options = tag_options.stringify_keys.to_tag_options, span_tag_options.merge!(:class => "btn btn-mini disabled btn-warning").stringify_keys.to_tag_options
+    
+    return tag_options.present? ? "<span #{span_tag_options}><i #{tag_options}></i></span>" : ""
   end
   
   def self.patch_calculation
