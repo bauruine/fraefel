@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
     c.perishable_token_valid_for = 300.minutes
   end
   
+  attr_accessor :is_importing
+  
   has_many :user_role_assignments
   has_many :roles, :through => :user_role_assignments
   
@@ -12,6 +14,8 @@ class User < ActiveRecord::Base
   has_many :pdf_reports, :class_name => "PdfReport"
   
   validates_presence_of :roles, :forename, :surname, :email
+  
+  after_update :after_update_1, :if => :is_importing
   
   def role_symbols
     roles.map do |role|
@@ -35,4 +39,15 @@ class User < ActiveRecord::Base
   def full_name
     "#{self.forename} #{self.surname}"
   end
+  
+  def callbacker_1
+    puts "sdfsdf"
+  end
+  
+  protected
+  
+  def after_update_1
+    puts "shit!!"
+  end
+  
 end
