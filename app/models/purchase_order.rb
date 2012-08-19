@@ -1,4 +1,5 @@
 class PurchaseOrder < ActiveRecord::Base
+  attr_accessor :is_importing
   has_one :calculation, :as => :calculable, :dependent => :destroy
   belongs_to :category, :class_name => "Category", :foreign_key => "category_id"
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
@@ -20,6 +21,9 @@ class PurchaseOrder < ActiveRecord::Base
   
   after_create :handle_calculation
   after_create :update_import_purchase_order
+  after_create :redis_sadd_purchase_order_ids
+  after_update :redis_sadd_purchase_order_ids, :if => :is_importing
+  after_save :handling_address_ids
   
   def self.patch_level_3
     select("DISTINCT `purchase_orders`.*").joins(:purchase_positions).each do |purchase_order|
@@ -100,28 +104,25 @@ class PurchaseOrder < ActiveRecord::Base
     
     if purchase_order.new_record?
       purchase_order.save
-      Redis.connect.sadd("purchase_order_ids", purchase_order.id)
-      # purchase_order.create_html_content
     else
       update_entry = false
       purchase_order_attributes.merge!(:id => purchase_order.id)
       purchase_order_attributes[:delivery_date] = Date.parse(arg.attributes["baan_13"])
+      purchase_order_attributes.delete(:warehouse_number)
       
       purchase_order_attributes.each do |k, v|
         if purchase_order.attributes[k.to_s] != v
           update_entry = true
+          puts "PurchaseOrder not eql CSV -- Attribute #{k.to_s} || CSV: #{v} -- DB: #{purchase_order.attributes[k.to_s]}"
         end
       end
       if update_entry
         purchase_order_attributes.delete(:id)
         purchase_order_attributes[:delivery_date] = arg.attributes["baan_13"]
+        purchase_order.is_importing = true
         purchase_order.update_attributes(purchase_order_attributes)
-        Redis.connect.sadd("purchase_order_ids", purchase_order.id)
       end
     end
-    
-    purchase_order.address_ids = [level_1, level_2, level_3]
-
   end
   
   def self.clean
@@ -274,44 +275,6 @@ class PurchaseOrder < ActiveRecord::Base
     puts (ab - ag).to_s
   end
   
-  def self.import(arg)
-    @baan_import = BaanImport.find(arg)
-    
-    ag = Time.now
-    BaanRawData.where(:baan_import_id => arg).each do |baan_raw_data|
-      purchase_order_attributes = {}
-      
-      purchase_order_attributes.merge!(:baan_id => baan_raw_data.attributes["baan_2"])
-      purchase_order_attributes.merge!(:customer_id => Customer.where(:baan_id => baan_raw_data.attributes["baan_6"]).first.try(:id))
-      purchase_order_attributes.merge!(:shipping_route_id => ShippingRoute.find_or_create_by_name(:name => baan_raw_data.attributes["baan_21"], :active => true).id)
-      purchase_order_attributes.merge!(:warehouse_number => baan_raw_data.attributes["baan_22"])
-      purchase_order_attributes.merge!(:level_2 => Address.where(:code => baan_raw_data.attributes["baan_47"], :category_id => 9).first.try(:id))
-      purchase_order_attributes.merge!(:level_1 => Address.where(:code => baan_raw_data.attributes["baan_55"], :category_id => 8).first.try(:id))
-      purchase_order_attributes.merge!(:level_3 => Address.where(:code => baan_raw_data.attributes["baan_71"], :category_id => 10).first.try(:id))
-      purchase_order_attributes.merge!(:address_id => Address.where(:code => baan_raw_data.attributes["baan_71"]).first.try(:id))
-      purchase_order_attributes.merge!(:category_id => Category.find_or_create_by_title_and_categorizable_type(:title => baan_raw_data.attributes["baan_81"], :categorizable_type => "purchase_order").id)
-      
-      # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_order
-      purchase_order_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_order_attributes[:shipping_route_id].present?
-      
-      purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(purchase_order_attributes)
-      if purchase_order.new_record?
-        purchase_order.save
-        purcase_order.create_html_content
-      else
-        purchase_order_attributes.merge!(:id => purchase_order.id)
-        unless PurchaseOrder.select(purchase_order_attributes.keys).where(:id => purchase_order.id).first.attributes == purchase_order_attributes
-          # update logic comes here...
-          purchase_order_attributes.delete(:id)
-          purchase_order.update_attributes(purchase_order_attributes)
-        end
-      end
-      purchase_order.addresses += Address.where(:id => [purchase_order_attributes[:level_1], purchase_order_attributes[:level_2], purchase_order_attributes[:level_3]])
-    end
-    ab = Time.now
-    puts (ab - ag).to_s
-  end
-  
   def self.clean_up_delivered
     self.where("purchase_orders.picked_up" => false).where("purchase_positions.picked_up" => true).includes(:purchase_positions).each do |p_o|
       if p_o.purchase_positions.count == p_o.purchase_positions.where("purchase_positions.picked_up" => true).count
@@ -331,6 +294,14 @@ class PurchaseOrder < ActiveRecord::Base
     unless import_purchase_order.nil?
       import_purchase_order.update(:mapper_id => self.id)
     end
+  end
+  
+  def redis_sadd_purchase_order_ids
+    Redis.connect.sadd("purchase_order_ids", self.id)
+  end
+  
+  def handling_address_ids
+    self.address_ids = [self.level_1, self.level_2, self.level_3]
   end
   
 end
