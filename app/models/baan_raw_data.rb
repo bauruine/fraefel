@@ -1,6 +1,9 @@
 class BaanRawData < ActiveRecord::Base
   belongs_to :baan_import, :class_name => "BaanImport", :foreign_key => "baan_import_id"
   
+  after_create :create_import_purchase_order
+  after_create :create_import_purchase_position
+  
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     csv_file_path = @baan_import.baan_upload.path
@@ -59,6 +62,20 @@ class BaanRawData < ActiveRecord::Base
     
     ab = Time.now
     puts (ab - ag).to_s
+  end
+  
+  protected
+  
+  def create_import_purchase_order
+    unless Import::PurchaseOrder.find(:baan_id => self.baan_2).present?
+      Import::PurchaseOrder.create(:baan_id => self.baan_2)
+    end
+  end
+  
+  def create_import_purchase_position
+    unless Import::PurchasePosition.find(:baan_id => "#{self.baan_2}-#{self.baan_4}").present?
+      Import::PurchasePosition.create(:baan_id => "#{self.baan_2}-#{self.baan_4}")
+    end
   end
   
 end

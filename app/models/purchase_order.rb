@@ -19,6 +19,7 @@ class PurchaseOrder < ActiveRecord::Base
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
   after_create :handle_calculation
+  after_create :update_import_purchase_order
   
   def self.patch_level_3
     select("DISTINCT `purchase_orders`.*").joins(:purchase_positions).each do |purchase_order|
@@ -319,10 +320,17 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
   
-  private
+  protected
   
   def handle_calculation
     self.create_calculation unless self.calculation.present?
+  end
+  
+  def update_import_purchase_order
+    import_purchase_order = Import::PurchaseOrder.find(:baan_id => self.baan_id).first
+    unless import_purchase_order.nil?
+      import_purchase_order.update(:mapper_id => self.id)
+    end
   end
   
 end

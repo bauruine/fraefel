@@ -32,6 +32,11 @@ class Hash
       " #{attrs.sort * ' '}".html_safe unless attrs.empty?
     end
   end
+  
+  def to_md5(*except_keys)
+    return Digest::MD5.hexdigest(dup.except!(*except_keys).to_s)
+  end
+  
 end
 
 

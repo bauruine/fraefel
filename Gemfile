@@ -28,6 +28,7 @@ gem "kaminari"
 gem "magic_user"
 gem 'mysql2'
 gem 'nokogiri'
+gem 'ohm'
 gem 'paper_trail'
 gem 'paperclip'
 gem 'prawn', :git => 'git://github.com/prawnpdf/prawn', :branch => 'master'
