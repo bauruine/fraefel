@@ -13,6 +13,14 @@ class Import::PurchaseOrder < Ohm::Model
     end
   end
   
+  def self.get_mapper_id(attrs)
+    begin
+      mapper_id = self.find(attrs).first.mapper_id.to_i
+    rescue NoMethodError
+      return nil
+    end
+  end
+  
   def create_purchase_position(attrs)
     attrs = attrs.merge!(:purchase_order_id => self.id)
     Import::PurchasePosition.create(attrs)

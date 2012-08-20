@@ -7,7 +7,8 @@ class Customer < ActiveRecord::Base
   has_many :delivery_rejections, :class_name => "DeliveryRejection", :foreign_key => "customer_id"
   
   accepts_nested_attributes_for :shipping_addresses
-  has_paper_trail :on => [:update]
+  
+  after_create :update_import_customer
   
   def simplified
     self.company.downcase.delete(' ')
@@ -35,5 +36,14 @@ class Customer < ActiveRecord::Base
     
     customer = Customer.find_or_create_by_baan_id(customer_attributes)
   end
-
+  
+  protected
+  
+  def update_import_customer
+    import_customer = Import::Customer.find(:baan_id => self.baan_id).first
+    unless import_customer.nil?
+      import_customer.update(:mapper_id => self.id.to_s)
+    end
+  end
+  
 end

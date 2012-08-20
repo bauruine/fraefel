@@ -78,11 +78,11 @@ class PurchaseOrder < ActiveRecord::Base
   end
   
   def self.create_from_raw_data(arg)
-    customer_id = Customer.where(:baan_id => arg.attributes["baan_6"]).first.try(:id)
-    shipping_route_id = ShippingRoute.where(:name => arg.attributes["baan_21"]).first.try(:id)
-    level_1 = Address.where(:code => arg.attributes["baan_55"], :category_id => 8).first.try(:id)
-    level_2 = Address.where(:code => arg.attributes["baan_47"], :category_id => 9).first.try(:id)
-    level_3 = Address.where(:code => arg.attributes["baan_71"], :category_id => 10).first.try(:id)
+    customer_id = Import::Customer.get_mapper_id(:baan_id => arg.attributes["baan_6"])
+    shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"])
+    level_1 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_55"], :category_id => "8")
+    level_2 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_47"], :category_id => "9")
+    level_3 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_71"], :category_id => "10")
     category_id = Category.find_or_create_by_title_and_categorizable_type(:title => arg.attributes["baan_81"], :categorizable_type => "purchase_order").id
     
     purchase_order_attributes = Hash.new
@@ -91,8 +91,8 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order_attributes.merge!(:shipping_route_id => shipping_route_id)
     purchase_order_attributes.merge!(:warehouse_number => arg.attributes["baan_22"].to_i)
     purchase_order_attributes.merge!(:delivery_date => arg.attributes["baan_13"])
-    purchase_order_attributes.merge!(:level_2 => level_2)
     purchase_order_attributes.merge!(:level_1 => level_1)
+    purchase_order_attributes.merge!(:level_2 => level_2)
     purchase_order_attributes.merge!(:level_3 => level_3)
     purchase_order_attributes.merge!(:address_id => level_3)
     purchase_order_attributes.merge!(:category_id => category_id)
@@ -113,7 +113,7 @@ class PurchaseOrder < ActiveRecord::Base
       purchase_order_attributes.each do |k, v|
         if purchase_order.attributes[k.to_s] != v
           update_entry = true
-          puts "PurchaseOrder not eql CSV -- Attribute #{k.to_s} || CSV: #{v} -- DB: #{purchase_order.attributes[k.to_s]}"
+          #puts "PurchaseOrder not eql CSV -- Attribute #{k.to_s} || CSV: #{v} -- DB: #{purchase_order.attributes[k.to_s]}"
         end
       end
       if update_entry
@@ -292,7 +292,7 @@ class PurchaseOrder < ActiveRecord::Base
   def update_import_purchase_order
     import_purchase_order = Import::PurchaseOrder.find(:baan_id => self.baan_id).first
     unless import_purchase_order.nil?
-      import_purchase_order.update(:mapper_id => self.id)
+      import_purchase_order.update(:mapper_id => self.id.to_s)
     end
   end
   

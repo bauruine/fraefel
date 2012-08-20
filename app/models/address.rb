@@ -10,6 +10,8 @@ class Address < ActiveRecord::Base
   has_many :purchase_positions, :class_name => "PurchasePosition", :foreign_key => "level_3"
   has_many :pallets, :class_name => "Pallet", :foreign_key => "level_3"
   
+  after_create :update_import_address
+  
   def consignee_full
     "#{self.company_name}, #{self.street}, #{self.country}-#{self.postal_code} #{self.city}"
   end
@@ -146,6 +148,15 @@ class Address < ActiveRecord::Base
       address_attributes.merge!(:category_id => categories[k])
 
       address = Address.find_or_create_by_code_and_category_id(address_attributes)
+    end
+  end
+  
+  protected
+  
+  def update_import_address
+    import_address = Import::Address.find(:baan_id => self.baan_id, :category_id => self.category_id.to_s).first
+    unless import_address.nil?
+      import_address.update(:mapper_id => self.id.to_s)
     end
   end
   

@@ -6,6 +6,8 @@ class ShippingRoute < ActiveRecord::Base
   has_many :printable_media_shipping_route_assignments
   has_many :printable_media, :through => :printable_media_shipping_route_assignments
   
+  after_create :update_import_shipping_route
+  
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
     
@@ -27,6 +29,15 @@ class ShippingRoute < ActiveRecord::Base
     shipping_route_attributes.merge!(:active => true)
     
     shipping_route = ShippingRoute.find_or_create_by_name(shipping_route_attributes)
+  end
+  
+  protected
+  
+  def update_import_shipping_route
+    import_shipping_route = Import::ShippingRoute.find(:baan_id => self.name).first
+    unless import_shipping_route.nil?
+      import_shipping_route.update(:mapper_id => self.id.to_s)
+    end
   end
   
 end

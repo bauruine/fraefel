@@ -101,9 +101,7 @@ class TimeShiftingsController < ApplicationController
       @time_shifting.purchase_positions.each do |purchase_position|
         purchase_position.patch_html_content
       end
-      @time_shifting.purchase_order.each do |purchase_order|
-        purchase_order.patch_btn_cat_a
-      end
+      @time_shifting.purchase_order.patch_btn_cat_a
       redirect_to(time_shiftings_path)
     else
       render 'new'
