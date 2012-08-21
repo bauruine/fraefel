@@ -23,7 +23,8 @@ class PurchasePosition < ActiveRecord::Base
   has_many :delivery_dates, :as => :dateable
   
   after_create :redis_sadd_purchase_order_ids
-  after_create :update_purchase_order_delivered
+  # TODO: Remove this filter && add to last steps of importer
+  # after_create :update_purchase_order_delivered
   after_create :creation_delivery_dates_if_new_record
   after_create :after_create_1
   after_update :redis_sadd_purchase_order_ids, :if => :is_importing
@@ -171,12 +172,6 @@ class PurchasePosition < ActiveRecord::Base
         purchase_position.update_attributes(purchase_position_attributes)
       end
     end
-    # last piece to remove
-    if purchase_order.present?
-      if purchase_order.first.purchase_positions.collect(&:picked_up).count {|x| x == true} == purchase_order.first.purchase_positions.collect(&:picked_up).size
-        purchase_order.first.update_attribute("picked_up", true)
-      end
-    end
     
   end
   
@@ -186,10 +181,9 @@ class PurchasePosition < ActiveRecord::Base
     Redis.connect.sadd("purchase_order_ids", self.purchase_order_id)
   end
   
+  # INFO: Fire up patcher in PurchaseOrder -> patch_delivered
   def update_purchase_order_delivered
-    if self.purchase_order_obj.delivered
-      self.purchase_order_obj.update_attributes(:delivered => false)
-    end
+    self.purchase_order.patch_delivered
   end
   
   def creation_delivery_dates_if_new_record

@@ -65,7 +65,13 @@ class PurchaseOrder < ActiveRecord::Base
   
   def patch_picked_up
     if PurchasePosition.where(:purchase_order_id => self.id).count == PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.picked_up" => true).count
-      self.update_attribute("picked_up", true)
+      self.update_attributes(:picked_up => true)
+    end
+  end
+  
+  def patch_delivered
+    if PurchasePosition.where(:purchase_order_id => self.id).count != PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.delivered" => true).count
+      self.update_attributes(:delivered => false)
     end
   end
   

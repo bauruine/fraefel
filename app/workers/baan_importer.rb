@@ -18,6 +18,12 @@ class BaanImporter
       end
       PurchaseOrder.where(:id => Redis.connect.smembers("purchase_order_ids").collect{|v| v.to_i}.uniq).each do |purchase_order|
         # Updating considered PurchaseOrder instances
+        
+        # THIS SHOULD BE DONE WHEN OTHER IMPORT IS BEING FIRED UP
+        purchase_order.patch_picked_up
+        purchase_order.patch_delivered
+        #END OF THIS...
+        
         purchase_order.patch_calculation
         purchase_order.patch_aggregations
       end
