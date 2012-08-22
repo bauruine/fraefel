@@ -7,6 +7,14 @@ class Import::Customer < Ohm::Model
   index :baan_id
   index :mapper_id
   
+  def self.fill_up
+    ::Customer.all.each do |customer|
+      unless self.find(:baan_id => customer.baan_id).present?
+        self.create(:baan_id => customer.baan_id, :mapper_id => customer.id.to_s)
+      end
+    end
+  end
+  
   def self.destroy_all
     self.all.each do |customer|
       customer.delete

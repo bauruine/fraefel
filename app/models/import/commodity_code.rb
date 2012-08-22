@@ -1,4 +1,4 @@
-class Import::ShippingRoute < Ohm::Model
+class Import::CommodityCode < Ohm::Model
   attribute :baan_id
   attribute :mapper_id
   
@@ -8,16 +8,16 @@ class Import::ShippingRoute < Ohm::Model
   index :mapper_id
   
   def self.fill_up
-    ::ShippingRoute.all.each do |shipping_route|
-      unless self.find(:baan_id => shipping_route.name).present?
-        self.create(:baan_id => shipping_route.name, :mapper_id => shipping_route.id.to_s)
+    ::CommodityCode.all.each do |commodity_code|
+      unless self.find(:baan_id => commodity_code.code).present?
+        self.create(:baan_id => commodity_code.code, :mapper_id => commodity_code.id.to_s)
       end
     end
   end
   
   def self.destroy_all
-    self.all.each do |shipping_route|
-      shipping_route.delete
+    self.all.each do |commodity_code|
+      commodity_code.delete
     end
   end
   

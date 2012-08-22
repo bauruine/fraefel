@@ -7,6 +7,14 @@ class Import::PurchaseOrder < Ohm::Model
   index :baan_id
   index :mapper_id
   
+  def self.fill_up
+    ::PurchaseOrder.all.each do |purchase_order|
+      unless self.find(:baan_id => purchase_order.baan_id).present?
+        self.create(:baan_id => purchase_order.baan_id, :mapper_id => purchase_order.id.to_s)
+      end
+    end
+  end
+  
   def self.destroy_all
     self.all.each do |purchase_order|
       purchase_order.delete

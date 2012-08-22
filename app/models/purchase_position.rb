@@ -114,12 +114,11 @@ class PurchasePosition < ActiveRecord::Base
   end
   
   def self.create_from_raw_data(arg)
-    commodity_code_id = CommodityCode.where(:code => arg.attributes["baan_0"]).first.try(:id)
-    purchase_order = PurchaseOrder.where(:baan_id => arg.attributes["baan_2"])
-    purchase_order_id = purchase_order.first.try(:id)
-    level_3 = Address.where(:code => arg.attributes["baan_71"], :category_id => 10).first.try(:id)
-    zip_location_id = ZipLocation.where(:title => arg.attributes["baan_35"]).first.try(:id)
-    shipping_route_id = ShippingRoute.where(:name => arg.attributes["baan_21"]).first.try(:id)
+    commodity_code_id = Import::CommodityCode.get_mapper_id(:baan_id => arg.attributes["baan_0"])
+    purchase_order_id = Import::PurchaseOrder.get_mapper_id(:baan_id => arg.attributes["baan_2"])
+    level_3 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_71"], :category_id => "10")
+    zip_location_id = Import::ZipLocation.get_mapper_id(:baan_id => arg.attributes["baan_35"])
+    shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"])
     
     purchase_position_attributes = {}
     purchase_position_attributes.merge!(:commodity_code_id => commodity_code_id)
@@ -150,7 +149,7 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes[:picked_up] = purchase_position_attributes[:picked_up] == 1 ? true : false
     
     purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
-    purchase_position.purchase_order_obj = purchase_order.first
+
     if purchase_position.new_record?
       purchase_position.save
     else

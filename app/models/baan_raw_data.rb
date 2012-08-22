@@ -6,6 +6,8 @@ class BaanRawData < ActiveRecord::Base
   after_create :create_import_address
   after_create :create_import_customer
   after_create :create_import_shipping_route
+  after_create :create_import_zip_location
+  after_create :create_import_commodity_code
   
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
@@ -83,11 +85,11 @@ class BaanRawData < ActiveRecord::Base
   
   def create_import_address
     begin
-      Import::Address.create(:baan_id => self.baan_55, :category_id => "8", :unique_id => Digest::MD5.hexdigest("#{self.baan_55}-a"))
-      Import::Address.create(:baan_id => self.baan_47, :category_id => "9", :unique_id => Digest::MD5.hexdigest("#{self.baan_47}-b"))
-      Import::Address.create(:baan_id => self.baan_71, :category_id => "10", :unique_id => Digest::MD5.hexdigest("#{self.baan_71}-c"))
+      Import::Address.create(:baan_id => self.baan_55, :category_id => "8", :unique_id => Digest::MD5.hexdigest("#{self.baan_55}-8"))
+      Import::Address.create(:baan_id => self.baan_47, :category_id => "9", :unique_id => Digest::MD5.hexdigest("#{self.baan_47}-9"))
+      Import::Address.create(:baan_id => self.baan_71, :category_id => "10", :unique_id => Digest::MD5.hexdigest("#{self.baan_71}-10"))
     rescue Ohm::UniqueIndexViolation
-      "Address already exists... skipping address..."
+      "Skipping address..."
     end
   end
   
@@ -100,6 +102,18 @@ class BaanRawData < ActiveRecord::Base
   def create_import_shipping_route
     unless Import::ShippingRoute.find(:baan_id => self.baan_21).present?
       Import::ShippingRoute.create(:baan_id => self.baan_21)
+    end
+  end
+  
+  def create_import_zip_location
+    unless Import::ZipLocation.find(:baan_id => self.baan_35).present?
+      Import::ZipLocation.create(:baan_id => self.baan_35)
+    end
+  end
+  
+  def create_import_commodity_code
+    unless Import::CommodityCode.find(:baan_id => self.baan_0).present?
+      Import::CommodityCode.create(:baan_id => self.baan_0)
     end
   end
   

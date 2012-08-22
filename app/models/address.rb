@@ -154,7 +154,7 @@ class Address < ActiveRecord::Base
   protected
   
   def update_import_address
-    import_address = Import::Address.find(:baan_id => self.baan_id, :category_id => self.category_id.to_s).first
+    import_address = Import::Address.find(:baan_id => self.code, :category_id => self.category_id.to_s).first
     unless import_address.nil?
       import_address.update(:mapper_id => self.id.to_s)
     end
