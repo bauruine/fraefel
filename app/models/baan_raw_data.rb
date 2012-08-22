@@ -1,13 +1,15 @@
 class BaanRawData < ActiveRecord::Base
+  attr_accessor :should_preload
+  
   belongs_to :baan_import, :class_name => "BaanImport", :foreign_key => "baan_import_id"
   
-  after_create :create_import_purchase_order
-  after_create :create_import_purchase_position
-  after_create :create_import_address
-  after_create :create_import_customer
-  after_create :create_import_shipping_route
-  after_create :create_import_zip_location
-  after_create :create_import_commodity_code
+  after_create :create_import_purchase_order, :if => :should_preload
+  after_create :create_import_purchase_position, :if => :should_preload
+  after_create :create_import_address, :if => :should_preload
+  after_create :create_import_customer, :if => :should_preload
+  after_create :create_import_shipping_route, :if => :should_preload
+  after_create :create_import_zip_location, :if => :should_preload
+  after_create :create_import_commodity_code, :if => :should_preload
   
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
@@ -23,7 +25,11 @@ class BaanRawData < ActiveRecord::Base
         @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s.undress)
       end
       @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)
-      BaanRawData.find_or_create_by_baan_2_and_baan_4_and_baan_import_id(@baan_raw_attributes)
+      unless BaanRawData.where(:baan_2 => @baan_raw_attributes[:baan_2], :baan_4 => @baan_raw_attributes[:baan_4]).present?
+        baan_raw_data = BaanRawData.new(@baan_raw_attributes)
+        baan_raw_data.should_preload = true
+        baan_raw_data.save
+      end
     end
     
     ab = Time.now
