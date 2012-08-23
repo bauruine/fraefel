@@ -1,6 +1,6 @@
 class PurchaseOrdersController < ApplicationController
   filter_access_to :all
-  before_filter :is_currently_importing, :only => :index
+  # before_filter :is_currently_importing, :only => :index
   
   def show
     @purchase_order = PurchaseOrder.where(:id => params[:id]).first
@@ -157,8 +157,8 @@ class PurchaseOrdersController < ApplicationController
   end
   
   def is_currently_importing
-    unless Resque::Worker.working.empty?
-      render "shared/disabled_while_importing"
-    end
+    #  unless Resque::Worker.working.empty?
+    #    render "shared/disabled_while_importing"
+    #  end
   end
 end

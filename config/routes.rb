@@ -1,6 +1,8 @@
+require 'sidekiq/web'
+
 Fraefel::Application.routes.draw do
   
-  mount Resque::Server.new, :at => "/resque"
+  mount Sidekiq::Web, at: '/sidekiq'
   
   resources :password_resets, :only => [ :new, :create, :edit, :update ]
   

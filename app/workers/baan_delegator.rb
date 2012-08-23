@@ -1,7 +1,11 @@
 class BaanDelegator
-  @queue = :baan_delegator_queue
+
+  include Sidekiq::Worker
   
-  def self.perform(baan_import_id)
+  sidekiq_options queue: "baan_delegator_queue"
+  sidekiq_options retry: false
+  
+  def perform(baan_import_id)
   
     baan_import_id = baan_import_id.to_i
     unique_id = Time.now.to_s.to_md5
@@ -23,7 +27,7 @@ class BaanDelegator
     
     # INFO: Start BaanImporter worker for each batch
     BaanRawData.find_in_batches(:conditions => {:baan_import_id => baan_import_id}, :batch_size => 300) do |batch_data|
-      Resque.enqueue(BaanImporter, unique_id, batch_data.first.id..batch_data.last.id, "Versand")
+      BaanImporter.perform_async(unique_id, batch_data.first.id, batch_data.last.id, "Versand")
     end
     
     # INFO: BaanDelegator worker should sleep until each BaanImporter worker did his job

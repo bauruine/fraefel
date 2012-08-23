@@ -1,15 +1,18 @@
 class BaanImporter
+  
+  include Sidekiq::Worker
+  
+  sidekiq_options queue: "baan_importer_queue"
+  sidekiq_options retry: false
 
-  @queue = :baan_imports_queue
-
-  def self.perform(unique_id, batch_range, import_type = "Versand")
+  def perform(unique_id, batch_from, batch_to, import_type = "Versand")
   
     import_baan_import = Import::BaanImport.find(:unique_id => unique_id).first
     pending_workers = (import_baan_import.pending_workers.to_i - 1).to_s
     
     case import_type
     when "Versand"
-      BaanRawData.where(:baan_import_id => batch_range).each do |baan_raw_data|
+      BaanRawData.where(:baan_import_id => batch_from.to_i..batch_to.to_i).each do |baan_raw_data|
         Category.create_from_raw_data(baan_raw_data)
         Address.create_from_raw_data(baan_raw_data)
         Customer.create_from_raw_data(baan_raw_data)

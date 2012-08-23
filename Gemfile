@@ -37,9 +37,11 @@ gem 'rack-mini-profiler'
 gem "ransack"
 gem 'rabl'
 gem "RedCloth", :require => 'redcloth'
-gem 'resque', :require => "resque/server"
 gem 'rest-client'
+gem 'sidekiq'
 gem 'simple_form'
+gem 'sinatra', :require => false
+gem 'slim'
 gem 'thin'
 gem 'unicorn'
 gem 'wicked_pdf', :git => "git://github.com/mileszs/wicked_pdf.git"

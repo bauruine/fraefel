@@ -4,11 +4,6 @@
   
     <div class="span10">
       <%= yield :breadcrumb %>
-      <% if Resque::Worker.all.size == 0 %>
-        <div class="alert alert-error">
-          ZUR ZEIT KÖNNEN KEINE NEUE IMPORTS DURCHGEFÜHRT ODER VK GELÖSCHT WERDEN
-        </div>
-      <% end %>
     </div>
     <div class="span2">
       <%= image_tag(asset_path("logo.gif"), :class => "pull-right", :id => "logo") %>
