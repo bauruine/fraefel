@@ -1,28 +1,13 @@
-amount: 150.4
-article: Glasfront weiss, 747x347x7
-article_number: '003347'
-baan_id: !!null 
-commodity_code_id: 3
-consignee_full: Framo SA, La Maillarde , CH-1680 Romont
-created_at: 2012-04-01 21:12:24.000000000Z
-delivered: false
-delivery_date: 2012-04-03 22:00:00.000000000Z
-gross_price: 376.0
-id: 25927
-net_price: 150.4
-pallet_id: !!null 
-position: 10
-product_line: Einkaufsteile/Ersatzteile
-production_status: 0
-purchase_order_id: 13799
-quantity: 1
-status: open
-stock_status: 0
-storage_location: ''
-total_amount: 150.4
-updated_at: 2012-04-01 21:12:24.000000000Z
-value_discount: 225.6
-weight_single: 4.46
-weight_total: 4.46
-zip_location_id: 0
-zip_location_name: ''
+    when "Inventar-Baan-Artikel"
+      Article.import(baan_import)
+    when "Inventar-Lager-Adresse"
+      Depot.import(baan_import)
+    when "Inventar-Lager-Zone"
+      Article.import_extras(baan_import)
+    when "Inventar-Baan-Artikel-Gruppe"
+      ArticleGroup.import(baan_import)
+    when "Inventar-Baan-Artikel-Preis-Gruppe"
+      Article.import_extras_1(baan_import)
+    when "Inventar-BaanCSV"
+      Article.import_baan_file(baan_import)
+

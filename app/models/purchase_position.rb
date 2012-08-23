@@ -1,6 +1,5 @@
 class PurchasePosition < ActiveRecord::Base
   attr_accessor :is_importing
-  attr_accessor :purchase_order_obj
   
   belongs_to :commodity_code, :class_name => "CommodityCode", :foreign_key => "commodity_code_id"
   belongs_to :purchase_order, :class_name => "PurchaseOrder", :foreign_key => "purchase_order_id"
@@ -23,8 +22,6 @@ class PurchasePosition < ActiveRecord::Base
   has_many :delivery_dates, :as => :dateable
   
   after_create :redis_sadd_purchase_order_ids
-  # TODO: Remove this filter && add to last steps of importer
-  # after_create :update_purchase_order_delivered
   after_create :creation_delivery_dates_if_new_record
   after_create :after_create_1
   after_update :redis_sadd_purchase_order_ids, :if => :is_importing

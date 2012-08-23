@@ -1,13 +1,15 @@
 class BaanImporter
+
   @queue = :baan_imports_queue
-  def self.perform(baan_import_id)
-    baan_import = BaanImport.find(baan_import_id)
-    @start_time = Time.now
-    case baan_import.baan_import_group.title
+
+  def self.perform(unique_id, batch_range, import_type = "Versand")
+  
+    import_baan_import = Import::BaanImport.find(:unique_id => unique_id).first
+    pending_workers = (import_baan_import.pending_workers.to_i - 1).to_s
+    
+    case import_type
     when "Versand"
-      Redis.connect.del("purchase_order_ids")
-      BaanRawData.import(baan_import_id)
-      BaanRawData.where(:baan_import_id => baan_import.id).each do |baan_raw_data|
+      BaanRawData.where(:baan_import_id => batch_range).each do |baan_raw_data|
         Category.create_from_raw_data(baan_raw_data)
         Address.create_from_raw_data(baan_raw_data)
         Customer.create_from_raw_data(baan_raw_data)
@@ -17,30 +19,9 @@ class BaanImporter
         PurchaseOrder.create_from_raw_data(baan_raw_data)
         PurchasePosition.create_from_raw_data(baan_raw_data)
       end
-      PurchaseOrder.where(:id => Redis.connect.smembers("purchase_order_ids").collect{|v| v.to_i}.uniq).each do |purchase_order|
-        # Updating considered PurchaseOrder instances
-        
-        # INFO-1: Change picked_up && delivered if new child
-        purchase_order.patch_picked_up
-        purchase_order.patch_delivered
-        # END INFO-1
-        
-        purchase_order.patch_calculation
-        purchase_order.patch_aggregations
-      end
-      puts "Time to complete -- #{Time.now - @start_time}"
-    when "Inventar-Baan-Artikel"
-      Article.import(baan_import)
-    when "Inventar-Lager-Adresse"
-      Depot.import(baan_import)
-    when "Inventar-Lager-Zone"
-      Article.import_extras(baan_import)
-    when "Inventar-Baan-Artikel-Gruppe"
-      ArticleGroup.import(baan_import)
-    when "Inventar-Baan-Artikel-Preis-Gruppe"
-      Article.import_extras_1(baan_import)
-    when "Inventar-BaanCSV"
-      Article.import_baan_file(baan_import)
+      
+      import_baan_import.update(:pending_workers => pending_workers)
+      
     when "Versand-Verrechnet"
       BaanRawData.import(baan_import_id)
       BaanRawData.where(:baan_import_id => baan_import.id).each do |baan_raw_data|
