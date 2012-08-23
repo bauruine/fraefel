@@ -10,6 +10,7 @@ class BaanRawData < ActiveRecord::Base
   after_create :create_import_shipping_route, :if => :should_preload
   after_create :create_import_zip_location, :if => :should_preload
   after_create :create_import_commodity_code, :if => :should_preload
+  after_create :create_import_category, :if => :should_preload
   
   def self.import(arg)
     @baan_import = BaanImport.find(arg)
@@ -120,6 +121,12 @@ class BaanRawData < ActiveRecord::Base
   def create_import_commodity_code
     unless Import::CommodityCode.find(:baan_id => self.baan_0).present?
       Import::CommodityCode.create(:baan_id => self.baan_0)
+    end
+  end
+  
+  def create_import_category
+    unless Import::Category.find(:unique_id => Digest::MD5.hexdigest(%Q(#{self.baan_81}-purchase_order))).present?
+      Import::Category.create(:baan_id => self.baan_81, :categorizable_type => "purchase_order", :unique_id => Digest::MD5.hexdigest(%Q(#{self.baan_81}-purchase_order)))
     end
   end
   

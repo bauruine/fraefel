@@ -20,10 +20,13 @@ class PurchaseOrder < ActiveRecord::Base
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
   
   after_create :handle_calculation
+  after_create :handle_html_content
+  
   after_create :update_import_purchase_order
   after_create :redis_sadd_purchase_order_ids
   after_update :redis_sadd_purchase_order_ids, :if => :is_importing
-  after_save :handling_address_ids
+  after_create :handling_address_ids
+  after_update :handling_address_ids, :if => :is_importing
   
   def self.patch_level_3
     select("DISTINCT `purchase_orders`.*").joins(:purchase_positions).each do |purchase_order|
@@ -34,12 +37,7 @@ class PurchaseOrder < ActiveRecord::Base
   
   def self.patch_html_content
     self.all.each do |purchase_order|
-      purchase_order.create_html_content if purchase_order.html_content.nil?
-      buttons = String.new
-      buttons += purchase_order.pending_status_btn if purchase_order.pending_status != 0
-      buttons += purchase_order.production_status_btn if purchase_order.production_status != purchase_order.stock_status
-      buttons += purchase_order.stock_status_btn
-      purchase_order.html_content.update_attribute("code", buttons)
+      purchase_order.patch_html_content
     end
   end
   
@@ -49,7 +47,7 @@ class PurchaseOrder < ActiveRecord::Base
     buttons += self.pending_status_btn if self.pending_status != 0
     buttons += self.production_status_btn if self.production_status != self.stock_status
     buttons += self.stock_status_btn
-    self.html_content.update_attribute("code", buttons)
+    self.html_content.update_attributes(:code => buttons)
   end  
   
   def self.patch_btn_cat_a
@@ -64,7 +62,9 @@ class PurchaseOrder < ActiveRecord::Base
   end
   
   def patch_picked_up
-    if PurchasePosition.where(:purchase_order_id => self.id).count == PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.picked_up" => true).count
+    if PurchasePosition.where(:purchase_order_id => self.id).count != PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.picked_up" => true).count
+      self.update_attributes(:picked_up => false)
+    else
       self.update_attributes(:picked_up => true)
     end
   end
@@ -72,59 +72,43 @@ class PurchaseOrder < ActiveRecord::Base
   def patch_delivered
     if PurchasePosition.where(:purchase_order_id => self.id).count != PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.delivered" => true).count
       self.update_attributes(:delivered => false)
+    else
+      self.update_attributes(:delivered => true)
     end
   end
-  
-  def self.get_performance_time
-    @time_start = Time.now
-    self.includes(:purchase_positions)
-    @time_stop = Time.now
     
-    return @time_stop - @time_start
-  end
-  
   def self.create_from_raw_data(arg)
     customer_id = Import::Customer.get_mapper_id(:baan_id => arg.attributes["baan_6"])
     shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"])
     level_1 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_55"], :category_id => "8")
     level_2 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_47"], :category_id => "9")
     level_3 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_71"], :category_id => "10")
-    category_id = Category.find_or_create_by_title_and_categorizable_type(:title => arg.attributes["baan_81"], :categorizable_type => "purchase_order").id
+    category_id = Import::Category.get_mapper_id(:unique_id => Digest::MD5.hexdigest(%Q(#{arg.attributes["baan_81"]}-purchase_order))) || 45
     
     purchase_order_attributes = Hash.new
-    purchase_order_attributes.merge!(:baan_id => arg.attributes["baan_2"])
-    purchase_order_attributes.merge!(:customer_id => customer_id)
-    purchase_order_attributes.merge!(:shipping_route_id => shipping_route_id)
-    purchase_order_attributes.merge!(:warehouse_number => arg.attributes["baan_22"].to_i)
-    purchase_order_attributes.merge!(:delivery_date => arg.attributes["baan_13"])
-    purchase_order_attributes.merge!(:level_1 => level_1)
-    purchase_order_attributes.merge!(:level_2 => level_2)
-    purchase_order_attributes.merge!(:level_3 => level_3)
-    purchase_order_attributes.merge!(:address_id => level_3)
-    purchase_order_attributes.merge!(:category_id => category_id)
-
-    # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_order
-    purchase_order_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_order_attributes[:shipping_route_id].present?
+    purchase_order_attributes.merge!("baan_id" => arg.attributes["baan_2"])
+    purchase_order_attributes.merge!("customer_id" => customer_id)
+    purchase_order_attributes.merge!("shipping_route_id" => shipping_route_id)
+    purchase_order_attributes.merge!("warehouse_number" => arg.attributes["baan_22"].to_i)
+    purchase_order_attributes.merge!("delivery_date" => arg.attributes["baan_13"])
+    purchase_order_attributes.merge!("level_1" => level_1)
+    purchase_order_attributes.merge!("level_2" => level_2)
+    purchase_order_attributes.merge!("level_3" => level_3)
+    purchase_order_attributes.merge!("address_id" => level_3)
+    purchase_order_attributes.merge!("category_id" => category_id)
+    purchase_order_attributes = Hash[purchase_order_attributes.sort]
     
     purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(purchase_order_attributes)
     
     if purchase_order.new_record?
       purchase_order.save
     else
-      update_entry = false
-      purchase_order_attributes.merge!(:id => purchase_order.id)
-      purchase_order_attributes[:delivery_date] = Date.parse(arg.attributes["baan_13"])
-      purchase_order_attributes.delete(:warehouse_number)
+      purchase_order_attributes["delivery_date"] = Date.parse(arg.attributes["baan_13"])
+      purchase_order_attributes.delete("warehouse_number")
       
-      purchase_order_attributes.each do |k, v|
-        if purchase_order.attributes[k.to_s] != v
-          update_entry = true
-          #puts "PurchaseOrder not eql CSV -- Attribute #{k.to_s} || CSV: #{v} -- DB: #{purchase_order.attributes[k.to_s]}"
-        end
-      end
-      if update_entry
-        purchase_order_attributes.delete(:id)
-        purchase_order_attributes[:delivery_date] = arg.attributes["baan_13"]
+      if purchase_order_attributes.to_md5 != Hash[purchase_order.attributes.keep_if{|k,v| purchase_order_attributes.include?(k)}.sort].to_md5
+        puts "+++ Updating PurchaseOrder +++"
+        purchase_order_attributes["delivery_date"] = arg.attributes["baan_13"]
         purchase_order.is_importing = true
         purchase_order.update_attributes(purchase_order_attributes)
       end
@@ -171,7 +155,7 @@ class PurchaseOrder < ActiveRecord::Base
       when self.priority_level > 1 then tag_options.merge!(:class => "icon-fire")
     end
     tag_options, span_tag_options = tag_options.stringify_keys.to_tag_options, span_tag_options.merge!(:class => "btn btn-mini disabled btn-warning").stringify_keys.to_tag_options
-    
+    l
     return tag_options.present? ? "<span #{span_tag_options}><i #{tag_options}></i></span>" : ""
   end
   
@@ -293,6 +277,10 @@ class PurchaseOrder < ActiveRecord::Base
   
   def handle_calculation
     self.create_calculation unless self.calculation.present?
+  end
+  
+  def handle_html_content
+    self.create_html_content unless self.html_content.present?
   end
   
   def update_import_purchase_order

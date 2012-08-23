@@ -8,6 +8,7 @@ class BaanImporter
       Redis.connect.del("purchase_order_ids")
       BaanRawData.import(baan_import_id)
       BaanRawData.where(:baan_import_id => baan_import.id).each do |baan_raw_data|
+        Category.create_from_raw_data(baan_raw_data)
         Address.create_from_raw_data(baan_raw_data)
         Customer.create_from_raw_data(baan_raw_data)
         ZipLocation.create_from_raw_data(baan_raw_data)
@@ -19,10 +20,10 @@ class BaanImporter
       PurchaseOrder.where(:id => Redis.connect.smembers("purchase_order_ids").collect{|v| v.to_i}.uniq).each do |purchase_order|
         # Updating considered PurchaseOrder instances
         
-        # THIS SHOULD BE DONE WHEN OTHER IMPORT IS BEING FIRED UP
+        # INFO-1: Change picked_up && delivered if new child
         purchase_order.patch_picked_up
         purchase_order.patch_delivered
-        #END OF THIS...
+        # END INFO-1
         
         purchase_order.patch_calculation
         purchase_order.patch_aggregations

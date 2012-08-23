@@ -4,6 +4,10 @@ class String
   def undress
     self.chomp.lstrip.rstrip
   end
+  
+  def to_md5
+    return Digest::MD5.hexdigest(dup)
+  end
 end
 
 class Hash
