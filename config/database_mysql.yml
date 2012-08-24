@@ -10,7 +10,7 @@ development:
   encoding: utf8
   reconnect: false
   database: fraefel_development
-  pool: 5
+  pool: 50
   username: root
   password:
   socket: /var/run/mysqld/mysqld.sock
@@ -23,7 +23,7 @@ test:
   encoding: utf8
   reconnect: false
   database: fraefel_test
-  pool: 5
+  pool: 50
   username: root
   password:
   socket: /var/run/mysqld/mysqld.sock
@@ -33,7 +33,7 @@ production:
   encoding: utf8
   reconnect: false
   database: fraefel_production
-  pool: 5
+  pool: 50
   username: root
   password:
   socket: /var/run/mysqld/mysqld.sock
