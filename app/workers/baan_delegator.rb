@@ -21,7 +21,7 @@ class BaanDelegator
     BaanRawData.import(baan_import_id)
     
     # INFO: Start BaanImporter worker for each batch
-    BaanRawData.find_in_batches(:conditions => {:baan_import_id => baan_import_id}, :batch_size => 200) do |batch_data|
+    BaanRawData.find_in_batches(:conditions => {:baan_import_id => baan_import_id}, :batch_size => 300) do |batch_data|
       import_baan_worker = Import::BaanWorker.create(:active => "true", :baan_import_id => import_baan_import.unique_id, :unique_id => (Random.rand(1337) * Random.rand(1337) * Random.rand(1337) * Time.now.to_i).to_s.to_md5)
       BaanImporter.perform_async(import_baan_worker.unique_id, batch_data.first.id, batch_data.last.id, "Versand")
     end
