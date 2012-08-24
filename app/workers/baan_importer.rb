@@ -6,13 +6,11 @@ class BaanImporter
   sidekiq_options retry: false
 
   def perform(unique_id, batch_from, batch_to, import_type = "Versand")
-  
-    import_baan_import = Import::BaanImport.find(:unique_id => unique_id).first
-    pending_workers = (import_baan_import.pending_workers.to_i - 1).to_s
+    import_baan_worker = Import::BaanWorker.find(:unique_id => unique_id).first
     
     case import_type
     when "Versand"
-      BaanRawData.where(:baan_import_id => batch_from.to_i..batch_to.to_i).each do |baan_raw_data|
+      BaanRawData.where(:id => batch_from.to_i..batch_to.to_i).each do |baan_raw_data|
         Category.create_from_raw_data(baan_raw_data)
         Address.create_from_raw_data(baan_raw_data)
         Customer.create_from_raw_data(baan_raw_data)
@@ -23,7 +21,7 @@ class BaanImporter
         PurchasePosition.create_from_raw_data(baan_raw_data)
       end
       
-      import_baan_import.update(:pending_workers => pending_workers)
+      import_baan_worker.update(:active => "false")
       
     when "Versand-Verrechnet"
       BaanRawData.import(baan_import_id)

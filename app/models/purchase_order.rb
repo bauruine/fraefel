@@ -155,7 +155,6 @@ class PurchaseOrder < ActiveRecord::Base
       when self.priority_level > 1 then tag_options.merge!(:class => "icon-fire")
     end
     tag_options, span_tag_options = tag_options.stringify_keys.to_tag_options, span_tag_options.merge!(:class => "btn btn-mini disabled btn-warning").stringify_keys.to_tag_options
-    l
     return tag_options.present? ? "<span #{span_tag_options}><i #{tag_options}></i></span>" : ""
   end
   

@@ -8,30 +8,26 @@ class BaanDelegator
   def perform(baan_import_id)
   
     baan_import_id = baan_import_id.to_i
-    unique_id = Time.now.to_s.to_md5
     start_time = Time.now
     
     # INFO: Delte old purchase_order_ids in Redis store
     Redis.connect.del("purchase_order_ids")
     
     # INFO: Create new Import::BaanImport instance with unique_id
-    import_baan_import = Import::BaanImport.create(:unique_id => unique_id)
+    import_baan_import = Import::BaanImport.create(:unique_id => Time.now.to_s.to_md5)
     
     # INFO: Import CSV data in to db
     # TODO: Replace DB with REDIS Store
     BaanRawData.import(baan_import_id)
     
-    # INFO: Calculate how many workers we should start and update Import::BaanImport instance
-    workers_total = (BaanRawData.where(:id => baan_import_id).count / 300) + 1
-    import_baan_import.update(:pending_workers => workers_total.to_s)
-    
     # INFO: Start BaanImporter worker for each batch
-    BaanRawData.find_in_batches(:conditions => {:baan_import_id => baan_import_id}, :batch_size => 300) do |batch_data|
-      BaanImporter.perform_async(unique_id, batch_data.first.id, batch_data.last.id, "Versand")
+    BaanRawData.find_in_batches(:conditions => {:baan_import_id => baan_import_id}, :batch_size => 200) do |batch_data|
+      import_baan_worker = Import::BaanWorker.create(:active => "true", :baan_import_id => import_baan_import.unique_id, :unique_id => (Random.rand(1337) * Random.rand(1337) * Random.rand(1337) * Time.now.to_i).to_s.to_md5)
+      BaanImporter.perform_async(import_baan_worker.unique_id, batch_data.first.id, batch_data.last.id, "Versand")
     end
     
     # INFO: BaanDelegator worker should sleep until each BaanImporter worker did his job
-    while import_baan_import.pending_workers != "0"
+    while Import::BaanWorker.find(:active => "true", :baan_import_id => import_baan_import.unique_id).size != 0
       sleep 5.seconds
     end
     
@@ -49,11 +45,12 @@ class BaanDelegator
       
       purchase_order.patch_calculation
       purchase_order.patch_aggregations
+      
     end
     
-    # INFO: Calculate time to complete patching and destroy Import::BaanImport instance
+    # INFO: Calculate time to complete patching
     puts "BaanImport Nr.: #{baan_import_id} finished patching... Time to complete => #{(Time.now - start_time) / 60} minutes."
-    import_baan_import.delete
+
   end
 
 
