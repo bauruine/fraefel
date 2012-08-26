@@ -79,11 +79,11 @@ class PurchaseOrder < ActiveRecord::Base
     
   def self.create_from_raw_data(arg)
     customer_id = Import::Customer.get_mapper_id(:baan_id => arg.attributes["baan_6"])
-    shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"])
+    shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"]) || 45
     level_1 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_55"], :category_id => "8")
     level_2 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_47"], :category_id => "9")
     level_3 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_71"], :category_id => "10")
-    category_id = Import::Category.get_mapper_id(:unique_id => Digest::MD5.hexdigest(%Q(#{arg.attributes["baan_81"]}-purchase_order))) || 45
+    category_id = Import::Category.get_mapper_id(:unique_id => Digest::MD5.hexdigest(%Q(#{arg.attributes["baan_81"]}-purchase_order))) || 13
     
     purchase_order_attributes = Hash.new
     purchase_order_attributes.merge!("baan_id" => arg.attributes["baan_2"])

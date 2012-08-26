@@ -115,54 +115,43 @@ class PurchasePosition < ActiveRecord::Base
     purchase_order_id = Import::PurchaseOrder.get_mapper_id(:baan_id => arg.attributes["baan_2"])
     level_3 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_71"], :category_id => "10")
     zip_location_id = Import::ZipLocation.get_mapper_id(:baan_id => arg.attributes["baan_35"])
-    shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"])
+    shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"]) || 45
     
-    purchase_position_attributes = {}
-    purchase_position_attributes.merge!(:commodity_code_id => commodity_code_id)
-    purchase_position_attributes.merge!(:purchase_order_id => purchase_order_id)
-    purchase_position_attributes.merge!(:baan_id => "#{arg.attributes["baan_2"]}-#{arg.attributes["baan_4"]}")
-    purchase_position_attributes.merge!(:position => arg.attributes["baan_4"].to_i)
-    purchase_position_attributes.merge!(:delivery_date => arg.attributes["baan_13"])
-    purchase_position_attributes.merge!(:weight_single => BigDecimal(arg.attributes["baan_15"]))
-    purchase_position_attributes.merge!(:weight_total => BigDecimal(arg.attributes["baan_16"]))
-    purchase_position_attributes.merge!(:amount => BigDecimal(arg.attributes["baan_17"]))
-    purchase_position_attributes.merge!(:quantity => arg.attributes["baan_18"].to_f)
-    purchase_position_attributes.merge!(:storage_location => arg.attributes["baan_23"])
-    purchase_position_attributes.merge!(:article_number => arg.attributes["baan_27"])
-    purchase_position_attributes.merge!(:article => arg.attributes["baan_28"])
-    purchase_position_attributes.merge!(:product_line => arg.attributes["baan_30"])
-    purchase_position_attributes.merge!(:level_3 => level_3)
-    purchase_position_attributes.merge!(:shipping_route_id => shipping_route_id)
-    purchase_position_attributes.merge!(:zip_location_id => zip_location_id)
-    purchase_position_attributes.merge!(:gross_price => BigDecimal(arg.attributes["baan_38"]))
-    purchase_position_attributes.merge!(:value_discount => BigDecimal(arg.attributes["baan_39"]))
-    purchase_position_attributes.merge!(:net_price => BigDecimal(arg.attributes["baan_40"]))
-    purchase_position_attributes.merge!(:stock_status => arg.attributes["baan_78"].to_i)
-    purchase_position_attributes.merge!(:production_status => arg.attributes["baan_79"].to_i)
-    purchase_position_attributes.merge!(:picked_up => arg.attributes["baan_84"].to_i)
-    
-    # Set Error ShippingRoute if there is no shipping_route_id assigned to this purchase_position
-    purchase_position_attributes[:shipping_route_id] = ShippingRoute.where(:name => "ERROR").first.id unless purchase_position_attributes[:shipping_route_id].present?
-    purchase_position_attributes[:picked_up] = purchase_position_attributes[:picked_up] == 1 ? true : false
-    
+    purchase_position_attributes = Hash.new
+    purchase_position_attributes.merge!("commodity_code_id" => commodity_code_id)
+    purchase_position_attributes.merge!("purchase_order_id" => purchase_order_id)
+    purchase_position_attributes.merge!("baan_id" => "#{arg.attributes["baan_2"]}-#{arg.attributes["baan_4"]}")
+    purchase_position_attributes.merge!("position" => arg.attributes["baan_4"].to_i)
+    purchase_position_attributes.merge!("delivery_date" => arg.attributes["baan_13"])
+    purchase_position_attributes.merge!("weight_single" => BigDecimal(arg.attributes["baan_15"]))
+    purchase_position_attributes.merge!("weight_total" => BigDecimal(arg.attributes["baan_16"]))
+    purchase_position_attributes.merge!("amount" => BigDecimal(arg.attributes["baan_17"]))
+    purchase_position_attributes.merge!("quantity" => arg.attributes["baan_18"].to_f)
+    purchase_position_attributes.merge!("storage_location" => arg.attributes["baan_23"])
+    purchase_position_attributes.merge!("article_number" => arg.attributes["baan_27"])
+    purchase_position_attributes.merge!("article" => arg.attributes["baan_28"])
+    purchase_position_attributes.merge!("product_line" => arg.attributes["baan_30"])
+    purchase_position_attributes.merge!("level_3" => level_3)
+    purchase_position_attributes.merge!("shipping_route_id" => shipping_route_id)
+    purchase_position_attributes.merge!("zip_location_id" => zip_location_id)
+    purchase_position_attributes.merge!("gross_price" => BigDecimal(arg.attributes["baan_38"]))
+    purchase_position_attributes.merge!("value_discount" => BigDecimal(arg.attributes["baan_39"]))
+    purchase_position_attributes.merge!("net_price" => BigDecimal(arg.attributes["baan_40"]))
+    purchase_position_attributes.merge!("stock_status" => arg.attributes["baan_78"].to_i)
+    purchase_position_attributes.merge!("production_status" => arg.attributes["baan_79"].to_i)
+    purchase_position_attributes.merge!("picked_up" => arg.attributes["baan_84"].to_i)
+    purchase_position_attributes["picked_up"] = purchase_position_attributes["picked_up"] == 1 ? true : false
+    purchase_position_attributes = Hash[purchase_position_attributes.sort]
+
     purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
 
     if purchase_position.new_record?
       purchase_position.save
     else
-      update_entry = false
-      purchase_position_attributes.merge!(:id => purchase_position.id)
-      purchase_position_attributes[:delivery_date] = Time.parse(arg.attributes["baan_13"])
+      purchase_position_attributes["delivery_date"] = Time.parse(arg.attributes["baan_13"])
       
-      purchase_position_attributes.each do |k, v|
-        if purchase_position.attributes[k.to_s] != v
-          update_entry = true
-        end
-      end
-      
-      if update_entry
-        purchase_position_attributes.delete(:id)
-        purchase_position_attributes[:delivery_date] = arg.attributes["baan_13"]
+      if purchase_position_attributes.to_md5 != Hash[purchase_position.attributes.keep_if{|k,v| purchase_position_attributes.include?(k)}.sort].to_md5
+        purchase_position_attributes["delivery_date"] = arg.attributes["baan_13"]
         purchase_position.is_importing = true
         
         purchase_position.update_attributes(purchase_position_attributes)
