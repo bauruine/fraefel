@@ -37,7 +37,7 @@ class BaanImportsController < ApplicationController
   
   def import
     @baan_import = BaanImport.find(params[:id])
-    BaanDelegator.perform_async(@baan_import.id)
+    BaanDelegator.perform_async(@baan_import.id, @baan_import.baan_import_group.title)
     redirect_to(baan_imports_url)
   end
 end

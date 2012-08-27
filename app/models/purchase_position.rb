@@ -95,8 +95,9 @@ class PurchasePosition < ActiveRecord::Base
     end
   end
   
+  # TODO: remove ?
   def self.update_from_raw_data(arg)
-    purchase_position_attributes = {}
+    purchase_position_attributes = Hash.new
     purchase_position_attributes.merge!(:quantity => arg.attributes["baan_18"].to_f)
     purchase_position_attributes.merge!(:stock_status => arg.attributes["baan_79"].to_i)
     purchase_position_attributes.merge!(:production_status => arg.attributes["baan_79"].to_i)
@@ -105,7 +106,19 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position = PurchasePosition.where(:baan_id => "#{arg.attributes["baan_2"]}-#{arg.attributes["baan_4"]}").first
     
     if purchase_position.present?
-      # update purchase_position
+      purchase_position.is_importing = true
+      purchase_position.update_attributes(purchase_position_attributes)
+    end
+  end
+  
+  def self.jaintor_from_raw_data(arg)
+    purchase_position_attributes = Hash.new
+    purchase_position_attributes.merge!(:cancelled => true)
+    
+    purchase_position = PurchasePosition.where(:baan_id => "#{arg.attributes["baan_2"]}-#{arg.attributes["baan_4"]}").first
+
+    if purchase_position.present?
+      purchase_position.is_importing = true
       purchase_position.update_attributes(purchase_position_attributes)
     end
   end

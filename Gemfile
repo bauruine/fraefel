@@ -8,7 +8,7 @@ group :assets do
   gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
   
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer', '0.11.0beta7', :require => 'v8'
+  gem 'therubyracer', :require => 'v8'
   gem 'uglifier', '>= 1.0.3'
 end
 

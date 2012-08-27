@@ -221,9 +221,6 @@ class PurchaseOrder < ActiveRecord::Base
     self.patch_stock_status
     self.patch_workflow_status
     self.patch_pending_status
-    # GTFO patch_html_content
-    self.patch_html_content
-    self.patch_btn_cat_a
   end
   
   def self.patch_addresses

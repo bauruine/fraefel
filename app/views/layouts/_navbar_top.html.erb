@@ -17,11 +17,11 @@
         <% if current_user %>
           <ul class="nav">
             <li class="">
-              <a href="<%= dashboard_path() %>"><i class="icon-home icon-white"></i> Dashboard</a>
+              <a href="<%= dashboard_path() %>"><i class="icon-home"></i> Dashboard</a>
             </li>
             <li class="divider-vertical"></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-road icon-white"></i> Versand <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-road"></i> Versand <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <% if permitted_to? :index, :purchase_orders %>
                   <li><%= link_to("VK-Aufträge", purchase_orders_path) %></li>
@@ -49,19 +49,19 @@
             <li class="divider-vertical"></li>
             <% if permitted_to? :index, :articles %>
               <li class="">
-                <a href="<%= articles_path %>"><i class="icon-th icon-white"></i> Inventar</a>
+                <a href="<%= articles_path %>"><i class="icon-th"></i> Inventar</a>
               </li>
               <li class="divider-vertical"></li>
             <% end %>
             <% if permitted_to? :import, :baan_imports %>
               <li class="">
-                <a href="<%= baan_imports_path %>"><i class="icon-upload icon-white"></i> Import Wizzard</a>
+                <a href="<%= baan_imports_path %>"><i class="icon-upload"></i> Import Wizzard</a>
               </li>
               <li class="divider-vertical"></li>
             <% end %>
             <% if permitted_to? :index, :users %>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench icon-white"></i> Verwaltung <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i> Verwaltung <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><%= link_to("Abteilungen", departments_path) %></li>
                   <li class="divider"></li>
@@ -81,7 +81,7 @@
           <ul class="nav pull-right">
             <li class="divider-vertical"></li>
             <li class="">
-              <a href="<%= logout_path() %>"><i class="icon-off icon-white"></i> Abmelden</a>
+              <a href="<%= logout_path() %>"><i class="icon-off"></i> Abmelden</a>
             </li>
           </ul>
         <% end %>

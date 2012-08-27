@@ -5,7 +5,7 @@ class BaanDelegator
   sidekiq_options queue: "baan_delegator_queue"
   sidekiq_options retry: false
   
-  def perform(baan_import_id)
+  def perform(baan_import_id, importer_klass = "Versand")
   
     baan_import_id = baan_import_id.to_i
     start_time = Time.now
@@ -18,12 +18,26 @@ class BaanDelegator
     
     # INFO: Import CSV data in to db
     # TODO: Replace DB with REDIS Store
-    BaanRawData.import(baan_import_id)
+    case
+      when importer_klass == "Versand"
+        BaanRawData.import(baan_import_id)
+      when importer_klass == "Versand-Verrechnet"
+        BaanRawData.import(baan_import_id)
+      when importer_klass == "Versand-Storniert"
+        BaanRawData.import_cancelled(baan_import_id)
+    end
     
     # INFO: Start BaanImporter worker for each batch
     BaanRawData.find_in_batches(:conditions => {:baan_import_id => baan_import_id}, :batch_size => 300) do |batch_data|
       import_baan_worker = Import::BaanWorker.create(:active => "true", :baan_import_id => import_baan_import.unique_id, :unique_id => (Random.rand(1337) * Random.rand(1337) * Random.rand(1337) * Time.now.to_i).to_s.to_md5)
-      BaanImporter.perform_async(import_baan_worker.unique_id, batch_data.first.id, batch_data.last.id, "Versand")
+      case
+        when importer_klass == "Versand"
+          BaanImporter.perform_async(import_baan_worker.unique_id, batch_data.first.id, batch_data.last.id, "Versand")
+        when importer_klass == "Versand-Verrechnet"
+          BaanUpdator.perform_async(import_baan_worker.unique_id, batch_data.first.id, batch_data.last.id, "Versand-Verrechnet")
+        when importer_klass == "Versand-Storniert"
+          BaanJaintor.perform_async(import_baan_worker.unique_id, batch_data.first.id, batch_data.last.id, "Versand-Storniert")
+      end
     end
     
     # INFO: BaanDelegator worker should sleep until each BaanImporter worker did his job
@@ -45,7 +59,8 @@ class BaanDelegator
       
       purchase_order.patch_calculation
       purchase_order.patch_aggregations
-      
+      purchase_order.patch_html_content
+      purchase_order.patch_btn_cat_a
     end
     
     # INFO: Calculate time to complete patching
