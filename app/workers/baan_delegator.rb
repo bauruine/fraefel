@@ -20,9 +20,9 @@ class BaanDelegator
     # TODO: Replace DB with REDIS Store
     case
       when importer_klass == "Versand"
-        BaanRawData.import(baan_import_id)
+        BaanRawData.import(baan_import_id, true)
       when importer_klass == "Versand-Verrechnet"
-        BaanRawData.import(baan_import_id)
+        BaanRawData.import(baan_import_id, false)
       when importer_klass == "Versand-Storniert"
         BaanRawData.import_cancelled(baan_import_id)
     end
@@ -55,6 +55,7 @@ class BaanDelegator
       # INFO-1: Change picked_up && delivered if new child
       purchase_order.patch_picked_up
       purchase_order.patch_delivered
+      purchase_order.patch_cancelled
       # END INFO-1
       
       purchase_order.patch_calculation

@@ -12,8 +12,9 @@ class BaanRawData < ActiveRecord::Base
   after_create :create_import_commodity_code, :if => :should_preload
   after_create :create_import_category, :if => :should_preload
   
-  def self.import(arg)
+  def self.import(arg, preloading = true)
     @baan_import = BaanImport.find(arg)
+    preloading = preloading
     csv_file_path = @baan_import.baan_upload.path
     csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
 
@@ -26,7 +27,7 @@ class BaanRawData < ActiveRecord::Base
       @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)
       unless BaanRawData.where(:baan_2 => @baan_raw_attributes[:baan_2], :baan_4 => @baan_raw_attributes[:baan_4]).present?
         baan_raw_data = BaanRawData.new(@baan_raw_attributes)
-        baan_raw_data.should_preload = true
+        baan_raw_data.should_preload = preloading
         baan_raw_data.save
       end
     end
@@ -58,12 +59,14 @@ class BaanRawData < ActiveRecord::Base
   end
   
   def create_import_address
-    begin
+    unless Import::Address.find(:unique_id => Digest::MD5.hexdigest("#{self.baan_55}-8")).present?
       Import::Address.create(:baan_id => self.baan_55, :category_id => "8", :unique_id => Digest::MD5.hexdigest("#{self.baan_55}-8"))
+    end
+    unless Import::Address.find(:unique_id => Digest::MD5.hexdigest("#{self.baan_47}-9")).present?
       Import::Address.create(:baan_id => self.baan_47, :category_id => "9", :unique_id => Digest::MD5.hexdigest("#{self.baan_47}-9"))
+    end
+    unless Import::Address.find(:unique_id => Digest::MD5.hexdigest("#{self.baan_71}-10")).present?
       Import::Address.create(:baan_id => self.baan_71, :category_id => "10", :unique_id => Digest::MD5.hexdigest("#{self.baan_71}-10"))
-    rescue Ohm::UniqueIndexViolation
-      "Skipping address..."
     end
   end
   

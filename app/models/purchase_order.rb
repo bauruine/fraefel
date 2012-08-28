@@ -76,7 +76,15 @@ class PurchaseOrder < ActiveRecord::Base
       self.update_attributes(:delivered => true)
     end
   end
-    
+  
+  def patch_cancelled
+    if PurchasePosition.where(:purchase_order_id => self.id).count != PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.cancelled" => true).count
+      self.update_attributes(:cancelled => false)
+    else
+      self.update_attributes(:cancelled => true)
+    end
+  end
+  
   def self.create_from_raw_data(arg)
     customer_id = Import::Customer.get_mapper_id(:baan_id => arg.attributes["baan_6"])
     shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"]) || 45

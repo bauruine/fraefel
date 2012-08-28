@@ -17,7 +17,7 @@ class Import::Address < Ohm::Model
   def self.fill_up
     ::Address.where("addresses.category_id" => [8, 9, 10]).each do |address|
       unless self.find(:unique_id => Digest::MD5.hexdigest("#{address.code}-#{address.category_id}")).present?
-        self.create(:baan_id => address.code, :mapper_id => address.id.to_s, :unique_id => Digest::MD5.hexdigest("#{address.code}-#{address.category_id}"))
+        self.create(:category_id => address.category_id.to_s, :baan_id => address.code, :mapper_id => address.id.to_s, :unique_id => Digest::MD5.hexdigest("#{address.code}-#{address.category_id}"))
       end
     end
   end
