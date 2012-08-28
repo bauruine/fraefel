@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/mileszs/wicked_pdf.git
-  revision: e6effc4a1ba937372d5b280689c764f0c08a7c48
-  specs:
-    wicked_pdf (0.7.9)
-      rails
-
-GIT
   remote: git://github.com/prawnpdf/prawn
   revision: 6680efc54d771052e0f8e4364948d1e538cdbeaa
   branch: master
@@ -270,6 +263,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    wicked_pdf (0.7.9)
     yajl-ruby (1.1.0)
 
 PLATFORMS
@@ -311,4 +305,4 @@ DEPENDENCIES
   twitter-bootstrap-rails!
   uglifier (>= 1.0.3)
   unicorn
-  wicked_pdf!
+  wicked_pdf

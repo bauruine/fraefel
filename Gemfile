@@ -44,4 +44,4 @@ gem 'sinatra', :require => false
 gem 'slim'
 gem 'thin'
 gem 'unicorn'
-gem 'wicked_pdf', :git => "git://github.com/mileszs/wicked_pdf.git"
+gem 'wicked_pdf'
