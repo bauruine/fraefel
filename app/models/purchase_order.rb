@@ -104,20 +104,26 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order_attributes.merge!("level_3" => level_3)
     purchase_order_attributes.merge!("address_id" => level_3)
     purchase_order_attributes.merge!("category_id" => category_id)
-    purchase_order_attributes = Hash[purchase_order_attributes.sort]
     
     purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(purchase_order_attributes)
     
     if purchase_order.new_record?
       purchase_order.save
     else
+      do_update = false
       purchase_order_attributes["delivery_date"] = Date.parse(arg.attributes["baan_13"])
       purchase_order_attributes.delete("warehouse_number")
       
-      if purchase_order_attributes.to_md5 != Hash[purchase_order.attributes.keep_if{|k,v| purchase_order_attributes.include?(k)}.sort].to_md5
-        puts "+++ Updating PurchaseOrder +++"
+      purchase_order_attributes.each do |k, v|
+        if v != purchase_order.attributes[k]
+          do_update = true
+        end
+      end
+      
+      if do_update
         purchase_order_attributes["delivery_date"] = arg.attributes["baan_13"]
         purchase_order.is_importing = true
+        
         purchase_order.update_attributes(purchase_order_attributes)
       end
     end

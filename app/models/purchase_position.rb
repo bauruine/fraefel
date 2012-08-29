@@ -139,7 +139,7 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!("weight_single" => BigDecimal(arg.attributes["baan_15"]))
     purchase_position_attributes.merge!("weight_total" => BigDecimal(arg.attributes["baan_16"]))
     purchase_position_attributes.merge!("amount" => BigDecimal(arg.attributes["baan_17"]))
-    purchase_position_attributes.merge!("quantity" => arg.attributes["baan_18"].to_f)
+    purchase_position_attributes.merge!("quantity" => arg.attributes["baan_18"].to_i)
     purchase_position_attributes.merge!("storage_location" => arg.attributes["baan_23"])
     purchase_position_attributes.merge!("article_number" => arg.attributes["baan_27"])
     purchase_position_attributes.merge!("article" => arg.attributes["baan_28"])
@@ -154,16 +154,22 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!("production_status" => arg.attributes["baan_79"].to_i)
     purchase_position_attributes.merge!("picked_up" => arg.attributes["baan_84"].to_i)
     purchase_position_attributes["picked_up"] = purchase_position_attributes["picked_up"] == 1 ? true : false
-    purchase_position_attributes = Hash[purchase_position_attributes.sort]
 
     purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
 
     if purchase_position.new_record?
       purchase_position.save
     else
-      purchase_position_attributes["delivery_date"] = Time.parse(arg.attributes["baan_13"])
+      do_update = false
+      purchase_position_attributes["delivery_date"] = Date.parse(arg.attributes["baan_13"])
       
-      if purchase_position_attributes.to_md5 != Hash[purchase_position.attributes.keep_if{|k,v| purchase_position_attributes.include?(k)}.sort].to_md5
+      purchase_position_attributes.each do |k, v|
+        if v != purchase_position.attributes[k]
+          do_update = true
+        end
+      end
+      
+      if do_update
         purchase_position_attributes["delivery_date"] = arg.attributes["baan_13"]
         purchase_position.is_importing = true
         
