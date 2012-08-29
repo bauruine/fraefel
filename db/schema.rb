@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120816120446) do
+ActiveRecord::Schema.define(:version => 20120829002736) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -501,7 +501,7 @@ ActiveRecord::Schema.define(:version => 20120816120446) do
     t.decimal  "weight_total",      :precision => 12, :scale => 2
     t.integer  "quantity"
     t.decimal  "amount",            :precision => 12, :scale => 2
-    t.datetime "delivery_date"
+    t.date     "delivery_date"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position"
