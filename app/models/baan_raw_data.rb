@@ -25,7 +25,7 @@ class BaanRawData < ActiveRecord::Base
         @baan_raw_attributes.merge!("baan_#{i}".to_sym => row[i].to_s.undress)
       end
       @baan_raw_attributes.merge!(:baan_import_id => @baan_import.id)
-      unless BaanRawData.where(:baan_2 => @baan_raw_attributes[:baan_2], :baan_4 => @baan_raw_attributes[:baan_4]).present?
+      unless BaanRawData.where(:baan_import_id => @baan_import.id, :baan_2 => @baan_raw_attributes[:baan_2], :baan_4 => @baan_raw_attributes[:baan_4]).present?
         baan_raw_data = BaanRawData.new(@baan_raw_attributes)
         baan_raw_data.should_preload = preloading
         baan_raw_data.save
