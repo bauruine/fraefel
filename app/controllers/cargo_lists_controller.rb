@@ -17,7 +17,7 @@ class CargoListsController < ApplicationController
       format.html
       format.pdf do
         render( 
-          :pdf => "Kein Titel-#{Date.today}",
+          :pdf => (params[:pdf_title].present? ? "#{params[:pdf_title]}" : "Kein Titel-#{Date.today}"),
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
           :show_as_html => params[:debug].present?,

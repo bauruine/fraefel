@@ -25,7 +25,7 @@ class PdfReportsController < ApplicationController
     respond_to do |format|
       format.html do
         @pdf = File.open(@pdf_report.report_file_path)
-        send_data @pdf.read, :filename => "report.pdf", :type => "application/pdf"
+        send_data @pdf.read, :filename => (params[:pdf_title].present? ? "#{params[:pdf_title]}.pdf" : "report.pdf"), :type => "application/pdf"
       end
       format.js
     end
