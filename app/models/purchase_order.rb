@@ -187,14 +187,18 @@ class PurchaseOrder < ActiveRecord::Base
   
   def patch_warehousing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    self.warehousing_completed = purchase_positions_cancelled.sum("purchase_positions.stock_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
-    self.save
+    if purchase_positions_cancelled.present?
+      self.warehousing_completed = purchase_positions_cancelled.sum("purchase_positions.stock_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
+      self.save
+    end
   end
   
   def patch_manufacturing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    self.manufacturing_completed = purchase_positions_cancelled.sum("purchase_positions.production_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
-    self.save
+    if purchase_positions_cancelled.present?
+      self.manufacturing_completed = purchase_positions_cancelled.sum("purchase_positions.production_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
+      self.save
+    end
   end
   
   def patch_production_status
