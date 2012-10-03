@@ -187,38 +187,39 @@ class PurchaseOrder < ActiveRecord::Base
   
   def patch_warehousing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    warehousing_completed = purchase_positions_cancelled.sum("purchase_positions.stock_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
+    self.warehousing_completed = purchase_positions_cancelled.sum("purchase_positions.stock_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
     self.save
   end
   
   def patch_manufacturing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    manufacturing_completed = purchase_positions_cancelled.sum("purchase_positions.production_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
+    self.manufacturing_completed = purchase_positions_cancelled.sum("purchase_positions.production_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
     self.save
   end
   
   def patch_production_status
+    # require more logic
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
+    self.production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
     self.save
   end
   
   def patch_stock_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    stock_status = purchase_positions_cancelled.sum("purchase_positions.stock_status")
+    self.stock_status = purchase_positions_cancelled.sum("purchase_positions.stock_status")
     self.save
   end
   
   def patch_workflow_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    workflow_status = "#{purchase_positions_cancelled.sum(:production_status)}#{purchase_positions_cancelled.sum(:stock_status)}"
+    self.workflow_status = "#{purchase_positions_cancelled.sum(:production_status)}#{purchase_positions_cancelled.sum(:stock_status)}"
     self.save
   end
   
   def patch_pending_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
-    pending_status = purchase_positions_cancelled.count - production_status
+    sum_production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
+    self.pending_status = purchase_positions_cancelled.count - sum_production_status
     self.save
   end
   
