@@ -1,15 +1,15 @@
 <% content_for :breadcrumb do %>
-  <ul class="breadcrumb">
-    <li><a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span></li>
-    <li class="active"><%= @purchase_order.id %></li>
-  </ul>
+    <ul class="breadcrumb">
+      <li><a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span></li>
+      <li class="active"><%= @purchase_order.id %></li>
+    </ul>
 <% end %>
 
 <div class="modal hide fade" id="edit_pallet">
 </div>
 
 <% @purchase_positions.each do |purchase_position| %>
-  <%= render("purchase_positions/partials/edit/modal/edit", :purchase_position => purchase_position) %>
+    <%= render("purchase_positions/partials/edit/modal/edit", :purchase_position => purchase_position) %>
 <% end %>
 
 <%= render("purchase_orders/partials/edit/modal/edit") %>
@@ -19,36 +19,41 @@
 </div>
 
 <div class="page-header">
-    <h1 class="pull-left">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
-    <div class="btn-toolbar pull-right">
-      <% if permitted_to? :edit, :purchase_orders %>
+  <h1 class="pull-left">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
+
+  <div class="btn-toolbar pull-right">
+    <% if permitted_to? :edit, :purchase_orders %>
         <div class="btn-group">
-          <a class="btn btn-primary" href="#purchase_order_<%= @purchase_order.id %>" data-toggle="modal"><i class="icon-plus-sign icon-white"></i> Edit</a>
+          <a class="btn btn-primary" href="#purchase_order_<%= @purchase_order.id %>" data-toggle="modal"><i class="icon-plus-sign icon-white"></i>
+            Edit</a>
           <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a rel="nofollow" data-remote="true" data-method="put" href="<%= purchase_order_path(@purchase_order, aggregation_for(@purchase_order.id)) %>"><i class="icon-refresh"></i> Status berechnen</a>
+              <a rel="nofollow" data-remote="true" data-method="put" href="<%= purchase_order_path(@purchase_order, aggregation_for(@purchase_order.id)) %>"><i class="icon-refresh"></i>
+                Status berechnen</a>
             </li>
           </ul>
         </div>
-      <% end %>
-      
-      <div class="btn-group">
-        <a href="<%= purchase_order_path(@purchase_order, :format => :pdf) %>" class="btn btn-primary"><i class="icon-print icon-white"></i> Drucke PDF</a>
-        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li>
-            <a href="<%= print_pallets_purchase_order_path(@purchase_order, :format => :pdf, :pdf_type => "pallets") %>"><i class="icon-print"></i> Drucke PDF Paletten</a>
-          </li>
-        </ul>
-      </div>
-      
+    <% end %>
+
+    <div class="btn-group">
+      <a href="<%= purchase_order_path(@purchase_order, :format => :pdf) %>" class="btn btn-primary"><i class="icon-print icon-white"></i>
+        Drucke PDF</a>
+      <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="<%= print_pallets_purchase_order_path(@purchase_order, :format => :pdf, :pdf_type => "pallets") %>"><i class="icon-print"></i>
+            Drucke PDF Paletten</a>
+        </li>
+      </ul>
     </div>
-    <div class="clear"></div>
+
+  </div>
+  <div class="clear"></div>
 </div>
 
 <dl class="dl-horizontal">
@@ -57,39 +62,41 @@
 </dl>
 
 <% if @purchase_positions.present? %>
-  <blockquote>
-    <p>
-      Offene Positionen
-    </p>
-  </blockquote>
-  
-      <%= form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
+    <blockquote>
+      <p>
+        Offene Positionen
+      </p>
+    </blockquote>
+
+    <%= form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
         <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
         <table class="table table-striped">
           <thead>
-            <tr>
-              <th>Position</th>
-              <th>Artikel NR</th>
-              <th>Artikel</th>
-              <th>Produktlinie</th>
-              <th>Menge Total</th>
-              <th>Lager Ort</th>
-              <th>PLZ Gebiet</th>
-              <th>Versand</th>
-              <th></th>
-              <th>Auswahl</th>
-            </tr>
+          <tr>
+            <th>Position</th>
+            <th>Artikel NR</th>
+            <th>Artikel</th>
+            <th>Produktlinie</th>
+            <th>Menge Total</th>
+            <th>Lager Ort</th>
+            <th>PLZ Gebiet</th>
+            <th>Versand</th>
+            <th></th>
+            <th>Auswahl</th>
+          </tr>
           </thead>
           <tbody>
-            <% @purchase_positions.each do |purchase_position| %>
+          <% @purchase_positions.each do |purchase_position| %>
               <% if purchase_position.pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
-                <tr>
+                  <tr>
                     <% if permitted_to? :edit, :purchase_positions %>
-                      <td>
-                        <%= link_to(purchase_position.baan_id, "#purchase_position_#{purchase_position.id}", "data-toggle" => "modal", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
-                      </td>
+                        <td>
+                          <%= link_to(purchase_position.baan_id, "#purchase_position_#{purchase_position.id}", "data-toggle" => "modal", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
+                        </td>
                     <% else %>
-                      <td><span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= purchase_position.position %></span></td>
+                        <td>
+                          <span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= purchase_position.position %></span>
+                        </td>
                     <% end %>
                     <td><%= purchase_position.article_number %></td>
                     <td><%= purchase_position.article %></td>
@@ -100,16 +107,16 @@
                     <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                     <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.available_quantity), :to_i, :to_s, purchase_position.available_quantity) %></td>
                     <% if permitted_to? :assign_positions, :pallets %>
-                      <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
+                        <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
                     <% else %>
-                      <td></td>
+                        <td></td>
                     <% end %>
                   </tr>
               <% end %>
-            <% end %>
+          <% end %>
           </tbody>
           <tfoot>
-            <% if permitted_to? :assign_positions, :pallets %>
+          <% if permitted_to? :assign_positions, :pallets %>
               <tr>
                 <td></td>
                 <td></td>
@@ -126,51 +133,51 @@
                   </button>
                 </td>
               </tr>
-            <% end %>
+          <% end %>
           </tfoot>
         </table>
-      <% end %>
-  
+    <% end %>
+
 <% else %>
-  <div id="flash_notice">Für diesen Auftrag wurden bereits alle Positionen bearbeitet!</div>
-  
+    <div id="flash_notice">Für diesen Auftrag wurden bereits alle Positionen bearbeitet!</div>
+
 <% end %>
 
 <% @pallets.each do |pallet| %>
-  <blockquote style="margin-bottom: 0;">
-    <p><%= pallet.shipping_address.consignee_full %></p>
-  </blockquote>
-      <% if pallet.mixed? %>
+    <blockquote style="margin-bottom: 0;">
+      <p><%= pallet.shipping_address.consignee_full %></p>
+    </blockquote>
+    <% if pallet.mixed? %>
         <dl class="dl-horizontal">
           <dt>Mischpalette:</dt>
           <dd>
             <% pallet.purchase_orders.each do |p_o| %>
-              <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
+                <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
             <% end %>
           </dd>
         </dl>
-      <% end %>
-      
-      <%= form_tag(remove_positions_pallet_path(pallet), {:class => "form no-margin", "data-submit_handler" => "true", :method => :delete}) do %>
+    <% end %>
+
+    <%= form_tag(remove_positions_pallet_path(pallet), {:class => "form no-margin", "data-submit_handler" => "true", :method => :delete}) do %>
         <table class="table table-striped">
           <thead>
-            <tr>
-              <th>Position</th>
-              <th>Artikel NR</th>
-              <th>Artikel</th>
-              <th>Produktlinie</th>
-              <th>Menge angefügt</th>
-              <th>Lager Ort</th>
-              <th>PLZ Gebiet</th>
-              <th>Versand</th>
-              <th>Auswahl</th>
-            </tr>
+          <tr>
+            <th>Position</th>
+            <th>Artikel NR</th>
+            <th>Artikel</th>
+            <th>Produktlinie</th>
+            <th>Menge angefügt</th>
+            <th>Lager Ort</th>
+            <th>PLZ Gebiet</th>
+            <th>Versand</th>
+            <th>Auswahl</th>
+          </tr>
           </thead>
           <tbody>
-            <% pallet.purchase_positions.each do |purchase_position| %>
+          <% pallet.purchase_positions.each do |purchase_position| %>
               <tr>
                 <td>
-                    <%= title_for_purchase_position(purchase_position, @purchase_order) %>
+                  <%= title_for_purchase_position(purchase_position, @purchase_order) %>
                 </td>
                 <td><%= purchase_position.article_number %></td>
                 <td><%= purchase_position.article %></td>
@@ -181,48 +188,46 @@
                 <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
                 <td class="align-center">
                   <% if permitted_to? :remove_positions, :pallets %>
-                    <% if purchase_position.purchase_order == @purchase_order %>
-                      <%= check_box_tag "purchase_position_ids[]", purchase_position.id %>
-                    <% end %>
+                      <% if purchase_position.purchase_order == @purchase_order %>
+                          <%= check_box_tag "purchase_position_ids[]", purchase_position.id %>
+                      <% end %>
                   <% end %>
                 </td>
               </tr>
-            <% end %>
+          <% end %>
           </tbody>
           <tfoot>
-            <% if permitted_to? :remove_positions, :pallets %>
-              <tr>
-                <td><%= pallet.pallet_type.read_as %>: <strong><%= pallet.id %></strong></td>
-                <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></td>
-                <td>
-                  <% if pallet.cargo_list.present? %>
-                    Versand: <%= link_to(pallet.cargo_list.id, pallet.cargo_list) %>
-                  <% end %>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <div class="btn-toolbar" style="margin: 0;">
-                    <div class="btn-group">
-                      <a href="<%= edit_pallet_path(pallet, :format => :xml) %>" data-toggle="modal-remote" data-target="#edit_pallet" class="btn btn-mini">Edit</a>
-                      <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
-                      <ul class="dropdown-menu pull-right">
-                        <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </td>
-                <td class="align-center">
-                  <button class="btn btn-mini btn-warning" type="submit" data-disable-with="Please wait...">
-                    Entfernen
-                  </button>
-                </td>
-              </tr>
-            <% end %>
+          <tr>
+            <td><%= pallet.pallet_type.read_as %>: <strong><%= pallet.id %></strong></td>
+            <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></td>
+            <td>
+              <% if pallet.cargo_list.present? %>
+                  Versand: <%= link_to(pallet.cargo_list.id, pallet.cargo_list) %>
+              <% end %>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <div class="btn-toolbar" style="margin: 0;">
+                <div class="btn-group">
+                  <a href="<%= edit_pallet_path(pallet, :format => :xml) %>" data-toggle="modal-remote" data-target="#edit_pallet" class="btn btn-mini">Edit</a>
+                  <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
+                  <ul class="dropdown-menu pull-right">
+                    <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+            <td class="align-center">
+              <button class="btn btn-mini btn-warning" type="submit" data-disable-with="Please wait...">
+                Entfernen
+              </button>
+            </td>
+          </tr>
           </tfoot>
         </table>
-      <% end %>
-  
+    <% end %>
+
 <% end %>
