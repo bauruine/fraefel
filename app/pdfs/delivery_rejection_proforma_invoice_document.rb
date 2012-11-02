@@ -162,7 +162,7 @@ class DeliveryRejectionProformaInvoiceDocument < Prawn::Document
   
   def foobar4_items
     [
-      ["Ort / Datum:", "#{@level_3.city} / #{Date.today.to_formatted_s(:swiss_date)}", "Unterschrift:", ""],
+      ["Ort / Datum:", "#{Date.today.to_formatted_s(:swiss_date)}", "Unterschrift:", ""],
       ["", "", "", ""],
       ["", "", "Name:", ""]
     ]
