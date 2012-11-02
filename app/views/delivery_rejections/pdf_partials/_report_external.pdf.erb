@@ -44,7 +44,7 @@
           <strong>Paletten / Paletten-Plätze:</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= "#{@pallets.sum('count_as', :include => :pallet_type)} / #{@pallets.sum('pallets.additional_space') + @pallets.sum('count_as', :include => :pallet_type)}" %>
+          <%= @pallet_types.sum('count_as') %> / <%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as') %>
         </td>
       </tr>
       <tr>
@@ -52,7 +52,7 @@
           <strong>Gewicht Brutto</strong>
         </td>
         <td style="line-height: 20px; padding: 0 5px;">
-          <%= "#{PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:weight) + (@delivery_rejection.pallets.sum("count_as", :include => [:pallet_type]) * 20)} kg" %>
+          <%= PalletPurchasePositionAssignment.where("delivery_rejections.id = ?", @delivery_rejection.id ).includes(:pallet => :delivery_rejection).sum(:weight) + (@pallet_types.sum("count_as") * 20) %>
         </td>
       </tr>
     </tbody>

@@ -9,7 +9,8 @@ class DeliveryRejectionsController < ApplicationController
     @coli_count = Pallet.joins(:pallet_type).where("pallets.delivery_rejection_id" => @delivery_rejection.id, "pallet_types.description" => "coli").count("DISTINCT pallets.id")
     @referee = @delivery_rejection.referee
     @address = @delivery_rejection.address
-    
+    @pallet_types = PalletType.where("pallets.delivery_rejection_id" => @delivery_rejection.id).joins(:pallets)
+
     @delivery_address = @delivery_rejection.delivery_address
     @invoice_address = @delivery_rejection.invoice_address
     @pick_up_address = @delivery_rejection.pick_up_address
