@@ -112,7 +112,6 @@ class DeliveryRejectionsController < ApplicationController
       purchase_position = PurchasePosition.find(k.to_i)
       pallet_purchase_position_assignment = PalletPurchasePositionAssignment.where(:pallet_id => @pallet.id, :purchase_position_id => purchase_position.id).first
       pallet_purchase_position_assignment.update_attributes(:reduced_price => (((pallet_purchase_position_assignment.purchase_position.amount * v.to_i) / 100) * @delivery_rejection.discount), :quantity => v.to_i, :amount => (pallet_purchase_position_assignment.purchase_position.amount * v.to_i), :weight => (pallet_purchase_position_assignment.purchase_position.weight_single * v.to_i)) if pallet_purchase_position_assignment.present?
-      pallet_purchase_position_assignment.very_ugly_patcher
     end
     redirect_to(:back)
   end
