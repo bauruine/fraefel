@@ -1,36 +1,38 @@
-<%= form_tag(get_results_for_articles_path, {:class => "form", :method => :get}) do %>
+<% content_for :breadcrumb do %>
+    <ul class="breadcrumb">
+      <li class="active">Zählliste ausfüllen</li>
+    </ul>
+<% end %>
 
-  <div class="clearfix formRow">
-    <p class="ajaxFormLabel">
-      <%= label_tag :baan_acces_code, "Access Code" %>
-    </p>
-    <p class="ajaxFormInput">
+<div class="page-header">
+  <h1>Zählliste ausfüllen</h1>
+</div>
+
+<%= form_tag(get_results_for_articles_path, {:class => "form-horizontal", :method => :get}) do %>
+
+  <div class="control-group">
+      <%= label_tag :baan_acces_code, "Access Code", :class => "control-label" %>
+    <div class="controls">
       <%= text_field_tag :baan_acces_code, nil, :placeholder => "bsp. 000014x100" %>
-    </p>
+    </div>
   </div>
   
-  <div class="clearfix formRow">
-    <p class="ajaxFormLabel">
-      <%= label_tag :rack_group_number, "Gruppe" %>
-    </p>
-    <p class="ajaxFormInput">
+  <div class="control-group">
+      <%= label_tag :rack_group_number, "Gruppe", :class => "control-label" %>
+    <div class="controls">
       <%= text_field_tag :rack_group_number, nil, :placeholder => "bsp. 07" %>
-    </p>
+    </div>
   </div>
   
-  <div class="clearfix formRow">
-    <p class="ajaxFormLabel">
-      <%= label_tag :rack_root_number, "Gestell" %>
-    </p>
-    <p class="ajaxFormInput">
+  <div class="control-group">
+      <%= label_tag :rack_root_number, "Gestell", :class => "control-label" %>
+    <div class="controls">
       <%= text_field_tag :rack_root_number, nil, :placeholder => "bsp. 01.2" %>
-    </p>
+    </div>
   </div>
-  
-  <div class="clearfix formRow">
-    <p class="ajaxFormInput">
-      <%= submit_tag("Gehe zur eingabe") %>
-    </p>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Gehe zur eingabe</button>
   </div>
   
 <% end %>

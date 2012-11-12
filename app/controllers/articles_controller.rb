@@ -6,8 +6,10 @@ class ArticlesController < ApplicationController
   end
   
   def index
-    @search = Article.where(:considered => true).search(params[:search])
-    @articles = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
+    @search = Article.where(:considered => true)
+    @search = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
+    @search = @search.search(params[:q])
+    @articles = @search.result
     respond_to do |format|
       format.html
       format.pdf do
@@ -65,9 +67,10 @@ class ArticlesController < ApplicationController
   end
   
   def calculate_difference_for
-    @search = Article.where(:considered => true, :should_be_checked => true).search(params[:search])
-    @articles = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
-    
+    @search = Article.where(:considered => true, :should_be_checked => true)
+    @search = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
+    @search = @search.search(params[:q])
+    @articles = @search.result
     
     respond_to do |format|
       format.pdf do

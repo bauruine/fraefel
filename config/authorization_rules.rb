@@ -1,5 +1,6 @@
 authorization do
   role :admin do
+    has_permission_on [:articles], :to => [:show, :index, :edit, :edit_multiple, :update_multiple, :search_for, :get_results_for, :calculate_difference_for, :export]
     has_permission_on [:roles, :users], :to => [:index, :show, :new, :create, :edit, :update, :destroy]
     has_permission_on [:cargo_lists], :to => [:show, :index, :controll_invoice, :collective_invoice, :calculate_cargo_list, :print_lebert, :search_for, :new, :create, :edit, :update, :assign_pallets, :remove_pallets]
     has_permission_on [:pallets], :to => [:show, :ajax_show, :index, :search_for, :assign_positions, :remove_positions, :edit, :update]
