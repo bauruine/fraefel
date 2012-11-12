@@ -1,3 +1,7 @@
+Inventory Branch
+
+TODO: At the bottom is the upload szenario for the inventory
+
     when "Inventar-Baan-Artikel"
       Article.import(baan_import)
     when "Inventar-Lager-Adresse"
