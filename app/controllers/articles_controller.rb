@@ -21,7 +21,7 @@ class ArticlesController < ApplicationController
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
           :header => {
-            :left => "Fraefel AG - Inventar Dez. 2011",
+            :left => "Fraefel AG - Inventar #{I18n.t("date.month_names")[Date.today.month]}. 2012",
             :right => "#{Time.now.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
@@ -55,7 +55,7 @@ class ArticlesController < ApplicationController
   
   def update_multiple
     @articles = Article.update(params[:articles].keys, params[:articles].values)
-    Resque.enqueue(BaanCalculator, @articles.first.rack_group_number)
+    BaanCalculator.perform_async(@articles.first.rack_group_number)
     redirect_to(articles_url(:search => {:rack_group_number_equals => @articles.first.rack_group_number, :rack_root_part_number_equals => @articles.first.rack_root_part_number}))
   end
   
@@ -82,7 +82,7 @@ class ArticlesController < ApplicationController
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
           :header => {
-            :left => "Fraefel AG - Inventar Dez. 2011",
+            :left => "Fraefel AG - Inventar #{I18n.t("date.month_names")[Date.today.month]}. 2012",
             :right => "#{Date.today.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
