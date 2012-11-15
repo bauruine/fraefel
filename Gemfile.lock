@@ -55,7 +55,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     builder (3.0.0)
-    capistrano (2.13.3)
+    capistrano (2.13.5)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
