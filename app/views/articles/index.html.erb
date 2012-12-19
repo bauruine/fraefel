@@ -12,8 +12,10 @@
       <button type="button" data-toggle="modal" data-target="#modal" class="btn btn-primary">Filter</button>
     </div>
     <div class="btn-group">
+        <% if @superman %>
       <% if permitted_to? :export, :articles %>
           <%= link_to("Export", export_articles_path(), :class => "btn btn-primary") %>
+      <% end %>
       <% end %>
       <%= link_to("Zählliste komplett", articles_path(:format => :pdf), :class => "btn btn-primary") %>
       <% if permitted_to? :edit_multiple, :articles %>
