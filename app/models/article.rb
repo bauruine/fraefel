@@ -174,6 +174,7 @@ class Article < ActiveRecord::Base
       end
       
     end
+    return @michi
   end
   
   def self.calculate_difference(arg)
