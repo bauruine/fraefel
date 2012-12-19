@@ -107,7 +107,7 @@ class Article < ActiveRecord::Base
     
     csv_file_path = @baan_import.first.baan_upload.path
     csv_file = CSV.open(csv_file_path, "rb:us-ascii:UTF-8", {:col_sep => ";"})
-    
+    @michi = []
     csv_file.each do |row|
       
       baan_orno = row[0].to_s.undress
@@ -133,6 +133,7 @@ class Article < ActiveRecord::Base
       _article = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2012")
       
       if _article.present?
+        @michi << baan_acces_id
         _article.first.update_attributes(:old_stock => old_stock,
                        :baan_orno => baan_orno,
                        :baan_cntn => baan_cntn,
