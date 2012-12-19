@@ -1,6 +1,6 @@
 class DashboardsController < ApplicationController
   def show
-    @articles = Article.where(:considered => true)
+    @articles = Article.where(:stocktaking_id => "dez-2012").where(:considered => true)
     
     @pending_purchase_orders = PurchaseOrder.where(:delivered => false).joins(:shipping_address)
     @delivered_purchase_orders = PurchaseOrder.where(:delivered => true).joins(:shipping_address)
