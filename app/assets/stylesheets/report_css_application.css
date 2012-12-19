@@ -101,7 +101,7 @@ table thead th:first-child {
 
 table tbody {
 }
-                
+				
 table tbody tr {
   height: 20px;
   background: #fff;
@@ -172,6 +172,9 @@ input {
 
 
 /*** Filter Box**/
+section.new_page {
+	page-break-after:always;
+}
 section.filter_box {
 	margin-bottom: 20px;
 }
