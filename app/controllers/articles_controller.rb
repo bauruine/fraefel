@@ -79,7 +79,7 @@ class ArticlesController < ApplicationController
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf_bootstrap.html',
           :show_as_html => params[:debug].present?,
-          :orientation => 'Portrait',
+          :orientation => 'Landscape',
           :encoding => 'UTF-8',
           :header => {
             :left => "Fraefel AG - Inventar #{I18n.t("date.month_names")[Date.today.month]}. 2012",
