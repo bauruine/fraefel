@@ -2,8 +2,7 @@
   <% @articles.where(:rack_group_number => r_g_n.rack_group_number).group(:rack_root_part_number).each do |r_r_n| %>
     <section class="filter_box">
       <header class="filter_box_header clearfix">
-        <h4 class="floatLeft m-r_5px">Gruppe <%= r_r_n.rack_group_number %> | </h4>
-        <h4 class="floatLeft m-r_5px">Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></h4>
+        <h4 class="floatLeft m-r_5px">Gruppe <%= r_r_n.rack_group_number %> | Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></h4>
       </header>
       <section class="filter_box_content clearfix">
         <table class="table table-condensed table-striped">
@@ -12,8 +11,8 @@
               <th>Artikel</th>
               <th>Lager Platz</th>
               <th>Bezeichnung</th>
-              <th>Groesse</th>
-              <th>Einheit</th>
+              <th>Grösse</th>
+              <th>Einh.</th>
               <th>Menge</th>
               <th>Fach</th>
               <th>Kiste</th>
