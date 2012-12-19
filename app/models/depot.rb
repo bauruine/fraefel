@@ -3,22 +3,21 @@ class Depot < ActiveRecord::Base
   has_many :articles, :class_name => "Article", :foreign_key => "depot_id"
   
   def self.import(arg)
-    @baan_import = arg
-    #PaperTrail.whodunnit = 'System'
-    
-    csv_file = @baan_import.baan_upload.path
-    
     depot_type = DepotType.find_or_create_by_title(:title => "Einkaufslager")
+    @baan_import = BaanImport.find(arg)
     
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
+    csv_file_path = @baan_import.baan_upload.path
+    csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
+    
+    csv_file.each do |row|
       
-      code = Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip
-      description = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
-      type = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
-      address_code = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.chomp.lstrip.rstrip
-      phone_number = Iconv.conv('UTF-8', 'iso-8859-1', row[9]).to_s.chomp.lstrip.rstrip
-      fax_number = Iconv.conv('UTF-8', 'iso-8859-1', row[10]).to_s.chomp.lstrip.rstrip
-      web_address = Iconv.conv('UTF-8', 'iso-8859-1', row[11]).to_s.chomp.lstrip.rstrip
+      code = row[0].to_s.undress
+      description = row[1].to_s.undress
+      type = row[2].to_s.undress
+      address_code = row[4].to_s.undress
+      phone_number = row[9].to_s.undress
+      fax_number = row[10].to_s.undress
+      web_address = row[11].to_s.undress
       
       
       depot = Depot.find_or_initialize_by_code(:code => code)

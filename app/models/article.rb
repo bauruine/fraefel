@@ -6,29 +6,28 @@ class Article < ActiveRecord::Base
   validates_presence_of :in_stock, :if => Proc.new { |article| article.scii_sia }
   
   def self.import(arg)
-    @baan_import = arg
-    #PaperTrail.whodunnit = 'System'
+    @baan_import = BaanImport.find(arg)
     
-    csv_file = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.baan_upload.path
+    csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
-      
-      baan_acces_id = Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip
-      article_code = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
-      depot_code = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
+    csv_file.each do |row|
+      baan_acces_id = row[0].to_s.undress
+      article_code = row[1].to_s.undress
+      depot_code = row[2].to_s.undress
       depot = Depot.where(:code => depot_code).first
-      article_type = Iconv.conv('UTF-8', 'iso-8859-1', row[3]).to_s.chomp.lstrip.rstrip
-      signal_code_description = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.chomp.lstrip.rstrip
-      description = Iconv.conv('UTF-8', 'iso-8859-1', row[5]).to_s.chomp.lstrip.rstrip
-      search_key_01 = Iconv.conv('UTF-8', 'iso-8859-1', row[6]).to_s.chomp.lstrip.rstrip
-      search_key_02 = Iconv.conv('UTF-8', 'iso-8859-1', row[7]).to_s.chomp.lstrip.rstrip
-      material = Iconv.conv('UTF-8', 'iso-8859-1', row[8]).to_s.chomp.lstrip.rstrip
-      factor = Iconv.conv('UTF-8', 'iso-8859-1', row[9]).to_s.chomp.lstrip.rstrip
-      zone_code = Iconv.conv('UTF-8', 'iso-8859-1', row[10]).to_s.chomp.lstrip.rstrip
-      stock_unit = Iconv.conv('UTF-8', 'iso-8859-1', row[11]).to_s.chomp.lstrip.rstrip
-      order_unit = Iconv.conv('UTF-8', 'iso-8859-1', row[12]).to_s.chomp.lstrip.rstrip
-      trade_partner_name = Iconv.conv('UTF-8', 'iso-8859-1', row[13]).to_s.chomp.lstrip.rstrip
-      trade_partner_additional_info = Iconv.conv('UTF-8', 'iso-8859-1', row[14]).to_s.chomp.lstrip.rstrip
+      article_type = row[3].to_s.undress
+      signal_code_description = row[4].to_s.undress
+      description = row[5].to_s.undress
+      search_key_01 = row[6].to_s.undress
+      search_key_02 = row[7].to_s.undress
+      material = row[8].to_s.undress
+      factor = row[9].to_s.undress
+      zone_code = row[10].to_s.undress
+      stock_unit = row[11].to_s.undress
+      order_unit = row[12].to_s.undress
+      trade_partner_name = row[13].to_s.undress
+      trade_partner_additional_info = row[14].to_s.undress
       
       articles = Article.where(:baan_acces_id => baan_acces_id)
       if articles.present?
@@ -52,20 +51,20 @@ class Article < ActiveRecord::Base
   end
   
   def self.import_extras(arg)
-    @baan_import = arg
-    #PaperTrail.whodunnit = 'System'
+    @baan_import = BaanImport.find(arg)
     
-    csv_file = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.baan_upload.path
+    csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
+    csv_file.each do |row|
       
-      baan_acces_id = Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip
-      rack_group_number = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
-      rack_root_number = Iconv.conv('UTF-8', 'iso-8859-1', row[2]).to_s.chomp.lstrip.rstrip
-      rack_part_number = Iconv.conv('UTF-8', 'iso-8859-1', row[3]).to_s.chomp.lstrip.rstrip
+      baan_acces_id = row[0].to_s.undress
+      rack_group_number = row[1].to_s.undress
+      rack_root_number = row[2].to_s.undress
+      rack_part_number = row[3].to_s.undress
       rack_root_part_number = rack_root_number + "." + rack_part_number
-      rack_tray_number = Iconv.conv('UTF-8', 'iso-8859-1', row[4]).to_s.chomp.lstrip.rstrip
-      rack_box_number = Iconv.conv('UTF-8', 'iso-8859-1', row[5]).to_s.chomp.lstrip.rstrip
+      rack_tray_number = row[4].to_s.undress
+      rack_box_number = row[5].to_s.undress
     
       articles = Article.where(:baan_acces_id => baan_acces_id)
       if articles.present?
@@ -82,16 +81,16 @@ class Article < ActiveRecord::Base
   end
   
   def self.import_extras_1(arg)
-    @baan_import = arg
-    #PaperTrail.whodunnit = 'System'
+    @baan_import = BaanImport.find(arg)
     
-    csv_file = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.baan_upload.path
+    csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     
-    CSV.foreach(csv_file, {:col_sep => ";", :headers => :first_row}) do |row|
+    csv_file.each do |row|
       
-      article_code = Iconv.conv('UTF-8', 'iso-8859-1', row[0]).to_s.chomp.lstrip.rstrip
-      baan_article_group_id = Iconv.conv('UTF-8', 'iso-8859-1', row[3]).to_s.chomp.lstrip.rstrip
-      price = Iconv.conv('UTF-8', 'iso-8859-1', row[1]).to_s.chomp.lstrip.rstrip
+      article_code = row[0].to_s.undress
+      baan_article_group_id = row[3].to_s.undress
+      price = row[1].to_s.undress
       article_group = ArticleGroup.find_by_baan_id(baan_article_group_id)
       
       articles = Article.where(:article_code => article_code)
@@ -104,51 +103,75 @@ class Article < ActiveRecord::Base
   end
   
   def self.import_baan_file(arg)
-    @baan_import = arg
-    #PaperTrail.whodunnit = 'System'
+    @baan_import = BaanImport.find(arg)
     
-    csv_file = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.baan_upload.path
+    csv_file = CSV.open(csv_file_path, "rb:us-ascii:UTF-8", {:col_sep => ";"})
     
-    CSV.foreach(csv_file, {:col_sep => ";"}) do |row|
+    csv_file.each do |row|
       
-      baan_orno = Iconv.conv('UTF-8', 'us-ascii', row[0]).to_s.chomp.lstrip.rstrip
-      baan_cntn = Iconv.conv('UTF-8', 'us-ascii', row[1]).to_s.chomp.lstrip.rstrip
-      baan_pono = Iconv.conv('UTF-8', 'us-ascii', row[2]).to_s.chomp.lstrip.rstrip
-      baan_loca = Iconv.conv('UTF-8', 'us-ascii', row[4]).to_s
-      baan_item = Iconv.conv('UTF-8', 'us-ascii', row[5]).to_s
-      baan_clot = Iconv.conv('UTF-8', 'us-ascii', row[6]).to_s
-      baan_stun = Iconv.conv('UTF-8', 'us-ascii', row[8]).to_s.chomp.lstrip.rstrip
-      baan_qstk = Iconv.conv('UTF-8', 'us-ascii', row[9]).to_s.chomp.lstrip.rstrip
-      baan_qstr = Iconv.conv('UTF-8', 'us-ascii', row[10]).to_s.chomp.lstrip.rstrip
-      baan_csts = Iconv.conv('UTF-8', 'us-ascii', row[15]).to_s.chomp.lstrip.rstrip
-      baan_recd = Iconv.conv('UTF-8', 'us-ascii', row[17]).to_s.chomp.lstrip.rstrip
-      baan_reco = Iconv.conv('UTF-8', 'us-ascii', row[18]).to_s.chomp.lstrip.rstrip
-      baan_appr = Iconv.conv('UTF-8', 'us-ascii', row[19]).to_s.chomp.lstrip.rstrip
-      baan_cadj = Iconv.conv('UTF-8', 'us-ascii', row[20]).to_s.chomp.lstrip.rstrip
+      baan_orno = row[0].to_s.undress
+      baan_cntn = row[1].to_s.undress
+      baan_pono = row[2].to_s.undress
+      baan_loca = row[4].to_s
+      baan_item = row[5].to_s
+      baan_clot = row[6].to_s
+      baan_stun = row[8].to_s.undress
+      baan_qstk = row[9].to_s.undress
+      baan_qstr = row[10].to_s.undress
+      baan_csts = row[15].to_s.undress
+      baan_recd = row[17].to_s.undress
+      baan_reco = row[18].to_s.undress
+      baan_appr = row[19].to_s.undress
+      baan_cadj = row[20].to_s.undress
       
-      article_code = Iconv.conv('UTF-8', 'us-ascii', row[5]).to_s.chomp.lstrip.rstrip
-      depot_number = Iconv.conv('UTF-8', 'us-ascii', row[3]).to_s.chomp.lstrip.rstrip
-      old_stock = Iconv.conv('UTF-8', 'us-ascii', row[11]).to_s.chomp.lstrip.rstrip
+      article_code = row[5].to_s.undress
+      depot_number = row[3].to_s.undress
+      old_stock = row[11].to_s.undress
       baan_acces_id = "#{article_code}x#{depot_number}"
-      #articles = Article.where(:baan_acces_id => baan_acces_id)
       
-      Article.create(:old_stock => old_stock,
-                     :baan_orno => baan_orno,
-                     :baan_cntn => baan_cntn,
-                     :baan_pono => baan_pono,
-                     :baan_loca => baan_loca,
-                     :baan_item => baan_item,
-                     :baan_clot => baan_clot,
-                     :baan_stun => baan_stun,
-                     :baan_qstk => baan_qstk,
-                     :baan_qstr => baan_qstr,
-                     :baan_csts => baan_csts,
-                     :baan_recd => baan_recd,
-                     :baan_reco => baan_reco,
-                     :baan_appr => baan_appr,
-                     :baan_cadj => baan_cadj,
-                     :considered => true,
-                     :baan_acces_id => baan_acces_id)
+      _article = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2012")
+      
+      if _article.present?
+        _article.first.update_attributes(:old_stock => old_stock,
+                       :baan_orno => baan_orno,
+                       :baan_cntn => baan_cntn,
+                       :baan_pono => baan_pono,
+                       :baan_loca => baan_loca,
+                       :baan_item => baan_item,
+                       :baan_clot => baan_clot,
+                       :baan_stun => baan_stun,
+                       :baan_qstk => baan_qstk,
+                       :baan_qstr => baan_qstr,
+                       :baan_csts => baan_csts,
+                       :baan_recd => baan_recd,
+                       :baan_reco => baan_reco,
+                       :baan_appr => baan_appr,
+                       :baan_cadj => baan_cadj,
+                       :considered => true,
+                       :baan_acces_id => baan_acces_id,
+                       :stocktaking_id => "dez-2012")
+      else
+        Article.create(:old_stock => old_stock,
+                       :baan_orno => baan_orno,
+                       :baan_cntn => baan_cntn,
+                       :baan_pono => baan_pono,
+                       :baan_loca => baan_loca,
+                       :baan_item => baan_item,
+                       :baan_clot => baan_clot,
+                       :baan_stun => baan_stun,
+                       :baan_qstk => baan_qstk,
+                       :baan_qstr => baan_qstr,
+                       :baan_csts => baan_csts,
+                       :baan_recd => baan_recd,
+                       :baan_reco => baan_reco,
+                       :baan_appr => baan_appr,
+                       :baan_cadj => baan_cadj,
+                       :considered => true,
+                       :baan_acces_id => baan_acces_id,
+                       :stocktaking_id => "dez-2012")
+      end
+      
     end
   end
   

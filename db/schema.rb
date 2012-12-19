@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120829002736) do
+ActiveRecord::Schema.define(:version => 20121219150843) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(:version => 20120829002736) do
     t.string   "baan_cstk"
     t.string   "baan_cstr"
     t.string   "rack_root_part_number"
+    t.string   "stocktaking_id"
   end
 
   create_table "baan_import_groups", :force => true do |t|
@@ -629,6 +630,28 @@ ActiveRecord::Schema.define(:version => 20120829002736) do
     t.integer  "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "unit_counters", :force => true do |t|
+    t.integer  "shipped"
+    t.integer  "cancelled"
+    t.integer  "picked_up"
+    t.integer  "available"
+    t.string   "counter_for"
+    t.integer  "counter_for_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  create_table "unit_flags", :force => true do |t|
+    t.boolean  "shipped"
+    t.boolean  "cancelled"
+    t.boolean  "picked_up"
+    t.boolean  "available"
+    t.string   "flag_for"
+    t.integer  "flag_for_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "user_role_assignments", :id => false, :force => true do |t|
