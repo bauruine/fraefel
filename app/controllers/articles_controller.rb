@@ -16,7 +16,7 @@ class ArticlesController < ApplicationController
         render( 
           :pdf => "Zaehlliste-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
-          :layout => 'pdf.html',
+          :layout => 'pdf_bootstrap.html',
           :show_as_html => params[:debug].present?,
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
