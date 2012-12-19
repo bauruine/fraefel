@@ -2,16 +2,24 @@ Inventory Branch
 
 TODO: At the bottom is the upload szenario for the inventory
 
-    when "Inventar-Baan-Artikel"
-      Article.import(baan_import)
-    when "Inventar-Lager-Adresse"
-      Depot.import(baan_import)
-    when "Inventar-Lager-Zone"
-      Article.import_extras(baan_import)
-    when "Inventar-Baan-Artikel-Gruppe"
-      ArticleGroup.import(baan_import)
-    when "Inventar-Baan-Artikel-Preis-Gruppe"
-      Article.import_extras_1(baan_import)
-    when "Inventar-BaanCSV"
-      Article.import_baan_file(baan_import)
 
+
+1. Inventar-BaanCSV -> Article.import_baan_file(baan_import)
+
+2. Inventar-Lager-Zone -> Article.import_extras(baan_import)
+3. Inventar-Lager-Adresse -> Depot.import(baan_import)
+4. Inventar-Baan-Artikel -> Article.import(baan_import)
+
+5. Inventar-Baan-Artikel-Gruppe -> ArticleGroup.import(baan_import)
+6. Inventar-Baan-Artikel-Preis-Gruppe -> Article.import_extras_1(baan_import)
+
+
+when "Inventar-Baan-Artikel-Gruppe"
+  ArticleGroup.import(baan_import)
+when "Inventar-Baan-Artikel-Preis-Gruppe"
+  Article.import_extras_1(baan_import)
+when "Inventar-BaanCSV"
+  Article.import_baan_file(baan_import)
+
+  when "Inventar-Lager-Zone"
+    Article.import_extras(baan_import)

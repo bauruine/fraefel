@@ -6,16 +6,16 @@ class Article < ActiveRecord::Base
   validates_presence_of :in_stock, :if => Proc.new { |article| article.scii_sia }
   
   def self.import(arg)
-    @baan_import = BaanImport.find(arg)
+    @baan_import = BaanImport.where(:id => arg)
     
-    csv_file_path = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.first.baan_upload.path
     csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     
     csv_file.each do |row|
       baan_acces_id = row[0].to_s.undress
       article_code = row[1].to_s.undress
       depot_code = row[2].to_s.undress
-      depot = Depot.where(:code => depot_code).first
+      depot = Depot.where(:code => depot_code, :stocktaking_id => "dez-2012")
       article_type = row[3].to_s.undress
       signal_code_description = row[4].to_s.undress
       description = row[5].to_s.undress
@@ -29,11 +29,11 @@ class Article < ActiveRecord::Base
       trade_partner_name = row[13].to_s.undress
       trade_partner_additional_info = row[14].to_s.undress
       
-      articles = Article.where(:baan_acces_id => baan_acces_id)
+      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2012")
       if articles.present?
         articles.each do |article|
           article.update_attributes(:article_code => article_code,
-                                    :depot => depot,
+                                    :depot_id => depot.first.id,
                                     :signal_code_description => signal_code_description,
                                     :description => description,
                                     :search_key_01 => search_key_01,
@@ -51,9 +51,9 @@ class Article < ActiveRecord::Base
   end
   
   def self.import_extras(arg)
-    @baan_import = BaanImport.find(arg)
+    @baan_import = BaanImport.where(:id => arg)
     
-    csv_file_path = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.first.baan_upload.path
     csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     
     csv_file.each do |row|
@@ -66,7 +66,7 @@ class Article < ActiveRecord::Base
       rack_tray_number = row[4].to_s.undress
       rack_box_number = row[5].to_s.undress
     
-      articles = Article.where(:baan_acces_id => baan_acces_id)
+      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2012").first
       if articles.present?
         articles.each do |article|
           article.update_attributes(:rack_group_number => rack_group_number,
@@ -81,9 +81,9 @@ class Article < ActiveRecord::Base
   end
   
   def self.import_extras_1(arg)
-    @baan_import = BaanImport.find(arg)
+    @baan_import = BaanImport.where(:id => arg)
     
-    csv_file_path = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.first.baan_upload.path
     csv_file = CSV.open(csv_file_path, "rb:iso-8859-1:UTF-8", {:col_sep => ";", :headers => :first_row})
     
     csv_file.each do |row|
@@ -91,12 +91,12 @@ class Article < ActiveRecord::Base
       article_code = row[0].to_s.undress
       baan_article_group_id = row[3].to_s.undress
       price = row[1].to_s.undress
-      article_group = ArticleGroup.find_by_baan_id(baan_article_group_id)
+      article_group = ArticleGroup.where(:baan_id => baan_article_group_id, :stocktaking_id => "dez-2012")
       
-      articles = Article.where(:article_code => article_code)
+      articles = Article.where(:article_code => article_code, :stocktaking_id => "dez-2012")
       if articles.present?
         articles.each do |article|
-          article.update_attributes(:article_group => article_group, :price => price)
+          article.update_attributes(:article_group_id => article_group.first.id, :price => price)
         end
       end
     end
@@ -107,7 +107,7 @@ class Article < ActiveRecord::Base
     
     csv_file_path = @baan_import.first.baan_upload.path
     csv_file = CSV.open(csv_file_path, "rb:us-ascii:UTF-8", {:col_sep => ";"})
-    @michi = []
+    
     csv_file.each do |row|
       
       baan_orno = row[0].to_s.undress
@@ -133,7 +133,6 @@ class Article < ActiveRecord::Base
       _article = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2012")
       
       if _article.present?
-        @michi << baan_acces_id
         _article.first.update_attributes(:old_stock => old_stock,
                        :baan_orno => baan_orno,
                        :baan_cntn => baan_cntn,
@@ -178,7 +177,7 @@ class Article < ActiveRecord::Base
   end
   
   def self.calculate_difference(arg)
-    @articles = Article.where(:rack_group_number => arg, :considered => true).where("old_stock IS NOT NULL").where("in_stock IS NOT NULL").where("in_stock != ''")
+    @articles = Article.where(:rack_group_number => arg, :considered => true, :stocktaking_id => "dez-2012").where("old_stock IS NOT NULL").where("in_stock IS NOT NULL").where("in_stock != ''")
     @articles.each do |article|
       article_warn_on = article.article_group.present? ? article.article_group.warn_on : 10
       article_warn_on_price = article.article_group.present? && article.article_group.warn_on_price.present? ? article.article_group.warn_on_price.to_f : 3000
