@@ -66,7 +66,7 @@ class Article < ActiveRecord::Base
       rack_tray_number = row[4].to_s.undress
       rack_box_number = row[5].to_s.undress
     
-      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2012").first
+      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2012")
       if articles.present?
         articles.each do |article|
           article.update_attributes(:rack_group_number => rack_group_number,
