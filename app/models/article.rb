@@ -103,9 +103,9 @@ class Article < ActiveRecord::Base
   end
   
   def self.import_baan_file(arg)
-    @baan_import = BaanImport.find(arg)
+    @baan_import = BaanImport.where(:id => arg)
     
-    csv_file_path = @baan_import.baan_upload.path
+    csv_file_path = @baan_import.first.baan_upload.path
     csv_file = CSV.open(csv_file_path, "rb:us-ascii:UTF-8", {:col_sep => ";"})
     
     csv_file.each do |row|
