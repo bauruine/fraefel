@@ -1,14 +1,13 @@
-<h1>Abweichung Gruppe <%= params[:group] %></h1>
+<h1>Stichprobe Gruppe <%= params[:group] %></h1>
 
 <% @articles.group(:rack_group_number).each do |r_g_n| %>
   <% @articles.where(:rack_group_number => r_g_n.rack_group_number).group(:rack_root_part_number).each do |r_r_n| %>
     <section class="filter_box">
       <header class="filter_box_header clearfix">
-        <h4 class="floatLeft m-r_5px">Gruppe <%= r_r_n.rack_group_number %> | </h4>
-        <h4 class="floatLeft m-r_5px">Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></h4>
+        <h4 class="floatLeft m-r_5px">Gruppe <%= r_r_n.rack_group_number %> | Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></h4>
       </header>
       <section class="filter_box_content clearfix">
-        <table>
+        <table class="table table-condensed table-striped">
           <thead>
             <tr>
               <th>Artikel</th>
@@ -37,6 +36,19 @@
           </tbody>
         </table>
       </section>
+    </section>
+    <section>
+      <dl>
+        <dt>Datum:</dt>
+        <dd>__________________________________________</dd>
+      </dl>
+    </section>
+  
+    <section class="new-page">
+      <dl>
+        <dt class="bold">Visum:</dt>
+        <dd>__________________________________________</dd>
+      </dl>
     </section>
   <% end %>
 <% end %>

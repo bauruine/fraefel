@@ -77,7 +77,7 @@ class ArticlesController < ApplicationController
         render( 
           :pdf => "Abweichung-Gruppe#{params[:group]}-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
-          :layout => 'pdf.html',
+          :layout => 'pdf_bootstrap.html',
           :show_as_html => params[:debug].present?,
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
