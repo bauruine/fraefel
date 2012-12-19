@@ -43,11 +43,11 @@ class ArticlesController < ApplicationController
   
   def edit_multiple
     if params[:baan_acces_code].present? && !params[:rack_group_number].present?
-      rack_group_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).present? ? Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_group_number : nil
-      rack_root_number = Article.find_by_baan_acces_id(params[:baan_acces_code]).present? ? Article.find_by_baan_acces_id(params[:baan_acces_code]).rack_root_number : nil
-      @articles = Article.where(:considered => true).where(:rack_group_number=> rack_group_number, :rack_root_number => rack_root_number)
+      rack_group_number = Article.where(:stocktaking_id => "dez-2012", :baan_acces_id => params[:baan_acces_code]).present? ? Article.where(:stocktaking_id => "dez-2012", :baan_acces_id => params[:baan_acces_code]).first.rack_group_number : nil
+      rack_root_number = Article.where(:stocktaking_id => "dez-2012", :baan_acces_id => params[:baan_acces_code]).present? ? Article.where(:stocktaking_id => "dez-2012", :baan_acces_id => params[:baan_acces_code]).first.rack_root_number : nil
+      @articles = Article.where(:stocktaking_id => "dez-2012", :considered => true).where(:rack_group_number=> rack_group_number, :rack_root_number => rack_root_number)
     elsif params[:rack_group_number].present? && params[:rack_root_number].present?
-      @articles = Article.where(:considered => true).where(:rack_group_number => params[:rack_group_number], :rack_root_part_number => params[:rack_root_number])
+      @articles = Article.where(:stocktaking_id => "dez-2012", :considered => true).where(:rack_group_number => params[:rack_group_number], :rack_root_part_number => params[:rack_root_number])
     else
       @articles = nil
     end
@@ -67,7 +67,7 @@ class ArticlesController < ApplicationController
   end
   
   def calculate_difference_for
-    @search = Article.where(:considered => true, :should_be_checked => true)
+    @search = Article.where(:stocktaking_id => "dez-2012", :considered => true, :should_be_checked => true)
     @search = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
     @search = @search.search(params[:q])
     @articles = @search.result
