@@ -5,9 +5,9 @@ gem 'rails', '3.2.7'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
   
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  gem 'libv8', '~> 3.11.8'
   gem 'therubyracer', :require => 'v8'
   gem 'uglifier', '>= 1.0.3'
 end
@@ -16,6 +16,9 @@ group :development do
   gem 'letter_opener'
   gem 'ruby_parser'
 end
+
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem "less-rails" 
 
 gem "authlogic"
 gem 'capistrano'
