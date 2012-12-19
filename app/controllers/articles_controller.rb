@@ -6,7 +6,7 @@ class ArticlesController < ApplicationController
   end
   
   def index
-    @search = Article.where(:considered => true)
+    @search = Article.where(:considered => true, :stocktaking_id => "dez-2012")
     @search = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
     @search = @search.search(params[:q])
     @articles = @search.result
