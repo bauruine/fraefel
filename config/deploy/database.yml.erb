@@ -8,13 +8,13 @@ base: &base
   socket: /var/run/mysqld/mysqld.sock
 
 development:
-  database: fraefel-demo_development<%= if ENV['deploy'] != 'production' then "_staging" end %>
+  database: fraefel_development<%= if ENV['deploy'] != 'production' then "_staging" end %>
   <<: *base
 
 test:
-  database: fraefel-demo_test<%= if ENV['deploy'] != 'production' then "_staging" end %>
+  database: fraefel_test<%= if ENV['deploy'] != 'production' then "_staging" end %>
   <<: *base
 
 production:
-  database: fraefel-demo_production<%= if ENV['deploy'] != 'production' then "_staging" end %>
+  database: fraefel_production<%= if ENV['deploy'] != 'production' then "_staging" end %>
   <<: *base

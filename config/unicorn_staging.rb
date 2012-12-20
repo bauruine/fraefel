@@ -91,4 +91,3 @@ after_fork do |server, worker|
     end
   end
 end
-
