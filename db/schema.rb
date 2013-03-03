@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121219212343) do
+ActiveRecord::Schema.define(:version => 20130303210841) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20121219212343) do
     t.integer "referee_id"
     t.string  "company_name"
     t.string  "code"
+    t.string  "eori"
   end
 
   create_table "article_groups", :force => true do |t|
@@ -632,28 +633,6 @@ ActiveRecord::Schema.define(:version => 20121219212343) do
     t.integer  "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "unit_counters", :force => true do |t|
-    t.integer  "shipped"
-    t.integer  "cancelled"
-    t.integer  "picked_up"
-    t.integer  "available"
-    t.string   "counter_for"
-    t.integer  "counter_for_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  create_table "unit_flags", :force => true do |t|
-    t.boolean  "shipped"
-    t.boolean  "cancelled"
-    t.boolean  "picked_up"
-    t.boolean  "available"
-    t.string   "flag_for"
-    t.integer  "flag_for_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
   end
 
   create_table "user_role_assignments", :id => false, :force => true do |t|

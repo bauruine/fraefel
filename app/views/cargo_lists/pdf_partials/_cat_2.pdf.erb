@@ -1,0 +1,61 @@
+<% @pallets.each do |pallet| %>
+  <fieldset class="floatLeft">
+    <h3 style="font-size: 15px;">&nbsp;</h3>
+  </fieldset>
+  <%= content_tag(:div, nil, :class => "clear") %>
+  <div style="margin-bottom:25px;">&nbsp;</div>
+  
+  <h1 style="font-weight:bold; font-size:65px;"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></h1>
+  <section class="filter_box new_page">
+    <header class="filter_box_header">
+      <% if pallet.cargo_list.present? %>
+        <h4 class="floatLeft m-r_5px"><%= "Versand #{pallet.cargo_list.id} |" %></h4>
+      <% end %>
+      <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli #{pallet.id}" : "Palette #{pallet.id}" %></h4>
+      <% if pallet.purchase_positions.present? %>
+        <h4 class="floatRight"><%= pallet.purchase_orders.first.shipping_address.consignee_full %></h4>
+      <% end %>
+    </header>
+    <section class="filter_box_content clearfix">
+      <table>
+        <thead>
+          <tr>
+            <tr>
+              <th>VK-Position</th>
+              <th>Artikel NR</th>
+              <th>Artikel</th>
+              <th>Anz.</th>
+            </tr>
+          </tr>
+        </thead>
+        <tbody>
+          <% pallet.purchase_positions.each do |purchase_position| %>
+            <tr>
+              <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
+                <td class="red"><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+              <% else %>
+                <td><%= "#{purchase_position.purchase_order.baan_id}-#{purchase_position.position}" %></td>
+              <% end %>
+              <td><%= purchase_position.article_number %></td>
+              <td><%= purchase_position.article %></td>
+              <td><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id, :purchase_position_id => purchase_position.id).first.quantity %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="bold"><%= "Paletten #{pallet.pallet_type.count_as.to_f}" %></td>
+            <td class="bold"><%= "Paletten-Plätze #{pallet.pallet_type.count_as.to_f + pallet.additional_space.to_f}" %></td>
+            <td class="bold">
+              <%= "Gewicht Netto #{PalletPurchasePositionAssignment.where("pallet_id = ?", pallet.id ).sum(:weight)} kg" %>
+            </td>
+            <td class="bold">
+              <%= "Gewicht Brutto #{PalletPurchasePositionAssignment.where("pallet_id = ?", pallet.id ).sum(:weight) + (pallet.pallet_type.count_as * 20)} kg" %>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </section>
+  
+<% end %>

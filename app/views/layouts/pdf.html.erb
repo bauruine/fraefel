@@ -2,7 +2,7 @@
 <html>
   <head>
 
-    <% unless params[:pdf_type] == "invoice" or params[:pdf_type] == "delivery_receipt" or params[:pdf_type] == "pick_up_receipt" or params[:pdf_type] == "invoice_beta" %>
+    <% unless params[:pdf_type] == "invoice" or params[:pdf_type] == "delivery_receipt" or params[:pdf_type] == "pick_up_receipt" or params[:pdf_type] == "invoice_beta" or params[:pdf_type] == "cat_1" %>
       <%= wicked_pdf_stylesheet_link_tag "report_css_application" %>
     <% else %>
       <%= wicked_pdf_stylesheet_link_tag "pdf_css_application" %>

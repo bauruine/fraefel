@@ -1,13 +1,41 @@
 <div class="btn-toolbar pull-right">
+  <div class="btn-group">
+    <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice_beta", :pdf_title => pdf_title(@cargo_list.id, "sammel_rg")), :class => "btn btn-primary") do %>
+      Zollpapiere Lebert
+    <% end %>
+  </div>
+  <div class="btn-group">
+    <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "cat_1", :pdf_title => pdf_title(@cargo_list.id, "sammel_rg")), :class => "btn btn-primary") do %>
+      Zollpapiere Diverse
+    <% end %>
+  </div>
+</div>
+<div class="clear"></div>
+
+<div class="btn-toolbar pull-right">
+  <div class="btn-group">
+    <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report", :pdf_title => pdf_title(@cargo_list.id, "ruesten")), :class => "btn btn-primary") do %>
+      Rüstschein
+    <% end %>
+  </div>
+  <div class="btn-group">
+    <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "cat_3", :pdf_title => pdf_title(@cargo_list.id, "ruesten")), :class => "btn btn-primary") do %>
+      Rüstschein Spediteur
+    <% end %>
+  </div>
+</div>
+<div class="clear"></div>
+
+<div class="btn-toolbar pull-right">
   <%# if @assigned_pallets.present? %>
     <div class="btn-group">
-      <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert", :pdf_title => pdf_title(@cargo_list.id, "anmeldung")), :class => "btn btn-primary") do %>
-        Transport Anmeldung
+      <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "cat_2", :pdf_title => pdf_title(@cargo_list.id, "ruesten")), :class => "btn btn-primary") do %>
+        Paletten Schein
       <% end %>
     </div>
     <div class="btn-group">
-      <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report", :pdf_title => pdf_title(@cargo_list.id, "ruesten")), :class => "btn btn-primary") do %>
-        Rüstschein
+      <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "report_lebert", :pdf_title => pdf_title(@cargo_list.id, "anmeldung")), :class => "btn btn-primary") do %>
+        Transport Anmeldung
       <% end %>
     </div>
     <div class="btn-group">
@@ -19,11 +47,6 @@
       <div class="btn-group">
         <%= link_to(pdf_reports_path(:pdf_type => "ProformaInvoiceDocument", :args_for_printing => {:cargo_list_id => @cargo_list.id}, :pdf_title => pdf_title(@cargo_list.id, "proforma_rg")), :class => "btn btn-primary", "data-method" => "post") do %>
           Proforma Rechnung
-        <% end %>
-      </div>
-      <div class="btn-group">
-        <%= link_to(cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice_beta", :pdf_title => pdf_title(@cargo_list.id, "sammel_rg")), :class => "btn btn-primary") do %>
-          Zollpapiere
         <% end %>
       </div>
       <div class="btn-group">
