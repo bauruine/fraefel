@@ -77,7 +77,7 @@
     <tbody>
       <% @purchase_positions.group("purchase_positions.level_3").count.each do |k, v| %>
       <tr>
-        <td style="white-space:nowrap;">eori-fault</td>
+        <td style="white-space:nowrap;"><%= Address.find(k).eori %></td>
         <td><%= Address.find(k).consignee_full %></td>
         <td class="align-right">EUR</td>
         <td class="align-right" style="white-space:nowrap;">

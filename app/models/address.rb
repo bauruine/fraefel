@@ -139,6 +139,9 @@ class Address < ActiveRecord::Base
     
     address_categories.each do |k, v|
       address_attributes.clear
+      if (k == "kat_c")
+        address_attributes.merge!(:eori => arg.attributes["baan_12"])
+      end
       address_attributes.merge!(:country => arg.attributes["baan_#{v[0]}"])
       address_attributes.merge!(:code => arg.attributes["baan_#{v[1]}"])
       address_attributes.merge!(:company_name => arg.attributes["baan_#{v[2]}"])
