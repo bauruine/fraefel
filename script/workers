@@ -1,0 +1,2 @@
+#!/bin/bash
+bin/sidekiq -e production -q baan_delegator_queue -q baan_importer_queue -q baan_jaintor_queue -q baan_updator_queue
