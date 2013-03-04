@@ -288,6 +288,9 @@ section.new_page {
   page-break-after: always;
 }
 
+.new_page {
+  page-break-after: always;
+}
 section.filter_box {
 	margin-bottom: 20px;
 }
