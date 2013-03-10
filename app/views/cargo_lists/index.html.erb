@@ -20,9 +20,9 @@
         </div>
       </div>
       <div class="control-group">
-        <%= f.label(:shipper_eq, "Spediteur", :class => "control-label") %>
+        <%= f.label(:shipper_id_eq, "Spediteur", :class => "control-label") %>
         <div class="controls">
-          <%= f.collection_select(:shipper_eq, Shipper.all, :id, :name, {:include_blank => true}, {"data-foo" => "shipper"}) %>
+          <%= f.collection_select(:shipper_id_eq, Shipper.all, :id, :name, {:include_blank => true}, {"data-foo" => "shipper"}) %>
         </div>
       </div>
       
