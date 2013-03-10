@@ -9,7 +9,7 @@
         <%= f.input :country, :hint => "Achtung - Einzelne Funktionen sind Länderspezifisch", :label => "Versand nach", :collection => { 'Deutschland'=>"DE", 'Schweiz'=>"CH" } %>
         <%= f.input :delivered, :label => "Versendet?", :collection => { 'Ja'=>true, 'Nein'=>false } %>
         <%= f.input :level_3, :label => "Lieferadresse", :collection => @addresses, :value_method => :id, :label_method => :location_for_select, :include_blank => true %>
-        
+        <%= f.input :shipper_id, :label => "Spediteur", :collection => Shipper.all, :value_method => :id, :label_method => :name, :include_blank => true %>
         <div class="form-actions">
           <%= link_to "Abbrechen", @cargo_list, :class => "btn" %>
           <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>

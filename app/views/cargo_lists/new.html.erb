@@ -40,6 +40,13 @@
         
         <hr />
         
+        <div class="form-element">
+          <%= f.label :shipper_id, "Spediteur" %>
+          <%= f.collection_select(:shipper_id, Shipper.all, :id, :name, {:include_blank => true}) %>
+        </div>
+        
+        <hr />
+        
         <div class="form-actions">
           <%= link_to("Abbrechen", :back, :class => "btn btn-warning") %>
           <button type="submit" class="btn btn-primary">Papiere erfassen</button>

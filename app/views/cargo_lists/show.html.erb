@@ -27,6 +27,8 @@
   <dd><%= @pallets.count.to_i %></dd>
   <dt>Mehrplatz</dt>
   <dd><%= @cargo_list.additional_space %></dd>
+  <dt>Spediteur</dt>
+  <dd><%= @cargo_list.shipper.try(:name) %></dd>
 </dl>
 
 <blockquote>
