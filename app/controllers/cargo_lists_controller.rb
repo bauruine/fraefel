@@ -45,7 +45,7 @@ class CargoListsController < ApplicationController
     if params[:q].present? && params[:q][:delivered_eq].present? && params[:q][:delivered_eq] == "true"
       @search = CargoList.search(params[:q])
     else
-      @search = CargoList.where(:delivered => false).search(params[:search])
+      @search = CargoList.where(:delivered => false).search(params[:q])
     end
     @cargo_lists = @search.result
   end
