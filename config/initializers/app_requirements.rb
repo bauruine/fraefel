@@ -1,5 +1,3 @@
-require 'iconv'
-
 class String
   def undress
     self.chomp.lstrip.rstrip

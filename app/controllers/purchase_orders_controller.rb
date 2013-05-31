@@ -6,6 +6,7 @@ class PurchaseOrdersController < ApplicationController
     @purchase_order = PurchaseOrder.where(:id => params[:id]).first
     @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id).where("purchase_positions.cancelled" => false)
     @pallets = Pallet.where("purchase_orders.id = ?", @purchase_order.id).includes([:purchase_orders => :shipping_address], [:purchase_positions => :shipping_address])
+    @parcels = @pallets
     @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL")
     @shipping_routes = ShippingRoute.order("name ASC")
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
@@ -82,19 +83,19 @@ class PurchaseOrdersController < ApplicationController
   
   def edit
     @purchase_order = PurchaseOrder.find(params[:id])
+    @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
+    @shipping_routes = ShippingRoute.order("name ASC")
+    
+    
   end
   
   def update
     @purchase_order = PurchaseOrder.find(params[:id])
     
-    respond_to do |format|
-      if @purchase_order.update_attributes(params[:purchase_order])
-        format.html { redirect_to @purchase_order, notice: 'VK wurde erfolgreich gespeichert.' }
-        format.js
-      else
-        format.html { render action: "edit" }
-        format.js
-      end
+    if @purchase_order.update_attributes(params[:purchase_order])
+      redirect_to @purchase_order, notice: 'VK wurde erfolgreich gespeichert.'
+    else
+      render 'edit'
     end
   end
   

@@ -2,6 +2,8 @@ require 'sidekiq/web'
 
 Fraefel::Application.routes.draw do
   
+  devise_for :users
+
   mount Sidekiq::Web, at: '/sidekiq'
   
   resources :password_resets, :only => [ :new, :create, :edit, :update ]
@@ -53,7 +55,13 @@ Fraefel::Application.routes.draw do
   
   resources :export_declarations
   
-  resources :pallet_purchase_position_assignments
+  resources :pallet_purchase_position_assignments do
+    collection do
+      get :new_multiple
+      post :create_multiple
+      delete :destroy_multiple
+    end
+  end
   
   resources :versions, :only => [:update, :destroy]
   

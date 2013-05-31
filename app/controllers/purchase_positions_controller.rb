@@ -57,25 +57,20 @@ class PurchasePositionsController < ApplicationController
   
   def edit
     @purchase_position = PurchasePosition.find(params[:id])
+    @purchase_order = @purchase_position.purchase_order
+    
     @shipping_routes = ShippingRoute.order("name ASC")
     @commodity_codes = CommodityCode.all
-    
-    respond_to do |format|
-      format.html
-      format.xml
-    end
   end
   
   def update
     @purchase_position = PurchasePosition.find(params[:id])
-    respond_to do |format|
-      if @purchase_position.update_attributes(params[:purchase_position])
-        format.html { redirect_to :back, notice: 'VK-Pos wurde erfolgreich gespeichert.' }
-        format.js
-      else
-        format.html { render action: "edit" }
-        format.js
-      end
+    @purchase_order = @purchase_position.purchase_order
+    
+    if @purchase_position.update_attributes(params[:purchase_position])
+      redirect_to purchase_order_path(@purchase_order), notice: 'VK-Pos wurde erfolgreich gespeichert.'
+    else
+      render action: "edit"
     end
   end
   

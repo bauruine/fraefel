@@ -1,4 +1,6 @@
 class DashboardsController < ApplicationController
+  before_filter :authenticate_user!
+  
   def show
     @articles = Article.where(:stocktaking_id => "dez-2012").where(:considered => true)
     

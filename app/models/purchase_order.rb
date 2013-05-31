@@ -28,6 +28,18 @@ class PurchaseOrder < ActiveRecord::Base
   after_create :handling_address_ids
   after_update :handling_address_ids, :if => :is_importing
   
+  def pending_in_percent
+    [100 - self.warehousing_completed, "%"].join
+  end
+  
+  def stored_in_percent
+    [self.warehousing_completed, "%"].join
+  end
+  
+  def manufactured_in_percent
+    [self.manufacturing_completed, "%"].join
+  end
+  
   def self.patch_level_3
     select("DISTINCT `purchase_orders`.*").joins(:purchase_positions).each do |purchase_order|
       level_3 = purchase_order.purchase_positions.collect(&:level_3).uniq.compact.first

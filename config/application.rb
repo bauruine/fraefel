@@ -31,8 +31,9 @@ module Fraefel
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.i18n.default_locale = :"de-CH"
-
+    # config.i18n.default_locale = :"de-CH"
+    config.i18n.default_locale = :en
+    
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
@@ -57,7 +58,15 @@ module Fraefel
     config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.0'
-
+    config.assets.version = '1.1'
+    
+    config.to_prepare do
+        Devise::SessionsController.layout "devise"
+        Devise::RegistrationsController.layout proc{ |controller| user_signed_in? ? "application" : "devise" }
+        Devise::ConfirmationsController.layout "devise"
+        Devise::UnlocksController.layout "devise"
+        Devise::PasswordsController.layout "devise"
+    end
+    
   end
 end

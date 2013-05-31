@@ -1,7 +1,11 @@
 class User < ActiveRecord::Base
-  acts_as_authentic do |c|
-    c.perishable_token_valid_for = 300.minutes
-  end
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable,
+  # :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :token_authenticatable
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :email, :password, :password_confirmation, :remember_me
   
   attr_accessor :is_importing
   
@@ -14,8 +18,6 @@ class User < ActiveRecord::Base
   has_many :pdf_reports, :class_name => "PdfReport"
   
   validates_presence_of :roles, :forename, :surname, :email
-  
-  after_update :after_update_1, :if => :is_importing
   
   def role_symbols
     roles.map do |role|
@@ -38,16 +40,6 @@ class User < ActiveRecord::Base
   
   def full_name
     "#{self.forename} #{self.surname}"
-  end
-  
-  def callbacker_1
-    puts "sdfsdf"
-  end
-  
-  protected
-  
-  def after_update_1
-    puts "shit!!"
   end
   
 end

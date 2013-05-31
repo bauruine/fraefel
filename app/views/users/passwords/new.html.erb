@@ -1,0 +1,12 @@
+<div class="well">
+  <%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+    <fieldset>
+      <legend><%= "Forgot your password?" %></legend>
+      <%= f.input :email, :label => false, :autofocus => true, :input_html => {:class => "input-block-level"} %>
+      <hr />
+      <%= f.button :submit, "Send me reset password instructions", :class => "btn-large btn-block btn-info" %>
+    </fieldset>
+  <% end %>
+  
+  <%= render "users/shared/links" %>
+</div>

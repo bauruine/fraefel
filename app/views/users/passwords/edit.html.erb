@@ -1,0 +1,19 @@
+<div class="well">
+
+  <%= simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
+    <%= content_for :devise_flash_messages do %>
+      <%= f.error_notification %>
+    <% end %>
+    <fieldset>
+      <legend>Change your password</legend>
+      <%= f.input :reset_password_token, :as => :hidden %>
+      <%= f.input :password, :label => false, :placeholder => "New password", :autofocus => true, :input_html => {:class => "input-block-level"} %>
+      <%= f.input :password_confirmation, :label => false, :placeholder => "Confirm your new password", :input_html => {:class => "input-block-level"} %>
+      
+      <hr />
+      <%= f.button :submit, "Change my password", :class => "btn-large btn-block btn-info" %>
+    </fieldset>
+  <% end %>
+
+  <%= render "users/shared/links" %>
+</div>

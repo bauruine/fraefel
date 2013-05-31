@@ -1,11 +1,72 @@
-<h1>VK-Auftrag NR#<%= @purchase_order.baan_id %></h3>
+<%- model_class = PurchaseOrder -%>
 
-<% form_for @purchase_order do |f| %>
-  <div class="form-element">
-    <%= f.label :delivered, "Versendet?" %>
-    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-  </div>
-  <div class="form-element clearfix">
-    <%= f.submit("Speichern", :class => "blueSubmit floatLeft") %>
-  </div>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li>
+      <a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span>
+    </li>
+    <li class="active">
+      <%= link_to(@purchase_order.baan_id, purchase_order_path(@purchase_order)) %> <span class="divider">/</span>
+    </li>
+    <li class="active">
+      Edit
+    </li>
+  </ul>
 <% end %>
+
+<div class="media">
+  <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=154x154&chl=#{@purchase_order.baan_id}", :class => "pull-left") %>
+  <div class="media-body">
+    <div class="page-header">
+      <h1>
+        <%=t '.title', :default => model_class.model_name.human %>
+        <small>
+          <%= @purchase_order.baan_id %>
+        </small>
+      </h1>
+    </div>
+    <dl class="dl-horizontal">
+      <dt>Empfänger:</dt>
+      <dd><%= @purchase_order.shipping_address.consignee_full %></dd>
+    </dl>
+  </div>
+</div>
+
+<hr />
+
+<div class="row-fluid">
+  <div class="span10 offset1">
+    <%= simple_form_for @purchase_order, :html => {:class => "form-horizontal"} do |f| %>
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#tab_1">Allgemein</a></li>
+          <li><a data-toggle="tab" href="#tab_2">Versand</a></li>
+          <li><a data-toggle="tab" href="#tab_3">Produktion</a></li>
+          <li><a data-toggle="tab" href="#tab_4">TS / Prio</a></li>
+          <li><a data-toggle="tab" href="#tab_5">Status</a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="tab_1" class="tab-pane active">
+            <%= render("purchase_orders/tabs/edit/edit/tab_1", :f => f) %>
+          </div>
+          <div id="tab_2" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_2", :f => f) %>
+          </div>
+          <div id="tab_3" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_3", :f => f) %>
+          </div>
+          <div id="tab_4" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_4", :f => f) %>
+          </div>
+          <div id="tab_5" class="tab-pane">
+            <%= render("purchase_orders/tabs/edit/edit/tab_5", :f => f) %>
+          </div>
+          <div class="form-actions">
+            <%= link_to("Abbrechen", :back, :class => "btn")%>
+            <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

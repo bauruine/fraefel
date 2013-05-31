@@ -81,7 +81,9 @@
           <ul class="nav pull-right">
             <li class="divider-vertical"></li>
             <li class="">
-              <a href="<%= logout_path() %>"><i class="icon-off"></i> Abmelden</a>
+              <%= link_to(destroy_user_session_path, :method => :delete) do %>
+                <i class="icon-off"></i> Abmelden</a>
+              <% end %>
             </li>
           </ul>
         <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130303210841) do
+ActiveRecord::Schema.define(:version => 20130530103158) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -402,12 +402,13 @@ ActiveRecord::Schema.define(:version => 20130303210841) do
     t.integer  "quantity"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "amount",               :precision => 12, :scale => 2
-    t.decimal  "weight",               :precision => 12, :scale => 2
-    t.decimal  "reduced_price",        :precision => 12, :scale => 2
-    t.decimal  "gross_price",          :precision => 12, :scale => 2
-    t.decimal  "net_price",            :precision => 12, :scale => 2
-    t.decimal  "value_discount",       :precision => 12, :scale => 2
+    t.decimal  "amount",                :precision => 12, :scale => 2
+    t.decimal  "weight",                :precision => 12, :scale => 2
+    t.decimal  "reduced_price",         :precision => 12, :scale => 2
+    t.decimal  "gross_price",           :precision => 12, :scale => 2
+    t.decimal  "net_price",             :precision => 12, :scale => 2
+    t.decimal  "value_discount",        :precision => 12, :scale => 2
+    t.boolean  "is_individual_package"
   end
 
   create_table "pallet_types", :force => true do |t|
@@ -418,15 +419,15 @@ ActiveRecord::Schema.define(:version => 20130303210841) do
 
   create_table "pallets", :force => true do |t|
     t.integer "cargo_list_id"
-    t.float   "additional_space",          :default => 0.0
+    t.float   "additional_space",      :default => 0.0
     t.integer "pallet_type_id"
-    t.boolean "delivered",                 :default => false
+    t.boolean "delivered",             :default => false
     t.integer "delivery_rejection_id"
-    t.integer "purchase_position_counter"
     t.integer "level_3"
     t.integer "zip_location_id"
-    t.boolean "mixed",                     :default => false
+    t.boolean "mixed",                 :default => false
     t.integer "shipping_route_id"
+    t.integer "line_items_quantity",   :default => 0
   end
 
   create_table "pdf_reports", :force => true do |t|
@@ -644,24 +645,35 @@ ActiveRecord::Schema.define(:version => 20130303210841) do
 
   create_table "users", :force => true do |t|
     t.string   "username"
-    t.string   "email"
-    t.string   "crypted_password"
-    t.string   "password_salt"
-    t.string   "persistence_token"
+    t.string   "email",                  :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "forename"
     t.string   "surname"
-    t.string   "single_access_token",                :null => false
-    t.string   "perishable_token",                   :null => false
-    t.integer  "login_count",         :default => 0, :null => false
-    t.integer  "failed_login_count",  :default => 0, :null => false
-    t.datetime "last_request_at"
-    t.datetime "current_login_at"
-    t.datetime "last_login_at"
-    t.string   "current_login_ip"
-    t.string   "last_login_ip"
+    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.integer  "failed_attempts",        :default => 0
+    t.string   "unlock_token"
+    t.datetime "locked_at"
+    t.string   "authentication_token"
   end
+
+  add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["unlock_token"], :name => "index_users_on_unlock_token", :unique => true
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false

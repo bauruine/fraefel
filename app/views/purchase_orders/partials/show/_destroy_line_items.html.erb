@@ -1,0 +1,72 @@
+<ul class="breadcrumb">
+  <% if pallet.cargo_list.present? %>
+    <li class="active">Versand <span class="divider">/</span></li>
+    <li><%= link_to(pallet.cargo_list.id, pallet.cargo_list) %> <span class="divider">/</span></li>
+  <% end %>
+  <li class="active"><%= pallet.pallet_type.read_as %> <span class="divider">/</span></li>
+  <li class="active"><%= pallet.id %></li>
+  <li class="pull-right">
+      <%= link_to(edit_pallet_path(pallet), :class => "btn btn-mini") do %>
+        <i class="icon-cogs"></i> Palette Bearbeiten
+      <% end %>
+      <%= link_to(pallet_path(pallet, :format => :pdf), :class => "btn btn-mini btn-primary") do %>
+        <i class="icon-print"></i> Drucke Palette
+      <% end %>
+  </li>
+</ul>
+<%= form_tag(destroy_multiple_pallet_purchase_position_assignments_path, :method => :delete) do %>
+    <table class="table table-striped table-bordered">
+      <thead>
+      <tr>
+        <th>Position</th>
+        <th>Artikel Nr</th>
+        <th>Artikel</th>
+        <th>Lager</th>
+        <th>Gebiet</th>
+        <th>Versand</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% pallet.line_items.each do |line_item| %>
+      <% purchase_position = line_item.purchase_position %>
+          <tr>
+            <td class="nowrap">
+              <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
+            </td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.article %></td>
+            <td class="nowrap"><%= purchase_position.storage_location %></td>
+            <td class="nowrap"><%= purchase_position.zip_location.title %></td>
+            <td class="nowrap"><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            <td class="nowrap">
+              <% if line_item.is_individual_package? %>
+                <span class="label label-warning">
+                  <i class="icon-asterisk"></i> <%= line_item.quantity %>
+                </span>
+              <% else %>
+                <%= line_item.quantity %>
+              <% end %>
+            </td>
+            <%= fields_for "line_items[]", PalletPurchasePositionAssignment.new(:id => line_item.id, :purchase_position_id => line_item.purchase_position_id, :quantity => nil) do |variant| %>
+              <td>
+                <%= variant.hidden_field :id, :value => line_item.id %>
+                <%= variant.hidden_field :purchase_position_id %>
+                <%= variant.text_field :quantity, :class => 'input-block-level', :placeholder => "Neue Menge" %>
+              </td>
+            <% end %>
+          </tr>
+      <% end %>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="7">PLZ Gebiet: <strong><%= pallet.zip_location.title %></td>
+        <td colspan="1">
+          <%= hidden_field_tag :pallet_id, pallet.id %>
+          <%= submit_tag "Speichern", :class => "btn btn-block" %>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+<% end %>

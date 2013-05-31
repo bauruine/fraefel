@@ -1,14 +1,13 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.7'
+gem 'rails', '3.2.13'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'libv8', '~> 3.11.8'
-  gem 'therubyracer', :require => 'v8'
+  gem "therubyracer"
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -17,12 +16,14 @@ group :development do
   gem 'ruby_parser'
 end
 
+gem "less-rails"
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
-gem "less-rails" 
 
-gem "authlogic"
+gem "declarative_authorization", "~> 0.5.7"
+gem 'devise'
+
 gem 'capistrano'
-gem "declarative_authorization"
+
 gem 'exception_notification'
 gem 'hirb'
 gem 'jquery-rails'
@@ -47,4 +48,4 @@ gem 'sinatra', :require => false
 gem 'slim'
 gem 'thin'
 gem 'unicorn'
-gem 'wicked_pdf'
+gem 'wicked_pdf', :git => 'git://github.com/mileszs/wicked_pdf.git'

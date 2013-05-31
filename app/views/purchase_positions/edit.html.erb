@@ -1,35 +1,81 @@
-<h1>VK-Position NR#<%= @purchase_position.position %></h3>
+<%- model_class = PurchasePosition -%>
 
-<% form_for @purchase_position do |f| %>
-  <div class="form-element">
-    <%= f.label :weight_single, "Gewicht Einzeln" %>
-    <%= f.text_field :weight_single %>
-  </div>
-  <div class="form-element">
-    <%= f.label :quantity, "Anzahl" %>
-    <%= f.text_field :quantity %>
-  </div>
-  <div class="form-element">
-    <%= f.label :gross_price, "Brutto Preis pro Stück" %>
-    <%= f.text_field :gross_price %>
-  </div>
-  <div class="form-element">
-    <%= f.label :value_discount, "Rabatt pro Stück" %>
-    <%= f.text_field :value_discount %>
-  </div>
-  <div class="form-element">
-    <%= f.label :net_price, "Netto Preis pro Stück" %>
-    <%= f.text_field :net_price %>
-  </div>
-  <div class="form-element">
-    <%= f.label :commodity_code, "Zoll Position" %>
-    <%= f.collection_select(:commodity_code_id, CommodityCode.all, :id, :content) %>
-  </div>
-  <div class="form-element">
-    <%= f.label :delivered, "Versendet?" %>
-    <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }) %>
-  </div>
-  <div class="form-element clearfix">
-    <%= f.submit("Artikel ändern", :class => "blueSubmit floatLeft") %>
-  </div>
+<%- @shipping_routes ||= ShippingRoute.order("name ASC") -%>
+<%- @commodity_codes ||= CommodityCode.all -%>
+
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li>
+      <a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span>
+    </li>
+    <li>
+      <%= link_to(@purchase_order.baan_id, purchase_order_path(@purchase_order)) %> <span class="divider">/</span>
+    </li>
+    <li class="active">
+      VK-Position <span class="divider">/</span>
+    </li>
+    <li class="active">
+      <%= @purchase_position.baan_id %> <span class="divider">/</span>
+    </li>
+    <li class="active">
+      Edit
+    </li>
+  </ul>
 <% end %>
+
+<div class="media">
+  <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=154x154&chl=#{@purchase_position.baan_id}", :class => "pull-left") %>
+  <div class="media-body">
+    <div class="page-header">
+      <h1>
+        <%=t '.title', :default => model_class.model_name.human %>
+        <small>
+          <%= @purchase_position.baan_id %>
+        </small>
+      </h1>
+    </div>
+    <dl class="dl-horizontal">
+      <dt>Empfänger:</dt>
+      <dd><%= @purchase_position.shipping_address.consignee_full %></dd>
+    </dl>
+  </div>
+</div>
+
+<hr />
+
+<div class="row-fluid">
+  <div class="span10 offset1">
+    <%= simple_form_for @purchase_position, :html => {:class => "form-horizontal"} do |f| %>
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#tab_1">Allgemein</a></li>
+          <li><a data-toggle="tab" href="#tab_2">Gewicht</a></li>
+          <li><a data-toggle="tab" href="#tab_3">Preis</a></li>
+          <li><a data-toggle="tab" href="#tab_4">Produktion</a></li>
+          <li><a data-toggle="tab" href="#tab_5">Status</a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="tab_1" class="tab-pane active">
+            <%= render("purchase_positions/tabs/edit/edit/tab_1.html.erb", :f => f) %>
+          </div>
+          <div id="tab_2" class="tab-pane">
+            <%= render("purchase_positions/tabs/edit/edit/tab_2.html.erb", :f => f) %>
+          </div>
+          <div id="tab_3" class="tab-pane">
+            <%= render("purchase_positions/tabs/edit/edit/tab_3.html.erb", :f => f) %>
+          </div>
+          <div id="tab_4" class="tab-pane">
+            <%= render("purchase_positions/tabs/edit/edit/tab_4.html.erb", :f => f) %>
+          </div>
+          <div id="tab_5" class="tab-pane">
+            <%= render("purchase_positions/tabs/edit/edit/tab_5.html.erb", :f => f) %>
+          </div>
+          <div class="form-actions">
+            <%= link_to("Abbrechen", :back, :class => "btn")%>
+            <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

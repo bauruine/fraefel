@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-
-    <% unless params[:pdf_type] == "invoice" or params[:pdf_type] == "delivery_receipt" or params[:pdf_type] == "pick_up_receipt" or params[:pdf_type] == "invoice_beta" or params[:pdf_type] == "cat_1" %>
-      <%= wicked_pdf_stylesheet_link_tag "report_css_application" %>
-    <% else %>
-      <%= wicked_pdf_stylesheet_link_tag "pdf_css_application" %>
-    <% end %>
-    <%= wicked_pdf_javascript_include_tag "pdf_js_application" %>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%#= stylesheet_link_tag "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" %>
+    <%= wicked_pdf_stylesheet_link_tag "application" %>
   </head>
   <body>
-    <%= yield %>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="span12">
+          <%= yield %>
+        </div>
+      </div><!--/row-->
+    </div> <!-- /container -->
   </body>
 </html>

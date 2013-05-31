@@ -1,233 +1,114 @@
+<%- model_class = PurchaseOrder -%>
+
 <% content_for :breadcrumb do %>
-    <ul class="breadcrumb">
-      <li><a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span></li>
-      <li class="active"><%= @purchase_order.id %></li>
-    </ul>
-<% end %>
-
-<div class="modal hide fade" id="edit_pallet">
-</div>
-
-<% @purchase_positions.each do |purchase_position| %>
-    <%= render("purchase_positions/partials/edit/modal/edit", :purchase_position => purchase_position) %>
-<% end %>
-
-<%= render("purchase_orders/partials/edit/modal/edit") %>
-
-
-<div data-type="modal" style="display:none;">
-</div>
-
-<div class="page-header">
-  <h1 class="pull-left">VK-Auftrag NR#<%= @purchase_order.baan_id %></h1>
-
-  <div class="btn-toolbar pull-right">
-    <% if permitted_to? :edit, :purchase_orders %>
+  <ul class="breadcrumb">
+    <li>
+      <a href="<%= purchase_orders_path %>">VK-Aufträge</a> <span class="divider">/</span>
+    </li>
+    <li class="active"><%= @purchase_order.id %></li>
+    <li class="pull-right">
+      <% if permitted_to? :edit, :purchase_orders %>
         <div class="btn-group">
-          <a class="btn btn-primary" href="#purchase_order_<%= @purchase_order.id %>" data-toggle="modal"><i class="icon-plus-sign icon-white"></i>
-            Edit</a>
-          <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a rel="nofollow" data-remote="true" data-method="put" href="<%= purchase_order_path(@purchase_order, aggregation_for(@purchase_order.id)) %>"><i class="icon-refresh"></i>
-                Status berechnen</a>
-            </li>
-          </ul>
+          <%= link_to(edit_purchase_order_path(@purchase_order), :class => "btn btn-mini") do %>
+            <i class="icon-cogs"></i> VK bearbeiten
+          <% end %>
+          <%= link_to(purchase_order_path(@purchase_order, aggregation_for(@purchase_order.id)), :class => "btn btn-mini", :method => :put) do %>
+            <i class="icon-refresh"></i> Status neu berechnen
+          <% end %>
         </div>
-    <% end %>
+      <% end %>
+      <div class="btn-group">
+        <%= link_to(purchase_order_path(@purchase_order, :format => :pdf), :class => "btn btn-mini btn-primary") do %>
+          <i class="icon-print"></i> Drucke VK
+        <% end %>
+        <%= link_to(print_pallets_purchase_order_path(@purchase_order, :format => :pdf, :pdf_type => "pallets"), :class => "btn btn-mini btn-primary") do %>
+          <i class="icon-print"></i> Drucke VK-Paletten
+        <% end %>
+      </div>
+    </li>
+  </ul>
+<% end %>
 
-    <div class="btn-group">
-      <a href="<%= purchase_order_path(@purchase_order, :format => :pdf) %>" class="btn btn-primary"><i class="icon-print icon-white"></i>
-        Drucke PDF</a>
-      <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu">
-        <li>
-          <a href="<%= print_pallets_purchase_order_path(@purchase_order, :format => :pdf, :pdf_type => "pallets") %>"><i class="icon-print"></i>
-            Drucke PDF Paletten</a>
-        </li>
-      </ul>
+<div class="row-fluid">
+  <div class="span12">
+    <div class="span4">
+      <div class="well well-small">
+          <p class="lead text-center">Produziert</p>
+          <div class="progress progress-striped">
+            <div class="bar" style="width: <%= @purchase_order.manufactured_in_percent %>;"></div>
+          </div>
+      </div>
     </div>
-
+    <div class="span4">
+      <div class="well well-small">
+          <p class="lead text-center">Eingelagert</p>
+          <div class="progress progress-striped">
+            <div class="bar bar-success" style="width: <%= @purchase_order.stored_in_percent %>;"></div>
+          </div>
+      </div>
+    </div>
+    <div class="span4">
+      <div class="well well-small">
+          <p class="lead text-center">Pendent</p>
+          <div class="progress progress-striped">
+            <div class="bar bar-danger" style="width: <%= @purchase_order.pending_in_percent %>;"></div>
+          </div>
+      </div>
+    </div>
   </div>
-  <div class="clear"></div>
 </div>
 
-<dl class="dl-horizontal">
-  <dt>Empfänger:</dt>
-  <dd><%= @purchase_order.shipping_address.consignee_full %></dd>
-</dl>
+<div class="media">
+  <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=154x154&chl=#{@purchase_order.baan_id}", :class => "pull-left") %>
+  <div class="media-body">
+    <div class="page-header">
+      <h1>
+        <%=t '.title', :default => model_class.model_name.human %>
+        <small>
+          <%= @purchase_order.baan_id %>
+        </small>
+      </h1>
+    </div>
+    <dl class="dl-horizontal">
+      <dt>Empfänger:</dt>
+      <dd><%= @purchase_order.shipping_address.consignee_full %></dd>
+    </dl>
+  </div>
+</div>
+
+<hr />
 
 <% if @purchase_positions.present? %>
+<div class="row-fluid">
+  <div class="span9 offset3">
     <blockquote>
       <p>
         Offene Positionen
       </p>
     </blockquote>
-
-    <%= form_tag(assign_positions_pallets_path, {:class => "form no-margin", "data-submit_handler" => "true", :method => :post}) do %>
-        <%= hidden_field_tag(:purchase_order_id, @purchase_order.id) %>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Position</th>
-            <th>Artikel NR</th>
-            <th>Artikel</th>
-            <th>Produktlinie</th>
-            <th>Menge Total</th>
-            <th>Lager Ort</th>
-            <th>PLZ Gebiet</th>
-            <th>Versand</th>
-            <th></th>
-            <th>Auswahl</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @purchase_positions.each do |purchase_position| %>
-              <% if purchase_position.pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.quantity") < purchase_position.quantity %>
-                  <tr>
-                    <% if permitted_to? :edit, :purchase_positions %>
-                        <td>
-                          <%= link_to(purchase_position.baan_id, "#purchase_position_#{purchase_position.id}", "data-toggle" => "modal", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
-                        </td>
-                    <% else %>
-                        <td>
-                          <span class="label label-<%= purchase_position.production_status %><%= purchase_position.stock_status %>"><%= purchase_position.position %></span>
-                        </td>
-                    <% end %>
-                    <td><%= purchase_position.article_number %></td>
-                    <td><%= purchase_position.article %></td>
-                    <td><%= purchase_position.product_line %></td>
-                    <td><%= purchase_position.quantity %></td>
-                    <td><%= purchase_position.storage_location %></td>
-                    <td><%= purchase_position.zip_location.title %></td>
-                    <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                    <td class="align-center"><%= select_tag "quantity_with_ids[#{purchase_position.id}]", options_from_collection_for_select((1..purchase_position.available_quantity), :to_i, :to_s, purchase_position.available_quantity) %></td>
-                    <% if permitted_to? :assign_positions, :pallets %>
-                        <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
-                    <% else %>
-                        <td></td>
-                    <% end %>
-                  </tr>
+    <%= render :partial => 'purchase_orders/partials/show/create_line_items' %>
+    
+    <% @pallets.each do |pallet| %>
+      <hr />
+      <blockquote>
+        <p><%= pallet.try(:shipping_address).try(:consignee_full) %></p>
+      </blockquote>
+      <% if pallet.mixed? %>
+          <dl class="dl-horizontal">
+            <dt>Mischpalette:</dt>
+            <dd>
+              <% pallet.purchase_orders.each do |p_o| %>
+                  <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
               <% end %>
-          <% end %>
-          </tbody>
-          <tfoot>
-          <% if permitted_to? :assign_positions, :pallets %>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="align-center"><%= text_field_tag(:pallet_id, nil, :placeholder => "Palett NR...") %></td>
-                <td class="align-center">
-                  <button class="btn btn-mini btn-primary" type="submit" data-disable-with="Please wait...">
-                    Hinzufügen
-                  </button>
-                </td>
-              </tr>
-          <% end %>
-          </tfoot>
-        </table>
+            </dd>
+          </dl>
+      <% end %>
+      <%= render :partial => 'purchase_orders/partials/show/destroy_line_items', :locals => { :pallet => pallet } %>
     <% end %>
+  </div>
+</div>
 
 <% else %>
     <div id="flash_notice">Für diesen Auftrag wurden bereits alle Positionen bearbeitet!</div>
-
-<% end %>
-
-<% @pallets.each do |pallet| %>
-    <blockquote style="margin-bottom: 0;">
-      <p><%= pallet.shipping_address.consignee_full %></p>
-    </blockquote>
-    <% if pallet.mixed? %>
-        <dl class="dl-horizontal">
-          <dt>Mischpalette:</dt>
-          <dd>
-            <% pallet.purchase_orders.each do |p_o| %>
-                <%= link_to(p_o.baan_id, purchase_order_path(PurchaseOrder.where(:baan_id => p_o.baan_id).first), :class => "m-r_5px") %>
-            <% end %>
-          </dd>
-        </dl>
-    <% end %>
-
-    <%= form_tag(remove_positions_pallet_path(pallet), {:class => "form no-margin", "data-submit_handler" => "true", :method => :delete}) do %>
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Position</th>
-            <th>Artikel NR</th>
-            <th>Artikel</th>
-            <th>Produktlinie</th>
-            <th>Menge angefügt</th>
-            <th>Lager Ort</th>
-            <th>PLZ Gebiet</th>
-            <th>Versand</th>
-            <th>Auswahl</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% pallet.purchase_positions.each do |purchase_position| %>
-              <tr>
-                <td>
-                  <%= title_for_purchase_position(purchase_position, @purchase_order) %>
-                </td>
-                <td><%= purchase_position.article_number %></td>
-                <td><%= purchase_position.article %></td>
-                <td><%= purchase_position.product_line %></td>
-                <td><%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity} / #{purchase_position.quantity}" %></td>
-                <td><%= purchase_position.storage_location %></td>
-                <td><%= purchase_position.zip_location.title %></td>
-                <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-                <td class="align-center">
-                  <% if permitted_to? :remove_positions, :pallets %>
-                      <% if purchase_position.purchase_order == @purchase_order %>
-                          <%= check_box_tag "purchase_position_ids[]", purchase_position.id %>
-                      <% end %>
-                  <% end %>
-                </td>
-              </tr>
-          <% end %>
-          </tbody>
-          <tfoot>
-          <tr>
-            <td><%= pallet.pallet_type.read_as %>: <strong><%= pallet.id %></strong></td>
-            <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></td>
-            <td>
-              <% if pallet.cargo_list.present? %>
-                  Versand: <%= link_to(pallet.cargo_list.id, pallet.cargo_list) %>
-              <% end %>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div class="btn-toolbar" style="margin: 0;">
-                <div class="btn-group">
-                  <a href="<%= edit_pallet_path(pallet, :format => :xml) %>" data-toggle="modal-remote" data-target="#edit_pallet" class="btn btn-mini">Edit</a>
-                  <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
-                  <ul class="dropdown-menu pull-right">
-                    <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
-                  </ul>
-                </div>
-              </div>
-            </td>
-            <td class="align-center">
-              <button class="btn btn-mini btn-warning" type="submit" data-disable-with="Please wait...">
-                Entfernen
-              </button>
-            </td>
-          </tr>
-          </tfoot>
-        </table>
-    <% end %>
 
 <% end %>

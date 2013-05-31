@@ -1,89 +1,67 @@
-<h1>Pallet NR# <%= @pallet.id %></h3>
-<ul>
-  <li class="summary clearfix"><p class="floatLeft bold title">Kunde:</p><p class="floatLeft"><%= link_to(@pallet.purchase_order.customer.company, customer_path(@pallet.purchase_order.customer)) %></p></li>
-  <li class="summary clearfix"><p class="floatLeft bold title">Mehrplatz:</p><p class="floatLeft"><%= @pallet.additional_space %> cm</p></li>
-  <li class="summary clearfix"><p class="floatLeft bold title">Gewicht:</p><p class="floatLeft"><%= @pallet.purchase_order.weight_total %> kg</p></li>
-  <li class="summary clearfix"><p class="floatLeft bold title">Preis:</p><p class="floatLeft"><%= @pallet.purchase_order.amount %> EURO</p></li>
-  
-  
-</ul>
-<table>
-  <thead>
-    <tr>
-      <th>Description</th>
-      <th>Position</th>
-      <th>Gewicht Einzel</th>
-      <th>Gewicht Total</th>
-      <th>Menge Total</th>
-      <th>Betrag</th>
-      <th>Delivery</th>
-      <th>Aktionen</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @pallet.purchase_positions.each do |purchase_position| %>
-      <tr>
-        <td class="align-center"><%= purchase_position.commodity_code.content %></td>
-        <td class="align-center"><%= purchase_position.position %></td>
-        <td class="align-center"><%= purchase_position.weight_single %></td>
-        <td class="align-center"><%= purchase_position.weight_total %></td>
-        <td class="align-center"><%= purchase_position.quantity %></td>
-        <td class="align-center"><%= number_to_currency purchase_position.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
-        <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:long) %></td>
-        <td class="align-center"><%= button_to("Entfernen", remove_positions_pallet_path(@pallet, :purchase_position_ids => purchase_position.id), :method => :delete) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-  <tfoot>
-  </tfoot>
-</table>
+<%- model_class = Pallet -%>
 
-<% form_for @pallet do |f| %>
-  <p class="formLabel">
-    <%= f.label :additional_space, "Mehrplatz" %>
-  </p>
-  <p class="formInput">
-    <%= f.text_field :additional_space, :class => "fullWidth", :placeholder => "Mehrplatz in cm eingeben..." %>
-  </p>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th>Position</th>
-        <th>Gewicht Einzel</th>
-        <th>Gewicht Total</th>
-        <th>Menge Total</th>
-        <th>Betrag</th>
-        <th>Delivery</th>
-        <th>Palettieren</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @purchase_positions.each do |purchase_position| %>
-        <tr>
-          <td class="align-center"><%= purchase_position.commodity_code.content %></td>
-          <td class="align-center"><%= purchase_position.position %></td>
-          <td class="align-center"><%= purchase_position.weight_single %></td>
-          <td class="align-center"><%= purchase_position.weight_total %></td>
-          <td class="align-center"><%= purchase_position.quantity %></td>
-          <td class="align-center"><%= number_to_currency purchase_position.amount, :locale => @purchase_order.customer.shipping_addresses.first.country.downcase.to_sym %></td>
-          <td class="align-center"><%= purchase_position.delivery_date.to_date.to_formatted_s(:long) %></td>
-          <td class="align-center"><%= check_box_tag "purchase_position_ids[]", purchase_position.id %></td>
-        </tr>
-      <% end %>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><%= f.submit "Hinzufügen", :disable_with => 'Hinzufügening...' %></td>
-      </tr>
-    </tfoot>
-  </table>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li>
+      <%= link_to("Paletten", pallets_path) %> <span class="divider">/</span>
+    </li>
+    <li class="active">
+      <%= @pallet.id %> <span class="divider">/</span>
+    </li>
+    <li class="active">
+      Edit
+    </li>
+  </ul>
 <% end %>
+
+<div class="media">
+  <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=154x154&chl=#{edit_pallet_url(@pallet)}", :class => "pull-left") %>
+  <div class="media-body">
+    <div class="page-header">
+      <h1>
+        <%=t '.title', :default => model_class.model_name.human %>
+        <small>
+          <%= @pallet.id %>
+        </small>
+      </h1>
+    </div>
+    <dl class="dl-horizontal">
+      <dt>Empfänger:</dt>
+      <dd><%= @pallet.shipping_address.consignee_full %></dd>
+    </dl>
+  </div>
+</div>
+
+<hr />
+
+<div class="row-fluid">
+  <div class="span11 offset1">
+    <%= simple_form_for @pallet, :html => {:class => "form-horizontal"} do |f| %>
+      <fieldset>
+        <legend>Bearbeiten</legend>
+        <div class="control-group">
+          <%= f.label :additional_space, "Zusätzlicher Platz", :class => "control-label" %>
+          <div class="controls">
+            <%= f.select(:additional_space, {'0.5' => 0.5, '1.0' => 1.0, '1.5' => 1.5, '2.0' => 2.0}, {:include_blank => true}, {}) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :pallet_type, "Paletten Typ", :class => "control-label" %>
+          <div class="controls">
+            <%= f.collection_select(:pallet_type_id, PalletType.all, :id, :description, {:include_blank => true}, {}) %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :delivered, "Versendet?", :class => "control-label" %>
+          <div class="controls">
+            <%= f.select(:delivered, { 'Ja'=>true, 'Nein'=>false }, {}, {}) %>
+          </div>
+        </div>
+        <div class="form-actions">
+          <%= link_to("Abbrechen", purchase_order_path(@pallet.purchase_orders.first), :class => "btn") %>
+          <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
+        </div>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

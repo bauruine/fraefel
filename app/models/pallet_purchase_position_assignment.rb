@@ -2,14 +2,13 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   belongs_to :pallet, :class_name => "Pallet", :foreign_key => "pallet_id"
   belongs_to :purchase_position, :class_name => "PurchasePosition", :foreign_key => "purchase_position_id"
 
-  after_create :update_purchase_position_counter
+  after_save :recalculate_pallet_line_items_quantity
+  after_destroy :recalculate_pallet_line_items_quantity, :destroy_pallet_if_no_line_items
+  
+  after_save :update_pallet_shipping_address, :update_pallet_zip_location_id, :update_pallet_shipping_route_id
+  
   after_create :update_purchase_order_calculation
-  after_create :update_pallet_level_3
-  after_create :update_pallet_zip_location_id
-  after_create :update_pallet_shipping_route_id
-  after_destroy :update_purchase_position_counter
-  after_destroy :handle_assignments
-
+  
   def self.fix_amount_and_weight
     self.all.each do |p_p_p_a|
       if p_p_p_a.purchase_position.present?
@@ -42,37 +41,23 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   end
 
   def update_pallet_shipping_route_id
-    if self.pallet.present? && self.purchase_position.present?
-      @purchase_orders = self.pallet.purchase_orders
-      @shipping_route_id = @purchase_orders.collect(&:shipping_route_id).uniq.compact.first
-
-      self.pallet.update_attribute("shipping_route_id", @shipping_route_id)
-    end
+    self.reload
+    self.pallet.patch_shipping_route_id
   end
 
-  def update_pallet_level_3
-    if self.pallet.present? && self.purchase_position.present?
-      @purchase_orders = self.pallet.purchase_orders
-      @level_3_id = @purchase_orders.collect(&:level_3).uniq.compact.first
-
-      self.pallet.update_attribute("level_3", @level_3_id)
-    end
+  def update_pallet_shipping_address
+    self.reload
+    self.pallet.patch_shipping_address
   end
 
   def update_pallet_zip_location_id
-    if self.pallet.present? && self.purchase_position.present?
-      @purchase_positions = self.pallet.purchase_positions
-      @zip_location_id = @purchase_positions.collect(&:zip_location_id).uniq.compact.first
-
-      self.pallet.update_attribute("zip_location_id", @zip_location_id)
-    end
+    self.reload
+    self.pallet.patch_zip_location_id
   end
 
-  def update_purchase_position_counter
-    if self.pallet.present? && self.purchase_position.present?
-      @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.where(:pallet_id => self.pallet.id)
-      self.pallet.update_attribute("purchase_position_counter", @pallet_purchase_position_assignments.sum("quantity"))
-    end
+  def recalculate_pallet_line_items_quantity
+    #self.reload
+    self.pallet.recalculate_line_items_quantity
   end
 
   def update_purchase_order_calculation
@@ -81,18 +66,15 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
     end
   end
 
-  def handle_assignments
-    if self.pallet.purchase_position_counter == 0
-      self.pallet.update_attributes(:cargo_list_id => nil, :delivery_rejection_id => nil)
-    end
+  def destroy_pallet_if_no_line_items
+    self.pallet.destroy_if_no_line_items
   end
 
   def very_ugly_patcher
-    self.update_purchase_position_counter
+    self.recalculate_pallet_line_items_quantity
     self.update_purchase_order_calculation
-    self.update_pallet_level_3
+    self.update_pallet_shipping_address
     self.update_pallet_zip_location_id
     self.update_pallet_shipping_route_id
-
   end
 end
