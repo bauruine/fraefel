@@ -42,8 +42,6 @@ Fraefel::Application.routes.draw do
   resource :dashboard, :only => [:show]
   
   resources :microsoft_databases
-
-  resources :user_sessions, :only => [:new, :create, :destroy]
   
   resources :roles
   
