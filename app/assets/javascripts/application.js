@@ -12,21 +12,20 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
 //= require twitter/bootstrap
 //= require_tree .
 
 $(document).ready(function() {
 
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
-  
+
   $('div[data-type="modal"], div[data-type="modal2"]').dialog({
     autoOpen: false,
     width: 'auto',
     height: 'auto',
     modal: true
   });
-  
+
   $('a[data-role="table_remote"]').click(function() {
     var remote_url = $(this).attr("href");
     $('div[data-type=modal]').load(remote_url + ' table', function() {
@@ -35,7 +34,7 @@ $(document).ready(function() {
     });
     return false;
   });
-  
+
   $('a[data-role="edit_local"]').click(function() {
     $('div[data-type="modal"]').show();
     $('div[data-type="modal"]').dialog('open');
@@ -53,14 +52,14 @@ $(document).ready(function() {
     $("form[data-tab=" + warpToTab + "]").show();
     $('div[data-type="modal"]').show();
     $('div[data-type=modal]').dialog('open');
-    
+
     return false;
   });
-  
+
   $('input#delivery_rejection_customer_company').autocomplete({
     source: $('input#delivery_rejection_customer_company').data("autocomplete_source")
   });
-  
+
   $('a[data-role="edit_remote"]').click(function() {
     var remote_url = $(this).attr("href");
     $('div[data-type="modal"]').load(remote_url + ' form', function() {
@@ -69,7 +68,7 @@ $(document).ready(function() {
     });
     return false;
   });
-  
+
   $('a[data-role="edit_remote2"]').click(function() {
     var remote_url = $(this).attr("href");
     $('div[data-type="modal2"]').load(remote_url + ' form', function() {
@@ -78,7 +77,7 @@ $(document).ready(function() {
     });
     return false;
   });
-  
+
   $('body').on('click', 'a[data-toggle="scroll-top"]', function (e) {
     e.preventDefault();
     $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -89,7 +88,7 @@ $(document).ready(function() {
     var href = $this.attr('href');
     var $target = $($this.attr('data-target'));
     var option = 'toggle';
-    
+
     e.preventDefault();
     $target.load(href, function() {
       $target.modal(option);

@@ -2,34 +2,47 @@
   <ul class="breadcrumb">
     <li><a href="<%= cargo_lists_path %>">Versand Listen</a> <span class="divider">/</span></li>
     <li class="active"><%= @cargo_list.id %></li>
+    <li class="pull-right">
+      <% if permitted_to? :edit, :cargo_lists %>
+        <div class="btn-group">
+          <%= link_to(edit_cargo_list_path(@cargo_list), :class => "btn btn-mini") do %>
+            <i class="icon-cogs"></i> Versand bearbeiten
+          <% end %>
+        </div>
+      <% end %>
+    </li>
   </ul>
 <% end %>
 
 <div class="modal hide fade" id="remote">
 </div>
 
-<div class="page-header">
-  <h1 class="pull-left">Versand NR#<%= @cargo_list.id %></h1>
-  <%= render 'cargo_lists/partials/show/btn_toolbar' %>
-  <div class="clear"></div>
-</div>
-
 <% if @cargo_list.delivered %>
   <div class="alert alert-success">Versand <%= @cargo_list.id %> wurde bereits versendet. Klicke <%= link_to("hier", cargo_lists_path()) %> um zurückzukehren.</div>
 <% end %>
 
-<dl class="dl-horizontal">
-  <dt>Versand:</dt>
-  <dd><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %> / <%= @cargo_list.country %></dd>
-  <dt>Empfänger</dt>
-  <dd><%= @cargo_list.referee %></dd>
-  <dt>Anzahl Paletten:</dt>
-  <dd><%= @pallets.count.to_i %></dd>
-  <dt>Mehrplatz</dt>
-  <dd><%= @cargo_list.additional_space %></dd>
-  <dt>Spediteur</dt>
-  <dd><%= @cargo_list.shipper.try(:name) %></dd>
-</dl>
+<div class="row-fluid">
+  <div class="span2">
+    <%= render 'cargo_lists/partials/show/btn_toolbar' %>
+  </div>
+<div class="span10">
+<div class="media">
+  <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=154x154&chl=#{cargo_list_url(@cargo_list)}", :class => "pull-left") %>
+  <div class="media-body">
+    <div class="page-header">
+      <h1>
+        <%=t '.title', :default => CargoList.model_name.human %>
+        <small>
+          <%= @cargo_list.id %>
+        </small>
+      </h1>
+      <span class="label label-warning">Spediteur: <strong><%= @cargo_list.shipper.try(:name) %></strong></span>
+      <span class="label label-info">Empfänger: <strong><%= @cargo_list.referee %></strong></span>
+      <span class="label label-info"><strong><%= @cargo_list.country %></strong></span>
+      <span class="label label-info"><strong><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></strong></span>
+    </div>
+  </div>
+</div>
 
 <blockquote>
   <p>
@@ -39,7 +52,7 @@
 
 <%= form_tag(remove_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
   <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-  <table class="table table-striped">
+  <table class="table table-striped table-bordered">
     <thead>
       <tr>
         <th id="column_1">NR</th>
@@ -47,8 +60,7 @@
         <th id="column_3">Mehrplatz</th>
         <th id="column_4">Tour</th>
         <th id="column_5">PLZ Gebiet</th>
-        <th id="column_6">Empfänger</th>
-        <th id="column_7"></th>
+        <th id="column_6" colspan="2">Empfänger</th>
       </tr>
     </thead>
     <tbody>
@@ -57,7 +69,7 @@
           <td>
             <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
           </td>
-          <td><%= pallet.purchase_position_counter %></td>
+          <td><%= pallet.line_items_quantity %></td>
           <td><%= pallet.additional_space %></td>
           <td><%= pallet.shipping_route.name %></td>
           <td><%= pallet.purchase_positions.first.zip_location.title %></td>
@@ -69,10 +81,13 @@
     <tfoot>
       <tr>
         <% if @pallets.present? %>
-          <% 6.times do %>
-            <td></td>
-          <% end %>
-          <td style="text-align:center;"><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-mini btn-danger", :disable_with => "Entferne..." %></td>
+          <td colspan="6">
+            <ul class="inline">
+              <li>Anzahl Paletten: <strong><%= @pallets.count.to_i %></strong></li>
+              <li>Mehrplatz: <strong><%= @cargo_list.additional_space %></strong></li>
+            </ul>
+          </td>
+          <td><%= submit_tag "Entfernen", :name => "submit", :class => "btn btn-block", :disable_with => "Entferne..." %></td>
         <% else %>
           <td colspan="7">Keine Zuweisungen.</td>
         <% end %>
@@ -89,7 +104,7 @@
 
 <%= form_tag(assign_pallets_cargo_lists_path, {:class => "form", "data-submit_handler" => "true", :method => :post}) do %>
   <%= hidden_field_tag("cargo_id", @cargo_list.id) %>
-  <table class="table table-striped">
+  <table class="table table-striped table-bordered">
     <thead>
       <tr>
         <th id="column_1">NR</th>
@@ -97,8 +112,7 @@
         <th id="column_3">Mehrplatz</th>
         <th id="column_4">Tour</th>
         <th id="column_5">PLZ Gebiet</th>
-        <th id="column_6">Empfänger</th>
-        <th id="column_7"></th>
+        <th id="column_6" colspan="2">Empfänger</th>
       </tr>
     </thead>
     <tbody>
@@ -107,7 +121,7 @@
           <td>
             <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
           </td>
-          <td><%= pallet.purchase_position_counter %></td>
+          <td><%= pallet.line_items_quantity %></td>
           <td><%= pallet.additional_space %></td>
           <td><%= pallet.shipping_route.name %></td>
           <td><%= pallet.purchase_positions.first.zip_location.title %></td>
@@ -119,10 +133,8 @@
     <tfoot>
       <tr>
         <% if @available_pallets.present? %>
-          <% 6.times do %>
-            <td></td>
-          <% end %>
-          <td style="text-align:center;"><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-mini btn-primary", :disable_with => "Füge hinzu..." %></td>
+          <td colspan="6"></td>
+          <td><%= submit_tag "Hinzufügen", :name => "submit", :class => "btn btn-block", :disable_with => "Füge hinzu..." %></td>
         <% else %>
           <td colspan="7">Keine Paletten verfügbar.</td>
         <% end %>
@@ -130,50 +142,5 @@
     </tfoot>
   </table>
 <% end %>
-
-<script type="text/javascript" charset="utf-8">
-  var column_1 = 0;
-  var column_2 = 0;
-  var column_3 = 0;
-  var column_4 = 0;
-  var column_5 = 0;
-  var column_6 = 0;
-  var column_7 = 0;
-  
-  $('th#column_1').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_1) {column_1 = this_width};
-  });
-  $('th#column_2').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_2) {column_2 = this_width};
-  });
-  $('th#column_3').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_3) {column_3 = this_width};
-  });
-  $('th#column_4').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_4) {column_4 = this_width};
-  });
-  $('th#column_5').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_5) {column_5 = this_width};
-  });
-  $('th#column_6').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_6) {column_6 = this_width};
-  });
-  $('th#column_7').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_7) {column_7 = this_width};
-  });
-  
-  $('th#column_1').css('width', column_1 + 'px');
-  $('th#column_2').css('width', column_2 + 'px');
-  $('th#column_3').css('width', column_3 + 'px');
-  $('th#column_4').css('width', column_4 + 'px');
-  $('th#column_5').css('width', column_5 + 'px');
-  $('th#column_6').css('width', column_6 + 'px');
-  $('th#column_7').css('width', column_7 + 'px');
-</script>
+</div>
+</div>

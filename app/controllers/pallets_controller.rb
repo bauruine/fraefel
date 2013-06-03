@@ -1,48 +1,44 @@
 class PalletsController < ApplicationController
   filter_access_to :all
-  
+
   def show
     @pallet = Pallet.find(params[:id])
     @purchase_positions = @pallet.purchase_positions.includes(:shipping_address)
     respond_to do |format|
       format.pdf do
-        render( 
+        render(
           :pdf => "Palette-NR: #{@pallet.id}-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
           :show_as_html => params[:debug].present?,
+          :print_media_type => true,
           :orientation => 'Landscape',
-          :encoding => 'UTF-8',
-          :header => {
-            :right => "#{Time.now}",
-            :line => true,
-            :spacing => 2
-          }
+          :encoding => 'UTF-8'
         )
       end
     end
   end
-  
+
   def ajax_show
     @pallet = Pallet.find(params[:id])
   end
-  
+
   def search_for
     @pallet = Pallet.where(:id => params[:pallet_id])
   end
-  
+
   def index
     @search = Pallet.where("purchase_positions.id IS NOT NULL").includes(:zip_location, :shipping_address, :cargo_list, {:pallet_purchase_position_assignments => {:purchase_position => [:commodity_code, :html_content]}}, :purchase_orders, :pallet_type).search(params[:q] || {:delivered_eq => "false"})
     @pallets = @search.result
-    
+
     @pallet_ids = @pallets.collect(&:id)
-    
+
     @level_3 = Address.order("addresses.company_name ASC").select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 10).where("pallets.id" => @pallet_ids).joins(:pallets)
-    
+
     respond_to do |format|
       format.html
       format.pdf do
-        render( 
+        render(
           :pdf => "Paletten-Liste-#{Time.now}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
@@ -64,7 +60,7 @@ class PalletsController < ApplicationController
       end
     end
   end
-  
+
   def edit
     @pallet = Pallet.find(params[:id])
     respond_to do |format|
@@ -72,7 +68,7 @@ class PalletsController < ApplicationController
       format.xml
     end
   end
-  
+
   def update
     @pallet = Pallet.find(params[:id])
     respond_to do |format|
@@ -88,7 +84,7 @@ class PalletsController < ApplicationController
       end
     end
   end
-  
+
   def create
     @purchase_order = PurchaseOrder.find(params[:purchase_order])
     @pallet = @purchase_order.pallets.build()
@@ -98,14 +94,14 @@ class PalletsController < ApplicationController
       flash[:error] = "Could not create a new pallet for this order..."
     end
   end
-  
+
   def remove_positions
     @pallet = Pallet.find(params[:id])
     @purchase_positions = PurchasePosition.where(:id => params[:purchase_position_ids])
     @purchase_order = @purchase_positions.first.purchase_order
-    
+
     PalletPurchasePositionAssignment.where(:pallet_id => @pallet.id, :purchase_position_id => params[:purchase_position_ids]).destroy_all
-    
+
     if !Pallet.find(@pallet).purchase_positions.where(:purchase_order_id => @purchase_positions.first.purchase_order_id).present?
       # remove purchase_order assignment from table
       @pallet.purchase_orders -= [@purchase_positions.first.purchase_order]
@@ -113,7 +109,7 @@ class PalletsController < ApplicationController
     end
     redirect_to(:back)
   end
-  
+
   def delete_empty
     @purchase_order = PurchaseOrder.find(params[:purchase_order_id])
     @purchase_order.pallets.each do |pallet|
@@ -123,7 +119,7 @@ class PalletsController < ApplicationController
     end
     redirect_to(:back)
   end
-  
+
   def assign_positions
     @purchase_order = PurchaseOrder.where(:id => params[:purchase_order_id]).first
     if params[:pallet_id].present?
@@ -131,11 +127,11 @@ class PalletsController < ApplicationController
     else
       @pallet = Pallet.create
     end
-    
+
     if params[:purchase_position_ids].present?
       @purchase_order.pallets += [@pallet]
     end
-    
+
     pallet_purchase_position_assignment_attributes = {}
     params[:quantity_with_ids].each do |k, v|
       if params[:purchase_position_ids].present? && params[:purchase_position_ids].include?(k)
@@ -147,11 +143,11 @@ class PalletsController < ApplicationController
         pallet_purchase_position_assignment_attributes.merge!(:quantity => v.to_i)
         pallet_purchase_position_assignment_attributes.merge!(:amount => purchase_position.amount * v.to_i)
         pallet_purchase_position_assignment_attributes.merge!(:weight => purchase_position.weight_single * v.to_i)
-        
+
         @pallet.pallet_purchase_position_assignments.create(pallet_purchase_position_assignment_attributes)
       end
     end
     redirect_to(:back)
   end
-  
+
 end

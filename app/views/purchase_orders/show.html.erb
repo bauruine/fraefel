@@ -21,7 +21,7 @@
         <%= link_to(purchase_order_path(@purchase_order, :format => :pdf), :class => "btn btn-mini btn-primary") do %>
           <i class="icon-print"></i> Drucke VK
         <% end %>
-        <%= link_to(print_pallets_purchase_order_path(@purchase_order, :format => :pdf, :pdf_type => "pallets"), :class => "btn btn-mini btn-primary") do %>
+        <%= link_to(purchase_order_path(@purchase_order, :format => :pdf, :parcels_only => true), :class => "btn btn-mini btn-primary") do %>
           <i class="icon-print"></i> Drucke VK-Paletten
         <% end %>
       </div>
@@ -87,7 +87,7 @@
       </p>
     </blockquote>
     <%= render :partial => 'purchase_orders/partials/show/create_line_items' %>
-    
+
     <% @pallets.each do |pallet| %>
       <hr />
       <blockquote>

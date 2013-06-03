@@ -1,0 +1,87 @@
+<% @special_parcels = Pallet.where(:id => @pallets.collect(&:id), "pallet_purchase_position_assignments.is_individual_package" => true).includes(:line_items, :pallet_type, :shipping_address) %>
+
+<% @special_parcels.each do |pallet| %>
+  <% line_items = PalletPurchasePositionAssignment.where("pallet_purchase_position_assignments.pallet_id" => pallet.id, "pallet_purchase_position_assignments.is_individual_package" => true) %>
+  <% line_items = line_items.includes(:purchase_position => :shipping_address) %>
+
+  <h1><%= "Achtung Mischpalette" %></h1>
+  <div class="media">
+    <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=120x120&chl=#{pallet_url(pallet)}", :class => "pull-left") %>
+    <div class="media-body">
+      <h1><%= "#{pallet.pallet_type.read_as} #{pallet.id}" %></h1>
+      <blockquote>
+        <p><%= "Palette mit Einzelpackstücken diverse Empfänger" %></p>
+      </blockquote>
+    </div>
+  </div>
+
+  <ul class="breadcrumb">
+    <% if pallet.cargo_list.present? %>
+      <li>Versand <span class="divider">/</span></li>
+      <li><strong><%= pallet.cargo_list.id %></strong> <span class="divider">/</span></li>
+    <% end %>
+    <li><%= pallet.pallet_type.read_as %> <span class="divider">/</span></li>
+    <li><strong><%= pallet.id %></strong></li>
+  </ul>
+
+  <table class="table table-striped table-bordered table-condensed new-page">
+    <thead>
+      <tr>
+        <tr>
+          <th>VK-Position</th>
+          <th>Artikel NR</th>
+          <th>Artikel</th>
+          <th>Anz.</th>
+        </tr>
+      </tr>
+    </thead>
+    <tbody>
+      <% line_items.each do |line_item| %>
+        <% purchase_position = line_item.purchase_position %>
+        <tr>
+          <td><%= purchase_position.baan_id %></td>
+          <td colspan="3"><strong><%= purchase_position.shipping_address.try(:consignee_full) %></strong></td>
+        </tr>
+        <tr>
+          <% if purchase_position.purchase_order != pallet.purchase_orders.first %>
+            <td class="red"><%= purchase_position.baan_id %></td>
+          <% else %>
+            <td><%= purchase_position.baan_id %></td>
+          <% end %>
+          <td><%= purchase_position.article_number %></td>
+          <td><%= purchase_position.article %></td>
+          <td><%= line_item.quantity %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="bold"><%= "Paletten #{pallet.pallet_type.count_as.to_f}" %></td>
+        <td class="bold"><%= "Paletten-Plätze #{pallet.pallet_type.count_as.to_f + pallet.additional_space.to_f}" %></td>
+        <td class="bold">
+          <%= "Gewicht Netto #{line_items.sum(:weight)} kg" %>
+        </td>
+        <td class="bold">
+          <%= "Gewicht Brutto #{line_items.sum(:weight) + pallet.pallet_type.weight} kg" %>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <% line_items.each do |line_item| %>
+    <% shipping_address = line_item.purchase_position.shipping_address %>
+
+    <div class="new-page" style="margin-top:220px;">
+      <address>
+        <strong><%= shipping_address.company_name %></strong><br>
+        <%= shipping_address.street %><br>
+        <%= "#{shipping_address.country}-#{shipping_address.postal_code} #{shipping_address.city}" %>
+      </address>
+      <address>
+        <strong><%= line_item.purchase_position.baan_id %></strong><br>
+        <strong><%= "#{pallet.pallet_type.read_as}: #{pallet.id}" %></strong>
+      </address>
+      <hr />
+    </div>
+  <% end %>
+<% end %>

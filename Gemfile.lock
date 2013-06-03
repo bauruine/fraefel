@@ -153,7 +153,6 @@ GEM
     mime-types (1.23)
     multi_json (1.7.4)
     multi_xml (0.5.3)
-    mysql2 (0.3.11)
     nest (1.1.2)
       redis
     net-scp (1.1.1)
@@ -184,6 +183,7 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
+    pg (0.15.1)
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.3)
@@ -307,11 +307,11 @@ DEPENDENCIES
   less-rails
   letter_opener
   magic_user
-  mysql2
   nokogiri
   ohm
   paper_trail
   paperclip
+  pg
   prawn!
   private_pub
   rabl

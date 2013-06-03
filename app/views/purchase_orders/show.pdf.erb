@@ -1,37 +1,99 @@
-<blockquote>
-  <p>
-    VK #<%= @purchase_order.baan_id %>
-  </p>
-</blockquote>
+<%- model_class = PurchaseOrder -%>
 
+<div class="media">
+  <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=120x120&chl=#{purchase_order_url(@purchase_order)}", :class => "pull-left") %>
+  <div class="media-body">
+    <div class="page-header">
+      <h1>
+        <% if (params[:parcels_only].present? && params[:parcels_only] == "false") || (!params[:parcels_only].present?) %>
+          <%= t '.title', :default => model_class.model_name.human %>
+        <% else %>
+          <%= "Paletten Liste VK-Auftrag" %>
+        <% end %>
+        <small>
+          <%= @purchase_order.baan_id %>
+        </small>
+      </h1>
+    </div>
+    <dl class="dl-horizontal">
+      <dt>Empfänger:</dt>
+      <dd><%= @purchase_order.shipping_address.consignee_full %></dd>
+    </dl>
+  </div>
+</div>
 
-<section class="filter_box">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">VK-Pos für VK <%= @purchase_order.baan_id %></h4>
-  </header>
-  <section class="filter_box_content clearfix">
-    
-    <table class="table no-margin">
+<hr />
+
+<% if (params[:parcels_only].present? && params[:parcels_only] == "false") || (!params[:parcels_only].present?) %>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Artikel NR</th>
+        <th>Artikel</th>
+        <th>Produktlinie</th>
+        <th>Menge Total</th>
+        <th>Lager Ort</th>
+        <th>PLZ Gebiet</th>
+        <th>Versand</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @purchase_positions.each do |purchase_position| %>
+        <tr>
+          <td class="nowrap"><%= purchase_position.position %></td>
+          <td><%= purchase_position.article_number %></td>
+          <td><%= purchase_position.article %></td>
+          <td><%= purchase_position.product_line %></td>
+          <td><%= purchase_position.quantity %></td>
+          <td><%= purchase_position.storage_location %></td>
+          <td><%= purchase_position.zip_location.title %></td>
+          <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <hr />
+<% end %>
+
+<% if @pallets.present? %>
+  <% @pallets.each do |pallet| %>
+    <blockquote>
+      <p><%= pallet.try(:shipping_address).try(:consignee_full) %></p>
+    </blockquote>
+
+    <ul class="breadcrumb">
+      <% if pallet.cargo_list.present? %>
+        <li>Versand <span class="divider">/</span></li>
+        <li><strong><%= pallet.cargo_list.id %></strong> <span class="divider">/</span></li>
+      <% end %>
+      <li><%= pallet.pallet_type.read_as %> <span class="divider">/</span></li>
+      <li><strong><%= pallet.id %></strong></li>
+    </ul>
+
+    <table class="table table-condensed table-bordered">
       <thead>
         <tr>
           <th>Position</th>
           <th>Artikel NR</th>
           <th>Artikel</th>
           <th>Produktlinie</th>
-          <th>Menge Total</th>
+          <th>Menge angefügt</th>
           <th>Lager Ort</th>
           <th>PLZ Gebiet</th>
           <th>Versand</th>
         </tr>
       </thead>
       <tbody>
-        <% @purchase_positions.each do |purchase_position| %>
+        <% pallet.purchase_positions.each do |purchase_position| %>
           <tr>
-            <td><%= purchase_position.position %></td>
+            <td><%= purchase_position.baan_id %></td>
             <td><%= purchase_position.article_number %></td>
             <td><%= purchase_position.article %></td>
             <td><%= purchase_position.product_line %></td>
-            <td><%= purchase_position.quantity %></td>
+            <td>
+              <%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity} / #{purchase_position.quantity}" %>
+            </td>
             <td><%= purchase_position.storage_location %></td>
             <td><%= purchase_position.zip_location.title %></td>
             <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
@@ -39,55 +101,8 @@
         <% end %>
       </tbody>
     </table>
-    
-  </section>
-</section>
-
-<% if @pallets.present? %>
-  <% @pallets.each do |pallet| %>
-    <section class="filter_box">
-      <header class="filter_box_header clearfix">
-        <% if pallet.cargo_list.present? %>
-          <h4 class="floatLeft m-r_5px"><%= "Versand NR #{pallet.cargo_list.id} |" %></h4>
-        <% end %>
-        <h4 class="floatLeft m-r_5px"><%= pallet.pallet_type.description == "coli" ? "Coli NR #{pallet.id} | " : "Palette NR #{pallet.id} | " %></h4>
-        <% if pallet.purchase_positions.present? %>
-          <h4 class="floatLeft"><%= pallet.purchase_positions.first.shipping_address.consignee_full %></h4>
-        <% end %>
-      </header>
-      <section class="filter_box_content clearfix">
-
-        <table class="table no-margin">
-          <thead>
-            <tr>
-              <th>Position</th>
-              <th>Artikel NR</th>
-              <th>Artikel</th>
-              <th>Produktlinie</th>
-              <th>Menge angefügt</th>
-              <th>Lager Ort</th>
-              <th>PLZ Gebiet</th>
-              <th>Versand</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% pallet.purchase_positions.each do |purchase_position| %>
-              <tr>
-                <td><%= title_for_purchase_position(purchase_position, @purchase_order) %></td>
-                <td><%= purchase_position.article_number %></td>
-                <td><%= purchase_position.article %></td>
-                <td><%= purchase_position.product_line %></td>
-                <td><%= "#{purchase_position.pallet_purchase_position_assignments.where(:pallet_id => pallet.id).first.quantity} / #{purchase_position.quantity}" %></td>
-                <td><%= purchase_position.storage_location %></td>
-                <td><%= purchase_position.zip_location.title %></td>
-                <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
-              </tr>
-            <% end %>
-            
-          </tbody>
-        </table>
-
-      </section>
-    </section>
+    <% if @pallets.size > 1 %>
+      <hr />
+    <% end %>
   <% end %>
 <% end %>

@@ -1,7 +1,7 @@
 class PurchaseOrdersController < ApplicationController
   filter_access_to :all
   before_filter :is_currently_importing, :only => :index
-  
+
   def show
     @purchase_order = PurchaseOrder.where(:id => params[:id]).first
     @purchase_positions = PurchasePosition.where(:purchase_order_id => @purchase_order.id).where("purchase_positions.cancelled" => false)
@@ -10,14 +10,14 @@ class PurchaseOrdersController < ApplicationController
     @mixed_purchase_positions = @purchase_order.purchase_positions.where("purchase_order_id IS NOT NULL")
     @shipping_routes = ShippingRoute.order("name ASC")
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
-    
+
     @commodity_codes = CommodityCode.all
-    
-    
+
+
     respond_to do |format|
       format.html
       format.pdf do
-        render( 
+        render(
           :pdf => "fraefel_app-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
@@ -32,9 +32,9 @@ class PurchaseOrdersController < ApplicationController
         )
       end
     end
-    
+
   end
-  
+
   def search_for
     @purchase_order = PurchaseOrder.where(:baan_id => params[:purchase_order_id])
     if @purchase_order.present?
@@ -45,26 +45,26 @@ class PurchaseOrdersController < ApplicationController
   def index
     @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :shipping_address, :html_content, :btn_cat_a).search(params[:q] || {:delivered_eq => "false", :picked_up_eq => "false", :cancelled_eq => "false"})
     @purchase_orders = @search.result.ordered_for_delivery
-    
+
     @purchase_order_ids = @purchase_orders.collect(&:id)
-    
-    @level_1 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 8).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
-    @level_2 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 9).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
-    @level_3 = Address.select("DISTINCT `addresses`.*").where("addresses.category_id = ?", 10).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
-    
-    @shipping_routes = ShippingRoute.select("DISTINCT `shipping_routes`.*").order("shipping_routes.name ASC").where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+
+    @level_1 = Address.select("DISTINCT addresses.*").where("addresses.category_id = ?", 8).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+    @level_2 = Address.select("DISTINCT addresses.*").where("addresses.category_id = ?", 9).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+    @level_3 = Address.select("DISTINCT addresses.*").where("addresses.category_id = ?", 10).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+
+    @shipping_routes = ShippingRoute.select("DISTINCT shipping_routes.*").order("shipping_routes.name ASC").where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
-    
-    @production_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 1).joins(:purchase_order).count("DISTINCT `purchase_positions`.id")
-    @stock_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.stock_status" => 1).joins(:purchase_order).count("DISTINCT `purchase_positions`.id")
-    @pending_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 0, "purchase_positions.stock_status" => 0).joins(:purchase_order).count("DISTINCT `purchase_positions`.id")
+
+    @production_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 1).joins(:purchase_order).count("DISTINCT purchase_positions.id")
+    @stock_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.stock_status" => 1).joins(:purchase_order).count("DISTINCT purchase_positions.id")
+    @pending_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 0, "purchase_positions.stock_status" => 0).joins(:purchase_order).count("DISTINCT purchase_positions.id")
     respond_to do |format|
       format.html
       format.js
       format.json
       format.xml
       format.pdf do
-        render( 
+        render(
           :pdf => "print-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
@@ -80,30 +80,30 @@ class PurchaseOrdersController < ApplicationController
       end
     end
   end
-  
+
   def edit
     @purchase_order = PurchaseOrder.find(params[:id])
     @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
     @shipping_routes = ShippingRoute.order("name ASC")
-    
-    
+
+
   end
-  
+
   def update
     @purchase_order = PurchaseOrder.find(params[:id])
-    
+
     if @purchase_order.update_attributes(params[:purchase_order])
       redirect_to @purchase_order, notice: 'VK wurde erfolgreich gespeichert.'
     else
       render 'edit'
     end
   end
-  
+
   def print_pallets
     @purchase_order = PurchaseOrder.find(params[:id])
     @pallets = @purchase_order.pallets
     @purchase_positions = @purchase_order.purchase_positions.where('pallet_id IS NOT NULL')
-    
+
     @foreign_purchase_positions = []
     @pallets.each do |pallet|
       pallet.purchase_positions.each do |purchase_position|
@@ -112,10 +112,10 @@ class PurchaseOrdersController < ApplicationController
         end
       end
     end
-    
+
     respond_to do |format|
       format.pdf do
-        render( 
+        render(
           :pdf => "print_VK##{@purchase_order.baan_id}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
@@ -137,26 +137,26 @@ class PurchaseOrdersController < ApplicationController
       end
     end
   end
-  
+
   def import_orders
     #system('rake routes')
     system('rake baan:import:re RAILS_ENV=production')
     redirect_to(:back)
   end
-  
+
   def destroy_multiple
     Resque.enqueue(FraefelJaintor)
     redirect_to purchase_orders_path
   end
-  
+
   private
-  
+
   def method_name
     if params[:search].present?
-      
+
     end
   end
-  
+
   def is_currently_importing
     unless Redis.connect.smembers('workers').empty?
       render "shared/disabled_while_importing"

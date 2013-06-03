@@ -1,12 +1,35 @@
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li class="active">Versand Listen</li>
+    <li class="pull-right">
+      <% if permitted_to? :new, :cargo_lists %>
+        <div class="btn-group">
+          <%= link_to(new_cargo_list_path, :class => "btn btn-mini") do %>
+            <i class="icon-plus-sign"></i> Versand erstellen
+          <% end %>
+        </div>
+      <% end %>
+      <div class="btn-group">
+        <%= link_to("#filter", :class => "btn btn-mini", :data => {:toggle => 'modal'}) do %>
+          <i class="icon-filter"></i> Filter
+        <% end %>
+        <%= link_to("#goto", :class => "btn btn-mini", :data => {:toggle => 'modal'}) do %>
+          <i class="icon-search"></i> Gehe zu
+        <% end %>
+      </div>
+    </li>
+  </ul>
+<% end %>
+
 <div class="modal hide fade" id="filter">
   <%= search_form_for @search, :html => {:class => "form-horizontal", :method => :get, :style => "margin: 0;"} do |f| %>
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal">×</button>
       <h3>Filter Optionen</h3>
     </div>
-    
+
     <div class="modal-body">
-      
+
       <div class="control-group">
         <%= f.label :delivered_eq, "Versendet", :class => "control-label" %>
         <div class="controls">
@@ -25,24 +48,24 @@
           <%= f.collection_select(:shipper_id_eq, Shipper.all, :id, :name, {:include_blank => true}) %>
         </div>
       </div>
-      
+
     </div>
     <div class="modal-footer">
       <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
       <button type="submit" class="btn btn-primary">Filtern</button>
     </div>
-  
+
   <% end %>
 </div>
 
 <div class="modal hide fade" id="goto">
   <%= form_tag(search_for_cargo_lists_path, {:class => "form-horizontal", :method => :get, :style => "margin: 0;"}) do %>
-  
+
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal">×</button>
       <h3>Gehe zu Versand</h3>
     </div>
-    
+
     <div class="modal-body">
       <div class="control-group">
         <%= label_tag(:cargo_list_id, "Versand NR", :class => "control-label") %>
@@ -55,83 +78,52 @@
       <a href="#" class="btn" data-dismiss="modal">Abbrechen</a>
       <button type="submit" class="btn btn-primary">Gehe zu</button>
     </div>
-  
+
   <% end %>
 </div>
 
-<ul class="breadcrumb">
-  <li class="active">Versand Listen</li>
-</ul>
-
 <div class="page-header">
-    <h1 class="pull-left">Versand Listen</h1>
-    <div class="btn-toolbar pull-right">
-      <% if permitted_to? :new, :cargo_lists %>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= new_cargo_list_path() %>"><i class="icon-plus-sign icon-white"></i> Neuer Versand</a>
-        </div>
-      <% end %>
-      <div class="btn-group">
-        <button data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</button>
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <a data-toggle="modal" href="#goto"><i class="icon-screenshot"></i> Gehe zu</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="clear"></div>
+  <h1>Versand Listen</h1>
 </div>
 
 <% if @cargo_lists.present? %>
-  <section class="filter_box">
-    <header class="filter_box_header">
-      <h4 class="floatLeft">&nbsp;</h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Versand NR</th>
-            <th>Anz. Paletten</th>
-            <th>Für</th>
-            <th>Land</th>
-            <th>Abholtermin von</th>
-            <th>Abholtermin bis</th>
-            <th>Spediteur</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @cargo_lists.each do |cargo_list| %>
-            <tr>
-              <td><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
-              <td><%= cargo_list.pallets.count %></td>
-              <td><%= cargo_list.referee.present? ? cargo_list.referee : "Bitte Name eintragen!"%></td>
-              <td><%= cargo_list.country %></td>
-              <td><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
-              <td><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
-              <td><%= cargo_list.shipper.try(:name) %></td>
-            </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </section>
-  </section>
-  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Versand NR</th>
+        <th>Anz. Paletten</th>
+        <th>Für</th>
+        <th>Land</th>
+        <th>Abholtermin von</th>
+        <th>Abholtermin bis</th>
+        <th>Spediteur</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cargo_lists.each do |cargo_list| %>
+        <tr>
+          <td><%= link_to(cargo_list.id, cargo_list_path(cargo_list)) %></td>
+          <td><%= cargo_list.pallets.count %></td>
+          <td><%= cargo_list.referee.present? ? cargo_list.referee : "Bitte Name eintragen!"%></td>
+          <td><%= cargo_list.country %></td>
+          <td><%= cargo_list.pick_up_time_earliest.to_formatted_s(:long) %></td>
+          <td><%= cargo_list.pick_up_time_latest.to_formatted_s(:long) %></td>
+          <td><%= cargo_list.shipper.try(:name) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
 <% else %>
   <div id="flash_notice">Keine Liefer Papiere gefunden...</div>
 <% end %>

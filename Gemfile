@@ -5,7 +5,7 @@ gem 'rails', '3.2.13'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  
+
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem "therubyracer"
   gem 'uglifier', '>= 1.0.3'
@@ -30,7 +30,8 @@ gem 'jquery-rails'
 gem 'jquery-ui-themes'
 gem "kaminari"
 gem "magic_user"
-gem 'mysql2'
+# gem 'mysql2'
+gem 'pg'
 gem 'nokogiri'
 gem 'ohm'
 gem 'paper_trail'

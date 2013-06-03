@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130530103158) do
+ActiveRecord::Schema.define(:version => 20130602140801) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -28,6 +28,13 @@ ActiveRecord::Schema.define(:version => 20130530103158) do
     t.string  "code"
     t.string  "eori"
   end
+
+  add_index "addresses", ["category_id"], :name => "index_addresses_on_category_id"
+  add_index "addresses", ["code"], :name => "index_addresses_on_code"
+  add_index "addresses", ["company_name"], :name => "index_addresses_on_company_name"
+  add_index "addresses", ["country"], :name => "index_addresses_on_country"
+  add_index "addresses", ["customer_id"], :name => "index_addresses_on_customer_id"
+  add_index "addresses", ["eori"], :name => "index_addresses_on_eori"
 
   create_table "article_groups", :force => true do |t|
     t.text     "description"
@@ -489,6 +496,21 @@ ActiveRecord::Schema.define(:version => 20130530103158) do
     t.boolean  "cancelled",               :default => false
   end
 
+  add_index "purchase_orders", ["baan_id"], :name => "index_purchase_orders_on_baan_id", :unique => true
+  add_index "purchase_orders", ["cancelled"], :name => "index_purchase_orders_on_cancelled"
+  add_index "purchase_orders", ["category_id"], :name => "index_purchase_orders_on_category_id"
+  add_index "purchase_orders", ["delivered"], :name => "index_purchase_orders_on_delivered"
+  add_index "purchase_orders", ["level_1"], :name => "index_purchase_orders_on_level_1"
+  add_index "purchase_orders", ["level_2"], :name => "index_purchase_orders_on_level_2"
+  add_index "purchase_orders", ["level_3"], :name => "index_purchase_orders_on_level_3"
+  add_index "purchase_orders", ["pending_status"], :name => "index_purchase_orders_on_pending_status"
+  add_index "purchase_orders", ["picked_up"], :name => "index_purchase_orders_on_picked_up"
+  add_index "purchase_orders", ["priority_level"], :name => "index_purchase_orders_on_priority_level"
+  add_index "purchase_orders", ["production_status"], :name => "index_purchase_orders_on_production_status"
+  add_index "purchase_orders", ["shipping_route_id"], :name => "index_purchase_orders_on_shipping_route_id"
+  add_index "purchase_orders", ["stock_status"], :name => "index_purchase_orders_on_stock_status"
+  add_index "purchase_orders", ["warehouse_number"], :name => "index_purchase_orders_on_warehouse_number"
+
   create_table "purchase_position_time_shifting_assignments", :force => true do |t|
     t.integer  "purchase_position_id"
     t.integer  "time_shifting_id"
@@ -530,6 +552,13 @@ ActiveRecord::Schema.define(:version => 20130530103158) do
     t.integer  "level_3"
     t.integer  "shipping_route_id"
   end
+
+  add_index "purchase_positions", ["baan_id"], :name => "index_purchase_positions_on_baan_id", :unique => true
+  add_index "purchase_positions", ["commodity_code_id"], :name => "index_purchase_positions_on_commodity_code_id"
+  add_index "purchase_positions", ["level_3"], :name => "index_purchase_positions_on_level_3"
+  add_index "purchase_positions", ["shipping_route_id"], :name => "index_purchase_positions_on_shipping_route_id"
+  add_index "purchase_positions", ["storage_location"], :name => "index_purchase_positions_on_storage_location"
+  add_index "purchase_positions", ["zip_location_id"], :name => "index_purchase_positions_on_zip_location_id"
 
   create_table "referees", :force => true do |t|
     t.integer  "customer_id"

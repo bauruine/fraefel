@@ -1,100 +1,108 @@
-<fieldset class="floatLeft">
-  <h3 style="font-size: 15px;">Transport Anmeldung - Versand <%= @cargo_list.id %></h3>
-</fieldset>
-<fieldset class="floatRight" style="font-size: 8px;">
-  gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
-</fieldset>
-<%= content_tag(:div, nil, :class => "clear") %>
-<hr style="margin-bottom: 20px;" />
-<div class="floatLeft" style="width: 48%; margin-bottom: 20px;">
-  <table>
-    <tbody>
-      <tr class="dark">
-        <td style="line-height: 20px; padding: 0 5px;">
-          <strong>Handelspartner:</strong>
-        </td>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <%= @cargo_list.referee %>
-        </td>
-      </tr>
-      <tr>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <strong>Versandsdatum:</strong>
-        </td>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <%= @cargo_list.pick_up_time_earliest.to_formatted_s(:swiss_date) %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="page-header">
+  <h1><%= "Transport Anmeldung - Versand #{@cargo_list.id}" %></h1>
+  <small><%= "gedruckt von #{current_user.full_name} / #{Time.now.to_formatted_s(:swiss_date)}" %></small>
 </div>
-<div class="floatRight" style="width: 48%;">
-  <table>
-    <tbody>
-      <tr class="dark">
-        <td style="line-height: 20px; padding: 0 5px;">
-          <strong>Paletten / Paletten-Plätze:</strong>
-        </td>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <%= @pallet_types.sum('pallet_types.count_as') %> / <%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as') %>
-        </td>
-      </tr>
-      <tr>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <strong>Gewicht Brutto</strong>
-        </td>
-        <td style="line-height: 20px; padding: 0 5px;">
-          <%= "#{@pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.weight") + (@pallet_types.sum("pallet_types.count_as") * 20)} kg" %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<%= content_tag(:div, nil, :class => "clear") %>
+<dl class="dl-horizontal">
+  <dt>Handelspartner:</dt>
+  <dd><%= @cargo_list.referee %></dd>
+  <dt>Versandsdatum:</dt>
+  <dd><%= @cargo_list.pick_up_time_earliest.to_formatted_s(:swiss_date) %></dd>
+</dl>
+
+<dl class="dl-horizontal">
+  <dt>Paletten / Paletten-Plätze:</dt>
+  <dd><%= @pallet_types.sum('pallet_types.count_as') %> / <%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as') %></dd>
+  <dt>Gewicht Brutto</dt>
+  <dd><%= "#{@pallet_purchase_position_assignments.sum("pallet_purchase_position_assignments.weight") + (@pallet_types.sum("pallet_types.count_as") * 20)} kg" %></dd>
+</dl>
 
 <hr />
 <% @addresses.each do |address| %>
-  <% pallet_types = PalletType.where("pallets.cargo_list_id" => @cargo_list.id, "pallets.level_3" => address.id).joins(:pallets) %>
-  <% pallets = Pallet.order("pallets.id ASC").where("pallets.cargo_list_id" => @cargo_list.id, "pallets.level_3" => address.id).includes(:pallet_type) %>
-  <section class="filter_box">
-    <header class="filter_box_header">
-      <h4 class="floatLeft"><%= address.consignee_full %></h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <table>
-        <thead>
-          <tr>
-            <th>Palette / Coli</th>
-            <th>Mischpalette?</th>
-            <th>Paletten Typ</th>
-            <th>Brutto Kg</th>
-            <th>Mehrplatz</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% pallets.each do |pallet| %>
-            <tr>
-              <td><%= "#{pallet.pallet_type.read_as} #{pallet.id}" %></td>
-              <td><%= pallet.mixed ? "Ja" : nil %></td>
-              <td>"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
-              <td><%= PalletPurchasePositionAssignment.where(:pallet_id => pallet.id).sum(:weight) + (pallet.pallet_type.description == "coli" ? 0 : (pallet.pallet_type.count_as * 20)) %></td>
-              <td><%= pallet.additional_space %></td>
-            </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td class="bold">
-              <%= "Paletten-Plätze #{pallets.sum(:additional_space) + pallet_types.sum('pallet_types.count_as')}" %>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </section>
-  </section>
-  
+  <% pallets = Pallet.order("pallets.id ASC").where("pallets.cargo_list_id" => @cargo_list.id, "pallets.level_3" => address.id, "pallet_purchase_position_assignments.is_individual_package" => false).includes(:pallet_type, :line_items) %>
+  <% pallet_types = PalletType.where("pallets.id" => pallets.collect(&:id), "pallets.level_3" => address.id).joins(:pallets) %>
+
+  <blockquote>
+    <p><%= address.consignee_full %></p>
+  </blockquote>
+  <table class="table table-striped table-condensed table-bordered">
+    <thead>
+      <tr>
+        <th>Palette / Coli</th>
+        <th>Mischpalette?</th>
+        <th>Paletten Typ</th>
+        <th>Brutto Kg</th>
+        <th>Mehrplatz</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pallets.each do |pallet| %>
+        <% line_items = PalletPurchasePositionAssignment.where(:pallet_id => pallet.id, "pallet_purchase_position_assignments.is_individual_package" => false) %>
+        <tr>
+          <td><%= "#{pallet.pallet_type.read_as} #{pallet.id}" %></td>
+          <td><%= pallet.mixed ? "Ja" : nil %></td>
+          <td>"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
+          <td><%= line_items.sum(:weight) + pallet.pallet_type.weight %></td>
+          <td><%= pallet.additional_space %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="bold" colspan="5">
+          <%= "Paletten-Plätze #{pallets.sum(:additional_space) + pallet_types.sum('pallet_types.count_as')}" %>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+<% end %>
+
+<div class="new-page"></div>
+
+<% @special_addresses.each do |address| %>
+  <% pallets = Pallet.order("pallets.id ASC").where("pallets.cargo_list_id" => @cargo_list.id, "pallets.level_3" => address.id, "pallet_purchase_position_assignments.is_individual_package" => true).includes(:pallet_type, :line_items, :shipping_address) %>
+  <% pallet_types = PalletType.where("pallets.id" => pallets.collect(&:id), "pallets.level_3" => address.id).joins(:pallets) %>
+
+  <blockquote>
+    <p><%= "Einzelpackstücke diverse Empfänger" %></p>
+  </blockquote>
+  <table class="table table-striped table-condensed table-bordered">
+    <thead>
+      <tr>
+        <th>Palette / Coli</th>
+        <th>Mischpalette?</th>
+        <th>Paletten Typ</th>
+        <th>Brutto Kg</th>
+        <th>Mehrplatz</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% pallets.each do |pallet| %>
+        <% line_items = PalletPurchasePositionAssignment.where(:pallet_id => pallet.id, "pallet_purchase_position_assignments.is_individual_package" => true) %>
+        <tr>
+          <td>
+            <%= "#{pallet.pallet_type.read_as} #{pallet.id}" %>
+          </td>
+          <td colspan="4">
+            <p><%= pallet.shipping_address.try(:consignee_full) %></p>
+          </td>
+        </tr>
+        <tr>
+          <td><%= "#{pallet.pallet_type.read_as} #{pallet.id}" %></td>
+          <td><%= pallet.mixed ? "Ja" : nil %></td>
+          <td>"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
+          <td><%= line_items.sum(:weight) + pallet.pallet_type.weight %></td>
+          <td><%= pallet.additional_space %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="bold" colspan="5">
+          <%= "Paletten-Plätze #{pallets.sum(:additional_space) + pallet_types.sum('pallet_types.count_as')}" %>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
 <% end %>
