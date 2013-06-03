@@ -13,8 +13,8 @@ preload_app true
 timeout 900
 
 # change this for other apps
-approot = '/var/www/fraefel/app/current/'
-appuser = 'fraefel'
+approot = '/var/www/fraefel-demo/app/current/'
+appuser = 'fraefel-demo'
 # Listen on a Unix data socket
 listen "#{approot}/tmp/app.sock", :backlog => 2048
 # path to pid file
