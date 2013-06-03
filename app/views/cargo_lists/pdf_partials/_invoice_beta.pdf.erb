@@ -185,13 +185,13 @@
 
 
 <script type="text/javascript" charset="utf-8">
-  var pallet_count = $("tr")[1].children[0];
-  var pallet_total = $("tr")[2].children[0];
-  var coli_count = $("tr")[3].children[0];
+  var pallet_count = $("tbody tr")[1].children[0];
+  var pallet_total = $("tbody tr")[2].children[0];
+  var coli_count = $("tbody tr")[3].children[0];
   
-  var pallet_count_value = $("tr")[1].children[1];
-  var pallet_total_value = $("tr")[2].children[1];
-  var coli_count_value = $("tr")[3].children[1];
+  var pallet_count_value = $("tbody tr")[1].children[1];
+  var pallet_total_value = $("tbody tr")[2].children[1];
+  var coli_count_value = $("tbody tr")[3].children[1];
   
   $(pallet_count).html(<%= @pallet_types.sum('count_as') %>);
   $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as') %>);
