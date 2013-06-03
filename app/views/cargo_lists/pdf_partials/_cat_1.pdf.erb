@@ -1,66 +1,58 @@
-<header id="invoice_header" class="clearfix">
-  <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
-  <ul class="floatLeft">
-    <li class="bold">Verkaufsinnendienst</li>
-    <li>Telefon +41 71 982 80 84</li>
-    <li>Telefax +41 71 982 80 77</li>
-  </ul>
+<div class="row-fluid">
+	<div class="span6">
+		<%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>	
+		<h2>Sammelrechnung</h2>
+	</div>
+	<div class="span3">
+	    <address>
+	      <strong>Verkaufsinnendienst</strong><br>
+	      Telefon +41 71 982 80 84<br>
+	      Telefax +41 71 982 80 77
+	    </address>
+	</div>
+	
+	<div class="span3">
+	    <address>
+	      <strong>Fraefel AG</strong><br>
+	      Lerchenfeld<br>
+	      CH-9601 Lütisburg-Station<br>
+	      www.fraefel.ag
+	    </address>
+	</div>
+</div>
 
-  <ul class="floatLeft">
-    <li class="bold">Fraefel AG</li>
-    <li>Lerchenfeld</li>
-    <li>CH-9601 Lütisburg-Station</li>
-    <li>www.fraefel.ag</li>
-  </ul>
-</header>
+<div class="page-header">
+	<h1>
+		Diverse Empfänger in Deutschland
+	</h1>
+</div>
 
-<h1 class="logo_title">Sammelrechnung</h1>
-<section class="clearfix">
-  <h1 class="floatLeft">Diverse Empfänger in Deutschland</h1>
-</section>
-<hr>
+<div class="row-fluid">
+	<div class="span6">
+		<dl class="dl-horizontal">
+			<dt>DE-ST-Nr.</dt>
+			<dd>DE 09408/24772</dd>
+			<dt>DE-Zollnummer Fraefel</dt>
+			<dd>6207308</dd>
+		</dl>
+		<dl class="dl-horizontal">
+			<dt>Kunde</dt>
+			<dd><%= @cargo_list.referee %></dd>
+			<dt>Transport/Lieferung</dt>
+			<dd><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></dd>
+		</dl>
+	</div>
+	<div class="span6">
+		<dl class="dl-horizontal">
+			<dt>U/Z</dt>
+			<dd><%= current_user.username %></dd>
+			<dt>U/V</dt>
+			<dd><%= @cargo_list.id %></dd>
+		</dl>
+	</div>
+</div>
 
-<section id="customer_attributes_1" class="clearfix">
-  <ul id="column_1" class="floatLeft">
-    <li>DE-ST-Nr.</li>
-    <li>DE-Zollnummer Fraefel</li>
-  </ul>
-  <ul id="column_2" class="floatLeft">
-    <li class="bold">DE 09408/24772</li>
-    <li class="bold">6207308</li>
-  </ul>
-  <ul id="column_3" class="floatLeft">
-    <li>U/Z</li>
-    <li>U/V</li>
-  </ul>
-  <ul id="column_4" class="floatLeft">
-    <li><%= current_user.username %></li>
-    <li><%= @cargo_list.id %></li>
-  </ul>
-  <ul id="column_5" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="white_color">.</li>
-  </ul>
-</section>
-
-<section id="customer_attributes_2" class="clearfix">
-  <ul id="column_1" class="floatLeft">
-    <li>Kunde</li>
-    <li>Transport/Lieferung</li>
-  </ul>
-  <ul id="column_2" class="floatLeft">
-    <li class="bold"><%= @cargo_list.referee %></li>
-    <li class="bold"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></li>
-  </ul>
-  <ul id="column_3" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="white_color">.</li>
-  </ul>
-  <ul id="column_4" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="bold">&nbsp;</li>
-  </ul>
-</section>
+<hr />
 
 <section id="price_table">
   <table id="special_tbl table table-condensed table-striped">
@@ -153,19 +145,14 @@
   </table>
 </section>
 
-
-<section id="conditions" class="clearfix">
-  <ul id="column_1" class="floatLeft">
-    <li>Lieferbedingung</li>
-    <li>Versandbedingung</li>
-    <li>Zahlungsbedingung</li>
-  </ul>
-  <ul id="column_2" class="floatLeft">
-    <li>frei Haus, verzollt, versteuert (DDP)</li>
-    <li>per LKW</li>
-    <li>30 Tage netto</li>
-  </ul>
-</section>
+<dl class="dl-horizontal">
+  <dt>Lieferbedingung</dt>
+  <dd>frei Haus, verzollt, versteuert (DDP)</dd>
+  <dt>Versandbedingung</dt>
+  <dd>per LKW</dd>
+  <dt>Zahlungsbedingung</dt>
+  <dd>30 Tage netto</dd>
+</div>
 
 <section id="declaration">
   <p>
@@ -179,20 +166,17 @@
   </p>
 </section>
 
-<footer id="invoice_footer" class="clearfix">
-  <ul id="column_1" class="floatLeft">
-    <li>Lütisburg-Station,</li>
-    <li>Unterschrift des Ausführers</li>
-    <li class="margin_top_5px">___________________________</li>
-  </ul>
-</footer>
+<p>Lütisburg-Station,</p>
 
-<footer id="invoice_footer_2" class="clearfix new_page">
-  <ul id="column_2" class="floatLeft">
-    <li>Name + Vorname ( in Druckschrift anführen )</li>
-    <li class="margin_top_5px">___________________________</li>
-  </ul>
-</footer>
+<dl class="dl-horizontal">
+	<dt>Unterschrift des Ausführers</dt>
+	<dd>___________________________</dd>
+</dl>
+
+<dl class="dl-horizontal">
+	<dt>Name + Vorname ( in Druckschrift anführen )</dt>
+	<dd>___________________________</dd>
+</dl>
 
 
 <script type="text/javascript" charset="utf-8">
@@ -213,72 +197,64 @@
   $(coli_count_value).html("Colli / POST");
 </script>
 
-<header id="invoice_header" class="clearfix">
-  <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
-  <ul class="floatLeft">
-    <li class="bold">Verkaufsinnendienst</li>
-    <li>Telefon +41 71 982 80 84</li>
-    <li>Telefax +41 71 982 80 77</li>
-  </ul>
+<div class="new-page"></div>
 
-  <ul class="floatLeft">
-    <li class="bold">Fraefel AG</li>
-    <li>Lerchenfeld</li>
-    <li>CH-9601 Lütisburg-Station</li>
-    <li>www.fraefel.ag</li>
-  </ul>
-</header>
+<div class="row-fluid">
+	<div class="span6">
+		<%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>	
+		<h2>Sammelrechnung - Detail</h2>
+	</div>
+	<div class="span3">
+	    <address>
+	      <strong>Verkaufsinnendienst</strong><br>
+	      Telefon +41 71 982 80 84<br>
+	      Telefax +41 71 982 80 77
+	    </address>
+	</div>
+	
+	<div class="span3">
+	    <address>
+	      <strong>Fraefel AG</strong><br>
+	      Lerchenfeld<br>
+	      CH-9601 Lütisburg-Station<br>
+	      www.fraefel.ag
+	    </address>
+	</div>
+</div>
 
-<h1 class="logo_title">Sammelrechnung - Detail</h1>
-<section class="clearfix">
-  <h1 class="floatLeft">Diverse Empfänger in Deutschland</h1>
-</section>
-<hr>
+<div class="page-header">
+	<h1>
+		Diverse Empfänger in Deutschland
+	</h1>
+</div>
 
-<section id="customer_attributes_1" class="clearfix">
-  <ul id="column_1" class="floatLeft">
-    <li>DE-ST-Nr.</li>
-    <li>DE-Zollnummer Fraefel</li>
-  </ul>
-  <ul id="column_2" class="floatLeft">
-    <li class="bold">DE 09408/24772</li>
-    <li class="bold">6207308</li>
-  </ul>
-  <ul id="column_3" class="floatLeft">
-    <li>U/Z</li>
-    <li>&nbsp;</li>
-  </ul>
-  <ul id="column_4" class="floatLeft">
-    <li><%= current_user.username %></li>
-    <li>&nbsp;</li>
-  </ul>
-  <ul id="column_5" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="white_color">.</li>
-  </ul>
-</section>
+<div class="row-fluid">
+	<div class="span6">
+		<dl class="dl-horizontal">
+			<dt>DE-ST-Nr.</dt>
+			<dd>DE 09408/24772</dd>
+			<dt>DE-Zollnummer Fraefel</dt>
+			<dd>6207308</dd>
+		</dl>
+		<dl class="dl-horizontal">
+			<dt>Kunde</dt>
+			<dd><%= @cargo_list.referee %></dd>
+			<dt>Transport/Lieferung</dt>
+			<dd><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></dd>
+		</dl>
+	</div>
+	<div class="span6">
+		<dl class="dl-horizontal">
+			<dt>U/Z</dt>
+			<dd><%= current_user.username %></dd>
+		</dl>
+	</div>
+</div>
 
-<section id="customer_attributes_2" class="clearfix">
-  <ul id="column_1" class="floatLeft">
-    <li>Versand Nr.</li>
-    <li>Transport/Lieferung</li>
-  </ul>
-  <ul id="column_2" class="floatLeft">
-    <li class="bold"><%= @cargo_list.id %></li>
-    <li class="bold"><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></li>
-  </ul>
-  <ul id="column_3" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="white_color">.</li>
-  </ul>
-  <ul id="column_4" class="floatLeft">
-    <li class="white_color">.</li>
-    <li class="bold">&nbsp;</li>
-  </ul>
-</section>
+<hr />
 
 <section id="price_table">
-  <table>
+  <table class="table table-condensed table-striped">
     <thead>
       <tr>
         <th>Eori NR.</th>
