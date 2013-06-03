@@ -30,7 +30,14 @@ if ENV['deploy'] == 'production' # production only if explicitly asked to do
   set :default_environment, {
     'PATH' => "/var/www/fraefel/.rbenv/shims:/var/www/fraefel/.rbenv/bin:$PATH"
   }
-else # do the dino... staging
+elsif ENV['deploy'] == 'demo'# do the dino... staging
+  puts "\n\n*** working with DEMO server! *** \n\n"
+  set :deploy_to, "/var/www/fraefel-demo/app/"
+  ssh_options[:username] = "fraefel-demo"
+  set :default_environment, {
+    'PATH' => "/var/www/fraefel-demo/.rbenv/shims:/var/www/fraefel-demo/.rbenv/bin:$PATH"
+  }
+else
   puts "\n\n*** working with STAGING server! *** \n\n"
   set :deploy_to, "/var/www/fraefel_staging/app/"
   ssh_options[:username] = "fraefel_staging"
@@ -59,7 +66,7 @@ set :use_sudo, false # NOTE: should be true by default
 # cache the app (don't do a full clone on every update)
 set :deploy_via, :remote_cache
 
-if ENV['deploy'] != 'production' # just on staging
+if ENV['deploy'] == 'staging' # just on staging
 	after "deploy", "feed_staging"
 end
 
@@ -69,9 +76,12 @@ after "deploy", "deploy:migrate"
 
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 if ENV['deploy'] == 'production' # production only if explicitly asked to do
-server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
-else 
-server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
+  server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
+elsif ENV['deploy'] == 'demo'
+  server "fraefel-demo.i-v-o.ch", :app, :web, :db, :primary => true
+else
+  # Wrong server?!?
+  server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
 end
 
 
@@ -88,9 +98,12 @@ end
 # end
 if ENV['deploy'] == 'production' # production only if explicitly asked to do
 	set :unicorn_init_script, "/etc/init.d/fraefel_app"
+elsif ENV['deploy'] == 'demo'
+  set :unicorn_init_script, "/etc/init.d/fraefel-demo_app"
 else
 	set :unicorn_init_script, "/etc/init.d/fraefel_staging_app"
 end
+
 namespace :deploy do
         task :start, :roles => :app, :except => { :no_release => true } do
                 # run "#{try_sudo} #{unicorn_init_script} start"
