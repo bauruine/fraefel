@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130602140801) do
+ActiveRecord::Schema.define(:version => 20130603065547) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -415,7 +415,7 @@ ActiveRecord::Schema.define(:version => 20130602140801) do
     t.decimal  "gross_price",           :precision => 12, :scale => 2
     t.decimal  "net_price",             :precision => 12, :scale => 2
     t.decimal  "value_discount",        :precision => 12, :scale => 2
-    t.boolean  "is_individual_package"
+    t.boolean  "is_individual_package",                                :default => false
   end
 
   create_table "pallet_types", :force => true do |t|

@@ -30,8 +30,8 @@ gem 'jquery-rails'
 gem 'jquery-ui-themes'
 gem "kaminari"
 gem "magic_user"
-# gem 'mysql2'
-gem 'pg'
+gem 'mysql2'
+# gem 'pg'
 gem 'nokogiri'
 gem 'ohm'
 gem 'paper_trail'
