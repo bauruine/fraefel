@@ -203,7 +203,17 @@ class CargoListsController < ApplicationController
     end
 
   end
-
+  
+  def recalculate
+    @cargo_list = CargoList.find(params[:id])
+    
+    @cargo_list.pallets.each do |pallet|
+      pallet.recalculate_line_items_weight_net_price_and_gross_price_and_value_discount
+    end
+    
+    redirect_to(cargo_list_path(@cargo_list), notice: 'Versand wurde neu berechnet.')
+  end
+  
   def heydo
     PurchasePosition.sum("amount", :include => [:commodity_code, {:pallet => :cargo_list}], :group => "commodity_code", :conditions => {:cargo_lists => { :id => 2}})
   end

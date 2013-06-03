@@ -9,6 +9,12 @@
             <i class="icon-cogs"></i> Versand bearbeiten
           <% end %>
         </div>
+        <div class="btn-group">
+          <%= link_to(recalculate_cargo_list_path(@cargo_list), :class => "btn btn-mini", :method => :put) do %>
+            <i class="icon-retweet"></i> Versand neu berechnen
+          <% end %>
+        </div>
+        
       <% end %>
     </li>
   </ul>

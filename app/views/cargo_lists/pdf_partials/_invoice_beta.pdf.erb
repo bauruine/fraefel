@@ -1,203 +1,203 @@
 <div class="row-fluid">
-	<div class="span6">
-		<%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>	
-		<h2>Sammelrechnung</h2>
-	</div>
-	<div class="span3">
-	    <address>
-	      <strong>Verkaufsinnendienst</strong><br>
-	      Telefon +41 71 982 80 84<br>
-	      Telefax +41 71 982 80 77
-	    </address>
-	</div>
-	
-	<div class="span3">
-	    <address>
-	      <strong>Fraefel AG</strong><br>
-	      Lerchenfeld<br>
-	      CH-9601 Lütisburg-Station<br>
-	      www.fraefel.ag
-	    </address>
-	</div>
+<div class="span6">
+<%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>	
+<h2>Sammelrechnung</h2>
+</div>
+<div class="span3">
+<address>
+<strong>Verkaufsinnendienst</strong><br>
+Telefon +41 71 982 80 84<br>
+Telefax +41 71 982 80 77
+</address>
+</div>
+
+<div class="span3">
+<address>
+<strong>Fraefel AG</strong><br>
+Lerchenfeld<br>
+CH-9601 Lütisburg-Station<br>
+www.fraefel.ag
+</address>
+</div>
 </div>
 <div class="page-header">
-	<h1>
-		Diverse Empfänger in Deutschland
-		<small>
-			Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).first.zip_location.title %>
-		</small>
-	</h1>
+<h1>
+Diverse Empfänger in Deutschland
+<small>
+Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).first.zip_location.title %>
+</small>
+</h1>
 </div>
 
 <div class="row-fluid">
-	<div class="span6">
-		<dl class="dl-horizontal">
-			<dt>DE-ST-Nr.</dt>
-			<dd>DE 09408/24772</dd>
-			<dt>DE-Zollnummer Fraefel</dt>
-			<dd>6207308</dd>
-		</dl>
-		<dl class="dl-horizontal">
-			<dt>Kunde</dt>
-			<dd><%= @cargo_list.referee %></dd>
-			<dt>Transport/Lieferung</dt>
-			<dd><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></dd>
-		</dl>
-	</div>
-	<div class="span6">
-		<dl class="dl-horizontal">
-			<dt>U/Z</dt>
-			<dd><%= current_user.username %></dd>
-			<dt>U/V</dt>
-			<dd><%= @cargo_list.id %></dd>
-		</dl>
-		<dl class="dl-horizontal">
-			<dt></dt>
-			<dd>Lebert Fax: +41 71 677 22 66</dd>
-		</dl>
-	</div>
+<div class="span6">
+<dl class="dl-horizontal">
+<dt>DE-ST-Nr.</dt>
+<dd>DE 09408/24772</dd>
+<dt>DE-Zollnummer Fraefel</dt>
+<dd>6207308</dd>
+</dl>
+<dl class="dl-horizontal">
+<dt>Kunde</dt>
+<dd><%= @cargo_list.referee %></dd>
+<dt>Transport/Lieferung</dt>
+<dd><%= @cargo_list.pick_up_time_earliest.to_date.to_formatted_s(:swiss_date) %></dd>
+</dl>
+</div>
+<div class="span6">
+<dl class="dl-horizontal">
+<dt>U/Z</dt>
+<dd><%= current_user.username %></dd>
+<dt>U/V</dt>
+<dd><%= @cargo_list.id %></dd>
+</dl>
+<dl class="dl-horizontal">
+<dt></dt>
+<dd>Lebert Fax: +41 71 677 22 66</dd>
+</dl>
+</div>
 </div>
 
 <hr />
 
-  <table class="table table-condensed table-striped">
-    <thead>
-      <tr>
-        <th>Menge Coli</th>
-        <th></th>
-        <th>Pos. Artikel</th>
-        <th class="align-center">Stück</th>
-        <th class="align-right">Gewicht</th>
-        <th class="align-right">Brutto</th>
-        <th class="align-right">Rabatt</th>
-        <th class="align-right">Warenwert / Euro</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @purchase_positions.group(:commodity_code_id).count.each do |k, v| %>
-      <tr>
-        <td></td>
-        <td></td>
-        <td><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></td>
-        <td class="align-center"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:quantity) %></td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:weight) %></td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:gross_price) %></td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:value_discount) %></td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:net_price) %></td>
-      </tr>
-      <% end %>
-      <tr>
-        <td></td>
-        <td></td>
-        <td class="bold">Total Stücke</td>
-        <td class="align-center border-top bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:quantity) %></td>
-        <td class="align-right border-top bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:weight) %></td>
-        <td class="align-right border-top"></td>
-        <td class="align-right border-top"></td>
-        <td class="align-right border-top"></td>
-      </tr>
-      <tr>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>Zwischentotal</td>
-        <td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) %></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>MwSt 19.00%</td>
-        <td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) / 100) * 19).round(2) %></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>Total netto kg</td>
-        <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) %></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="align-right"></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td class="bold">Total brutto kg</td>
-        <td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@pallet_types.sum("count_as") * 20) %></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="bold">Rechnungswert Euro</td>
-        <td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) %></td>
-      </tr>
-    </tbody>
-  </table>
+<table class="table table-condensed table-striped">
+<thead>
+<tr>
+<th>Menge Coli</th>
+<th></th>
+<th>Pos. Artikel</th>
+<th class="align-center">Stück</th>
+<th class="align-right">Gewicht</th>
+<th class="align-right">Brutto</th>
+<th class="align-right">Rabatt</th>
+<th class="align-right">Warenwert / Euro</th>
+</tr>
+</thead>
+<tbody>
+<% @purchase_positions.group(:commodity_code_id).count.each do |k, v| %>
+<tr>
+<td></td>
+<td></td>
+<td><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></td>
+<td class="align-center"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:quantity) %></td>
+<td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:weight) %></td>
+<td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:gross_price) %></td>
+<td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:value_discount) %></td>
+<td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("commodity_codes.id = ?", k).includes(:pallet => [:cargo_list], :purchase_position => [:commodity_code]).sum(:net_price) %></td>
+</tr>
+<% end %>
+<tr>
+<td></td>
+<td></td>
+<td class="bold">Total Stücke</td>
+<td class="align-center border-top bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:quantity) %></td>
+<td class="align-right border-top bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:weight) %></td>
+<td class="align-right border-top"></td>
+<td class="align-right border-top"></td>
+<td class="align-right border-top"></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Zwischentotal</td>
+<td class="align-right"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) %></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>MwSt 19.00%</td>
+<td class="align-right"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) / 100) * 19).round(2) %></td>
+</tr>
+<tr>
+<td></td>
+<td>Total netto kg</td>
+<td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) %></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td class="align-right"></td>
+</tr>
+<tr>
+<td></td>
+<td class="bold">Total brutto kg</td>
+<td class="bold"><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:weight) + (@pallet_types.sum("count_as") * 20) %></td>
+<td></td>
+<td></td>
+<td></td>
+<td class="bold">Rechnungswert Euro</td>
+<td class="align-right bold"><%= ((PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) / 100) * 19).round(2) + PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id ).includes(:pallet => :cargo_list).sum(:net_price) %></td>
+</tr>
+</tbody>
+</table>
 
-  <dl class="dl-horizontal">
-	  <dt>Lieferbedingung</dt>
-	  <dd>frei Haus, verzollt, versteuert (DDP)</dd>
-	  <dt>Versandbedingung</dt>
-	  <dd>per LKW</dd>
-	  <dt>Zahlungsbedingung</dt>
-	  <dd>30 Tage netto</dd>
-  </div>
-  
+<dl class="dl-horizontal">
+<dt>Lieferbedingung</dt>
+<dd>frei Haus, verzollt, versteuert (DDP)</dd>
+<dt>Versandbedingung</dt>
+<dd>per LKW</dd>
+<dt>Zahlungsbedingung</dt>
+<dd>30 Tage netto</dd>
+</div>
+
 
 <section id="declaration">
-  <p>
-    Der Ausführer ( Ermächtigter Ausführer; Bewilligungs-Nr.4218 ) der Waren, auf die sich dieses
-  </p>
-  <p>
-    Handelspapier bezieht, erklärt, dass diese Waren, soweit nicht anders angegeben, präferenzbegünstigte
-  </p>
-  <p>
-    schweizerische Ursprungswaren sind.
-  </p>
+<p>
+Der Ausführer ( Ermächtigter Ausführer; Bewilligungs-Nr.4218 ) der Waren, auf die sich dieses
+</p>
+<p>
+Handelspapier bezieht, erklärt, dass diese Waren, soweit nicht anders angegeben, präferenzbegünstigte
+</p>
+<p>
+schweizerische Ursprungswaren sind.
+</p>
 </section>
 
 <p>Lütisburg-Station,</p>
 
 <dl class="dl-horizontal">
-	<dt>Unterschrift des Ausführers</dt>
-	<dd>___________________________</dd>
+<dt>Unterschrift des Ausführers</dt>
+<dd>___________________________</dd>
 </dl>
 
 <dl class="dl-horizontal">
-	<dt>Name + Vorname ( in Druckschrift anführen )</dt>
-	<dd>___________________________</dd>
+<dt>Name + Vorname ( in Druckschrift anführen )</dt>
+<dd>___________________________</dd>
 </dl>
 
 
 <script type="text/javascript" charset="utf-8">
-  var pallet_count = $("tbody tr")[1].children[0];
-  var pallet_total = $("tbody tr")[2].children[0];
-  var coli_count = $("tbody tr")[3].children[0];
-  
-  var pallet_count_value = $("tbody tr")[1].children[1];
-  var pallet_total_value = $("tbody tr")[2].children[1];
-  var coli_count_value = $("tbody tr")[3].children[1];
-  
-  $(pallet_count).html(<%= @pallet_types.sum('count_as') %>);
-  $(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as') %>);
-  $(coli_count).html(<%= @pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
-  
-  $(pallet_count_value).html("Paletten");
-  $(pallet_total_value).html("Palettenplätze");
-  $(coli_count_value).html("Colli / POST");
+var pallet_count = $("tbody tr")[1].children[0];
+var pallet_total = $("tbody tr")[2].children[0];
+var coli_count = $("tbody tr")[3].children[0];
+
+var pallet_count_value = $("tbody tr")[1].children[1];
+var pallet_total_value = $("tbody tr")[2].children[1];
+var coli_count_value = $("tbody tr")[3].children[1];
+
+$(pallet_count).html(<%= @pallet_types.sum('count_as') %>);
+$(pallet_total).html(<%= @pallets.sum('pallets.additional_space') + @pallet_types.sum('count_as') %>);
+$(coli_count).html(<%= @pallets.where("pallet_types.description = 'coli'").includes(:pallet_type).count %>);
+
+$(pallet_count_value).html("Paletten");
+$(pallet_total_value).html("Palettenplätze");
+$(coli_count_value).html("Colli / POST");
 </script>

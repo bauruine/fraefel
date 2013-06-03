@@ -108,6 +108,7 @@ Fraefel::Application.routes.draw do
       get 'search_for'
     end
     member do
+      put 'recalculate'
       get 'print_pallets'
       get 'collective_invoice'
       get 'print_lebert'

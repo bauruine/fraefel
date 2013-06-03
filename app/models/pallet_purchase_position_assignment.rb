@@ -5,7 +5,7 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
   after_save :recalculate_pallet_line_items_quantity
   after_destroy :recalculate_pallet_line_items_quantity, :destroy_pallet_if_no_line_items
   
-  after_save :update_pallet_shipping_address, :update_pallet_zip_location_id, :update_pallet_shipping_route_id
+  after_save :update_pallet_shipping_address, :update_pallet_zip_location_id, :update_pallet_shipping_route_id, :recalculate_weight_net_price_and_gross_price_and_value_discount
   
   after_create :update_purchase_order_calculation
   
@@ -39,7 +39,30 @@ class PalletPurchasePositionAssignment < ActiveRecord::Base
       pallet_purchase_position_assignment.pallet.update_attribute("purchase_position_counter", pallet_purchase_position_assignment.quantity)
     end
   end
-
+  
+  def recalculate_weight_net_price_and_gross_price_and_value_discount
+    self.recalculate_weight
+    self.recalculate_net_price
+    self.recalculate_gross_price
+    self.recalculate_value_discount
+  end
+  
+  def recalculate_weight
+    self.update_column(:weight, self.purchase_position.weight_single * self.quantity)
+  end
+  
+  def recalculate_net_price
+    self.update_column(:net_price, self.purchase_position.net_price * self.quantity)
+  end
+  
+  def recalculate_gross_price
+    self.update_column(:gross_price, self.purchase_position.gross_price * self.quantity)
+  end
+  
+  def recalculate_value_discount
+    self.update_column(:value_discount, self.purchase_position.value_discount * self.quantity)
+  end
+  
   def update_pallet_shipping_route_id
     self.reload
     self.pallet.patch_shipping_route_id

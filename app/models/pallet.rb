@@ -91,6 +91,12 @@ class Pallet < ActiveRecord::Base
     end
   end
   
+  def recalculate_line_items_weight_net_price_and_gross_price_and_value_discount
+    self.line_items.each do |line_item|
+      line_item.recalculate_weight_net_price_and_gross_price_and_value_discount
+    end
+  end
+  
   protected
   
   def assign_default_pallet_type
