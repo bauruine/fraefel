@@ -1,59 +1,51 @@
-<fieldset class="floatLeft">
-  <h3 style="font-size: 15px;">Kontrolle - Versand Nummer <%= @cargo_list.id %></h3>
-</fieldset>
-<fieldset class="floatRight" style="font-size: 8px;">
-  gedruckt von <%= current_user.username %> <%= Date.today.to_formatted_s(:swiss_date) %>
-</fieldset>
-<%= content_tag(:div, nil, :class => "clear") %>
-<hr style="margin-bottom: 20px;" />
+
+<div class="page-header">
+  <h1><%= "Kontrolle - Versand Nummer #{@cargo_list.id}" %></h1>
+  <small><%= "gedruckt von #{current_user.full_name} / #{Time.now.to_formatted_s(:swiss_date)}" %></small>
+</div>
 
 <% @purchase_positions.group(:commodity_code_id).count.each do |k, v| %>
-
-  <section class="filter_box">
-    <header class="filter_box_header">
-      <h4 class="floatLeft"><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <table>
-        <thead>
-          <tr>
-            <tr>
-              <th>VK-Position</th>
-              <th>Artikel NR</th>
-              <th>Artikel</th>
-              <th>Produktlinie</th>
-              <th>Menge</th>
-              <th>Preis</th>
-              <th>Gewicht</th>
-            </tr>
-          </tr>
-        </thead>
-        <tbody>
-          <% @purchase_positions.where("purchase_positions.commodity_code_id = ?", k).each do |purchase_position| %>
-            <tr>
-              <td><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
-              <td><%= purchase_position.article_number %></td>
-              <td><%= purchase_position.article %></td>
-              <td><%= purchase_position.product_line %></td>
-              <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:quantity) %></td>
-              <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:net_price) %></td>
-              <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:weight) %></td>
-            </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("purchase_positions.commodity_code_id = ?", k).includes(:pallet => [:cargo_list]).includes(:purchase_position).sum(:net_price) %></td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </section>
-  </section>
+  <blockquote>
+    <p><%= "#{CommodityCode.find(k).code} #{CommodityCode.find(k).content}" %></p>
+  </blockquote>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <tr>
+          <th>VK-Position</th>
+          <th>Artikel NR</th>
+          <th>Artikel</th>
+          <th>Produktlinie</th>
+          <th>Menge</th>
+          <th>Preis</th>
+          <th>Gewicht</th>
+        </tr>
+      </tr>
+    </thead>
+    <tbody>
+      <% @purchase_positions.where("purchase_positions.commodity_code_id = ?", k).each do |purchase_position| %>
+        <tr>
+          <td><%= "#{purchase_position.try(:purchase_order).try(:baan_id)}-#{purchase_position.position}" %></td>
+          <td><%= purchase_position.article_number %></td>
+          <td><%= purchase_position.article %></td>
+          <td><%= purchase_position.product_line %></td>
+          <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:quantity) %></td>
+          <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:net_price) %></td>
+          <td><%= PalletPurchasePositionAssignment.where(:purchase_position_id => purchase_position.id).where("cargo_lists.id = ?", @cargo_list.id).includes(:pallet => [:cargo_list]).sum(:weight) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%= PalletPurchasePositionAssignment.where("cargo_lists.id = ?", @cargo_list.id).where("purchase_positions.commodity_code_id = ?", k).includes(:pallet => [:cargo_list]).includes(:purchase_position).sum(:net_price) %></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
   
 <% end %>

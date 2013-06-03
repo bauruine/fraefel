@@ -4,7 +4,11 @@ class CargoListsController < ApplicationController
   def show
     @cargo_list = CargoList.where(:id => params[:id]).first
     @pallets = @cargo_list.pallets.order("pallets.id DESC").includes(:pallet_type, [:purchase_orders => :shipping_route], [:purchase_positions => :zip_location])
-    @available_pallets = Pallet.where("cargo_lists.id IS NULL AND pallets.delivered = false AND pallets.line_items_quantity != 0").includes(:pallet_type, [:purchase_orders => :shipping_route], [:purchase_positions => :zip_location], :cargo_list)
+    
+    @available_pallets = Pallet.where("pallets.cargo_list_id" => nil, "pallets.delivery_rejection_id" => nil, "pallets.delivered" => false)
+    @available_pallets = @available_pallets.where("pallets.line_items_quantity != 0")
+    @available_pallets = @available_pallets.includes(:pallet_type, [:purchase_orders => :shipping_route], [:purchase_positions => :zip_location], :cargo_list)
+    
     @purchase_positions = PurchasePosition.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
     @pallet_types = PalletType.where("pallets.cargo_list_id" => @cargo_list.id).joins(:pallets)
     @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.select("DISTINCT pallet_purchase_position_assignments.*").where("cargo_lists.id = ?", @cargo_list.id ).joins(:pallet => :cargo_list)

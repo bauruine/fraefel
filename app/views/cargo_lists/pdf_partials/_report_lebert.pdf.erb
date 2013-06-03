@@ -80,14 +80,6 @@
       <% pallets.each do |pallet| %>
         <% line_items = PalletPurchasePositionAssignment.where(:pallet_id => pallet.id, "pallet_purchase_position_assignments.is_individual_package" => true) %>
         <tr>
-          <td>
-            <%= "#{pallet.pallet_type.read_as} #{pallet.id}" %>
-          </td>
-          <td colspan="4">
-            <p><%= pallet.shipping_address.try(:consignee_full) %></p>
-          </td>
-        </tr>
-        <tr>
           <td><%= "#{pallet.pallet_type.read_as} #{pallet.id}" %></td>
           <td><%= pallet.mixed ? "Ja" : nil %></td>
           <td>"<%= pallet.pallet_type.description %>" (zählen als: <%= pallet.pallet_type.count_as %>)</td>
