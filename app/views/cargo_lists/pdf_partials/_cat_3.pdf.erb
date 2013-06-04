@@ -30,7 +30,8 @@
             <th>VK-Position</th>
             <th>Artikel NR</th>
             <th>Artikel</th>
-            <th>Anz.</th>
+            <th class="align-right">Anz.</th>
+            <th class="align-right">kg Netto</th>
           </tr>
         </tr>
       </thead>
@@ -45,13 +46,14 @@
             <% end %>
             <td><%= purchase_position.article_number %></td>
             <td><%= purchase_position.article %></td>
-            <td><%= line_item.quantity %></td>
+            <td class="align-right"><%= line_item.quantity %></td>
+            <td class="align-right"><%= line_item.weight %></td>
           </tr>
         <% end %>
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="4">
+          <td colspan="5">
             <ul class="inline">
               <li><%= "Paletten:"%> <strong><%= pallet.pallet_type.count_as.to_f %></strong></li>
               <li><%= "Paletten-Plätze:" %> <strong><%= pallet.pallet_type.count_as.to_f + pallet.additional_space.to_f %></strong></li>
@@ -91,7 +93,8 @@
           <th>VK-Position</th>
           <th>Artikel NR</th>
           <th>Artikel</th>
-          <th>Anz.</th>
+          <th class="align-right">Anz.</th>
+          <th class="align-right">kg Netto</th>
         </tr>
       </tr>
     </thead>
@@ -102,7 +105,7 @@
           <td>
             <%= purchase_position.baan_id %>
           </td>
-          <td colspan="3">
+          <td colspan="4">
             <strong><%= purchase_position.shipping_address.try(:consignee_full) %></strong>
           </td>
         </tr>
@@ -114,13 +117,14 @@
           <% end %>
           <td><%= purchase_position.article_number %></td>
           <td><%= purchase_position.article %></td>
-          <td><%= line_item.quantity %></td>
+          <td class="align-right"><%= line_item.quantity %></td>
+          <td class="align-right"><%= line_item.weight %></td>
         </tr>
       <% end %>
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="4">
+        <td colspan="5">
           <ul class="inline">
             <li><%= "Anzahl Einzelpackstücke:" %> <strong><%= line_items.sum(:quantity) %></strong></li>
             <li><%= "Gewicht Netto:" %> <strong><%= line_items.sum(:weight) %> <%= "kg" %></strong></li>

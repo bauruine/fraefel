@@ -75,19 +75,18 @@
   <% line_items.each do |line_item| %>
     <% shipping_address = line_item.purchase_position.shipping_address %>
     <div class="row-fluid new-page">
-      <div class="span12" style="margin-top:220px;">
-        <div class="new-page">
-          <address>
-            <strong><%= shipping_address.company_name %></strong><br>
-            <%= shipping_address.street %><br>
-            <%= "#{shipping_address.country}-#{shipping_address.postal_code} #{shipping_address.city}" %>
-          </address>
-          <address>
-            <strong><%= line_item.purchase_position.baan_id %></strong><br>
-            <strong><%= "#{pallet.pallet_type.read_as}: #{pallet.id}" %></strong>
-          </address>
-          <hr />
-        </div>
+      <div class="span12" style="margin-top:165px;">
+        <address>
+          <strong><%= shipping_address.company_name %></strong><br>
+          <%= shipping_address.street %><br>
+          <%= "#{shipping_address.country}-#{shipping_address.postal_code} #{shipping_address.city}" %>
+        </address>
+        <address style="margin-bottom:55px;">
+          <strong><%= line_item.purchase_position.baan_id %></strong><br>
+          <strong><%= "#{pallet.pallet_type.read_as}: #{pallet.id}" %></strong>
+        </address>
+        <hr />
+        
       </div>
     </div>
   <% end %>
