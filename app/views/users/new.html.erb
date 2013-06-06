@@ -1,12 +1,18 @@
 <% content_for :breadcrumb do %>
   <ul class="breadcrumb">
-    <li class="active">Benutzer</li>
+    <li>
+      <%= link_to("Users", users_path) %> <span class="divider">/</span>
+    </li>
+    <li class="active">New</li>
   </ul>
 <% end %>
 
 <div class="page-header">
-    <h1 class="pull-left">Erfasse neuen Benutzer</h1>
-    <div class="clear"></div>
+  <h1>User</h1>
 </div>
 
-<%= render 'form' %>
+<div class="row-fluid">
+  <div class="span11 offset1">
+    <%= render 'form' %>
+  </div>
+</div>

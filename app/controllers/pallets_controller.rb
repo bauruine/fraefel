@@ -28,7 +28,7 @@ class PalletsController < ApplicationController
   end
 
   def index
-    @search = Pallet.where("purchase_positions.id IS NOT NULL").includes(:zip_location, :shipping_address, :cargo_list, {:pallet_purchase_position_assignments => {:purchase_position => [:commodity_code, :html_content]}}, :purchase_orders, :pallet_type).search(params[:q] || {:delivered_eq => "false"})
+    @search = Pallet.where("pallets.line_items_quantity != 0").includes(:zip_location, :shipping_address, :cargo_list, {:pallet_purchase_position_assignments => {:purchase_position => [:commodity_code, :html_content]}}, :pallet_type).search(params[:q] || {:delivered_eq => "false"})
     @pallets = @search.result
 
     @pallet_ids = @pallets.collect(&:id)

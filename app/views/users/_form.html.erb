@@ -1,5 +1,6 @@
 <%= simple_form_for(@user, :html => {:class => 'form-horizontal no-margin' }) do |f| %>
-  
+<fieldset>
+  <legend><%= @user.new_record? ? "Erstellen" : "Bearbeiten" %></legend>
   <%= f.input :forename, :label => @user.new_record? ? "Vornamen angeben" : "Vorname ändern" %>
   <%= f.input :surname, :label => @user.new_record? ? "Nachname angeben" : "Nachname ändern" %>
   
@@ -16,11 +17,11 @@
   
   
   <%= f.association :departments, :as => :check_boxes %>
-  
-  
-  <div class="form-actions">
-    <a href="/users" class="btn">Abbrechen</a>
-    <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
-  </div>
+</fieldset>
+
+<div class="form-actions">
+  <a href="/users" class="btn">Abbrechen</a>
+  <button class="btn btn-primary" type="submit" data-disable-with="Please wait...">Speichern</button>
+</div>
 
 <% end %>

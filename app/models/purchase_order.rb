@@ -74,26 +74,26 @@ class PurchaseOrder < ActiveRecord::Base
   end
   
   def patch_picked_up
-    if PurchasePosition.where(:purchase_order_id => self.id).count != PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.picked_up" => true).count
-      self.update_attributes(:picked_up => false)
+    if self.purchase_positions.count != self.purchase_positions.where("purchase_positions.picked_up" => true).count
+      self.update_column(:picked_up, false)
     else
-      self.update_attributes(:picked_up => true)
+      self.update_column(:picked_up, true)
     end
   end
   
   def patch_delivered
-    if PurchasePosition.where(:purchase_order_id => self.id).count != PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.delivered" => true).count
-      self.update_attributes(:delivered => false)
+    if self.purchase_positions.count != self.purchase_positions.where("purchase_positions.delivered" => true).count
+      self.update_column(:delivered, false)
     else
-      self.update_attributes(:delivered => true)
+      self.update_column(:delivered, true)
     end
   end
   
   def patch_cancelled
-    if PurchasePosition.where(:purchase_order_id => self.id).count != PurchasePosition.where(:purchase_order_id => self.id, "purchase_positions.cancelled" => true).count
-      self.update_attributes(:cancelled => false)
+    if self.purchase_positions.count != self.purchase_positions.where("purchase_positions.cancelled" => true).count
+      self.update_column(:cancelled, false)
     else
-      self.update_attributes(:cancelled => true)
+      self.update_column(:cancelled, true)
     end
   end
   
@@ -184,59 +184,58 @@ class PurchaseOrder < ActiveRecord::Base
     return tag_options.present? ? "<span #{span_tag_options}><i #{tag_options}></i></span>" : ""
   end
   
-  def self.patch_calculation
+  def self.recalculate_calculation_total_purchase_positions
     PurchaseOrder.all.each do |purchase_order|
-      purchase_order.patch_calculation
+      purchase_order.recalculate_calculation_total_purchase_positions
     end
   end
   
-  def patch_calculation
-    self.create_calculation if self.calculation.nil?
-    total_pallets = self.pallets.count
-    total_purchase_positions = self.purchase_positions.where("purchase_positions.cancelled" => false).count
-    self.calculation.update_attributes(:total_pallets => total_pallets, :total_purchase_positions => total_purchase_positions)
+  def self.recalculate_calculation_total_pallets
+    PurchaseOrder.all.each do |purchase_order|
+      purchase_order.recalculate_calculation_total_pallets
+    end
   end
   
+  def recalculate_calculation_total_purchase_positions
+    self.calculation.recalculate_total_purchase_positions
+  end
+  
+  def recalculate_calculation_total_pallets
+    self.calculation.recalculate_total_pallets
+  end
+
   def patch_warehousing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     if purchase_positions_cancelled.present?
-      self.warehousing_completed = purchase_positions_cancelled.sum("purchase_positions.stock_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
-      self.save
+      self.update_column(:warehousing_completed, purchase_positions_cancelled.sum(:stock_status) * (Float(100) / Float(purchase_positions_cancelled.count)))
     end
   end
   
   def patch_manufacturing_completed
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
     if purchase_positions_cancelled.present?
-      self.manufacturing_completed = purchase_positions_cancelled.sum("purchase_positions.production_status") * (100.to_f / purchase_positions_cancelled.count.to_f)
-      self.save
+      self.update_column(:manufacturing_completed, purchase_positions_cancelled.sum(:production_status) * (Float(100) / Float(purchase_positions_cancelled.count)))
     end
   end
   
   def patch_production_status
-    # require more logic
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    self.production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
-    self.save
+    self.update_column(:production_status, purchase_positions_cancelled.sum(:production_status))
   end
   
   def patch_stock_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    self.stock_status = purchase_positions_cancelled.sum("purchase_positions.stock_status")
-    self.save
+    self.update_column(:stock_status, purchase_positions_cancelled.sum(:stock_status))
   end
   
   def patch_workflow_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    self.workflow_status = "#{purchase_positions_cancelled.sum(:production_status)}#{purchase_positions_cancelled.sum(:stock_status)}"
-    self.save
+    self.update_column(:workflow_status, [purchase_positions_cancelled.sum(:production_status), purchase_positions_cancelled.sum(:stock_status)].join)
   end
   
   def patch_pending_status
     purchase_positions_cancelled = self.purchase_positions.where("purchase_positions.cancelled" => false)
-    sum_production_status = purchase_positions_cancelled.sum("purchase_positions.production_status")
-    self.pending_status = purchase_positions_cancelled.count - sum_production_status
-    self.save
+    self.update_column(:pending_status, purchase_positions_cancelled.count - purchase_positions_cancelled.sum(:production_status))
   end
   
   def self.patch_aggregations

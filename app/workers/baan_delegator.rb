@@ -58,7 +58,7 @@ class BaanDelegator
       purchase_order.patch_cancelled
       # END INFO-1
       
-      purchase_order.patch_calculation
+      purchase_order.recalculate_calculation_total_purchase_positions
       purchase_order.patch_aggregations
       purchase_order.patch_html_content
       purchase_order.patch_btn_cat_a

@@ -22,7 +22,7 @@ class PurchasePositionsController < ApplicationController
     respond_to do |format|
       
       format.html do
-        @search = PurchasePosition.includes(:commodity_code, :purchase_order, :shipping_route, :html_content).search(params[:q] || {:delivered_eq => "false", :picked_up_eq => "false", :cancelled_eq => "false"})
+        @search = PurchasePosition.includes(:commodity_code, :shipping_route, :html_content).search(params[:q] || {:delivered_eq => "false", :picked_up_eq => "false", :cancelled_eq => "false"})
         # @purchase_positions = @search.relation.order("purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_positions.delivery_date asc, purchase_positions.stock_status desc, purchase_positions.production_status desc")
         @purchase_positions = @search.result.order("purchase_positions.delivery_date asc, purchase_positions.level_3 asc, purchase_positions.shipping_route_id asc")
         @shipping_routes = ShippingRoute.order("name ASC")

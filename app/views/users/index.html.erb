@@ -1,19 +1,20 @@
 <% content_for :breadcrumb do %>
   <ul class="breadcrumb">
-    <li class="active">Benutzer</li>
+    <li class="active">Users</li>
+    <li class="pull-right">
+      <% if permitted_to? :new, :users %>
+        <div class="btn-group">
+          <%= link_to(new_user_path, :class => "btn btn-mini") do %>
+            <i class="icon-plus-sign"></i> User erstellen
+          <% end %>
+        </div>
+      <% end %>
+    </li>
   </ul>
 <% end %>
 
 <div class="page-header">
-    <h1 class="pull-left">Benutzer</h1>
-    <div class="btn-toolbar pull-right">
-    
-      <div class="btn-group">
-        <a class="btn btn-primary" href="<%= new_user_path() %>">Neuer Benutzer</a>
-      </div>
-      
-    </div>
-    <div class="clear"></div>
+  <h1>Users</h1>
 </div>
 
 <table class="table table-striped">
@@ -25,8 +26,6 @@
       <th>Vorname</th>
       <th>Email</th>
       <th>Gruppe/n</th>
-      <th>Login anz.</th>
-      <th>Letzter login</th>
     </tr>
   </thead>
   <tbody>
@@ -38,15 +37,11 @@
         <td><%= user.forename %></td>
         <td><%= user.email %></td>
         <td><%= user.roles.present? ? user.roles.map(&:name).join(", ") : nil %></td>
-        <td><%= user.login_count %></td>
-        <td><%= user.last_login_at.present? ? user.last_login_at.to_formatted_s(:swiss_date) : nil %></td>
       </tr>
     <% end %>
   </tbody>
   <tfoot>
     <tr>
-      <td></td>
-      <td></td>
       <td></td>
       <td></td>
       <td></td>

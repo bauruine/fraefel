@@ -1,28 +1,48 @@
-<div class="modal hide fade" id="remote">
-</div>
-
 <%= render("pallets/partials/index/modal/filter") %>
 
-<div data-type="modal" style="display:none;">
-</div>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li class="active">Paletten Liste</li>
+    <li class="pull-right">
+      <div class="btn-group">
+        <%= link_to(pallets_path(:format => :pdf), :class => "btn btn-mini") do %>
+          <i class="icon-print"></i> Drucke Paletten
+        <% end %>
+      </div>
+      <div class="btn-group">
+        <%= link_to("#filter", :class => "btn btn-mini", :data => {:toggle => 'modal'}) do %>
+          <i class="icon-filter"></i> Filter
+        <% end %>
+      </div>
+    </li>
+  </ul>
+<% end %>
 
 <div class="page-header">
-    <h1 class="pull-left">Paletten / Coli Liste</h1>
-    <div class="btn-toolbar pull-right">
-      <div class="btn-group">
-        <a class="btn btn-primary" href="<%= pallets_path(:format => :pdf) %>"><i class="icon-print icon-white"></i> PDF</a>
-      </div>
-      <div class="btn-group">
-        <a data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</a>
-      </div>
-    </div>
-    <div class="clear"></div>
+  <h1>Paletten / Coli Liste</h1>
 </div>
 
 <% @pallets.each do |pallet| %>
-  <blockquote style="margin-bottom: 0;">
+  <blockquote>
     <p><%= pallet.shipping_address.consignee_full %></p>
   </blockquote>
+  
+  <ul class="breadcrumb">
+    <% if pallet.cargo_list.present? %>
+      <li class="active">Versand <span class="divider">/</span></li>
+      <li><%= link_to(pallet.cargo_list.id, pallet.cargo_list) %> <span class="divider">/</span></li>
+    <% end %>
+    <li class="active"><%= pallet.pallet_type.read_as %> <span class="divider">/</span></li>
+    <li class="active"><%= pallet.id %></li>
+    <li class="pull-right">
+        <%= link_to(edit_pallet_path(pallet), :class => "btn btn-mini") do %>
+          <i class="icon-cogs"></i> Palette Bearbeiten
+        <% end %>
+        <%= link_to(pallet_path(pallet, :format => :pdf), :class => "btn btn-mini btn-primary") do %>
+          <i class="icon-print"></i> Drucke Palette
+        <% end %>
+    </li>
+  </ul>
   
   <table class="table table-striped">
     <thead>
@@ -38,20 +58,28 @@
       </tr>
     </thead>
     <tbody>
-      <% pallet.pallet_purchase_position_assignments.each do |pallet_purchase_position_assignment| %>
-        <% purchase_position = pallet_purchase_position_assignment.purchase_position %>
+      <% pallet.pallet_purchase_position_assignments.each do |line_item| %>
+        <% purchase_position = line_item.purchase_position %>
         <tr>
           <td>
             <div class="btn-group">
               <%= purchase_position.html_content.code.html_safe %>
-              <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position, :format => :xml), "data-toggle" => "modal-remote", "data-target" => "#remote", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
+              <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
             </div>
           </td>
           <td><%= purchase_position.article_number %></td>
           <td><%= purchase_position.commodity_code.content %></td>
           <td><%= purchase_position.article %></td>
           <td><%= purchase_position.product_line %></td>
-          <td><%= pallet_purchase_position_assignment.quantity %></td>
+          <td class="nowrap">
+            <% if line_item.is_individual_package? %>
+              <span class="label label-warning">
+                <i class="icon-asterisk"></i> <%= line_item.quantity %>
+              </span>
+            <% else %>
+              <%= line_item.quantity %>
+            <% end %>
+          </td>
           <td><%= purchase_position.storage_location %></td>
           <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
         </tr>
@@ -59,82 +87,9 @@
     </tbody>
     <tfoot>
       <tr>
-        <td><%= pallet.pallet_type.read_as %>: <strong><%= pallet.id %></strong></td>
-        <td>PLZ Gebiet: <strong><%= pallet.zip_location.title %></strong></td>
-        <td>
-          <% if pallet.cargo_list_id.present? %>
-            Versand: <%= link_to(pallet.cargo_list.id, pallet.cargo_list) %>
-          <% end %>
-        </td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-          <div class="btn-toolbar" style="margin: 0;">
-            <div class="btn-group">
-              <a href="<%= edit_pallet_path(pallet, :format => :xml) %>" data-toggle="modal-remote" data-target="#remote" class="btn btn-mini">Edit</a>
-              <a data-toggle="dropdown" class="btn btn-mini dropdown-toggle"><span class="caret"></span></a>
-              <ul class="dropdown-menu pull-right">
-                <li><a href="<%= pallet_path(pallet, :format => :pdf) %>">Drucke PDF</a></li>
-              </ul>
-            </div>
-          </div>
-        </td>
+        <td colspan="8">PLZ Gebiet: <strong><%= pallet.zip_location.title %></strong></td>
       </tr>
     </tfoot>
   </table>
+  <hr />
 <% end %>
-
-<script type="text/javascript" charset="utf-8">
-  var column_1 = 0;
-  var column_2 = 0;
-  var column_3 = 0;
-  var column_4 = 0;
-  var column_5 = 0;
-  var column_6 = 0;
-  var column_7 = 0;
-  var column_8 = 0;
-  
-  $('th#column_1').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_1) {column_1 = this_width};
-  });
-  $('th#column_2').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_2) {column_2 = this_width};
-  });
-  $('th#column_3').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_3) {column_3 = this_width};
-  });
-  $('th#column_4').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_4) {column_4 = this_width};
-  });
-  $('th#column_5').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_5) {column_5 = this_width};
-  });
-  $('th#column_6').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_6) {column_6 = this_width};
-  });
-  $('th#column_7').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_7) {column_7 = this_width};
-  });
-  $('th#column_8').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_8) {column_8 = this_width};
-  });
-  
-  $('th#column_1').css('width', column_1 + 'px');
-  $('th#column_2').css('width', column_2 + 'px');
-  $('th#column_3').css('width', column_3 + 'px');
-  $('th#column_4').css('width', column_4 + 'px');
-  $('th#column_5').css('width', column_5 + 'px');
-  $('th#column_6').css('width', column_6 + 'px');
-  $('th#column_7').css('width', column_7 + 'px');
-  $('th#column_8').css('width', column_8 + 'px');
-</script>

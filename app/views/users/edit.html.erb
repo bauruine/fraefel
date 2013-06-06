@@ -1,13 +1,32 @@
 <% content_for :breadcrumb do %>
   <ul class="breadcrumb">
-    <li class="active">Benutzer</li>
+    <li>
+      <%= link_to("Users", users_path) %> <span class="divider">/</span>
+    </li>
+    <li class="active"><%= @user.username %> <span class="divider">/</span></li>
+    <li class="active">Edit</li>
   </ul>
 <% end %>
 
-<div class="page-header">
-    <h1 class="pull-left">Benutzer <%= @user.username %> bearbeiten</h1>
-    <div class="clear"></div>
+
+<div class="media">
+  <%= image_tag("https://chart.googleapis.com/chart?cht=qr&chs=154x154&chl=#{edit_user_url(@user)}", :class => "pull-left") %>
+  <div class="media-body">
+    <div class="page-header">
+      <h1>
+        <%=t '.title', :default => User.model_name.human %>
+        <small>
+          <%= @user.username %>
+        </small>
+      </h1>
+    </div>
+  </div>
 </div>
 
-<%= render 'form' %>
+<hr />
 
+<div class="row-fluid">
+  <div class="span11 offset1">
+    <%= render 'form' %>
+  </div>
+</div>

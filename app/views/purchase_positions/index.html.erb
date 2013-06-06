@@ -1,53 +1,37 @@
-<div class="modal hide fade" id="edit_purchase_position">
-</div>
-
 <%= render("purchase_positions/partials/index/modal/filter") %>
 
-<div data-type="modal" style="display:none;">
-  <% form_tag(search_for_purchase_positions_path, {:class => "form", "data-tab" => "goto", :method => :get}) do %>
-    <ul class="ul_summary">
-
-      <li class="summary clearfix">
-        <p class="floatLeft bold title">VK-Position NR</p>
-        <p class="floatLeft"><%= text_field_tag(:purchase_position_id) %></p>
-      </li>
-      <li class="summary clearfix">
-        <p class="floatLeft title">Aktion</p>
-        <p class="floatLeft"><%= submit_tag "Go", :disable_with => 'Filterning...', :name => nil %></p>
-      </li>
-    </ul>
-  <% end %>
-</div>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li class="active">VK-Positionen</li>
+    <li class="pull-right">
+      <%= link_to(params.merge(:format => :pdf), :class => "btn btn-mini btn-primary") do %>
+        <i class="icon-print"></i> Drucke PDF
+      <% end %>
+      <%= link_to("#filter", :class => "btn btn-mini", :data => {:toggle => 'modal'}) do %>
+        <i class="icon-filter"></i> Filter
+      <% end %>
+    </li>
+  </ul>
+<% end %>
 
 <div class="page-header">
-    <h1 class="pull-left">VK-Pos Liste</h1>
-    <div class="btn-toolbar pull-right">
-      <div class="btn-group">
-        <a class="btn btn-primary" href="<%= url_for(params.merge(:format => :pdf)) %>"><i class="icon-print icon-white"></i> Drucke PDF</a>
-      </div>
-      
-      <div class="btn-group">
-        <a data-toggle="modal" href="#filter" class="btn"><i class="icon-filter"></i> Filter</a>
-      </div>
-      
-    </div>
-    <div class="clear"></div>
+  <h1>VK-Positionen</h1>
 </div>
 
-  <div class="btn-toolbar pull-right">
-          <div class="btn-group">
-            <button class="btn btn-primary" disabled="disabled">Produziert</button>
-            <button class="btn" disabled="disabled"><%= @purchase_positions.where(:production_status => 1, :stock_status => 0).count %></button>
-          </div>
-          <div class="btn-group">
-            <button class="btn btn-success" disabled="disabled">Eingelagert</button>
-            <button class="btn" disabled="disabled"><%= @purchase_positions.where(:stock_status => 1, :production_status => 1).count %></button>
-          </div>
-          <div class="btn-group">
-            <button class="btn btn-danger" disabled="disabled">Offen</button>
-            <button class="btn" disabled="disabled"><%= @purchase_positions.where(:production_status => 0).count %></button>
-          </div>
-        </div>
+<div class="btn-toolbar pull-right">
+  <div class="btn-group">
+    <button class="btn btn-primary" disabled="disabled">Produziert</button>
+    <button class="btn" disabled="disabled"><%= @purchase_positions.where(:production_status => 1, :stock_status => 0).count %></button>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-success" disabled="disabled">Eingelagert</button>
+    <button class="btn" disabled="disabled"><%= @purchase_positions.where(:stock_status => 1, :production_status => 1).count %></button>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-danger" disabled="disabled">Offen</button>
+    <button class="btn" disabled="disabled"><%= @purchase_positions.where(:production_status => 0).count %></button>
+  </div>
+</div>
 
 <div class="clear"></div>
 
@@ -61,13 +45,7 @@
   
 </blockquote>
 
-
-<section class="filter_box">
-  <header class="filter_box_header clearfix">
-    <h4 class="floatLeft">Dispoliste</h4>
-  </header>
-  <section class="filter_box_content clearfix">
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Versand</th>
@@ -89,7 +67,7 @@
             <td>
               <div class="btn-group">
                 <%= purchase_position.html_content.code.html_safe %>
-                <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position, :format => :xml), "data-toggle" => "modal-remote", "data-target" => "#edit_purchase_position", :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
+                <%= link_to(purchase_position.baan_id, edit_purchase_position_path(purchase_position), :class => "btn btn-mini btn-#{purchase_position.production_status}#{purchase_position.stock_status}") %>
               </div>
             </td>
             <td><%= purchase_position.article_number %></td>
@@ -103,11 +81,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <% 8.times do %>
-            <td></td>
-          <% end %>
+          <td colspan="9"></td>
         </tr>
       </tfoot>
     </table>
-  </section>
-</section>
