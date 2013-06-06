@@ -19,16 +19,16 @@ load 'deploy/assets'
 
 set :application, "FRAEFEL"
 set :repository,  "git@github.com:innovative-office/fraefel.git"
-set :branch,  "demo"
+set :branch,  "master"
 set :scm, :git
 
 # STAGING / PRODUCTION
 if ENV['deploy'] == 'production' # production only if explicitly asked to do
   puts "\n\n*** working with PRODUCTION server! ***\n\n"
-  set :deploy_to, "/var/www/fraefel-demo/app/"
-  ssh_options[:username] = "fraefel-demo"
+  set :deploy_to, "/var/www/fraefel/app/"
+  ssh_options[:username] = "fraefel"
   set :default_environment, {
-    'PATH' => "/var/www/fraefel-demo/.rbenv/shims:/var/www/fraefel-demo/.rbenv/bin:$PATH"
+    'PATH' => "/var/www/fraefel/.rbenv/shims:/var/www/fraefel/.rbenv/bin:$PATH"
   }
 else
   puts "\n\n*** working with STAGING server! *** \n\n"
@@ -69,10 +69,10 @@ after "deploy", "deploy:migrate"
 
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 if ENV['deploy'] == 'production' # production only if explicitly asked to do
-  server "fraefel-demo.i-v-o.ch", :app, :web, :db, :primary => true
+  server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
 else
   # Wrong server?!?
-  # server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
+  server "fraefel.i-v-o.ch", :app, :web, :db, :primary => true
 end
 
 
@@ -88,7 +88,7 @@ end
 #   end
 # end
 if ENV['deploy'] == 'production' # production only if explicitly asked to do
-  set :unicorn_init_script, "/etc/init.d/fraefel-demo_app"
+	set :unicorn_init_script, "/etc/init.d/fraefel_app"
 else
 	set :unicorn_init_script, "/etc/init.d/fraefel_staging_app"
 end
