@@ -1,4 +1,5 @@
-class PurchaseOrdersController < ApplicationController
+class PurchaseOrdersController < FraefelController
+
   filter_access_to :all
   before_filter :is_currently_importing, :only => :index
 

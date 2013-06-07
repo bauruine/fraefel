@@ -1,19 +1,19 @@
-class ShippingRoutesController < ApplicationController
-  
+class ShippingRoutesController < FraefelController
+
   def index
     @shipping_routes = ShippingRoute.order("name ASC")
-    
+
     respond_to do |format|
       format.html
       format.xml
     end
   end
-  
-  
+
+
   def edit
     @shipping_route = ShippingRoute.where(:id => params[:id]).first
   end
-  
+
   def update
     @shipping_route = ShippingRoute.where(:id => params[:id]).first
     @shipping_route.attributes = params[:shipping_route] if @shipping_route.present?
@@ -23,5 +23,5 @@ class ShippingRoutesController < ApplicationController
       render 'edit'
     end
   end
-  
+
 end

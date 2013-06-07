@@ -1,4 +1,4 @@
-class MicrosoftDatabasesController < ApplicationController
+class MicrosoftDatabasesController < FraefelController
   filter_resource_access
   require 'csv'
   before_filter :import

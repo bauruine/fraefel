@@ -1,4 +1,4 @@
-class StocktakingsController < ApplicationController
+class StocktakingsController < FraefelController
 
   def index
 
@@ -7,11 +7,11 @@ class StocktakingsController < ApplicationController
   def export
 
   end
-  
+
   def new
     @stocktaking = Stocktaking.new
   end
-  
+
   def create
     @stocktaking = Stocktaking.new
   end

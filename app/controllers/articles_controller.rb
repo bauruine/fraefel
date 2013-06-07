@@ -1,10 +1,10 @@
-class ArticlesController < ApplicationController
+class ArticlesController < FraefelController
   filter_access_to :all
-  
+
   def show
-    
+
   end
-  
+
   def index
     @search = Article.where(:considered => true, :stocktaking_id => "dez-2012")
     @search = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
@@ -13,7 +13,7 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render( 
+        render(
           :pdf => "Zaehlliste-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf_bootstrap.html',
@@ -34,13 +34,13 @@ class ArticlesController < ApplicationController
         )
       end
     end
-    
+
   end
-  
+
   def edit
-    
+
   end
-  
+
   def edit_multiple
     if params[:baan_acces_code].present? && !params[:rack_group_number].present?
       rack_group_number = Article.where(:stocktaking_id => "dez-2012", :baan_acces_id => params[:baan_acces_code]).present? ? Article.where(:stocktaking_id => "dez-2012", :baan_acces_id => params[:baan_acces_code]).first.rack_group_number : nil
@@ -52,29 +52,29 @@ class ArticlesController < ApplicationController
       @articles = nil
     end
   end
-  
+
   def update_multiple
     @articles = Article.update(params[:articles].keys, params[:articles].values)
     BaanCalculator.perform_async(@articles.first.rack_group_number)
     redirect_to(articles_url(:q => {:rack_group_number_eq => @articles.first.rack_group_number, :rack_root_part_number_eq => @articles.first.rack_root_part_number}))
   end
-  
+
   def search_for
   end
-  
+
   def get_results_for
     redirect_to(edit_multiple_articles_path(:rack_group_number => params[:rack_group_number], :baan_acces_code => params[:baan_acces_code], :rack_root_number => params[:rack_root_number]))
   end
-  
+
   def calculate_difference_for
     @search = Article.where(:stocktaking_id => "dez-2012", :considered => true, :should_be_checked => true)
     @search = @search.order("rack_group_number ASC, rack_root_number ASC, rack_part_number ASC, rack_tray_number ASC, rack_box_number ASC, article_code ASC")
     @search = @search.search(params[:q])
     @articles = @search.result
-    
+
     respond_to do |format|
       format.pdf do
-        render( 
+        render(
           :pdf => "Abweichung-Gruppe#{params[:group]}-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf_bootstrap.html',
@@ -96,7 +96,7 @@ class ArticlesController < ApplicationController
       end
     end
   end
-  
+
   def export
     # generates ugly csv for baan
     # should make a method to fill with empty spaces...

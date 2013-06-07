@@ -1,4 +1,4 @@
-class PalletsController < ApplicationController
+class PalletsController < FraefelController
   filter_access_to :all
 
   def show

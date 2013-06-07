@@ -1,4 +1,4 @@
-class ExportDeclarationsController < ApplicationController
+class ExportDeclarationsController < FraefelController
   require 'csv'
   def index
     @uniq_eori = []
@@ -8,7 +8,7 @@ class ExportDeclarationsController < ApplicationController
       @uniq_eori << row[17]
     end
   end
-  
+
   def show
     @eori = params[:id].delete(' ')
     @uniq_vk_auftrag = []

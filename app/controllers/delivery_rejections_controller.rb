@@ -1,4 +1,4 @@
-class DeliveryRejectionsController < ApplicationController
+class DeliveryRejectionsController < FraefelController
   filter_access_to :all
 
   def show

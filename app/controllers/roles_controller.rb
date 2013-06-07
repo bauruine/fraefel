@@ -1,6 +1,6 @@
-class RolesController < ApplicationController
+class RolesController < FraefelController
   filter_resource_access
-  
+
   def index
     @roles = Role.page(params[:page]).per(1000)
     respond_to do |format|
@@ -8,16 +8,16 @@ class RolesController < ApplicationController
       format.json  { render :json => @roles }
     end
   end
-  
+
   def show
     # @role = Role.find(params[:id])
     @users = @role.users
   end
-  
+
   def new
     @role = Role.new
   end
-  
+
   def create
     @role = Role.new(params[:role])
     if @role.save
@@ -26,16 +26,16 @@ class RolesController < ApplicationController
       render 'new'
     end
   end
-  
+
   def edit
-    
+
   end
-  
+
   def update
-    
+
   end
-  
+
   def destroy
-    
+
   end
 end

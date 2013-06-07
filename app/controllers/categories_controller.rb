@@ -1,4 +1,4 @@
-class CategoriesController < ApplicationController
+class CategoriesController < FraefelController
   # GET /categories
   # GET /categories.json
   def index

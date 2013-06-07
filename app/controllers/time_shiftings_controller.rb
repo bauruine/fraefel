@@ -1,7 +1,7 @@
-class TimeShiftingsController < ApplicationController
+class TimeShiftingsController < FraefelController
   before_filter :collect_departments, :only => :index
   before_filter :collect_shifting_reasons, :only => :index
-  
+
   def show
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_positions = @time_shifting.first.purchase_positions.where("purchase_position_time_shifting_assignments.considered" => true).includes(:purchase_position_time_shifting_assignments)
@@ -9,11 +9,11 @@ class TimeShiftingsController < ApplicationController
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     @comments = @time_shifting.first.comments.order("created_at DESC")
     @departments = @time_shifting.first.department_time_shifting_assignments.order("department_time_shifting_assignments.created_at DESC").includes(:department, :creator)
-    
+
     respond_to do |format|
       format.html
       format.pdf do
-        render( 
+        render(
           :pdf => "fraefel_app-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
@@ -28,25 +28,25 @@ class TimeShiftingsController < ApplicationController
         )
       end
     end
-    
+
   end
-  
+
   def index
     # @search = TimeShifting.includes(:purchase_order).order("time_shiftings.id DESC, time_shiftings.lt_date ASC, time_shiftings.purchase_order_id ASC").search(params[:search] || {:closed_equals => "false"})
     @search = TimeShifting.order("time_shiftings.id DESC, time_shiftings.lt_date ASC").search(params[:q] || {:closed_eq => "false"})
-    
+
     @time_shiftings = @search.result
-    
+
     #@requested_department_id = params["search"]["department_id_equals"] if params[:search]
 
-    
+
     respond_to do |format|
       format.html
       format.pdf do
         if params[:pdf_type].present? && params[:pdf_type] == "article_positions"
           @time_shiftings = @time_shiftings.where("article_positions.id IS NOT NULL").includes(:article_positions)
         end
-        render( 
+        render(
           :pdf => "Kein Titel-#{Date.today}",
           :wkhtmltopdf => '/usr/bin/wkhtmltopdf',
           :layout => 'pdf.html',
@@ -61,38 +61,38 @@ class TimeShiftingsController < ApplicationController
         )
       end
     end
-    
+
   end
-  
+
   def new
     @time_shifting = TimeShifting.new(params[:time_shifting])
     @departments = Department.order("departments.title ASC")
     @purchase_order = (params[:time_shifting].present? && params[:time_shifting][:purchase_order_id].present?) ? PurchaseOrder.where(:baan_id => params[:time_shifting][:purchase_order_id]) : nil
-    
+
     if @purchase_order.present?
        @purchase_positions = @purchase_order.first.purchase_positions
        @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
-       
+
        @time_shifting.comments.build
        #@time_shifting.shifting_reason_time_shifting_assignments.build
-       
+
        @purchase_positions.each do |purchase_position|
          @time_shifting.purchase_position_time_shifting_assignments.build(:purchase_position_id => purchase_position.id)
       end
     end
-    
+
   end
-  
+
   def create
     @time_shifting = TimeShifting.new(params[:time_shifting])
     @departments = Department.order("departments.title ASC")
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.purchase_order_id)
     @purchase_positions = @purchase_order.first.purchase_positions
     @shifting_reasons = ShiftingReason.where("departments.id IN(?)", User.current.departments(&:id)).includes(:departments)
-    
-    
+
+
     @time_shifting.comments.build if @time_shifting.comments.empty?
-    
+
     if @time_shifting.save
       @time_shifting.departments << @time_shifting.department
       PurchaseOrder.where(:baan_id => @time_shifting.purchase_order_id).first.update_attribute("priority_level", 0)
@@ -107,7 +107,7 @@ class TimeShiftingsController < ApplicationController
       render 'new'
     end
   end
-  
+
   def edit
     @time_shifting = TimeShifting.where(:id => params[:id])
     # @time_shifting.first.department = nil
@@ -119,13 +119,13 @@ class TimeShiftingsController < ApplicationController
     @time_shifting.first.department_time_shifting_assignments.build
     #@time_shifting.first.shifting_reason_time_shifting_assignments.build
   end
-  
+
   def update
     @time_shifting = TimeShifting.where(:id => params[:id])
     @purchase_order = PurchaseOrder.where(:baan_id => @time_shifting.first.purchase_order_id)
     @purchase_positions = @time_shifting.first.purchase_position_time_shifting_assignments.includes(:purchase_position)
     @departments = Department.order("departments.title ASC")
-    
+
     if @time_shifting.first.update_attributes(params[:time_shifting])
       if @time_shifting.first.department_id != @time_shifting.first.departments.last.id
         @time_shifting.first.departments << @time_shifting.first.department
@@ -149,15 +149,15 @@ class TimeShiftingsController < ApplicationController
           purchase_position.patch_html_content
         end
       end
-      
+
       redirect_to(@time_shifting.first)
     else
       render 'edit'
     end
   end
-  
+
   private
-  
+
   def collect_departments
     closed_condition = false
     if params[:search].present?
@@ -167,7 +167,7 @@ class TimeShiftingsController < ApplicationController
     end
     @departments = Department.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").where("time_shiftings.closed = ?", closed_condition).order("departments.title ASC")
   end
-  
+
   def collect_shifting_reasons
     closed_condition = false
     if params[:search].present?
@@ -177,5 +177,5 @@ class TimeShiftingsController < ApplicationController
     end
     @shifting_reasons = ShiftingReason.includes(:time_shiftings).where("time_shiftings.id IS NOT NULL").where("time_shiftings.closed = ?", closed_condition).order("shifting_reasons.title ASC")
   end
-  
+
 end

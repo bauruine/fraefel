@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < FraefelController
   filter_resource_access
   # GET /users
   # GET /users.xml
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
       if @user.save
         format.html { redirect_to(users_path, :notice => 'User was successfully created.') }
       else
-        format.html { render :action => "new", :notice => "Konnte neuen User nicht erstellen!" }
+        format.html { render :action => "new", :error => "Konnte neuen User nicht erstellen!" }
       end
     end
   end
@@ -53,12 +53,12 @@ class UsersController < ApplicationController
   # PUT /users/1.xml
   def update
     @user = User.find(params[:id])
-    
+
     if params[:user][:password].blank?
       params[:user].delete("password")
       params[:user].delete("password_confirmation")
     end
-    
+
     respond_to do |format|
       if @user.update_attributes(params[:user])
         format.html { redirect_to(users_path, :notice => 'User was successfully updated.') }
