@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class StatusesController < FraefelController
   # GET /statuses
   # GET /statuses.json

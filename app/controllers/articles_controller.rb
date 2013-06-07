@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ArticlesController < FraefelController
   filter_access_to :all
 

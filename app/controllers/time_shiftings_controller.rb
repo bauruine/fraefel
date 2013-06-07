@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class TimeShiftingsController < FraefelController
   before_filter :collect_departments, :only => :index
   before_filter :collect_shifting_reasons, :only => :index

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PdfReportsController < FraefelController
   def show
     @pdf_report = PdfReport.where(:id => params[:id])

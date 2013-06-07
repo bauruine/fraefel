@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ShippingRoutesController < FraefelController
 
   def index

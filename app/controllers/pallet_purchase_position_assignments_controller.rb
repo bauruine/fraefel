@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PalletPurchasePositionAssignmentsController < FraefelController
   before_filter :load_parcel
   before_filter :prepare_line_items, :only => [:create_multiple, :destroy_multiple]

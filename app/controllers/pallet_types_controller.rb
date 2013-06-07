@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PalletTypesController < FraefelController
   def index
     @pallet_types = PalletType.order("pallet_types.read_as ASC, pallet_types.count_as ASC")

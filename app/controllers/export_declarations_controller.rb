@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ExportDeclarationsController < FraefelController
   require 'csv'
   def index

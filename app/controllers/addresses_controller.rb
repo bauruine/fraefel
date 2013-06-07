@@ -1,3 +1,4 @@
+# encoding: utf-8
 class AddressesController < FraefelController
   def index
     @search = PurchaseOrder.includes(:purchase_positions, :shipping_route, :calculation, :addresses).search(params[:search] || {:delivered_equals => "false"})

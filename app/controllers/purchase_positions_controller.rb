@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PurchasePositionsController < FraefelController
   filter_access_to :all
   def show

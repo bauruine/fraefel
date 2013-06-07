@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CustomersController < FraefelController
   def show
     @customer = Customer.find(params[:id])

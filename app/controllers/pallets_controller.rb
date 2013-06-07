@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class PalletsController < FraefelController
   filter_access_to :all
 

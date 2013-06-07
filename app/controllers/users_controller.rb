@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class UsersController < FraefelController
   filter_resource_access
   # GET /users

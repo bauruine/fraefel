@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class MicrosoftDatabasesController < FraefelController
   filter_resource_access
   require 'csv'

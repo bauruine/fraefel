@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class DeliveryRejectionsController < FraefelController
   filter_access_to :all
 

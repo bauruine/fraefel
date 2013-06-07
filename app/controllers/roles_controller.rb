@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class RolesController < FraefelController
   filter_resource_access
 

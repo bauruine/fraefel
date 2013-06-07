@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CategoriesController < FraefelController
   # GET /categories
   # GET /categories.json

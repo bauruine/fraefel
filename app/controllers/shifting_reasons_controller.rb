@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ShiftingReasonsController < FraefelController
   def index
     @shifting_reasons = ShiftingReason.order("shifting_reasons.title ASC")
