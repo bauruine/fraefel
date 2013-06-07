@@ -1,59 +1,35 @@
-<ul class="breadcrumb">
-  <li><a href="<%= cargo_lists_path %>">Versandlisten</a> <span class="divider">/</span></li>
-  <li class="active">Neuer Versand</li>
-</ul>
-      
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li>
+      <%= link_to("Versandlisten", cargo_lists_path) %> <span class="divider">/</span>
+    </li>
+    <li class="active">New</li>
+  </ul>
+<% end %>
+
+
 <div class="page-header">
-  <h1>Neuen Versand erfassen</h1>
+  <h1>Versand</h1>
 </div>
 
-<section class="filter_box">
-  <header class="filter_box_header"><h4>Versand</h4></header>
-  <section class="filter_box_content clearfix">
-    <div class="box-padder">
-      <%= form_for(@cargo_list) do |f| %>
-
-        <div class="form-element">
-          <%= f.label :pick_up_time_earliest, "Früheste Abholzeit" %>
-          <%= f.datetime_select :pick_up_time_earliest %>
-        </div>
-      
-        <div class="form-element">
-          <%= f.label :pick_up_time_latest, "Späteste Abholzeit" %>
-          <%= f.datetime_select :pick_up_time_latest %>
-        </div>
-        
+<div class="row-fluid">
+  <div class="span11 offset1">
+    <%= simple_form_for(@cargo_list, :html => {:class => "form-horizontal"}) do |f| %>
+      <fieldset>
+        <legend>New</legend>
+        <%= f.input :pick_up_time_earliest, :label => "Früheste Abholzeit" %>
+        <%= f.input :pick_up_time_latest, :label => "Späteste Abholzeit" %>
         <hr />
-        
-        <div class="form-element">
-          <%= f.label :referee, "Kunden Name" %>
-          <%= f.text_field :referee, :placeholder => "Pflichtfeld!" %>
-        </div>
-        
+        <%= f.input :referee, :label => "Kunden Name" %>
         <hr />
-        
-        <div class="form-element">
-          <%= f.label :country, "Versand nach" %>
-          <%= f.select(:country, { 'Deutschland'=>"DE", 'Schweiz'=>"CH" }) %>
-          <small style="display: block; font-size: 10px; margin-top: 5px;">Achtung - Einzelne Funktionen sind Länderspezifisch</small>
-        </div>
-        
+        <%= f.input :country, :as => :country, :label => "Versand nach", priority: [ "Germany", "Switzerland" ] %>
         <hr />
-        
-        <div class="form-element">
-          <%= f.label :shipper_id, "Spediteur" %>
-          <%= f.collection_select(:shipper_id, Shipper.all, :id, :name, {:include_blank => true}) %>
-        </div>
-        
-        <hr />
-        
-        <div class="form-actions">
-          <%= link_to("Abbrechen", :back, :class => "btn btn-warning") %>
-          <button type="submit" class="btn btn-primary">Papiere erfassen</button>
-        </div>
-
-      <% end %>
-    </div>
-  </section>
-</section>
-
+        <%= f.input :shipper_id, :label => "Spediteur", :collection => Shipper.all, :label_method => :name, :value_method => :id, :include_blank => true %>
+      </fieldset>
+      <div class="form-actions">
+        <%= link_to("Abbrechen", cargo_lists_path, :class => "btn") %>
+        <%= f.button :submit %>
+      </div>
+    <% end %>
+  </div>
+</div>

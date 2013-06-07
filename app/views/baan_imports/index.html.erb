@@ -1,6 +1,21 @@
 <% content_for :breadcrumb do %>
   <ul class="breadcrumb">
     <li class="active">Import Wizzard</li>
+        <li class="pull-right">
+      <% if permitted_to? :import, :baan_imports %>
+        <div class="btn-group">
+          <%= link_to(new_baan_import_path, :class => "btn btn-mini") do %>
+            <i class="icon-plus-sign"></i> CSV Daten heraufladen
+          <% end %>
+        </div>
+      <% end %>
+      <div class="btn-group">
+        <%= link_to(destroy_all_baan_imports_path, :class => "btn btn-mini", :method => :delete) do %>
+          <i class="icon-trash"></i> CSV Daten löschen
+        <% end %>
+      </div>
+    </li>
+
   </ul>
 <% end %>
 
@@ -8,15 +23,7 @@
 </div>
 
 <div class="page-header">
-    <h1 class="pull-left">Import Wizzard</h1>
-    <div class="btn-toolbar pull-right">
-      <% if permitted_to? :import, :baan_imports %>
-        <div class="btn-group">
-          <a class="btn btn-primary" href="<%= new_baan_import_path(:format => :xml) %>" data-toggle="modal-remote" data-target="#new_baan_import"><i class="icon-upload icon-white"></i> Import CSV</a>
-        </div>
-      <% end %>
-    </div>
-    <div class="clear"></div>
+  <h1>Import Wizzard</h1>
 </div>
 
 <table class="table table-striped">

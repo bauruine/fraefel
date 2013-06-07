@@ -1,4 +1,4 @@
-<%= simple_form_for @cargo_list, :html => {:class => "form-horizontal", :style => "margin: 0;"} do |f| %>
+<%= simple_form_for @cargo_list, :html => {:class => "form-horizontal"} do |f| %>
   <div class="tab-content">
     <%= content_tag :div, :id => "tab1", :class => ["tab-pane", params[:tab].present? ? nil : "active"].compact.join(" ") do %>
       <fieldset>

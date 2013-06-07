@@ -8,9 +8,9 @@
   <td>
     <div class="btn-group">
       <%= purchase_order.html_content.code.html_safe %>
-      <a class="btn btn-inverse btn-mini" data-toggle="modal-remote" data-target="#index_purchase_positions" href="<%= api_purchase_positions_path(:format => :xml, :q => {:purchase_order_baan_id_eq => purchase_order.baan_id}) %>"><%= purchase_order.calculation.total_purchase_positions %></a>
+      <a class="btn btn-inverse btn-mini disabled"><%= purchase_order.calculation.total_purchase_positions %></a>
     </div>
-    
+
   </td>
   <td><%= purchase_order.calculation.total_pallets %></td>
   <td><%= purchase_order.shipping_address.consignee_full %></td>
@@ -18,4 +18,3 @@
   <td><%= purchase_order.purchase_positions.first.zip_location.title %></td>
   <td><%= purchase_order.delivery_date.to_formatted_s(:swiss_date) %></td>
 </tr>
-

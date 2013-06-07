@@ -1,15 +1,29 @@
-<%= form_for @baan_import, :html => {:multipart => true} do |f| %>
-  <div class="form-element">
-    <%= f.label :baan_upload, "CSV Datei", :class => "control-label" %>
-    <%= f.file_field :baan_upload %>
-  </div>
-  
-  <div class="form-element">
-    <%= f.label :baan_import_group, "Import Gruppe", :class => "control-label" %>
-    <%= f.collection_select(:baan_import_group_id, BaanImportGroup.all, :id, :title) %>
-  </div>
-  
-  <div class="form-element clearfix">
-    <%= f.submit("Upload", :class => "blueSubmit floatLeft") %>
-  </div>
+<% content_for :breadcrumb do %>
+  <ul class="breadcrumb">
+    <li>
+      <%= link_to("Import-Wizzard", baan_imports_path) %> <span class="divider">/</span>
+    </li>
+    <li class="active">New</li>
+  </ul>
 <% end %>
+
+<div class="page-header">
+  <h1>Upload CSV</h1>
+</div>
+
+<div class="row-fluid">
+  <div class="span11 offset1">
+    <%= simple_form_for @baan_import, :html => {:class => "form-horizontal"} do |f| %>
+      <fieldset>
+        <legend>Erstellen</legend>
+        <%= f.input :baan_upload %>
+        <%= f.input :baan_import_group_id, :collection => BaanImportGroup.all, :label_method => :title, :value_method => :id %>
+      </fieldset>
+
+      <div class="form-actions">
+        <%= link_to("Abbrechen", baan_imports_path, :class => "btn") %>
+        <%= f.button :submit %>
+      </div>
+    <% end %>
+  </div>
+</div>
