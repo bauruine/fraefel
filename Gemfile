@@ -33,7 +33,12 @@ gem "magic_user"
 gem 'mysql2'
 # gem 'pg'
 gem 'nokogiri'
-gem 'ohm'
+
+gem "redis", "~> 3.0.4"
+gem "hiredis", "~> 0.4.5"
+gem "ohm", "~> 2.0.0.alpha3"
+gem 'sidekiq', :git => "git://github.com/mperham/sidekiq.git"
+
 gem 'paper_trail'
 gem 'paperclip'
 gem 'prawn', :git => 'git://github.com/prawnpdf/prawn', :branch => 'master'
@@ -43,10 +48,11 @@ gem "ransack"
 gem 'rabl'
 gem "RedCloth", :require => 'redcloth'
 gem 'rest-client'
-gem 'sidekiq'
+
 gem 'simple_form'
-gem 'sinatra', :require => false
-gem 'slim'
+gem 'country_select'
+gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'slim', '>= 1.3.8'
 gem 'thin'
 gem 'unicorn'
 gem 'wicked_pdf', :git => 'git://github.com/mileszs/wicked_pdf.git'

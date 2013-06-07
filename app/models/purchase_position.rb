@@ -21,6 +21,8 @@ class PurchasePosition < ActiveRecord::Base
 
   has_many :delivery_dates, :as => :dateable
 
+  validates :baan_id, :uniqueness => true
+
   after_create :redis_sadd_purchase_order_ids
   after_create :creation_delivery_dates_if_new_record
   after_create :after_create_1

@@ -1,13 +1,13 @@
 require 'sidekiq/web'
 
 Fraefel::Application.routes.draw do
-  
+
   devise_for :users
 
   mount Sidekiq::Web, at: '/sidekiq'
-  
+
   resources :password_resets, :only => [ :new, :create, :edit, :update ]
-  
+
   resources :articles do
     collection do
       get 'search_for'
@@ -18,41 +18,41 @@ Fraefel::Application.routes.draw do
       get 'export'
     end
   end
-  
+
   namespace :api do
     resources :purchase_positions
   end
-  
+
   resources :pallet_types
-  
+
   resources :users
-  
+
   resources :addresses
-  
+
   resources :pdf_reports
-  
+
   resources :departments
-  
+
   resources :shifting_reasons
-  
+
   resources :shipping_routes
-  
+
   resources :time_shiftings
 
   resource :dashboard, :only => [:show]
-  
+
   resources :microsoft_databases
-  
+
   resources :roles
-  
+
   resources :categories
-  
+
   resources :statuses
-  
+
   resources :customers
-  
+
   resources :export_declarations
-  
+
   resources :pallet_purchase_position_assignments do
     collection do
       get :new_multiple
@@ -60,22 +60,25 @@ Fraefel::Application.routes.draw do
       delete :destroy_multiple
     end
   end
-  
+
   resources :versions, :only => [:update, :destroy]
-  
+
   resources :baan_imports do
     member do
       get 'import'
     end
+    collection do
+      delete 'destroy_all'
+    end
   end
-  
+
   resources :purchase_positions do
     collection do
       get 'search_for'
       get 'index_beta'
     end
   end
-  
+
   resources :purchase_orders do
     resources :time_shiftings
     member do
@@ -88,7 +91,7 @@ Fraefel::Application.routes.draw do
       get 'index_beta'
     end
   end
-  
+
   resources :pallets do
     member do
       delete 'remove_positions'
@@ -100,7 +103,7 @@ Fraefel::Application.routes.draw do
       get 'search_for'
     end
   end
-  
+
   resources :cargo_lists do
     collection do
       post 'assign_pallets'
@@ -115,7 +118,7 @@ Fraefel::Application.routes.draw do
       get 'controll_invoice'
     end
   end
-  
+
   resources :delivery_rejections do
     member do
       post 'assign_positions'
@@ -125,7 +128,7 @@ Fraefel::Application.routes.draw do
       post 'search'
     end
   end
-  
+
   resources :purchase_order_pallet_assignments
 
   resources :stocktakings
