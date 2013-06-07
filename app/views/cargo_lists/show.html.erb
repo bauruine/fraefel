@@ -14,7 +14,7 @@
             <i class="icon-retweet"></i> Versand neu berechnen
           <% end %>
         </div>
-        
+
       <% end %>
     </li>
   </ul>
@@ -73,7 +73,7 @@
       <% @pallets.each do |pallet| %>
         <tr>
           <td>
-            <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
+            <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", pallets_path(:q => {:id_eq => pallet.id, :delivered_eq => nil, :level_3_eq => nil})) %>
           </td>
           <td><%= pallet.line_items_quantity %></td>
           <td><%= pallet.additional_space %></td>
@@ -125,7 +125,7 @@
       <% @available_pallets.each do |pallet| %>
         <tr>
           <td>
-            <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", api_purchase_positions_path(:format => :xml, :q => {:pallets_id_eq => pallet.id}), "data-toggle" => "modal-remote", "data-target" => "#remote") %>
+            <%= link_to("#{pallet.pallet_type.read_as} #{pallet.id}", pallets_path(:q => {:id_eq => pallet.id, :delivered_eq => nil, :level_3_eq => nil})) %>
           </td>
           <td><%= pallet.line_items_quantity %></td>
           <td><%= pallet.additional_space %></td>

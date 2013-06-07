@@ -37,20 +37,10 @@
   <% end %>
 </div>
 
-<%# @addresses = Address.select("DISTINCT addresses.id, addresses.category_id, addresses.company_name, addresses.street, addresses.postal_code, addresses.city, purchase_orders.id, purchase_orders.delivery_date") %>
-<% @addresses = Address.where("addresses.category_id" => 10, "purchase_orders.id" => @purchase_orders.collect(&:id)) %>
-<% @addresses = @addresses.joins("LEFT OUTER JOIN purchase_orders ON purchase_orders.level_3 = addresses.id") %>
-<% @addresses = @addresses.order("purchase_orders.delivery_date ASC") %>
-
-<% @addresses.each do |address| %>
-  <%# PurchaseOrder.includes(:shipping_route, :purchase_positions => [:pallets]).order("purchase_orders.delivery_date ASC").where("purchase_orders.id" => @purchase_orders.collect(&:id)).where(:level_3 => ordered_address.id) %>
-  <% @purchase_positions = PurchasePosition.select("DISTINCT purchase_positions.id, purchase_positions.product_line, purchase_positions.level_3, purchase_positions.purchase_order_id, purchase_positions.baan_id, purchase_positions.article_number, purchase_positions.article, purchase_positions.storage_location, purchase_positions.shipping_route_id, purchase_positions.delivery_date, purchase_positions.quantity, purchase_positions.priority_level, shipping_routes.id, shipping_routes.name as shipping_route_name") %>
-  <% @purchase_positions = @purchase_positions.where("purchase_positions.level_3" => address.id, "purchase_positions.purchase_order_id" => @purchase_orders.collect(&:id)) %>
-  <% @purchase_positions = @purchase_positions.order("purchase_positions.delivery_date ASC, purchase_positions.purchase_order_id") %>
-  <% @purchase_positions = @purchase_positions.joins(:shipping_route) %>
+<% Address.select("DISTINCT `addresses`.*").where("addresses.category_id" => 10, "purchase_orders.id" => @purchase_orders.collect(&:id)).joins(:purchase_orders).order("purchase_orders.delivery_date ASC").each do |ordered_address| %>
 
   <blockquote>
-    <p><%= address.location_for_select %></p>
+    <p><%= ordered_address.location_for_select %></p>
   </blockquote>
 
   <table class="table table-bordered table-condensed">
@@ -64,27 +54,31 @@
         <th>Bezeichnung</th>
         <th>Produktlinie</th>
         <th>Lager Ort</th>
+        <th>Palette</th>
       </tr>
     </thead>
     <tbody>
-      <% @purchase_positions.each do |purchase_position| %>
-        <tr>
-          <td><%= purchase_position.delivery_date.to_formatted_s(:swiss_date) %></td>
-          <td><%= purchase_position.shipping_route_name %></td>
-          <td>
-            <% if purchase_position.priority_level == 0 %>
-              &#x2605;
-            <% elsif purchase_position.priority_level > 1 %>
-              &#x26a0;
-            <% end %>
-            <%= purchase_position.baan_id %>
-          </td>
-          <td><%= purchase_position.article_number %></td>
-          <td><%= purchase_position.quantity %></td>
-          <td><%= purchase_position.article %></td>
-          <td><%= purchase_position.product_line %></td>
-          <td><%= purchase_position.storage_location %></td>
-        </tr>
+      <% PurchaseOrder.includes(:shipping_route, :purchase_positions => [:pallets]).order("purchase_orders.delivery_date ASC").where("purchase_orders.id" => @purchase_orders.collect(&:id)).where(:level_3 => ordered_address.id).each do |purchase_order| %>
+        <% purchase_order.purchase_positions.each do |purchase_position| %>
+          <tr>
+            <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+            <td><%= purchase_order.shipping_route.name %></td>
+            <td>
+              <% if purchase_position.priority_level == 0 %>
+                &#x2605;
+              <% elsif purchase_position.priority_level > 1 %>
+                &#x26a0;
+              <% end %>
+              <%= purchase_position.baan_Id %>
+            </td>
+            <td><%= purchase_position.article_number %></td>
+            <td><%= purchase_position.quantity %></td>
+            <td><%= purchase_position.article %></td>
+            <td><%= purchase_position.product_line %></td>
+            <td><%= purchase_position.storage_location %></td>
+            <td><%= purchase_position.pallets.collect(&:id).join(", ") %></td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>

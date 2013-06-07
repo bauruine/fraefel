@@ -53,7 +53,7 @@
         </tr>
       </tbody>
     </table>
-    
+
   </section>
 </section>
 
@@ -66,102 +66,39 @@
   </p>
 </blockquote>
 
-
 <% Address.select("DISTINCT `addresses`.*").where("addresses.category_id" => 10).where("purchase_positions.id" => @purchase_positions.collect(&:id)).order("purchase_positions.delivery_date ASC").joins(:purchase_positions).each do |ordered_address| %>
-  <section class="filter_box">
-    <header class="filter_box_header">
-      <h4 class="floatLeft"><%= ordered_address.consignee_full %></h4>
-    </header>
-    <section class="filter_box_content clearfix">
-      <table>
-        <thead>
-          <tr>
-            <th id="column_1">Versand</th>
-            <th id="column_2">Tour</th>
-            <th id="column_3">VK-Pos</th>
-            <th id="column_4">Artikel</th>
-            <th id="column_5">stk.</th>
-            <th id="column_6">Bezeichnung</th>
-            <th id="column_7">Produktlinie</th>
-            <th id="column_8">Lager Ort</th>
-            <th id="column_9">Palette</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% PurchasePosition.includes(:pallets, :shipping_route).where("purchase_positions.id" => @purchase_positions.collect(&:id), "purchase_positions.level_3" => ordered_address.id).each do |purchase_position| %>
-            <tr>
-              <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date)%></td>
-              <td><%= purchase_position.shipping_route.name %></td>
-              <td><%= purchase_position.baan_id %></td>
-              <td><%= purchase_position.article_number %></td>
-              <td><%= purchase_position.quantity %></td>
-              <td><%= purchase_position.article %></td>
-              <td><%= purchase_position.product_line %></td>
-              <td><%= purchase_position.storage_location %></td>
-              <td><%= purchase_position.pallets.collect(&:id).join(", ") %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </section>
-  </section>
-<% end %>
+  <blockquote>
+    <p><%= ordered_address.consignee_full %></p>
+  </blockquote>
 
-<script type="text/javascript" charset="utf-8">
-  var column_1 = 0;
-  var column_2 = 0;
-  var column_3 = 0;
-  var column_4 = 0;
-  var column_5 = 0;
-  var column_6 = 0;
-  var column_7 = 0;
-  var column_8 = 0;
-  var column_9 = 0;
-  
-  $('th#column_1').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_1) {column_1 = this_width};
-  });
-  $('th#column_2').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_2) {column_2 = this_width};
-  });
-  $('th#column_3').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_3) {column_3 = this_width};
-  });
-  $('th#column_4').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_4) {column_4 = this_width};
-  });
-  $('th#column_5').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_5) {column_5 = this_width};
-  });
-  $('th#column_6').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_6) {column_6 = this_width};
-  });
-  $('th#column_7').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_7) {column_7 = this_width};
-  });
-  $('th#column_8').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_8) {column_8 = this_width};
-  });
-  $('th#column_9').each(function(){
-          var this_width = $(this).outerWidth();
-          if (this_width > column_9) {column_9 = this_width};
-  });
-  
-  $('th#column_1').css('width', column_1 + 'px');
-  $('th#column_2').css('width', column_2 + 'px');
-  $('th#column_3').css('width', column_3 + 'px');
-  $('th#column_4').css('width', column_4 + 'px');
-  $('th#column_5').css('width', column_5 + 'px');
-  $('th#column_6').css('width', column_6 + 'px');
-  $('th#column_7').css('width', column_7 + 'px');
-  $('th#column_8').css('width', column_8 + 'px');
-  $('th#column_9').css('width', column_9 + 'px');
-</script>
+  <table class="talbe table-condensed table-striped">
+    <thead>
+      <tr>
+        <th>Versand</th>
+        <th>Tour</th>
+        <th>VK-Pos</th>
+        <th>Artikel</th>
+        <th>stk.</th>
+        <th>Bezeichnung</th>
+        <th>Produktlinie</th>
+        <th>Lager Ort</th>
+        <th>Palette</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% PurchasePosition.includes(:pallets, :shipping_route).where("purchase_positions.id" => @purchase_positions.collect(&:id), "purchase_positions.level_3" => ordered_address.id).each do |purchase_position| %>
+        <tr>
+          <td><%= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date)%></td>
+          <td><%= purchase_position.shipping_route.name %></td>
+          <td><%= purchase_position.baan_id %></td>
+          <td><%= purchase_position.article_number %></td>
+          <td><%= purchase_position.quantity %></td>
+          <td><%= purchase_position.article %></td>
+          <td><%= purchase_position.product_line %></td>
+          <td><%= purchase_position.storage_location %></td>
+          <td><%= purchase_position.pallets.collect(&:id).join(", ") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
