@@ -45,6 +45,6 @@ class BaanImportsController < FraefelController
   def import
     @baan_import = BaanImport.find(params[:id])
     BaanDelegator.perform_async(@baan_import.id, @baan_import.baan_import_group.title)
-    redirect_to(baan_imports_url)
+    redirect_to(baan_imports_url, :notice => "Import wurde gestartet.")
   end
 end

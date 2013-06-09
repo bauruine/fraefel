@@ -36,7 +36,7 @@ gem 'nokogiri'
 
 gem "redis", "~> 3.0.4"
 gem "hiredis", "~> 0.4.5"
-gem "ohm", "~> 2.0.0.alpha3"
+gem "ohm"#, "~> 2.0.0.alpha3"
 gem 'sidekiq', :git => "git://github.com/mperham/sidekiq.git"
 
 gem 'paper_trail'

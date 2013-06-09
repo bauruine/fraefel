@@ -112,33 +112,23 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order_attributes.merge!("customer_id" => customer_id)
     purchase_order_attributes.merge!("shipping_route_id" => shipping_route_id)
     purchase_order_attributes.merge!("warehouse_number" => arg.attributes["baan_22"].to_i)
-    purchase_order_attributes.merge!("delivery_date" => arg.attributes["baan_13"])
+    purchase_order_attributes.merge!("delivery_date" => Date.parse(arg.attributes["baan_13"]))
     purchase_order_attributes.merge!("level_1" => level_1)
     purchase_order_attributes.merge!("level_2" => level_2)
     purchase_order_attributes.merge!("level_3" => level_3)
     purchase_order_attributes.merge!("address_id" => level_3)
     purchase_order_attributes.merge!("category_id" => category_id)
 
-    purchase_order = PurchaseOrder.find_or_initialize_by_baan_id(purchase_order_attributes)
+    purchase_order = PurchaseOrder.where(:baan_id => purchase_order_attributes["baan_id"]).first
+    purchase_order ||= PurchaseOrder.new(purchase_order_attributes)
 
     if purchase_order.new_record?
       purchase_order.save
     else
-      do_update = false
-      purchase_order_attributes["delivery_date"] = Date.parse(arg.attributes["baan_13"])
-      purchase_order_attributes.delete("warehouse_number")
-
-      purchase_order_attributes.each do |k, v|
-        if v != purchase_order.attributes[k]
-          do_update = true
-        end
-      end
-
-      if do_update
-        purchase_order_attributes["delivery_date"] = arg.attributes["baan_13"]
+      purchase_order.attributes = purchase_order_attributes
+      if purchase_order.changed?
         purchase_order.is_importing = true
-
-        purchase_order.update_attributes(purchase_order_attributes)
+        purchase_order.save
       end
     end
   end

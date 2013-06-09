@@ -145,7 +145,7 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!("purchase_order_id" => purchase_order_id)
     purchase_position_attributes.merge!("baan_id" => "#{arg.attributes["baan_2"]}-#{arg.attributes["baan_4"]}")
     purchase_position_attributes.merge!("position" => arg.attributes["baan_4"].to_i)
-    purchase_position_attributes.merge!("delivery_date" => arg.attributes["baan_13"])
+    purchase_position_attributes.merge!("delivery_date" => Date.parse(arg.attributes["baan_13"]))
     purchase_position_attributes.merge!("weight_single" => BigDecimal(arg.attributes["baan_15"]))
     purchase_position_attributes.merge!("weight_total" => BigDecimal(arg.attributes["baan_16"]))
     purchase_position_attributes.merge!("amount" => BigDecimal(arg.attributes["baan_17"]))
@@ -165,28 +165,18 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!("picked_up" => arg.attributes["baan_84"].to_i)
     purchase_position_attributes["picked_up"] = purchase_position_attributes["picked_up"] == 1 ? true : false
 
-    purchase_position = PurchasePosition.find_or_initialize_by_position_and_purchase_order_id(purchase_position_attributes)
+    purchase_position = PurchasePosition.where(:baan_id => purchase_position_attributes["baan_id"]).first
+    purchase_position ||= PurchasePosition.new(purchase_position_attributes)
 
     if purchase_position.new_record?
       purchase_position.save
     else
-      do_update = false
-      purchase_position_attributes["delivery_date"] = Date.parse(arg.attributes["baan_13"])
-
-      purchase_position_attributes.each do |k, v|
-        if v != purchase_position.attributes[k]
-          do_update = true
-        end
-      end
-
-      if do_update
-        purchase_position_attributes["delivery_date"] = arg.attributes["baan_13"]
+      purchase_position.attributes = purchase_position_attributes
+      if purchase_position.changed?
         purchase_position.is_importing = true
-
-        purchase_position.update_attributes(purchase_position_attributes)
+        purchase_position.save
       end
     end
-
   end
 
   protected
