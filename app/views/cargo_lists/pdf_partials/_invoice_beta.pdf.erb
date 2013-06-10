@@ -1,6 +1,6 @@
 <div class="row-fluid">
   <div class="span6">
-    <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>	
+    <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
     <h3>Sammelrechnung</h3>
   </div>
   <div class="span3">
@@ -25,7 +25,7 @@
   <h2>
     Diverse Empfänger in Deutschland
     <small>
-      Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).first.zip_location.title %>
+      Lebert Gruppe: <%= PurchasePosition.where("cargo_lists.id = #{@cargo_list.id} and purchase_positions.zip_location_id IS NOT NULL").includes(:pallets => [:cargo_list]).first.try(:zip_location).try(:title) %>
     </small>
   </h2>
 </div>
