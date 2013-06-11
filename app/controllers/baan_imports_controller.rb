@@ -17,10 +17,27 @@ class BaanImportsController < FraefelController
 
   def create
     @baan_import = BaanImport.new(params[:baan_import])
+
+    if @baan_import.baan_upload.present?
+      file_name = File.basename(@baan_import.baan_upload_file_name, File.extname(@baan_import.baan_upload_file_name))
+      file_name = file_name.downcase.chomp.lstrip.rstrip
+
+      if file_name == "baanread_versand_alle"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Versand").first.try(:id)
+      elsif file_name == "baanread_versand_alle_verrechnet"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Versand-Verrechnet").first.try(:id)
+      elsif file_name == "baanread_versand_storniert"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Versand-Storniert").first.try(:id)
+      else
+        @baan_import.baan_import_group_id = nil
+      end
+    end
+
     if @baan_import.save
       redirect_to(baan_imports_url, :notice => "CSV wurde erfolgreich gespeichert.")
     else
-      render 'new', :notice => "CSV konnte nicht gespeichert werden!"
+      flash[:error] = "CSV konnte nicht gespeichert werden!"
+      render 'new'
     end
   end
 
