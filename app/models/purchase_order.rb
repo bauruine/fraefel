@@ -7,6 +7,7 @@ class PurchaseOrder < ActiveRecord::Base
   belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => "level_3"
   has_many :purchase_positions, :class_name => "PurchasePosition", :foreign_key => "purchase_order_id", :dependent => :destroy
+  has_many :purchase_positions_compact, :class_name => "PurchasePosition", :foreign_key => "purchase_order_id", :select => "purchase_positions.id, purchase_positions.purchase_order_id, purchase_positions.baan_id"
   has_many :purchase_order_pallet_assignments
   has_many :pallets, :class_name => "Pallet", :through => :purchase_order_pallet_assignments
   has_many :purchase_order_address_assignments

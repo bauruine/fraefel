@@ -37,6 +37,57 @@
   <% end %>
 </div>
 
+<% shipping_addresses = Address::Delivery.select("DISTINCT(addresses.id), addresses.company_name, addresses.street, addresses.postal_code, addresses.city").joins(:purchase_orders).where("purchase_orders.id" => @purchase_orders.collect(&:id)).all %>
+<% purchase_positions = PurchasePosition.select("purchase_positions.id, purchase_positions.baan_id, purchase_positions.article_number, purchase_positions.quantity, purchase_positions.article, purchase_positions.level_3").where(:purchase_order_id => @purchase_orders.collect(&:id), :level_3 => shipping_addresses.collect(&:id)).all %>
+
+<% shipping_addresses.each do |address| %>
+  <blockquote>
+    <p><%= address.location_for_select %></p>
+  </blockquote>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Versand</th>
+        <th>Tour</th>
+        <th>VK-Pos</th>
+        <th>Artikel</th>
+        <th>stk.</th>
+        <th>Bezeichnung</th>
+        <th>Produktlinie</th>
+        <th>Lager Ort</th>
+        <th>Palette</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% purchase_positions.select{|pos| pos.level_3 == address.id}.each do |purchase_position| %>
+        <tr>
+          <td><%#= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
+          <td><%#= purchase_order.shipping_route.name %></td>
+          <td>
+            <%= purchase_position.baan_id %>
+          </td>
+          <td><%= purchase_position.article_number %></td>
+          <td><%= purchase_position.quantity %></td>
+          <td><%= purchase_position.article %></td>
+          <td><%#= purchase_position.product_line %></td>
+          <td><%#= purchase_position.storage_location %></td>
+          <td><%#= purchase_position.pallets.collect(&:id).join(", ") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% if @sddddd %>
+<% special_addresses = Address::Delivery.select("DISTINCT(addresses.id)").joins(:purchase_orders).where("purchase_orders.id" => @purchase_orders.collect(&:id)) %>
+
+<% Address::Delivery.where(:id => special_addresses.collect(&:id)).includes(:purchase_orders).each do |address| %>
+  <blockquote>
+    <p><%= address.location_for_select %></p>
+  </blockquote>
+<% end %>
+<% end %>
+<% if @asdfasdfasdf %>
 <% Address.select("DISTINCT `addresses`.*").where("addresses.category_id" => 10, "purchase_orders.id" => @purchase_orders.collect(&:id)).joins(:purchase_orders).order("purchase_orders.delivery_date ASC").each do |ordered_address| %>
 
   <blockquote>
@@ -82,4 +133,5 @@
       <% end %>
     </tbody>
   </table>
+<% end %>
 <% end %>
