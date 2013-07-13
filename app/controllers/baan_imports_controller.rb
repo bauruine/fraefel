@@ -5,6 +5,11 @@ class BaanImportsController < FraefelController
 
   def index
     @baan_imports = BaanImport.order("id DESC")
+    @baan_updator_queue = Sidekiq::Queue.new("baan_updator_queue")
+    @baan_importer_queue = Sidekiq::Queue.new("baan_importer_queue")
+    @baan_delegator_queue = Sidekiq::Queue.new("baan_delegator_queue")
+    @baan_jaintor_queue = Sidekiq::Queue.new("baan_jaintor_queue")
+    @stats = Sidekiq::Stats.new
   end
 
   def new

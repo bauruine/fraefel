@@ -25,6 +25,8 @@ Fraefel::Application.routes.draw do
 
   resources :pallet_types
 
+  resources :queues, :only => [:destroy]
+  
   resources :users
 
   resources :addresses

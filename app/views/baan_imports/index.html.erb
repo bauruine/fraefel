@@ -22,9 +22,46 @@
 <div class="modal hide fade" id="new_baan_import">
 </div>
 
+<% if permitted_to? :import, :baan_imports %>
+  <table class="table table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Warteschlange</th>
+        <th>Größe</th>
+        <th>ACHTUNG</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @baan_updator_queue.name %></td>
+        <td><%= @baan_updator_queue.size %></td>
+        <td><%= link_to("Löschen", queue_path(:id => @baan_updator_queue.name), :method => :delete) %></td>
+      </tr>
+      <tr>
+        <td><%= @baan_importer_queue.name %></td>
+        <td><%= @baan_importer_queue.size %></td>
+        <td><%= link_to("Löschen", queue_path(:id => @baan_importer_queue.name), :method => :delete) %></td>
+      </tr>
+      <tr>
+        <td><%= @baan_delegator_queue.name %></td>
+        <td><%= @baan_delegator_queue.size %></td>
+        <td><%= link_to("Löschen", queue_path(:id => @baan_delegator_queue.name), :method => :delete) %></td>
+      </tr>
+      <tr>
+        <td><%= @baan_jaintor_queue.name %></td>
+        <td><%= @baan_jaintor_queue.size %></td>
+        <td><%= link_to("Löschen", queue_path(:id => @baan_jaintor_queue.name), :method => :delete) %></td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>
+
 <div class="page-header">
   <h1>Import Wizzard</h1>
 </div>
+
+  
+</table>
 
 <table class="table table-striped">
   <thead>
