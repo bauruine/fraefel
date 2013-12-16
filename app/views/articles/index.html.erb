@@ -5,11 +5,11 @@
       <%= link_to(articles_path(:format => :pdf), :class => "btn btn-mini btn-primary") do %>
         <i class="icon-print"></i> Zählliste komplett
       <% end %>
-      <%= link_to("#modal", :class => "btn btn-mini", :data => {:toggle => 'modal'}) do %>
-        <i class="icon-filter"></i> Filter
-      <% end %>
       <% if permitted_to? :export, :articles %>
           <%= link_to("Export", export_articles_path(), :class => "btn btn-mini btn-primary") %>
+      <% end %>
+      <%= link_to("#modal", :class => "btn btn-mini", :data => {:toggle => 'modal'}) do %>
+        <i class="icon-filter"></i> Filter
       <% end %>
       <% if permitted_to? :edit_multiple, :articles %>
           <%= link_to("Daten eingeben", search_for_articles_path, :class => "btn btn-mini btn-primary") %>
