@@ -12,17 +12,17 @@ class BaanStockDelegator
     
     case importer_klass
     when "Inventar-Baan-Artikel"
-      Article.import(baan_import)
+      Article.import(baan_import_id)
     when "Inventar-Lager-Adresse"
-      Depot.import(baan_import)
+      Depot.import(baan_import_id)
     when "Inventar-Lager-Zone"
-      Article.import_extras(baan_import)
+      Article.import_extras(baan_import_id)
     when "Inventar-Baan-Artikel-Gruppe"
-      ArticleGroup.import(baan_import)
+      ArticleGroup.import(baan_import_id)
     when "Inventar-Baan-Artikel-Preis-Gruppe"
-      Article.import_extras_1(baan_import)
+      Article.import_extras_1(baan_import_id)
     when "Inventar-BaanCSV"
-      Article.import_baan_file(baan_import)
+      Article.import_baan_file(baan_import_id)
     end
   end
   
