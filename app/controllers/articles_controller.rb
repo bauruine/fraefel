@@ -23,7 +23,7 @@ class ArticlesController < FraefelController
           :orientation => 'Portrait',
           :encoding => 'UTF-8',
           :header => {
-            :left => "Fraefel AG - Inventar #{I18n.t("date.month_names")[Date.today.month]}. 2012",
+            :left => "Fraefel AG - Inventar #{I18n.t("date.month_names")[Date.today.month]}. 2013",
             :right => "#{Time.now.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
@@ -84,7 +84,7 @@ class ArticlesController < FraefelController
           :orientation => 'Landscape',
           :encoding => 'UTF-8',
           :header => {
-            :left => "Fraefel AG - Inventar #{I18n.t("date.month_names")[Date.today.month]}. 2012",
+            :left => "Fraefel AG - Inventar #{I18n.t("date.month_names")[Date.today.month]}. 2013",
             :right => "#{Date.today.to_formatted_s(:swiss_date)}",
             :line => true,
             :spacing => 2
