@@ -20,7 +20,7 @@ class Depot < ActiveRecord::Base
       web_address = row[11].to_s.undress
       
       
-      depot = Depot.find_or_initialize_by_code_and_stocktaking_id(:code => code, :stocktaking_id => "dez-2012")
+      depot = Depot.find_or_initialize_by_code_and_stocktaking_id(:code => code, :stocktaking_id => "dez-2013")
       if depot.present? && depot.new_record?
         depot.code = code
         depot.description = description
@@ -29,7 +29,7 @@ class Depot < ActiveRecord::Base
         depot.phone_number = phone_number
         depot.fax_number = fax_number
         depot.web_address = web_address
-        depot.stocktaking_id = "dez-2012"
+        depot.stocktaking_id = "dez-2013"
         depot.save
       else
         depot.update_attributes(:code => code,

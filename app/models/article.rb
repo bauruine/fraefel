@@ -15,7 +15,7 @@ class Article < ActiveRecord::Base
       baan_acces_id = row[0].to_s.undress
       article_code = row[1].to_s.undress
       depot_code = row[2].to_s.undress
-      depot = Depot.where(:code => depot_code, :stocktaking_id => "test_dez-2013")
+      depot = Depot.where(:code => depot_code, :stocktaking_id => "dez-2013")
       article_type = row[3].to_s.undress
       signal_code_description = row[4].to_s.undress
       description = row[5].to_s.undress
@@ -29,7 +29,7 @@ class Article < ActiveRecord::Base
       trade_partner_name = row[13].to_s.undress
       trade_partner_additional_info = row[14].to_s.undress
       
-      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "test_dez-2013")
+      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2013")
       if articles.present?
         articles.each do |article|
           article.update_attributes(:article_code => article_code,
@@ -66,7 +66,7 @@ class Article < ActiveRecord::Base
       rack_tray_number = row[4].to_s.undress
       rack_box_number = row[5].to_s.undress
     
-      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "test_dez-2013")
+      articles = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2013")
       if articles.present?
         articles.each do |article|
           article.update_attributes(:rack_group_number => rack_group_number,
@@ -91,9 +91,9 @@ class Article < ActiveRecord::Base
       article_code = row[0].to_s.undress
       baan_article_group_id = row[3].to_s.undress
       price = row[1].to_s.undress
-      article_group = ArticleGroup.where(:baan_id => baan_article_group_id, :stocktaking_id => "test_dez-2013")
+      article_group = ArticleGroup.where(:baan_id => baan_article_group_id, :stocktaking_id => "dez-2013")
       
-      articles = Article.where(:article_code => article_code, :stocktaking_id => "test_dez-2013")
+      articles = Article.where(:article_code => article_code, :stocktaking_id => "dez-2013")
       if articles.present?
         articles.each do |article|
           article.update_attributes(:article_group_id => article_group.first.id, :price => price)
@@ -130,7 +130,7 @@ class Article < ActiveRecord::Base
       old_stock = row[11].to_s.undress
       baan_acces_id = "#{article_code}x#{depot_number}"
       
-      _article = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "test_dez-2013")
+      _article = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2013")
       
       if _article.present?
         _article.first.update_attributes(:old_stock => old_stock,
@@ -150,7 +150,7 @@ class Article < ActiveRecord::Base
                        :baan_cadj => baan_cadj,
                        :considered => true,
                        :baan_acces_id => baan_acces_id,
-                       :stocktaking_id => "test_dez-2013")
+                       :stocktaking_id => "dez-2013")
       else
         Article.create(:old_stock => old_stock,
                        :baan_orno => baan_orno,
@@ -169,7 +169,7 @@ class Article < ActiveRecord::Base
                        :baan_cadj => baan_cadj,
                        :considered => true,
                        :baan_acces_id => baan_acces_id,
-                       :stocktaking_id => "test_dez-2013")
+                       :stocktaking_id => "dez-2013")
       end
       
     end
@@ -177,7 +177,7 @@ class Article < ActiveRecord::Base
   end
   
   def self.calculate_difference(arg)
-    @articles = Article.where(:rack_group_number => arg, :considered => true, :stocktaking_id => "test_dez-2013").where("old_stock IS NOT NULL").where("in_stock IS NOT NULL").where("in_stock != ''")
+    @articles = Article.where(:rack_group_number => arg, :considered => true, :stocktaking_id => "dez-2013").where("old_stock IS NOT NULL").where("in_stock IS NOT NULL").where("in_stock != ''")
     @articles.each do |article|
       article_warn_on = article.article_group.present? ? article.article_group.warn_on : 10
       article_warn_on_price = article.article_group.present? && article.article_group.warn_on_price.present? ? article.article_group.warn_on_price.to_f : 3000

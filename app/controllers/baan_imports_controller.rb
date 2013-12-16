@@ -33,6 +33,18 @@ class BaanImportsController < FraefelController
         @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Versand-Verrechnet").first.try(:id)
       elsif file_name == "baanread_versand_storniert"
         @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Versand-Storniert").first.try(:id)
+      elsif file_name == "inventar_baanartikel_artikel_gruppe"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Inventar-Baan-Artikel-Gruppe").first.try(:id)
+      elsif file_name == "inventar_baanartikel_preis_gruppe"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Inventar-Baan-Artikel-Preis-Gruppe").first.try(:id)
+      elsif file_name == "inventar_baanartikel"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Inventar-Baan-Artikel").first.try(:id)
+      elsif file_name == "inventar_lager_adresse"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Inventar-Lager-Adresse").first.try(:id)
+      elsif file_name == "inventar_lagerzone"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Inventar-Lager-Zone").first.try(:id)
+      elsif file_name == "inventar_baancsv"
+        @baan_import.baan_import_group_id = BaanImportGroup.where(:title => "Inventar-BaanCSV").first.try(:id)
       else
         @baan_import.baan_import_group_id = nil
       end
@@ -66,7 +78,14 @@ class BaanImportsController < FraefelController
 
   def import
     @baan_import = BaanImport.find(params[:id])
-    BaanDelegator.perform_async(@baan_import.id, @baan_import.baan_import_group.title)
+    @baan_import_group = BaanImportGroup.where(:id => @baan_import.baan_import_group_id).first
+    
+    if @baan_import_group.title.split("-")[0] == "Versand"
+      BaanDelegator.perform_async(@baan_import.id, @baan_import_group.title)
+    elsif @baan_import_group.title.split("-")[0] == "Inventar"
+      BaanStockDelegator.perform_async(@baan_import.id, @baan_import_group.title)
+    end
+    
     redirect_to(baan_imports_url, :notice => "Import wurde gestartet.")
   end
 end

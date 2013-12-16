@@ -13,12 +13,12 @@ class ArticleGroup < ActiveRecord::Base
       description = row[1].to_s.undress
       warn_on = row[3].to_s.undress
     
-      article_group = ArticleGroup.find_or_initialize_by_baan_id_and_stocktaking_id(:baan_id => baan_id, :stocktaking_id => "dez-2012")
+      article_group = ArticleGroup.find_or_initialize_by_baan_id_and_stocktaking_id(:baan_id => baan_id, :stocktaking_id => "dez-2013")
       if article_group.present? && article_group.new_record?
         article_group.baan_id = baan_id
         article_group.description = description
         article_group.warn_on = warn_on
-        article_group.stocktaking_id = "dez-2012"
+        article_group.stocktaking_id = "dez-2013"
         article_group.save
       else
         article_group.update_attributes(:baan_id => baan_id,
