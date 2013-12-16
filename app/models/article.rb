@@ -130,7 +130,7 @@ class Article < ActiveRecord::Base
       old_stock = row[11].to_s.undress
       baan_acces_id = "#{article_code}x#{depot_number}"
       
-      _article = Article.where(:baan_acces_id => baan_acces_id, :stocktaking_id => "dez-2013")
+      _article = Article.where(:baan_acces_id => baan_acces_id, :baan_loca => baan_loca, :stocktaking_id => "dez-2013")
       
       if _article.present?
         _article.first.update_attributes(:old_stock => old_stock,
