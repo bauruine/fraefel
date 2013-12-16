@@ -1,51 +1,55 @@
 <% @articles.group(:rack_group_number).each do |r_g_n| %>
-  <% @articles.where(:rack_group_number => r_g_n.rack_group_number).group(:rack_root_part_number).each do |r_r_n| %>
-    <blockquote>
-      <p>Gruppe <%= r_r_n.rack_group_number %> | Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></p>
-    </blockquote>
+  <div class="row-fluid">
+    <div class="span12">
+      <% @articles.where(:rack_group_number => r_g_n.rack_group_number).group(:rack_root_part_number).each do |r_r_n| %>
+        <blockquote>
+          <p>Gruppe <%= r_r_n.rack_group_number %> | Gestell <%= "#{r_r_n.rack_root_number}.#{r_r_n.rack_part_number}" %></p>
+        </blockquote>
   
-    <table class="table table-condensed table-striped">
-      <thead>
-        <tr>
-          <th>Artikel</th>
-          <th>Lager Platz</th>
-          <th>Bezeichnung</th>
-          <th>Grösse</th>
-          <th>Einh.</th>
-          <th>Menge</th>
-          <th>Fach</th>
-          <th>Kiste</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @articles.where(:rack_root_part_number => r_r_n.rack_root_part_number, :rack_group_number => r_g_n.rack_group_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
-          <tr>
-            <td class="align-center"><%= article.article_code %></td>
-            <td class="align-center"><%= article.baan_loca %></td>
-            <td><%= article.description %></td>
-            <td class="align-center"><%= article.factor %></td>
-            <td class="align-center"><%= article.stock_unit %></td>
-            <td class="align-center"><%= article.in_stock %></td>
-            <td class="align-center"><%= article.rack_tray_number %></td>
-            <td class="align-center"><%= article.rack_box_number %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+        <table class="table table-condensed table-striped">
+          <thead>
+            <tr>
+              <th>Artikel</th>
+              <th>Lager Platz</th>
+              <th>Bezeichnung</th>
+              <th>Grösse</th>
+              <th>Einh.</th>
+              <th>Menge</th>
+              <th>Fach</th>
+              <th>Kiste</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @articles.where(:rack_root_part_number => r_r_n.rack_root_part_number, :rack_group_number => r_g_n.rack_group_number).order("rack_tray_number ASC, rack_box_number ASC, article_code ASC").each do |article| %>
+              <tr>
+                <td class="align-center"><%= article.article_code %></td>
+                <td class="align-center"><%= article.baan_loca %></td>
+                <td><%= article.description %></td>
+                <td class="align-center"><%= article.factor %></td>
+                <td class="align-center"><%= article.stock_unit %></td>
+                <td class="align-center"><%= article.in_stock %></td>
+                <td class="align-center"><%= article.rack_tray_number %></td>
+                <td class="align-center"><%= article.rack_box_number %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
     
-    <section>
-      <dl>
-        <dt>Datum:</dt>
-        <dd>__________________________________________</dd>
-      </dl>
-    </section>
+        <section>
+          <dl>
+            <dt>Datum:</dt>
+            <dd>__________________________________________</dd>
+          </dl>
+        </section>
 
-    <section class="new-page">
-      <dl>
-        <dt class="bold">Visum:</dt>
-        <dd>__________________________________________</dd>
-      </dl>
-    </section>
+        <section class="new-page">
+          <dl>
+            <dt class="bold">Visum:</dt>
+            <dd>__________________________________________</dd>
+          </dl>
+        </section>
   
-  <% end %>
-<% end %>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
