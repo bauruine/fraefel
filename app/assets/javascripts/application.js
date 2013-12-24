@@ -13,8 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//= require_tree .
 
+/*
 $(document).ready(function() {
 
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
@@ -40,11 +40,7 @@ $(document).ready(function() {
     $('div[data-type="modal"]').dialog('open');
     return false;
   });
-  /*
-  if ($("form[data-tab]").size() != 0) {
-    $("form:not([data-tab=filter])").hide()
-  };
-  */
+  
   $('a[data-role="tab"]').click(function() {
     var warpToTab = $(this).attr("data-warp");
     var currentForm = $("form[data-tab]")
@@ -96,3 +92,4 @@ $(document).ready(function() {
   });
 
 });
+*/

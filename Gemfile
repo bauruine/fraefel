@@ -16,8 +16,7 @@ group :development do
   gem 'ruby_parser'
 end
 
-gem "less-rails"
-gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem 'less-rails-bootstrap'
 
 gem "declarative_authorization", "~> 0.5.7"
 gem 'devise'

@@ -19,18 +19,18 @@
   </head>
   <body>
 
-    <div class="navbar navbar-fluid-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <%= link_to("Fraefel", root_url, :class => "brand") %>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <%= link_to("Fraefel", root_url, :class => "navbar-brand") %>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span4 offset4">
-          <%= bootstrap_flash %>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+          <%#= bootstrap_flash %>
           <%= yield :devise_flash_messages %>
           <%= yield %>
         </div>
