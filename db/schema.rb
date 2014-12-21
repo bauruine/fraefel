@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141221202102) do
+ActiveRecord::Schema.define(:version => 20141221203410) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -481,22 +481,25 @@ ActiveRecord::Schema.define(:version => 20141221202102) do
     t.datetime "updated_at"
     t.integer  "shipping_route_id"
     t.date     "delivery_date"
-    t.boolean  "delivered",               :default => false
+    t.boolean  "delivered",                             :default => false
     t.integer  "address_id"
     t.integer  "level_1"
     t.integer  "level_2"
     t.integer  "level_3"
-    t.integer  "stock_status",            :default => 0
-    t.integer  "production_status",       :default => 0
-    t.string   "workflow_status",         :default => "00"
-    t.float    "manufacturing_completed", :default => 0.0
-    t.float    "warehousing_completed",   :default => 0.0
-    t.integer  "warehouse_number",        :default => 0
+    t.integer  "stock_status",                          :default => 0
+    t.integer  "production_status",                     :default => 0
+    t.string   "workflow_status",                       :default => "00"
+    t.float    "manufacturing_completed",               :default => 0.0
+    t.float    "warehousing_completed",                 :default => 0.0
+    t.integer  "warehouse_number",                      :default => 0
     t.integer  "category_id"
-    t.integer  "priority_level",          :default => 1
-    t.boolean  "picked_up",               :default => false
-    t.integer  "pending_status",          :default => 0
-    t.boolean  "cancelled",               :default => false
+    t.integer  "priority_level",                        :default => 1
+    t.boolean  "picked_up",                             :default => false
+    t.integer  "pending_status",                        :default => 0
+    t.boolean  "cancelled",                             :default => false
+    t.string   "additional_1",            :limit => 50
+    t.string   "additional_2",            :limit => 50
+    t.string   "additional_3",            :limit => 50
   end
 
   add_index "purchase_orders", ["baan_id"], :name => "index_purchase_orders_on_baan_id", :unique => true
@@ -527,10 +530,10 @@ ActiveRecord::Schema.define(:version => 20141221202102) do
   create_table "purchase_positions", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "commodity_code_id"
-    t.decimal  "weight_single",     :precision => 12, :scale => 2
-    t.decimal  "weight_total",      :precision => 12, :scale => 2
+    t.decimal  "weight_single",                   :precision => 12, :scale => 2
+    t.decimal  "weight_total",                    :precision => 12, :scale => 2
     t.integer  "quantity"
-    t.decimal  "amount",            :precision => 12, :scale => 2
+    t.decimal  "amount",                          :precision => 12, :scale => 2
     t.date     "delivery_date"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -540,20 +543,23 @@ ActiveRecord::Schema.define(:version => 20141221202102) do
     t.string   "article"
     t.string   "storage_location"
     t.string   "article_number"
-    t.decimal  "total_amount",      :precision => 12, :scale => 2
-    t.boolean  "delivered",                                        :default => false
+    t.decimal  "total_amount",                    :precision => 12, :scale => 2
+    t.boolean  "delivered",                                                      :default => false
     t.integer  "zip_location_id"
     t.string   "baan_id"
-    t.decimal  "gross_price",       :precision => 12, :scale => 2
-    t.decimal  "net_price",         :precision => 12, :scale => 2
-    t.decimal  "value_discount",    :precision => 12, :scale => 2
-    t.integer  "production_status",                                :default => 0
-    t.integer  "stock_status",                                     :default => 0
-    t.integer  "priority_level",                                   :default => 1
-    t.boolean  "picked_up",                                        :default => false
-    t.boolean  "cancelled",                                        :default => false
+    t.decimal  "gross_price",                     :precision => 12, :scale => 2
+    t.decimal  "net_price",                       :precision => 12, :scale => 2
+    t.decimal  "value_discount",                  :precision => 12, :scale => 2
+    t.integer  "production_status",                                              :default => 0
+    t.integer  "stock_status",                                                   :default => 0
+    t.integer  "priority_level",                                                 :default => 1
+    t.boolean  "picked_up",                                                      :default => false
+    t.boolean  "cancelled",                                                      :default => false
     t.integer  "level_3"
     t.integer  "shipping_route_id"
+    t.string   "additional_1",      :limit => 50
+    t.string   "additional_2",      :limit => 50
+    t.string   "additional_3",      :limit => 50
   end
 
   add_index "purchase_positions", ["baan_id"], :name => "index_purchase_positions_on_baan_id", :unique => true
