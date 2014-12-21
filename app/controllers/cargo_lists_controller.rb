@@ -20,6 +20,8 @@ class CargoListsController < FraefelController
     @address = Address.where(:id => @cargo_list.level_3).first
     @address ||= @addresses.limit(1).first
 
+    @additionals = @purchase_positions.collect { |x| [x.additional_1, x.additional_2, x.additional_3].compact.reject(&:empty?) }.reject(&:empty?).uniq.sample
+
     respond_to do |format|
       format.html
       format.pdf do
