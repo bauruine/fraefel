@@ -2,9 +2,9 @@
   <div class="well" style="max-width: 340px; padding: 8px 0;">
     <ul class="nav nav-list">
       <li class="nav-header">Zoll</li>
-      <li>
+      <!-- <li>
         <%= link_to("Zollpapiere Lebert", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "invoice_beta", :pdf_title => pdf_title(@cargo_list.id, "sammel_rg"))) %>
-      </li>
+      </li> -->
       <li>
         <%= link_to("Zollpapiere Diverse", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "cat_1", :pdf_title => pdf_title(@cargo_list.id, "sammel_rg"))) %>
       </li>
