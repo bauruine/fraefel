@@ -1,6 +1,6 @@
 <div class="row-fluid">
 <div class="span6">
-<%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>	
+<%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
 </div>
 <div class="span3">
 <address>
@@ -26,6 +26,9 @@ CH-9601 Lütisburg-Station
     <address>
       <% if @address.present? %>
         <strong><%= @address.company_name %></strong><br>
+        <% if @additionals && @additionals.size == 1 %>
+          <strong><%= @additionals.first %></strong><br>
+        <% end %>
         <strong><%= @address.street %></strong><br>
         <strong><%= "#{@address.country}-#{@address.postal_code} #{@address.city}" %></strong>
       <% else %>
