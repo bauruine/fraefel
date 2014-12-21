@@ -1,4 +1,4 @@
-# USAGE: 
+# USAGE:
 #   setup   to staging    server: cap deploy:setup
 #   setup   to production server: cap deploy:setup deploy="production"
 #   deploy  to staging    server: cap deploy
@@ -9,7 +9,7 @@
 # TODO: none
 require File.dirname(__FILE__) + "/capistrano_database_yml.rb"
 require "highline/import"
-# needs to be before bundler 
+# needs to be before bundler
 set :bundle_flags,    "--deployment --quiet --binstubs"
 require 'bundler/capistrano'
 # require 'lib/cap_tasks'
@@ -19,7 +19,7 @@ load 'deploy/assets'
 
 set :application, "FRAEFEL"
 set :repository,  "git@github.com:innovative-office/fraefel.git"
-set :branch,  "master"
+set :branch,  "old-state"
 set :scm, :git
 
 # STAGING / PRODUCTION
@@ -43,7 +43,7 @@ end
 answer = Capistrano::CLI.ui.ask("Do you want to continue? Type 'y' to continue")
 
 if answer == 'y' then
-  # continue 
+  # continue
 else
   Process.exit!
 end
@@ -115,9 +115,9 @@ end
 
 
 desc "feeds staging with production data"
-task :feed_staging, :role => :db, :only => { :primary => true } do 
+task :feed_staging, :role => :db, :only => { :primary => true } do
   puts "hey! I am a feeder"
-  
+
   staging_database = "fraefel_production_staging"
   staging_db_pw = Capistrano::CLI.ui.ask("Enter MySQL root password for Staging(db:#{staging_database} : ")
 
