@@ -163,6 +163,11 @@ class PurchasePosition < ActiveRecord::Base
     purchase_position_attributes.merge!("stock_status" => arg.attributes["baan_78"].to_i)
     purchase_position_attributes.merge!("production_status" => arg.attributes["baan_79"].to_i)
     purchase_position_attributes.merge!("picked_up" => arg.attributes["baan_84"].to_i)
+
+    purchase_position_attributes.merge!("additional_1" => arg.attributes["baan_85"])
+    purchase_position_attributes.merge!("additional_2" => arg.attributes["baan_86"])
+    purchase_position_attributes.merge!("additional_3" => arg.attributes["baan_87"])
+    
     purchase_position_attributes["picked_up"] = purchase_position_attributes["picked_up"] == 1 ? true : false
 
     purchase_position = PurchasePosition.where(:baan_id => purchase_position_attributes["baan_id"]).first

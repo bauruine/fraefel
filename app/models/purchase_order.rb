@@ -120,6 +120,10 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order_attributes.merge!("address_id" => level_3)
     purchase_order_attributes.merge!("category_id" => category_id)
 
+    purchase_order_attributes.merge!("additional_1" => arg.attributes["baan_85"])
+    purchase_order_attributes.merge!("additional_2" => arg.attributes["baan_86"])
+    purchase_order_attributes.merge!("additional_3" => arg.attributes["baan_87"])
+
     purchase_order = PurchaseOrder.where(:baan_id => purchase_order_attributes["baan_id"]).first
     purchase_order ||= PurchaseOrder.new(purchase_order_attributes)
 
