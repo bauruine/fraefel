@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130603065547) do
+ActiveRecord::Schema.define(:version => 20141221202102) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -138,93 +138,96 @@ ActiveRecord::Schema.define(:version => 20130603065547) do
 
   create_table "baan_raw_data", :force => true do |t|
     t.integer  "baan_import_id"
-    t.string   "baan_0"
-    t.string   "baan_1"
-    t.string   "baan_2"
-    t.string   "baan_3"
-    t.string   "baan_4"
-    t.string   "baan_5"
-    t.string   "baan_6"
-    t.string   "baan_7"
-    t.string   "baan_8"
-    t.string   "baan_9"
-    t.string   "baan_10"
-    t.string   "baan_11"
-    t.string   "baan_12"
-    t.string   "baan_13"
-    t.string   "baan_14"
-    t.string   "baan_15"
-    t.string   "baan_16"
-    t.string   "baan_17"
-    t.string   "baan_18"
-    t.string   "baan_19"
-    t.string   "baan_20"
-    t.string   "baan_21"
-    t.string   "baan_22"
-    t.string   "baan_23"
-    t.string   "baan_24"
-    t.string   "baan_25"
-    t.string   "baan_26"
-    t.string   "baan_27"
-    t.string   "baan_28"
-    t.string   "baan_29"
-    t.string   "baan_30"
-    t.string   "baan_31"
-    t.string   "baan_32"
-    t.string   "baan_33"
-    t.string   "baan_34"
-    t.string   "baan_35"
-    t.string   "baan_36"
-    t.string   "baan_37"
-    t.string   "baan_38"
-    t.string   "baan_39"
-    t.string   "baan_40"
-    t.string   "baan_41"
-    t.string   "baan_42"
-    t.string   "baan_43"
-    t.string   "baan_44"
-    t.string   "baan_45"
-    t.string   "baan_46"
-    t.string   "baan_47"
-    t.string   "baan_48"
-    t.string   "baan_49"
-    t.string   "baan_50"
-    t.string   "baan_51"
-    t.string   "baan_52"
-    t.string   "baan_53"
-    t.string   "baan_54"
-    t.string   "baan_55"
-    t.string   "baan_56"
-    t.string   "baan_57"
-    t.string   "baan_58"
-    t.string   "baan_59"
-    t.string   "baan_60"
-    t.string   "baan_61"
-    t.string   "baan_62"
-    t.string   "baan_63"
-    t.string   "baan_64"
-    t.string   "baan_65"
-    t.string   "baan_66"
-    t.string   "baan_67"
-    t.string   "baan_68"
-    t.string   "baan_69"
-    t.string   "baan_70"
-    t.string   "baan_71"
-    t.string   "baan_72"
-    t.string   "baan_73"
-    t.string   "baan_74"
-    t.string   "baan_75"
-    t.string   "baan_76"
-    t.string   "baan_77"
-    t.string   "baan_78"
-    t.string   "baan_79"
-    t.string   "baan_80"
-    t.string   "baan_81"
+    t.string   "baan_0",         :limit => 50
+    t.string   "baan_1",         :limit => 50
+    t.string   "baan_2",         :limit => 50
+    t.string   "baan_3",         :limit => 50
+    t.string   "baan_4",         :limit => 50
+    t.string   "baan_5",         :limit => 50
+    t.string   "baan_6",         :limit => 50
+    t.string   "baan_7",         :limit => 50
+    t.string   "baan_8",         :limit => 50
+    t.string   "baan_9",         :limit => 50
+    t.string   "baan_10",        :limit => 50
+    t.string   "baan_11",        :limit => 50
+    t.string   "baan_12",        :limit => 50
+    t.string   "baan_13",        :limit => 50
+    t.string   "baan_14",        :limit => 50
+    t.string   "baan_15",        :limit => 50
+    t.string   "baan_16",        :limit => 50
+    t.string   "baan_17",        :limit => 50
+    t.string   "baan_18",        :limit => 50
+    t.string   "baan_19",        :limit => 50
+    t.string   "baan_20",        :limit => 50
+    t.string   "baan_21",        :limit => 50
+    t.string   "baan_22",        :limit => 50
+    t.string   "baan_23",        :limit => 50
+    t.string   "baan_24",        :limit => 50
+    t.string   "baan_25",        :limit => 50
+    t.string   "baan_26",        :limit => 50
+    t.string   "baan_27",        :limit => 50
+    t.string   "baan_28",        :limit => 50
+    t.string   "baan_29",        :limit => 50
+    t.string   "baan_30",        :limit => 50
+    t.string   "baan_31",        :limit => 50
+    t.string   "baan_32",        :limit => 50
+    t.string   "baan_33",        :limit => 50
+    t.string   "baan_34",        :limit => 50
+    t.string   "baan_35",        :limit => 50
+    t.string   "baan_36",        :limit => 50
+    t.string   "baan_37",        :limit => 50
+    t.string   "baan_38",        :limit => 50
+    t.string   "baan_39",        :limit => 50
+    t.string   "baan_40",        :limit => 50
+    t.string   "baan_41",        :limit => 50
+    t.string   "baan_42",        :limit => 50
+    t.string   "baan_43",        :limit => 50
+    t.string   "baan_44",        :limit => 50
+    t.string   "baan_45",        :limit => 50
+    t.string   "baan_46",        :limit => 50
+    t.string   "baan_47",        :limit => 50
+    t.string   "baan_48",        :limit => 50
+    t.string   "baan_49",        :limit => 50
+    t.string   "baan_50",        :limit => 50
+    t.string   "baan_51",        :limit => 50
+    t.string   "baan_52",        :limit => 50
+    t.string   "baan_53",        :limit => 50
+    t.string   "baan_54",        :limit => 50
+    t.string   "baan_55",        :limit => 50
+    t.string   "baan_56",        :limit => 50
+    t.string   "baan_57",        :limit => 50
+    t.string   "baan_58",        :limit => 50
+    t.string   "baan_59",        :limit => 50
+    t.string   "baan_60",        :limit => 50
+    t.string   "baan_61",        :limit => 50
+    t.string   "baan_62",        :limit => 50
+    t.string   "baan_63",        :limit => 50
+    t.string   "baan_64",        :limit => 50
+    t.string   "baan_65",        :limit => 50
+    t.string   "baan_66",        :limit => 50
+    t.string   "baan_67",        :limit => 50
+    t.string   "baan_68",        :limit => 50
+    t.string   "baan_69",        :limit => 50
+    t.string   "baan_70",        :limit => 50
+    t.string   "baan_71",        :limit => 50
+    t.string   "baan_72",        :limit => 50
+    t.string   "baan_73",        :limit => 50
+    t.string   "baan_74",        :limit => 50
+    t.string   "baan_75",        :limit => 50
+    t.string   "baan_76",        :limit => 50
+    t.string   "baan_77",        :limit => 50
+    t.string   "baan_78",        :limit => 50
+    t.string   "baan_79",        :limit => 50
+    t.string   "baan_80",        :limit => 50
+    t.string   "baan_81",        :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "baan_82"
-    t.string   "baan_83"
-    t.string   "baan_84"
+    t.string   "baan_82",        :limit => 50
+    t.string   "baan_83",        :limit => 50
+    t.string   "baan_84",        :limit => 50
+    t.string   "baan_85",        :limit => 50
+    t.string   "baan_86",        :limit => 50
+    t.string   "baan_87",        :limit => 50
   end
 
   create_table "calculations", :force => true do |t|
