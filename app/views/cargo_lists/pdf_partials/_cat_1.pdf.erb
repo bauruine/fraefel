@@ -1,7 +1,7 @@
 <div class="row-fluid">
   <div class="span6">
     <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
-    <h3>Sammelrechnung</h3>
+    <h3><%= (@addresses.collect(&:id).uniq.size > 1) ? "Sammelrechnung" : "Proformarechnung" %></h3>
   </div>
   <div class="span3">
     <address>
@@ -23,7 +23,7 @@
 
 <div class="page-header">
   <h2>
-    Diverse Empfänger in Deutschland
+    <%= (@addresses.collect(&:id).uniq.size > 1) ? "Diverse Empfänger in Deutschland" : "Nur für Zollzwecke" %>
   </h2>
 </div>
 
@@ -240,7 +240,7 @@
 <div class="row-fluid">
 <div class="span6">
 <%= wicked_pdf_image_tag 'logo.gif', :class => "floatLeft" %>
-<h3>Sammelrechnung - Detail</h3>
+<h3><%= (@addresses.collect(&:id).uniq.size > 1) ? "Sammelrechnung - Detail" : "Proformarechnung" %></h3>
 </div>
 <div class="span3">
 <address>
@@ -262,7 +262,7 @@ www.fraefel.ag
 
 <div class="page-header">
 <h2>
-Diverse Empfänger in Deutschland
+<%= (@addresses.collect(&:id).uniq.size > 1) ? "Diverse Empfänger in Deutschland" : "Nur für Zollzwecke" %>
 </h2>
 </div>
 
