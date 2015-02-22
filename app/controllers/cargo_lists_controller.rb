@@ -12,6 +12,8 @@ class CargoListsController < FraefelController
     @available_pallets = @available_pallets.includes(:pallet_type, [:purchase_orders => :shipping_route], [:purchase_positions => :zip_location], :cargo_list)
 
     @purchase_positions = PurchasePosition.where("cargo_lists.id = ?", @cargo_list.id).includes(:pallets => :cargo_list)
+    @purchase_orders = PurchaseOrder.joins(:pallets).where("pallets.cargo_list_id" => @cargo_list.id)
+
     @pallet_types = PalletType.where("pallets.cargo_list_id" => @cargo_list.id).joins(:pallets)
     @pallet_purchase_position_assignments = PalletPurchasePositionAssignment.select("DISTINCT pallet_purchase_position_assignments.*").where("cargo_lists.id = ?", @cargo_list.id ).joins(:pallet => :cargo_list)
 
@@ -19,6 +21,8 @@ class CargoListsController < FraefelController
     @special_addresses = Address.select("DISTINCT addresses.*").where("cargo_lists.id" => @cargo_list.id, "addresses.category_id" => 10, "pallet_purchase_position_assignments.is_individual_package" => true).joins(:pallets => [:cargo_list, :line_items])
     @address = Address.where(:id => @cargo_list.level_3).first
     @address ||= @addresses.limit(1).first
+
+    @payer_addresses = Address.where(id: @purchase_orders.collect(&:level_1))
 
     @additionals = @purchase_positions.collect { |x| [x.additional_1, x.additional_2, x.additional_3].compact.reject(&:empty?) }.reject(&:empty?).uniq.sample
 
