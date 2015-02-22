@@ -9,6 +9,9 @@
         <%= link_to("Zollpapiere Diverse", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "cat_1", :pdf_title => pdf_title(@cargo_list.id, "sammel_rg"))) %>
       </li>
       <li>
+        <%= link_to("Zollpapiere Diverse V2", cargo_list_path(@cargo_list, :format => :pdf, :pdf_type => "cat_1_v2", :pdf_title => pdf_title(@cargo_list.id, "sammel_rg"))) %>
+      </li>
+      <li>
         <%= link_to("Proforma Rechnung", pdf_reports_path(:pdf_type => "ProformaInvoiceDocument", :args_for_printing => {:cargo_list_id => @cargo_list.id}, :pdf_title => pdf_title(@cargo_list.id, "proforma_rg")), "data-method" => "post") %>
       </li>
       <li class="divider"></li>
