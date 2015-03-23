@@ -37,8 +37,8 @@
   <% end %>
 </div>
 
-<% shipping_addresses = Address::Delivery.select("DISTINCT(addresses.id), addresses.company_name, addresses.street, addresses.postal_code, addresses.city").joins(:purchase_orders).where("purchase_orders.id" => @purchase_orders.collect(&:id)).all %>
-<% purchase_positions = PurchasePosition.select("purchase_positions.id, purchase_positions.baan_id, purchase_positions.article_number, purchase_positions.quantity, purchase_positions.article, purchase_positions.level_3").where(:purchase_order_id => @purchase_orders.collect(&:id), :level_3 => shipping_addresses.collect(&:id)).all %>
+<% shipping_addresses = Address::Delivery.select("DISTINCT(addresses.id), addresses.company_name, addresses.street, addresses.postal_code, addresses.city").joins(:purchase_orders).where("purchase_orders.id" => @purchase_order_ids).all %>
+<% purchase_positions = PurchasePosition.select("purchase_positions.id, purchase_positions.baan_id, purchase_positions.article_number, purchase_positions.quantity, purchase_positions.article, purchase_positions.level_3").where(purchase_order_id: @purchase_order_ids, :level_3 => shipping_addresses.collect(&:id)).all %>
 
 <% shipping_addresses.each do |address| %>
   <blockquote>
