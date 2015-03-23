@@ -12,6 +12,7 @@ group :assets do
 end
 
 group :development do
+  # gem 'meta_request'
   gem 'letter_opener'
   gem 'ruby_parser'
 end
@@ -52,7 +53,8 @@ gem 'rest-client'
 gem 'simple_form'
 gem 'country_select'
 gem 'sinatra', '>= 1.3.0', :require => nil
-gem 'slim', '>= 1.3.8'
+gem "slim-rails"
 gem 'thin'
+gem 'puma'
 gem 'unicorn'
 gem 'wicked_pdf', :git => 'git://github.com/mileszs/wicked_pdf.git'
