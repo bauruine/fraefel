@@ -46,26 +46,52 @@ class PurchaseOrdersController < FraefelController
   end
 
   def index
-    @search = PurchaseOrder.includes({:purchase_positions => [:zip_location]}, :shipping_route, :calculation, :shipping_address, :html_content, :btn_cat_a).search(params[:q] || {:delivered_eq => "false", :picked_up_eq => "false", :cancelled_eq => "false"})
-    @purchase_orders = @search.result.ordered_for_delivery
+    ActiveRecord::Base.logger.level = 1
+    @search = PurchaseOrder.includes(:zip_location, :shipping_route, :calculation, :shipping_address)
+                           .search(params[:q] || { delivered_eq: 'false', picked_up_eq: 'false', cancelled_eq: 'false' })
 
-    @purchase_order_ids = @purchase_orders.collect(&:id)
+    @purchase_order_ids = @search.result.pluck(:id)
+    @test = PurchaseOrder.joins(:shipping_route, :zip_location, :calculation, :shipping_address)
+                         .where(id: @purchase_order_ids)
+                         .ordered_for_delivery
+                         .pluck_all('purchase_orders.stock_status', 'purchase_orders.pending_status', 'purchase_orders.production_status', 'calculations.total_pallets', 'DATE_FORMAT(purchase_orders.delivery_date, "%e.%m.%y") AS delivery_date', 'purchase_orders.id', 'purchase_orders.baan_id', 'shipping_routes.name AS shipping_route', 'zip_locations.title AS zip_location', 'CONCAT(addresses.company_name, ", ", addresses.street, ", ", addresses.country, "-", addresses.postal_code, " ", addresses.city) AS shipping_address')
 
-    @level_1 = Address.select("DISTINCT addresses.*").where("addresses.category_id = ?", 8).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
-    @level_2 = Address.select("DISTINCT addresses.*").where("addresses.category_id = ?", 9).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
-    @level_3 = Address.select("DISTINCT addresses.*").where("addresses.category_id = ?", 10).where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
+    @level_1 = Address.joins(:purchase_orders)
+                      .where("addresses.category_id" => 8, "purchase_orders.id" => @purchase_order_ids)
+                      .uniq('addresses.id')
+                      .pluck_all('addresses.id', 'CONCAT(addresses.company_name, ", ", addresses.street, ", ", addresses.country, "-", addresses.postal_code, " ", addresses.city) AS label')
+    @level_2 = Address.joins(:purchase_orders)
+                      .where("addresses.category_id" => 9, "purchase_orders.id" => @purchase_order_ids)
+                      .uniq('addresses.id')
+                      .pluck_all('addresses.id', 'CONCAT(addresses.company_name, ", ", addresses.street, ", ", addresses.country, "-", addresses.postal_code, " ", addresses.city) AS label')
+    @level_3 = Address.joins(:purchase_orders)
+                      .where("addresses.category_id" => 10, "purchase_orders.id" => @purchase_order_ids)
+                      .uniq('addresses.id')
+                      .pluck_all('addresses.id', 'CONCAT(addresses.company_name, ", ", addresses.street, ", ", addresses.country, "-", addresses.postal_code, " ", addresses.city) AS label')
 
-    @shipping_routes = ShippingRoute.select("DISTINCT shipping_routes.*").order("shipping_routes.name ASC").where("purchase_orders.id" => @purchase_order_ids).joins(:purchase_orders)
-    @purchase_order_categories = Category.order("title ASC").where(:categorizable_type => "purchase_order")
+    @shipping_routes = ShippingRoute.joins(:purchase_orders)
+                                    .where("purchase_orders.id" => @purchase_order_ids)
+                                    .order("shipping_routes.name ASC")
+                                    .uniq('shipping_routes.id')
+                                    .pluck_all('shipping_routes.id', 'shipping_routes.name AS label')
 
-    @production_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 1).joins(:purchase_order).count("DISTINCT purchase_positions.id")
-    @stock_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.stock_status" => 1).joins(:purchase_order).count("DISTINCT purchase_positions.id")
-    @pending_status_count = PurchasePosition.where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 0, "purchase_positions.stock_status" => 0).joins(:purchase_order).count("DISTINCT purchase_positions.id")
+    @purchase_order_categories = Category.where(categorizable_type: 'purchase_order')
+                                         .order("categories.title ASC")
+                                         .uniq('categories.id')
+                                         .pluck_all('categories.id', 'categories.title AS label')
+
+    @production_status_count  = PurchasePosition.joins(:purchase_order)
+                                                .where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 1)
+                                                .count("DISTINCT purchase_positions.id")
+    @stock_status_count       = PurchasePosition.joins(:purchase_order)
+                                                .where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.stock_status" => 1)
+                                                .count("DISTINCT purchase_positions.id")
+    @pending_status_count     = PurchasePosition.joins(:purchase_order)
+                                                .where("purchase_orders.id" => @purchase_order_ids, "purchase_positions.production_status" => 0, "purchase_positions.stock_status" => 0)
+                                                .count("DISTINCT purchase_positions.id")
+
     respond_to do |format|
       format.html
-      format.js
-      format.json
-      format.xml
       format.pdf do
         render(
           :pdf => "print-#{Date.today}",

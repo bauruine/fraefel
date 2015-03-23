@@ -1,0 +1,10 @@
+fieldset
+  legend Versand
+  .control-group
+    = f.label(:shipping_route_id_eq, 'Tour', class: 'control-label')
+    .controls
+      = f.collection_select(:shipping_route_id_eq, @shipping_routes, :id, :name, { include_blank: true })
+  .control-group
+    = f.label(:warehouse_number_eq, 'Versandlager', class: 'control-label')
+    .controls
+      = f.text_field(:warehouse_number_eq)

@@ -1,0 +1,10 @@
+fieldset
+  legend Datum
+  .control-group
+    = f.label(:delivery_date_gteq, 'Von', class: 'control-label')
+    .controls
+      = f.text_field(:delivery_date_gteq, class: 'date_picker')
+  .control-group
+    = f.label(:delivery_date_lteq, 'Bis', class: 'control-label')
+    .controls
+      = f.text_field(:delivery_date_lteq, class: 'date_picker')

@@ -1,0 +1,13 @@
+tr
+  td
+    .btn-group
+      a.btn.btn-mini href="/purchase_orders/#{purchase_order.id}" = purchase_order.baan_id
+  td
+    .btn-group
+      | tbd
+      a.btn.btn-inverse.btn-mini.disabled = purchase_order.calculation.total_purchase_positions
+  td = purchase_order.calculation.total_pallets
+  td = purchase_order.shipping_address.consignee_full
+  td = purchase_order.shipping_route.name
+  td = purchase_order.purchase_positions.first.zip_location.title
+  td = purchase_order.delivery_date.to_formatted_s(:swiss_date)

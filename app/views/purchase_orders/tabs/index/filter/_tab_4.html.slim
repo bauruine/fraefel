@@ -1,0 +1,14 @@
+fieldset
+  legend Adresse
+  .control-group
+    = f.label(:level_1_eq, 'Zahlungsleister', class: 'control-label')
+    .controls
+      = f.collection_select(:level_1_eq, @level_1, :id, :location_for_select, { include_blank: true })
+  .control-group
+    = f.label(:level_2_eq, 'Rechnungsempfänger', class: 'control-label')
+    .controls
+      = f.collection_select(:level_2_eq, @level_2, :id, :location_for_select, { include_blank: true })
+  .control-group
+    = f.label(:level_3_eq, 'Lieferadresse', class: 'control-label')
+    .controls
+      = f.collection_select(:level_3_eq, @level_3, :id, :location_for_select, { include_blank: true })

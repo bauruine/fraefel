@@ -5,6 +5,7 @@ class PurchaseOrder < ActiveRecord::Base
   belongs_to :customer, :class_name => "Customer", :foreign_key => "customer_id"
   belongs_to :address, :class_name => "Address", :foreign_key => "address_id"
   belongs_to :shipping_route, :class_name => "ShippingRoute", :foreign_key => "shipping_route_id"
+  belongs_to :zip_location, :class_name => "ZipLocation", :foreign_key => "zip_location_id"
   belongs_to :shipping_address, :class_name => "Address", :foreign_key => "level_3"
   has_many :purchase_positions, :class_name => "PurchasePosition", :foreign_key => "purchase_order_id", :dependent => :destroy
   has_many :purchase_positions_compact, :class_name => "PurchasePosition", :foreign_key => "purchase_order_id", :select => "purchase_positions.id, purchase_positions.purchase_order_id, purchase_positions.baan_id"
@@ -14,16 +15,16 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :addresses, :class_name => "Address", :through => :purchase_order_address_assignments
   has_many :time_shiftings, :class_name => "TimeShifting", :foreign_key => "purchase_order_id", :primary_key => "baan_id"
 
-  has_one :html_content, :class_name => "HtmlContent"
-  has_one :btn_cat_a, :class_name => "HtmlContent", :conditions => {:category_id => 15}
-  has_one :btn_cat_b, :class_name => "HtmlContent", :conditions => {:category_id => 16}
+  # has_one :html_content, :class_name => "HtmlContent"
+  # has_one :btn_cat_a, :class_name => "HtmlContent", :conditions => {:category_id => 15}
+  # has_one :btn_cat_b, :class_name => "HtmlContent", :conditions => {:category_id => 16}
 
   validates :baan_id, :uniqueness => true
 
   scope :ordered_for_delivery, order("purchase_orders.priority_level desc, purchase_orders.shipping_route_id asc, purchase_orders.customer_id asc, purchase_orders.delivery_date asc, purchase_orders.id asc")
 
   after_create :handle_calculation
-  after_create :handle_html_content
+  # after_create :handle_html_content
 
   after_create :update_import_purchase_order
   after_create :redis_sadd_purchase_order_ids
@@ -50,31 +51,31 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
 
-  def self.patch_html_content
-    self.all.each do |purchase_order|
-      purchase_order.patch_html_content
-    end
-  end
+  # def self.patch_html_content
+  #   self.all.each do |purchase_order|
+  #     purchase_order.patch_html_content
+  #   end
+  # end
+  #
+  # def patch_html_content
+  #   self.create_html_content if self.html_content.nil?
+  #   buttons = String.new
+  #   buttons += self.pending_status_btn if self.pending_status != 0
+  #   buttons += self.production_status_btn if self.production_status != self.stock_status
+  #   buttons += self.stock_status_btn
+  #   self.html_content.update_column(:code, buttons)
+  # end
 
-  def patch_html_content
-    self.create_html_content if self.html_content.nil?
-    buttons = String.new
-    buttons += self.pending_status_btn if self.pending_status != 0
-    buttons += self.production_status_btn if self.production_status != self.stock_status
-    buttons += self.stock_status_btn
-    self.html_content.update_column(:code, buttons)
-  end
-
-  def self.patch_btn_cat_a
-    self.all.each do |purchase_order|
-      purchase_order.patch_btn_cat_a
-    end
-  end
-
-  def patch_btn_cat_a
-    self.create_btn_cat_a(:code => "") if self.btn_cat_a.nil?
-    self.btn_cat_a.update_attribute("code", self.priority_level_btn)
-  end
+  # def self.patch_btn_cat_a
+  #   self.all.each do |purchase_order|
+  #     purchase_order.patch_btn_cat_a
+  #   end
+  # end
+  #
+  # def patch_btn_cat_a
+  #   self.create_btn_cat_a(:code => "") if self.btn_cat_a.nil?
+  #   self.btn_cat_a.update_attribute("code", self.priority_level_btn)
+  # end
 
   def patch_picked_up
     if self.purchase_positions.count != self.purchase_positions.where("purchase_positions.picked_up" => true).count
@@ -102,6 +103,7 @@ class PurchaseOrder < ActiveRecord::Base
 
   def self.create_from_raw_data(arg)
     customer_id = Import::Customer.get_mapper_id(:baan_id => arg.attributes["baan_6"])
+    zip_location_id = Import::ZipLocation.get_mapper_id(:baan_id => arg.attributes["baan_35"])
     shipping_route_id = Import::ShippingRoute.get_mapper_id(:baan_id => arg.attributes["baan_21"]) || 45
     level_1 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_55"], :category_id => "8")
     level_2 = Import::Address.get_mapper_id(:baan_id => arg.attributes["baan_47"], :category_id => "9")
@@ -112,6 +114,7 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order_attributes.merge!("baan_id" => arg.attributes["baan_2"])
     purchase_order_attributes.merge!("customer_id" => customer_id)
     purchase_order_attributes.merge!("shipping_route_id" => shipping_route_id)
+    purchase_order_attributes.merge!("zip_location_id" => zip_location_id)
     purchase_order_attributes.merge!("warehouse_number" => arg.attributes["baan_22"].to_i)
     purchase_order_attributes.merge!("delivery_date" => Date.parse(arg.attributes["baan_13"]))
     purchase_order_attributes.merge!("level_1" => level_1)
@@ -144,36 +147,36 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
 
-  def stock_status_btn
-    btn_value = self.stock_status
-    tag_options = {:class => "btn btn-success btn-mini disabled"}.stringify_keys.to_tag_options
-
-    return "<a #{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
-  end
-
-  def pending_status_btn
-    btn_value = self.pending_status
-    tag_options = {:class => "btn btn-danger btn-mini disabled"}.stringify_keys.to_tag_options
-
-    return "<a #{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
-  end
-
-  def production_status_btn
-    btn_value = self.production_status
-    tag_options = {:class => "btn btn-primary btn-mini disabled"}.stringify_keys.to_tag_options
-
-    return "<a #{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
-  end
-
-  def priority_level_btn
-    tag_options, span_tag_options = {}, {}
-    case
-      when self.priority_level == 0 then tag_options.merge!(:class => "icon-asterisk")
-      when self.priority_level > 1 then tag_options.merge!(:class => "icon-fire")
-    end
-    tag_options, span_tag_options = tag_options.stringify_keys.to_tag_options, span_tag_options.merge!(:class => "btn btn-mini disabled btn-warning").stringify_keys.to_tag_options
-    return tag_options.present? ? "<span #{span_tag_options}><i #{tag_options}></i></span>" : ""
-  end
+  # def stock_status_btn
+  #   btn_value = self.stock_status
+  #   tag_options = {:class => "btn btn-success btn-mini disabled"}.stringify_keys.to_tag_options
+  #
+  #   return "<a #{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
+  # end
+  #
+  # def pending_status_btn
+  #   btn_value = self.pending_status
+  #   tag_options = {:class => "btn btn-danger btn-mini disabled"}.stringify_keys.to_tag_options
+  #
+  #   return "<a #{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
+  # end
+  #
+  # def production_status_btn
+  #   btn_value = self.production_status
+  #   tag_options = {:class => "btn btn-primary btn-mini disabled"}.stringify_keys.to_tag_options
+  #
+  #   return "<a #{tag_options}>#{ERB::Util.html_escape(btn_value)}</a>"
+  # end
+  #
+  # def priority_level_btn
+  #   tag_options, span_tag_options = {}, {}
+  #   case
+  #     when self.priority_level == 0 then tag_options.merge!(:class => "icon-asterisk")
+  #     when self.priority_level > 1 then tag_options.merge!(:class => "icon-fire")
+  #   end
+  #   tag_options, span_tag_options = tag_options.stringify_keys.to_tag_options, span_tag_options.merge!(:class => "btn btn-mini disabled btn-warning").stringify_keys.to_tag_options
+  #   return tag_options.present? ? "<span #{span_tag_options}><i #{tag_options}></i></span>" : ""
+  # end
 
   def self.recalculate_calculation_total_purchase_positions
     PurchaseOrder.all.each do |purchase_order|
@@ -296,9 +299,9 @@ class PurchaseOrder < ActiveRecord::Base
     self.create_calculation unless self.calculation.present?
   end
 
-  def handle_html_content
-    self.create_html_content unless self.html_content.present?
-  end
+  # def handle_html_content
+  #   self.create_html_content unless self.html_content.present?
+  # end
 
   def update_import_purchase_order
     import_purchase_order = Import::PurchaseOrder.find(:baan_id => self.baan_id).first

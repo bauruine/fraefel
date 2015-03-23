@@ -1,0 +1,6 @@
+fieldset
+  legend Prio / TS
+  .control-group
+    = f.label(:priority_level_eq, 'Prio Stufe', class: 'control-label')
+    .controls
+      = f.select(:priority_level_eq, { 'TS Aktiv' => 0, 'Normal' => 1, 'Termin Verschoben' => 2 }, { include_blank: true })

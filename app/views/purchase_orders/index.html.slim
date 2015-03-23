@@ -1,0 +1,71 @@
+- content_for :breadcrumb do
+  ul.breadcrumb
+    li.active VK-Aufträge
+    li.pull-right
+      = link_to(params.merge(format: :pdf), class: 'btn btn-mini btn-primary') do
+        i.icon-print
+        |  Drucke PDF
+      = link_to('#filter', class: 'btn btn-mini', data: { toggle: 'modal' }) do
+        i.icon-filter
+        |  Filter
+      = link_to('#goto', class: 'btn btn-mini', data: { toggle: 'modal' }) do
+        i.icon-search
+        |  Gehe zu
+
+.page-header
+  h1 VK-Aufträge
+
+#index_purchase_positions.modal.hide.fade
+= render('purchase_orders/partials/index/modal/filter')
+= render('purchase_orders/partials/index/modal/goto')
+
+.btn-toolbar.pull-right
+  .btn-group
+    span.btn.disabled VK-Pos
+    span.btn.btn-danger.disabled Offen
+    span.btn.disabled = @pending_status_count
+  .btn-group
+    span.btn.disabled VK-Pos
+    span.btn.btn-primary.disabled Produziert
+    span.btn.disabled = @production_status_count
+  .btn-group
+    span.btn.disabled VK-Pos
+    span.btn.btn-success.disabled Eingelagert
+    span.btn.disabled = @stock_status_count
+.clear
+
+blockquote
+  p
+    i.icon-asterisk
+    |  VK-Auftrag mit aktiver Terminverschiebung
+  p
+    i.icon-fire
+    |  Verschobener VK-Auftrag
+
+.row-fluid
+  .span12
+    table.table.table-striped
+      thead
+        tr
+          th VK-Auftrag
+          th Positionen
+          th Gebuchte Paletten
+          th Handelspartner
+          th Tour
+          th Gebiet
+          th Versand
+      tbody
+        - @test.map do |entry|
+          tr
+            td
+              a href="/purchase_orders/#{entry['id']}" = entry['baan_id']
+            td
+              .btn-group
+                a.btn.btn-danger.btn-mini.disabled = entry["pending_status"]
+                a.btn.btn-primary.btn-mini.disabled = entry["production_status"]
+                a.btn.btn-success.btn-mini.disabled = entry["stock_status"]
+            td = entry["total_pallets"]
+            td = entry["shipping_address"]
+            td = entry["shipping_route"]
+            td = entry["zip_location"]
+            td = entry["delivery_date"]

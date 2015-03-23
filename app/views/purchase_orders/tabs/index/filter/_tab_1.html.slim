@@ -1,0 +1,22 @@
+fieldset
+  legend Allgemein
+  .control-group
+    = f.label(:delivered_eq, 'Versendet?', class: 'control-label')
+    .controls
+      = f.select(:delivered_eq, { 'Nein' => false, 'Ja' => true })
+  .control-group
+    = f.label(:picked_up_eq, 'Warenentnahme abg?', class: 'control-label')
+    .controls
+      = f.select(:picked_up_eq, { 'Nein' => false, 'Ja' => true })
+  .control-group
+    = f.label(:cancelled_eq, 'Storniert?', class: 'control-label')
+    .controls
+      = f.select(:cancelled_eq, { 'Nein' => false, 'Ja' => true })
+  .control-group
+    = f.label(:category_id_eq, 'VK-Art', class: 'control-label')
+    .controls
+      = f.collection_select(:category_id_eq, @purchase_order_categories, :id, :title, { include_blank: true })
+  .control-group
+    = f.label(:baan_id_eq, 'VK-Auftrag', class: 'control-label')
+    .controls
+      = f.text_field(:baan_id_eq)

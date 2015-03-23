@@ -1,0 +1,111 @@
+#filter.modal.hide.fade
+  = search_form_for(@search, html: { class: 'form-horizontal', method: :get, style: 'margin: 0;' }) do |f|
+    .modal-header
+      button.close type='button' data-dismiss='modal' x
+      h3 Filter Optionen
+    .modal-body
+      .tabbable.tabs-left
+        ul.nav.nav-tabs
+          li.active
+            a href='#tab_1' data-toggle='tab' Allgemein
+          li
+            a href='#tab_2' data-toggle='tab' Datum
+          li
+            a href='#tab_3' data-toggle='tab' Prio / TS
+          li
+            a href='#tab_4' data-toggle='tab' Adresse
+          li
+            a href='#tab_5' data-toggle='tab' Versand
+          li
+            a href='#tab_6' data-toggle='tab' Produktion
+        .tab-content
+          #tab_1.tab-pane.active
+            fieldset
+              legend Allgemein
+              .control-group
+                = f.label(:delivered_eq, 'Versendet?', class: 'control-label')
+                .controls
+                  = f.select(:delivered_eq, { 'Nein' => false, 'Ja' => true })
+              .control-group
+                = f.label(:picked_up_eq, 'Warenentnahme abg?', class: 'control-label')
+                .controls
+                  = f.select(:picked_up_eq, { 'Nein' => false, 'Ja' => true })
+              .control-group
+                = f.label(:cancelled_eq, 'Storniert?', class: 'control-label')
+                .controls
+                  = f.select(:cancelled_eq, { 'Nein' => false, 'Ja' => true })
+              .control-group
+                = f.label(:category_id_eq, 'VK-Art', class: 'control-label')
+                .controls
+                  = f.select(:category_id_eq, @purchase_order_categories.collect{ |x| [x['label'], x['id']] }, { include_blank: true })
+              .control-group
+                = f.label(:baan_id_eq, 'VK-Auftrag', class: 'control-label')
+                .controls
+                  = f.text_field(:baan_id_eq)
+          #tab_2.tab-pane
+            fieldset
+              legend Datum
+              .control-group
+                = f.label(:delivery_date_gteq, 'Von', class: 'control-label')
+                .controls
+                  = f.text_field(:delivery_date_gteq, class: 'date_picker')
+              .control-group
+                = f.label(:delivery_date_lteq, 'Bis', class: 'control-label')
+                .controls
+                  = f.text_field(:delivery_date_lteq, class: 'date_picker')
+          #tab_3.tab-pane
+            fieldset
+              legend Prio / TS
+              .control-group
+                = f.label(:priority_level_eq, 'Prio Stufe', class: 'control-label')
+                .controls
+                  = f.select(:priority_level_eq, { 'TS Aktiv' => 0, 'Normal' => 1, 'Termin Verschoben' => 2 }, { include_blank: true })
+          #tab_4.tab-pane
+            fieldset
+              legend Adresse
+              .control-group
+                = f.label(:level_1_eq, 'Zahlungsleister', class: 'control-label')
+                .controls
+                  = f.select(:level_1_eq, @level_1.collect{ |x| [x['label'], x['id']] }, { include_blank: true })
+              .control-group
+                = f.label(:level_2_eq, 'Rechnungsempfänger', class: 'control-label')
+                .controls
+                  = f.select(:level_2_eq, @level_2.collect{ |x| [x['label'], x['id']] }, { include_blank: true })
+              .control-group
+                = f.label(:level_3_eq, 'Lieferadresse', class: 'control-label')
+                .controls
+                  = f.select(:level_3_eq, @level_3.collect{ |x| [x['label'], x['id']] }, { include_blank: true })
+          #tab_5.tab-pane
+            fieldset
+              legend Versand
+              .control-group
+                = f.label(:shipping_route_id_eq, 'Tour', class: 'control-label')
+                .controls
+                  = f.select(:shipping_route_id_eq, @shipping_routes.collect{ |x| [x['label'], x['id']] }, { include_blank: true })
+              .control-group
+                = f.label(:warehouse_number_eq, 'Versandlager', class: 'control-label')
+                .controls
+                  = f.text_field(:warehouse_number_eq)
+          #tab_6.tab-pane
+            fieldset
+              legend Produktion
+              .control-group
+                = f.label(:warehousing_completed_gteq, 'Einlagerung >= ?%', class: 'control-label')
+                .controls
+                  = f.select(:warehousing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, { include_blank: true })
+              .control-group
+                = f.label(:warehousing_completed_lteq, 'Einlagerung <= ?%', class: 'control-label')
+                .controls
+                  = f.select(:warehousing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, { include_blank: true })
+              .control-group
+                = f.label(:manufacturing_completed_gteq, 'Produktion >= ?%', class: 'control-label')
+                .controls
+                  = f.select(:manufacturing_completed_gteq, { '>= 0%' => 0.0, '>= 10%' => 10.0, '>= 20%' => 20.0, '>= 30%' => 30.0, '>= 40%' => 40.0, '>= 50%' => 50.0, '>= 60%' => 60.0, '>= 70%' => 70.0, '>= 80%' => 80.0, '>= 90%' => 90.0, '>= 100%' => 100.0 }, { include_blank: true })
+              .control-group
+                = f.label(:manufacturing_completed_lteq, 'Produktion <= ?%', class: 'control-label')
+                .controls
+                  = f.select(:manufacturing_completed_lteq, { '<= 100%' => 100.0, '<= 99%' => 99.0, '<= 90%' => 90.0, '<= 80%' => 80.0, '<= 70%' => 70.0, '<= 60%' => 60.0, '<= 50%' => 50.0, '<= 40%' => 40.0, '<= 30%' => 30.0, '<= 20%' => 20.0, '<= 10%' => 10.0, '<= 0%' => 0.0 }, { include_blank: true })
+    .modal-footer
+      a.btn.btn-danger href="#{purchase_orders_path()}" Filter Löschen
+      a.btn href='#' data-dismiss='modal' Abbrechen
+      button.btn.btn-primary type='submit' Filtern
