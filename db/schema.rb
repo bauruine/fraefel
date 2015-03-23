@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141221203410) do
+ActiveRecord::Schema.define(:version => 20150323145707) do
 
   create_table "addresses", :force => true do |t|
     t.integer "customer_id"
@@ -500,6 +500,7 @@ ActiveRecord::Schema.define(:version => 20141221203410) do
     t.string   "additional_1",            :limit => 50
     t.string   "additional_2",            :limit => 50
     t.string   "additional_3",            :limit => 50
+    t.integer  "zip_location_id"
   end
 
   add_index "purchase_orders", ["baan_id"], :name => "index_purchase_orders_on_baan_id", :unique => true
@@ -516,6 +517,7 @@ ActiveRecord::Schema.define(:version => 20141221203410) do
   add_index "purchase_orders", ["shipping_route_id"], :name => "index_purchase_orders_on_shipping_route_id"
   add_index "purchase_orders", ["stock_status"], :name => "index_purchase_orders_on_stock_status"
   add_index "purchase_orders", ["warehouse_number"], :name => "index_purchase_orders_on_warehouse_number"
+  add_index "purchase_orders", ["zip_location_id"], :name => "index_purchase_orders_on_zip_location_id"
 
   create_table "purchase_position_time_shifting_assignments", :force => true do |t|
     t.integer  "purchase_position_id"
