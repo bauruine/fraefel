@@ -37,12 +37,11 @@
   <% end %>
 </div>
 
-<% shipping_addresses = Address::Delivery.select("DISTINCT(addresses.id), addresses.company_name, addresses.street, addresses.postal_code, addresses.city").joins(:purchase_orders).where("purchase_orders.id" => @purchase_order_ids).all %>
-<% purchase_positions = PurchasePosition.select("purchase_positions.id, purchase_positions.baan_id, purchase_positions.article_number, purchase_positions.quantity, purchase_positions.article, purchase_positions.level_3").where(purchase_order_id: @purchase_order_ids, :level_3 => shipping_addresses.collect(&:id)).all %>
+<% purchase_positions = PurchasePosition.select("purchase_positions.id, purchase_positions.baan_id, purchase_positions.article_number, purchase_positions.quantity, purchase_positions.article, purchase_positions.level_3").where(purchase_order_id: @purchase_order_ids).all %>
 
-<% shipping_addresses.each do |address| %>
+<% @level_3.each do |address| %>
   <blockquote>
-    <p><%= address.location_for_select %></p>
+    <p><%= address['label'] %></p>
   </blockquote>
   <table class="table table-bordered table-condensed">
     <thead>
@@ -59,7 +58,7 @@
       </tr>
     </thead>
     <tbody>
-      <% purchase_positions.select{|pos| pos.level_3 == address.id}.each do |purchase_position| %>
+      <% purchase_positions.select{|pos| pos.level_3 == address['id']}.each do |purchase_position| %>
         <tr>
           <td><%#= purchase_position.delivery_date.to_date.to_formatted_s(:swiss_date) %></td>
           <td><%#= purchase_order.shipping_route.name %></td>
