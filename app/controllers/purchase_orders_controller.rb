@@ -47,14 +47,20 @@ class PurchaseOrdersController < FraefelController
 
   def index
     ActiveRecord::Base.logger.level = 1
+
     @search = PurchaseOrder.includes(:zip_location, :shipping_route, :calculation, :shipping_address)
                            .search(params[:q] || { delivered_eq: 'false', picked_up_eq: 'false', cancelled_eq: 'false' })
 
     @purchase_order_ids = @search.result.pluck(:id)
+
     @test = PurchaseOrder.joins(:shipping_route, :zip_location, :calculation, :shipping_address)
                          .where(id: @purchase_order_ids)
                          .ordered_for_delivery
                          .pluck_all('purchase_orders.stock_status', 'purchase_orders.pending_status', 'purchase_orders.production_status', 'calculations.total_pallets', 'DATE_FORMAT(purchase_orders.delivery_date, "%e.%m.%y") AS delivery_date', 'purchase_orders.id', 'purchase_orders.baan_id', 'shipping_routes.name AS shipping_route', 'zip_locations.title AS zip_location', 'CONCAT(addresses.company_name, ", ", addresses.street, ", ", addresses.country, "-", addresses.postal_code, " ", addresses.city) AS shipping_address')
+
+    @purchase_positions = PurchasePosition.joins(:shipping_route)
+                                          .where(purchase_order_id: @purchase_order_ids)
+                                          .pluck_all('purchase_positions.id', 'purchase_positions.baan_id', 'purchase_positions.level_3', 'purchase_positions.article_number', 'purchase_positions.quantity', 'purchase_positions.article', 'purchase_positions.product_line', 'purchase_positions.storage_location', 'DATE_FORMAT(purchase_positions.delivery_date, "%e.%m.%y") AS delivery_date', 'shipping_routes.name AS shipping_route')
 
     @level_1 = Address.joins(:purchase_orders)
                       .where("addresses.category_id" => 8, "purchase_orders.id" => @purchase_order_ids)
